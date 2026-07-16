@@ -1,587 +1,563 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './index.css';
 
-/* ── PIXEL DOG COMPONENT ── */
-const PixelDog = () => {
-  // 20x20 pixel dog art
-  const pixels = [
-    // row 0
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    // row 1
-    [0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0],
-    // row 2
-    [0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0],
-    // row 3
-    [0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0],
-    // row 4
-    [0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0],
-    // row 5
-    [0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0],
-    // row 6
-    [0,0,2,2,3,3,2,2,2,2,2,2,2,2,3,3,2,2,2,0],
-    // row 7
-    [0,0,2,2,3,3,2,2,2,2,2,2,2,2,3,3,2,2,2,0],
-    // row 8
-    [0,0,2,2,2,2,2,2,4,4,4,2,2,2,2,2,2,2,2,0],
-    // row 9
-    [0,0,2,2,2,2,2,4,4,4,4,4,2,2,2,2,2,2,2,0],
-    // row 10
-    [0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0],
-    // row 11
-    [0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0],
-    // row 12
-    [0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0],
-    // row 13
-    [0,0,0,0,0,2,2,5,2,2,2,2,5,2,2,2,0,0,0,0],
-    // row 14
-    [0,0,0,0,0,2,2,5,2,2,2,2,5,2,2,2,0,0,0,0],
-    // row 15
-    [0,0,0,0,0,2,2,5,2,2,2,2,5,2,2,2,0,0,0,0],
-    // row 16
-    [0,0,0,0,0,2,5,5,0,0,0,0,5,5,2,0,0,0,0,0],
-    // row 17
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    // row 18
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    // row 19
-    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  ];
+/* ─────────────────────────────────────────
+   CONSTANTS
+───────────────────────────────────────── */
+const CA     = '0xB200000000000000000000ba3068A5B447a81101';
+const O1_URL = 'https://launch.o1.exchange/token/0xb200000000000000000000ba3068a5b447a81101';
+const DEX_URL= 'https://dexscreener.com/base/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530';
+const DEX_EMBED = 'https://dexscreener.com/base/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530?embed=1&theme=dark&info=0';
 
-  const colorMap = {
-    0: 'transparent',
-    1: '#8B5E2B', // ear brown
-    2: '#c9882a', // body orange-brown
-    3: '#1a1a2e', // eyes dark
-    4: '#ff9eb5', // nose pink
-    5: '#8B5E2B', // legs brown
+const UNLOCKS = [
+  { date:'Aug 8, 2026',  amt:'10M'  },
+  { date:'Sep 7, 2026',  amt:'20M'  },
+  { date:'Oct 7, 2026',  amt:'30M'  },
+  { date:'Nov 6, 2026',  amt:'40M'  },
+  { date:'Dec 6, 2026',  amt:'50M'  },
+  { date:'Jan 5, 2027',  amt:'60M'  },
+  { date:'Feb 4, 2027',  amt:'70M'  },
+  { date:'Mar 6, 2027',  amt:'80M'  },
+  { date:'Apr 5, 2027',  amt:'90M'  },
+  { date:'May 5, 2027',  amt:'100M' },
+];
+
+const MARQUEE = [
+  '🐾 $VIBE ON BASE', '🔥 B20 STANDARD', '🐶 MALTIPOO COIN', '✨ 900M CIRCULATING',
+  '💛 GOOD BOY TOKEN', '🚀 UNLIMITED VIBES', '🐾 HAPPY PAWS', '💎 COMMUNITY FIRST',
+];
+
+/* ─────────────────────────────────────────
+   HOOKS
+───────────────────────────────────────── */
+function useCopy(text) {
+  const [done, setDone] = useState(false);
+  const go = () => {
+    navigator.clipboard.writeText(text).catch(() => {});
+    setDone(true);
+    setTimeout(() => setDone(false), 2000);
   };
+  return { done, go };
+}
 
-  return (
-    <div style={{ display: 'inline-grid', gridTemplateColumns: `repeat(20, 14px)`, gap: '1px', imageRendering: 'pixelated', marginBottom: '24px' }}>
-      {pixels.flat().map((val, i) => (
-        <div key={i} style={{ width: 14, height: 14, background: colorMap[val], borderRadius: '2px' }} />
-      ))}
-    </div>
-  );
-};
-
-/* ── MINI PIXEL DOG (decorative) ── */
-const MiniPixelDog = ({ color = '#c9882a' }) => {
-  const pattern = [
-    [0,1,1,0,0,0,1,1,0],
-    [1,1,1,1,1,1,1,1,1],
-    [1,1,2,1,1,1,2,1,1],
-    [1,1,1,1,1,1,1,1,1],
-    [0,1,1,1,1,1,1,1,0],
-    [0,0,1,0,0,0,1,0,0],
-    [0,0,1,0,0,0,1,0,0],
-  ];
-  const c = { 0: 'transparent', 1: color, 2: '#1a1a2e' };
-  return (
-    <div style={{ display: 'inline-grid', gridTemplateColumns: `repeat(9, 8px)`, gap: '1px', imageRendering: 'pixelated' }}>
-      {pattern.flat().map((v, i) => (
-        <div key={i} style={{ width: 8, height: 8, background: c[v], borderRadius: '1px' }} />
-      ))}
-    </div>
-  );
-};
-
-/* ── COPY HOOK ── */
-const useCopy = () => {
-  const [copied, setCopied] = useState(false);
-  const copy = (text) => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-  return { copied, copy };
-};
-
-/* ── REVEAL HOOK ── */
-const useReveal = () => {
+function useScrollReveal() {
   const ref = useRef(null);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) el.classList.add('visible');
-    }, { threshold: 0.1 });
-    obs.observe(el);
-    return () => obs.disconnect();
+    const io = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) el.classList.add('on'); },
+      { threshold: 0.1 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
   return ref;
-};
+}
 
-const CONTRACT = '0xB200000000000000000000ba3068A5B447a81101';
-const O1_URL = 'https://launch.o1.exchange/token/0xb200000000000000000000ba3068a5b447a81101';
-const DEX_URL = 'https://dexscreener.com/base/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530';
-
-const UNLOCKS = [
-  { date: 'Aug 8, 2026',  amount: '10M',  cumulative: 10 },
-  { date: 'Sep 7, 2026',  amount: '20M',  cumulative: 20 },
-  { date: 'Oct 7, 2026',  amount: '30M',  cumulative: 30 },
-  { date: 'Nov 6, 2026',  amount: '40M',  cumulative: 40 },
-  { date: 'Dec 6, 2026',  amount: '50M',  cumulative: 50 },
-  { date: 'Jan 5, 2027',  amount: '60M',  cumulative: 60 },
-  { date: 'Feb 4, 2027',  amount: '70M',  cumulative: 70 },
-  { date: 'Mar 6, 2027',  amount: '80M',  cumulative: 80 },
-  { date: 'Apr 5, 2027',  amount: '90M',  cumulative: 90 },
-  { date: 'May 5, 2027',  amount: '100M', cumulative: 100 },
-];
-
-/* ── MAIN APP ── */
-export default function App() {
+/* ─────────────────────────────────────────
+   NAV
+───────────────────────────────────────── */
+function Nav() {
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const { copied: caHeroCopied, copy: caHeroCopy } = useCopy();
-  const { copied: caFullCopied, copy: caFullCopy } = useCopy();
-
-  // Section refs for scroll reveal
-  const r1 = useReveal(), r2 = useReveal(), r3 = useReveal(), r4 = useReveal(), r5 = useReveal();
+  const [open, setOpen]         = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    const h = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', h);
+    return () => window.removeEventListener('scroll', h);
   }, []);
 
-  const goto = (id) => {
+  const go = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-    setMenuOpen(false);
+    setOpen(false);
   };
 
-  const ticker = [
-    '🐾 $VIBE ON BASE',
-    '🔥 B20 STANDARD',
-    '🐶 THE BASE DOG',
-    '✨ 900M CIRCULATING',
-    '🔒 100M COMMUNITY VESTING',
-    '🚀 UNLIMITED VIBES',
-    '🐾 HAPPY PAWS',
-    '💛 BUILT ON BASE',
-  ];
-
   return (
-    <div className="page">
-      {/* Ambient lights */}
-      <div className="ambient ambient-1" />
-      <div className="ambient ambient-2" />
-      <div className="ambient ambient-3" />
-
-      {/* ── NAV ── */}
-      <nav className={`nav ${scrolled ? 'sticky' : ''}`}>
-        <div className="container nav-inner">
-          <a className="nav-logo" onClick={() => goto('hero')}>
-            <div className="logo-dot" />
+    <>
+      <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
+        <div className="nav-wrap">
+          <div className="nav-logo" onClick={() => go('hero')}>
+            <span className="logo-paw">🐾</span>
             <span>$VIBE</span>
-          </a>
+            <span className="logo-live">LIVE</span>
+          </div>
+
           <ul className="nav-links">
-            <li><a onClick={() => goto('about')} style={{cursor:'pointer'}}>About</a></li>
-            <li><a onClick={() => goto('tokenomics')} style={{cursor:'pointer'}}>Tokenomics</a></li>
-            <li><a onClick={() => goto('chart')} style={{cursor:'pointer'}}>Chart</a></li>
-            <li><a onClick={() => goto('trade')} style={{cursor:'pointer'}}>Trade</a></li>
+            {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,label]) => (
+              <li key={id}><a onClick={() => go(id)}>{label}</a></li>
+            ))}
           </ul>
-          <a href={O1_URL} target="_blank" rel="noreferrer" className="btn-nav desktop">
+
+          <a href={O1_URL} target="_blank" rel="noreferrer" className="nav-cta desktop">
             Buy $VIBE ↗
           </a>
-          <button className="nav-hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-              {menuOpen
-                ? <><line x1="4" y1="4" x2="18" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="18" y1="4" x2="4" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>
-                : <><line x1="3" y1="7" x2="19" y2="7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="3" y1="11" x2="19" y2="11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="3" y1="15" x2="19" y2="15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></>}
-            </svg>
-          </button>
+          <button className="ham" onClick={() => setOpen(true)}>☰</button>
         </div>
       </nav>
 
       {/* Mobile drawer */}
-      <div className={`mobile-drawer ${menuOpen ? 'open' : ''}`}>
-        <button className="mobile-close" onClick={() => setMenuOpen(false)}>✕</button>
-        <a onClick={() => goto('about')}>About</a>
-        <a onClick={() => goto('tokenomics')}>Tokenomics</a>
-        <a onClick={() => goto('chart')}>Chart</a>
-        <a onClick={() => goto('trade')}>Trade</a>
-        <a href={O1_URL} target="_blank" rel="noreferrer" className="btn btn-yellow">Buy $VIBE ↗</a>
+      <div className={`mob-menu${open ? ' open' : ''}`}>
+        <button className="mob-close" onClick={() => setOpen(false)}>✕</button>
+        {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,label]) => (
+          <a key={id} onClick={() => go(id)}>{label}</a>
+        ))}
+        <a href={O1_URL} target="_blank" rel="noreferrer" className="btn-main btn-fill">Buy $VIBE ↗</a>
+      </div>
+    </>
+  );
+}
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+function Hero() {
+  const { done, go } = useCopy(CA);
+
+  return (
+    <section id="hero">
+      {/* decorative bg paws */}
+      <div className="hero-bg-paws" aria-hidden="true">
+        {['🐾','🐾','🐾','🐾','🐾'].map((p,i) => <span key={i}>{p}</span>)}
       </div>
 
-      {/* ── HERO ── */}
-      <section id="hero">
-        <div className="container">
-          <div className="hero-layout">
-            {/* Left */}
-            <div>
-              <div className="hero-badges">
-                <span className="badge badge-green">
-                  <span style={{width:6,height:6,background:'var(--green)',borderRadius:'50%',display:'inline-block',boxShadow:'0 0 6px var(--green)'}}/>
-                  Live on Base
-                </span>
-                <span className="badge badge-purple">B20 Token</span>
-                <span className="badge badge-yellow">🐶 The Base Dog</span>
+      <div className="wrap">
+        <div className="hero-grid">
+
+          {/* ── Left text ── */}
+          <div>
+            <div className="chip-row">
+              <span className="chip chip-base">BASE CHAIN</span>
+              <span className="chip chip-b20">B20 TOKEN</span>
+              <span className="chip chip-dog">🐶 MALTIPOO</span>
+            </div>
+
+            <h1 className="hero-title">
+              <span className="sub-word">Meet the based dog.</span>
+              The <em>fluffiest</em> vibe on chain.
+            </h1>
+
+            <p className="hero-desc">
+              $VIBE is a community‑driven B20 memecoin on Base, inspired by the world's cutest Maltipoo. 
+              Positive energy, immaculate vibes, and happy paws — all on-chain. 🐾
+            </p>
+
+            <div className="hero-btns">
+              <a href={O1_URL} target="_blank" rel="noreferrer" className="btn-main btn-fill">
+                Buy on o1.exchange ↗
+              </a>
+              <a href={DEX_URL} target="_blank" rel="noreferrer" className="btn-main btn-outline">
+                View Chart
+              </a>
+            </div>
+
+            <div className="ca-pill">
+              <span className="tag">CA</span>
+              <span className="addr" title={CA}>{CA}</span>
+              <button className={`cpbtn${done ? ' ok' : ''}`} onClick={go}>
+                {done ? '✓ Copied' : 'Copy'}
+              </button>
+            </div>
+          </div>
+
+          {/* ── Right card ── */}
+          <div className="hero-visual">
+            {/* floating badges */}
+            <div className="float-badge float-badge-1">
+              ✅ Community-driven
+            </div>
+            <div className="float-badge float-badge-2">
+              🔒 100M in vesting
+            </div>
+
+            <div className="hero-card">
+              {/* Try logo first, fallback to mascot */}
+              <img
+                src="/logo.png"
+                onError={e => { e.target.onerror=null; e.target.src='/mascot.png'; }}
+                alt="$VIBE Maltipoo"
+                className="hero-mascot"
+              />
+              <div className="hero-ticker">$VIBE</div>
+              <div className="hero-name">The Based Maltipoo · B20</div>
+
+              <div className="hero-stats-row">
+                <div className="hs">
+                  <span className="hs-val">1B</span>
+                  <span className="hs-lbl">Supply</span>
+                </div>
+                <div className="hs">
+                  <span className="hs-val">900M</span>
+                  <span className="hs-lbl">Circulating</span>
+                </div>
+                <div className="hs">
+                  <span className="hs-val">100M</span>
+                  <span className="hs-lbl">Vesting</span>
+                </div>
               </div>
 
-              <h1 className="hero-title">
-                <span className="line1">Meet The Dog</span>
-                <span className="line2">
-                  <span className="accent">$VIBE</span>
-                  {' '}is here.
-                </span>
-              </h1>
+              <div className="hero-paws-dec">
+                {['🐾','🐾','🐾','🐾','🐾'].map((p,i) => <span key={i}>{p}</span>)}
+              </div>
+            </div>
+          </div>
 
-              <p className="hero-desc">
-                The ultimate mood maker on Base B20. Built to share its positive energy and immaculate vibes with the based community. Every great journey starts with a single paw print 🐾
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────
+   MARQUEE
+───────────────────────────────────────── */
+function Marquee() {
+  const all = [...MARQUEE, ...MARQUEE];
+  return (
+    <div className="marquee-strip">
+      <div className="marquee-inner">
+        {all.map((t,i) => (
+          <div key={i} className="m-item">
+            <span className="star">✦</span>
+            <span className="bold">{t}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────
+   ABOUT
+───────────────────────────────────────── */
+function About() {
+  const r1 = useScrollReveal();
+  const r2 = useScrollReveal();
+  const r3 = useScrollReveal();
+
+  return (
+    <section id="about">
+      <div className="wrap">
+        <div className="about-grid">
+
+          <div className="about-text">
+            <div ref={r1} className="sr">
+              <div className="sec-label">About $VIBE</div>
+              <h2>The dog that <span>vibes</span> harder than any other.</h2>
+            </div>
+            <div ref={r2} className="sr sr-d1">
+              <p style={{marginTop:20}}>
+                Meet $VIBE — the Base Dog. Born from the love of a real Maltipoo pup, 
+                $VIBE is the ultimate mood-setter for the Based community. 
+                Every great journey starts with a single paw print. 🐾
+              </p>
+              <p>
+                Dreams. Happy paws. Unlimited vibes. Built to share positive energy 
+                and immaculate vibes with everyone on Base.
               </p>
 
-              <div className="hero-actions">
-                <a href={O1_URL} target="_blank" rel="noreferrer" className="btn btn-yellow">
-                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2"/><path d="M15 9L9 15M9 9H15V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
-                  Buy on o1.exchange
-                </a>
-                <button onClick={() => goto('chart')} className="btn btn-ghost">
-                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M3 3V21H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M7 16L12 10L16 13L21 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                  View Chart
-                </button>
-              </div>
-
-              <div className="ca-strip">
-                <span className="label">CA (Base)</span>
-                <span className="address">{CONTRACT}</span>
-                <button className="copy-btn" onClick={() => caHeroCopy(CONTRACT)}>
-                  {caHeroCopied ? '✓ copied' : 'copy'}
-                </button>
-              </div>
-            </div>
-
-            {/* Right — visual */}
-            <div className="hero-visual">
-              <div className="hero-glow-ring" />
-              <div className="hero-card-visual">
-                <img src="/logo.png" alt="$VIBE Dog" className="hero-logo-img" />
-                <div className="hero-card-ticker">$VIBE</div>
-                <div className="hero-card-desc">The Base Dog · B20</div>
-                <div className="hero-stat-row">
-                  <div className="hero-stat">
-                    <div className="hero-stat-val">1B</div>
-                    <div className="hero-stat-label">Total Supply</div>
+              <div className="pill-list">
+                <div className="pill-row">
+                  <span className="ico">🐶</span>
+                  <div className="ptxt">
+                    <strong>Inspired by a real Maltipoo</strong>
+                    The fluffiest, most good-vibes dog on the internet
                   </div>
-                  <div style={{width:1,background:'var(--border)'}} />
-                  <div className="hero-stat">
-                    <div className="hero-stat-val">900M</div>
-                    <div className="hero-stat-label">Circulating</div>
+                </div>
+                <div className="pill-row">
+                  <span className="ico">🔗</span>
+                  <div className="ptxt">
+                    <strong>B20 Standard on Base</strong>
+                    Community-driven with transparent, fair tokenomics
                   </div>
-                  <div style={{width:1,background:'var(--border)'}} />
-                  <div className="hero-stat">
-                    <div className="hero-stat-val">100M</div>
-                    <div className="hero-stat-label">Community</div>
+                </div>
+                <div className="pill-row">
+                  <span className="ico">🤝</span>
+                  <div className="ptxt">
+                    <strong>100% Community Vesting</strong>
+                    Every unlocked token goes straight to the community
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* ── TICKER MARQUEE ── */}
-      <div className="ticker-wrap">
-        <div className="ticker-track">
-          {[...ticker, ...ticker].map((t, i) => (
-            <div key={i} className="ticker-item">
-              <span className="dot">✦</span>
-              <span className="highlight">{t}</span>
+          {/* right stat mosaic */}
+          <div ref={r3} className="sr sr-d2 about-visual">
+            <div className="stat-mosaic">
+              <div className="stat-tile tall">
+                <div className="paws">🐾</div>
+                <span className="v">1B</span>
+                <span className="l">Total Supply</span>
+                <p className="desc">Fixed supply, no minting. Ever.</p>
+              </div>
+              <div className="stat-tile">
+                <span className="v">900M</span>
+                <span className="l">Circulating</span>
+              </div>
+              <div className="stat-tile gold">
+                <span className="v">100M</span>
+                <span className="l">Community Vesting</span>
+              </div>
+              <div className="stat-tile" style={{gridColumn:'span 2'}}>
+                <span className="v" style={{fontSize:'2rem'}}>10M / mo</span>
+                <span className="l">Monthly Unlock</span>
+                <p className="desc">Distributed to holders & supporters, every single month</p>
+              </div>
             </div>
-          ))}
+          </div>
+
         </div>
       </div>
+    </section>
+  );
+}
 
-      {/* ── ABOUT ── */}
-      <section id="about">
-        <div className="container">
-          <div className="about-layout">
-            <div className="about-text">
-              <div ref={r1} className="reveal">
-                <div className="section-tag">// About $VIBE</div>
-                <h2>
-                  The dog that<br/>
-                  <span className="accent">vibes</span> with everyone.
-                </h2>
-              </div>
-              <div ref={r2} className="reveal" style={{transitionDelay:'0.1s'}}>
-                <p style={{marginTop: 20}}>
-                  Meet $VIBE — the Base Dog and the ultimate mood maker on Base B20. Built to share its positive energy and immaculate vibes with the based community.
-                </p>
-                <p>
-                  Dreams. Happy paws. Unlimited vibes.
-                </p>
+/* ─────────────────────────────────────────
+   TOKENOMICS
+───────────────────────────────────────── */
+function Tokenomics() {
+  const r = useScrollReveal();
 
-                <div className="about-features">
-                  <div className="feature-item">
-                    <div className="feature-icon">🔒</div>
-                    <div className="feature-text">
-                      <strong>B20 Standard</strong>
-                      Community-driven token with transparent tokenomics
-                    </div>
-                  </div>
-                  <div className="feature-item">
-                    <div className="feature-icon">🌐</div>
-                    <div className="feature-text">
-                      <strong>Built on Base</strong>
-                      Deployed on Coinbase's L2 for fast, cheap transactions
-                    </div>
-                  </div>
-                  <div className="feature-item">
-                    <div className="feature-icon">🐾</div>
-                    <div className="feature-text">
-                      <strong>100% Community</strong>
-                      All vested tokens distributed to holders &amp; supporters
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right — pixel dog + stats */}
-            <div className="about-visual">
-              <div ref={r3} className="reveal pixel-art-container">
-                <PixelDog />
-                <div style={{marginBottom: 24}}>
-                  <div style={{display:'flex', justifyContent:'center', gap: 24, flexWrap:'wrap'}}>
-                    <MiniPixelDog color="#c9882a" />
-                    <MiniPixelDog color="#714bff" />
-                    <MiniPixelDog color="#ffe566" />
-                  </div>
-                </div>
-                <div className="stats-grid">
-                  <div className="stat-box">
-                    <span className="val">1B</span>
-                    <span className="lbl">Total Supply</span>
-                  </div>
-                  <div className="stat-box">
-                    <span className="val">900M</span>
-                    <span className="lbl">Circulating</span>
-                  </div>
-                  <div className="stat-box">
-                    <span className="val">100M</span>
-                    <span className="lbl">In Vesting</span>
-                  </div>
-                  <div className="stat-box">
-                    <span className="val">10M</span>
-                    <span className="lbl">Monthly Unlock</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+  return (
+    <section id="tokenomics">
+      <div className="wrap">
+        <div ref={r} className="sr tok-header">
+          <div className="sec-label">Tokenomics</div>
+          <h2>Built for the <span>community</span>.</h2>
+          <p>100M tokens in vesting — every single unlock flows back to $VIBE holders and supporters. Zero team allocation.</p>
         </div>
-      </section>
 
-      <div className="divider" />
+        <div className="tok-layout">
 
-      {/* ── TOKENOMICS ── */}
-      <section id="tokenomics">
-        <div className="container">
-          <div className="tokenomics-header">
-            <span className="tag">// Tokenomics</span>
-            <h2>Built for the <span className="accent">community</span></h2>
-            <p>100M tokens in vesting — every unlock goes back to holders and supporters.</p>
-          </div>
+          {/* Left column */}
+          <div className="tok-left">
 
-          <div className="tokenomics-layout">
-            {/* Vesting overview — full width */}
-            <div ref={r4} className="reveal card vesting-card">
-              <div style={{display:'flex', alignItems:'flex-start', justifyContent:'space-between', flexWrap:'wrap', gap:16, marginBottom:20}}>
-                <div>
-                  <h3>Community Vesting · 100M $VIBE</h3>
-                  <p className="desc" style={{marginTop:6}}>
-                    10% (10M tokens) unlocks each month and is distributed to qualified community members.
-                  </p>
+            {/* Vesting overview */}
+            <div className="vesting-block">
+              <h3>Community Vesting · 100M $VIBE</h3>
+              <p className="sub">10% (10M) unlocks each month, distributed to qualified holders</p>
+
+              <div className="progress-wrap">
+                <div className="progress-track">
+                  <div className="progress-fill" />
                 </div>
-                <span className="badge badge-yellow">10 unlocks total</span>
+                <div className="progress-labels">
+                  <span>0M unlocked today</span>
+                  <span>100M total</span>
+                </div>
               </div>
 
-              <div className="vesting-bar-bg">
-                <div className="vesting-bar-fill" style={{animationFillMode:'forwards'}} />
-              </div>
-              <div className="vesting-bar-labels">
-                <span>0M unlocked now</span>
-                <span>100M total</span>
-              </div>
-
-              <div className="recipients">
-                <div className="recipient-pill">
-                  <span className="icon">💎</span>
-                  <span>Holders with $44+ in $VIBE</span>
+              <p style={{fontSize:'0.82rem', color:'var(--dim)', marginBottom:16}}>Who gets the monthly unlock?</p>
+              <div className="who-gets">
+                <div className="who-row">
+                  <span className="wr-icon">💎</span>
+                  <div className="wr-text">
+                    Diamond Holders
+                    <span>Hold $44+ worth of $VIBE to qualify</span>
+                  </div>
                 </div>
-                <div className="recipient-pill">
-                  <span className="icon">🐾</span>
-                  <span>Active community members</span>
+                <div className="who-row">
+                  <span className="wr-icon">🐾</span>
+                  <div className="wr-text">
+                    Active Community Members
+                    <span>Engage, share, and spread the vibes</span>
+                  </div>
                 </div>
-                <div className="recipient-pill">
-                  <span className="icon">⚡</span>
-                  <span>Token supporters</span>
+                <div className="who-row">
+                  <span className="wr-icon">📣</span>
+                  <div className="wr-text">
+                    Token Supporters
+                    <span>Promote $VIBE and earn your share</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Unlock schedule */}
-            <div className="card unlock-schedule-card">
-              <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:20}}>
-                <h3>Unlock Schedule</h3>
-                <MiniPixelDog color="#714bff" />
+            {/* Supply bars */}
+            <div className="supply-block">
+              <h3>Supply Breakdown</h3>
+              <div className="supply-bars">
+                <div className="sb-row">
+                  <div className="sb-info"><span className="sb-name">Circulating Supply</span><span className="sb-pct">90%</span></div>
+                  <div className="sb-bar"><div className="sb-fill" style={{width:'90%', background:'var(--coral)'}}/></div>
+                </div>
+                <div className="sb-row">
+                  <div className="sb-info"><span className="sb-name">Community Vesting</span><span className="sb-pct">10%</span></div>
+                  <div className="sb-bar"><div className="sb-fill" style={{width:'10%', background:'var(--gold)'}}/></div>
+                </div>
               </div>
-              <div className="unlock-list">
+            </div>
+          </div>
+
+          {/* Right — unlock schedule */}
+          <div className="tok-right">
+            <div className="unlock-card">
+              <h3>Unlock Schedule</h3>
+              <p className="sub">10 monthly unlocks, starting Aug 8, 2026</p>
+              <div className="unlock-scroll">
                 {UNLOCKS.map((u, i) => (
-                  <div key={i} className="unlock-row">
-                    <span className="unlock-date">{u.date}</span>
-                    <span className="unlock-tokens">{u.amount}</span>
-                    <span className="unlock-tag">locked</span>
+                  <div key={i} className="ul-row">
+                    <span className="ul-date">{u.date}</span>
+                    <span className="ul-amt">{u.amt}</span>
+                    <span className="ul-status">locked</span>
                   </div>
                 ))}
               </div>
             </div>
+          </div>
 
-            {/* Community */}
-            <div className="card community-card">
-              <div style={{display:'flex', alignItems:'center', gap:12, marginBottom:12}}>
-                <h3>Who receives the unlock?</h3>
-              </div>
-              <p className="desc">
-                Every monthly unlock is distributed 100% to the $VIBE community — no team allocation, no VC bags.
-              </p>
-              <div className="community-badges">
-                <div className="community-badge-row">
-                  <span className="icon">💎</span>
-                  <div className="info">
-                    <div className="title">Diamond Holders</div>
-                    <div className="sub">Hold $44+ worth of $VIBE to qualify</div>
-                  </div>
-                </div>
-                <div className="community-badge-row">
-                  <span className="icon">🐾</span>
-                  <div className="info">
-                    <div className="title">Active Members</div>
-                    <div className="sub">Engage with the community & get rewarded</div>
-                  </div>
-                </div>
-                <div className="community-badge-row">
-                  <span className="icon">📣</span>
-                  <div className="info">
-                    <div className="title">Token Supporters</div>
-                    <div className="sub">Spread the vibes, share in the rewards</div>
-                  </div>
-                </div>
-              </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────
+   CHART
+───────────────────────────────────────── */
+function Chart() {
+  const r = useScrollReveal();
+
+  return (
+    <section id="chart">
+      <div className="wrap">
+        <div ref={r} className="sr chart-top">
+          <div>
+            <div className="sec-label">Live Chart</div>
+            <h2>Price <span>action</span>.</h2>
+          </div>
+          <a href={DEX_URL} target="_blank" rel="noreferrer" className="btn-main btn-outline">
+            Open on Dexscreener ↗
+          </a>
+        </div>
+        <div className="chart-frame">
+          <iframe
+            src={DEX_EMBED}
+            title="$VIBE live chart"
+            width="100%"
+            height="600"
+            frameBorder="0"
+            allowFullScreen
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────
+   TRADE
+───────────────────────────────────────── */
+function Trade() {
+  const r = useScrollReveal();
+  const { done, go } = useCopy(CA);
+
+  return (
+    <section id="trade">
+      <div className="wrap">
+        <div ref={r} className="sr trade-header">
+          <div className="sec-label">How to Buy</div>
+          <h2>Get <span>$VIBE</span>.</h2>
+          <p>Live on Base. Pick your spot and start vibing.</p>
+        </div>
+
+        <div className="trade-cards">
+          <a href={O1_URL} target="_blank" rel="noreferrer" className="tc">
+            <div className="tc-head">
+              <div className="tc-logo-wrap tc-o1-logo">o1</div>
+              <span className="tc-tag">Recommended</span>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <div className="divider" />
-
-      {/* ── CHART ── */}
-      <section id="chart">
-        <div className="container">
-          <div ref={r5} className="reveal chart-header">
-            <div>
-              <span style={{fontFamily:'var(--font-mono)',fontSize:'0.8rem',color:'var(--green)',textTransform:'uppercase',letterSpacing:'0.12em'}}>// Live Chart</span>
-              <h2 style={{marginTop:8}}>Price <span className="accent-purple">Action</span></h2>
+            <h3>o1.exchange</h3>
+            <p>The native launchpad where $VIBE was born. Bonded curve mechanics, lowest fees, and the simplest buy experience on Base.</p>
+            <div className="tc-foot">
+              <span className="tc-foot-link">Open launch page</span>
+              <div className="tc-arr">↗</div>
             </div>
-            <a href={DEX_URL} target="_blank" rel="noreferrer" className="btn btn-purple" style={{textDecoration:'none'}}>
-              Open on Dexscreener ↗
-            </a>
-          </div>
-          <div className="chart-wrap">
-            <iframe
-              src="https://dexscreener.com/base/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530?embed=1&theme=dark&info=0"
-              title="$VIBE Chart on Dexscreener"
-              width="100%"
-              height="600"
-              frameBorder="0"
-              allowFullScreen
-            />
-          </div>
-        </div>
-      </section>
+          </a>
 
-      <div className="divider" />
-
-      {/* ── TRADE ── */}
-      <section id="trade">
-        <div className="container">
-          <div className="trade-header">
-            <span className="tag">// How to Buy</span>
-            <h2>Get <span className="accent">$VIBE</span></h2>
-            <p>Live on Base. Pick your venue and start vibing.</p>
-          </div>
-
-          <div className="trade-grid">
-            {/* o1.exchange */}
-            <a href={O1_URL} target="_blank" rel="noreferrer" className="card trade-card">
-              <div className="tc-top">
-                <div className="tc-logo tc-o1">o1</div>
-                <span className="tc-badge">Recommended</span>
+          <a href={DEX_URL} target="_blank" rel="noreferrer" className="tc">
+            <div className="tc-head">
+              <div className="tc-logo-wrap tc-dx-logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M3 12L12 3L21 12L12 21L3 12Z" stroke="currentColor" strokeWidth="2"/>
+                </svg>
               </div>
-              <h3>o1.exchange</h3>
-              <p className="desc">The native launchpad — where $VIBE was born. Bonded curve, simplest UX, lowest fees. Best place to ape in.</p>
-              <div className="link-row">
-                <span className="link-text">Open launch page</span>
-                <div className="arrow">↗</div>
-              </div>
-            </a>
-
-            {/* Dexscreener */}
-            <a href={DEX_URL} target="_blank" rel="noreferrer" className="card trade-card">
-              <div className="tc-top">
-                <div className="tc-logo tc-dex">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3L21 12L12 21L3 12Z" stroke="currentColor" strokeWidth="2"/><path d="M12 8V16M8 12H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
-                </div>
-                <span className="tc-badge">Charts & Trade</span>
-              </div>
-              <h3>DexScreener</h3>
-              <p className="desc">Track $VIBE price action in real-time and trade directly from the chart. Powered by Dexscreener on Base network.</p>
-              <div className="link-row">
-                <span className="link-text">Trade on Dexscreener</span>
-                <div className="arrow">↗</div>
-              </div>
-            </a>
-          </div>
-
-          {/* Full CA box */}
-          <div className="ca-full-box">
-            <div>
-              <div className="l">Contract Address (Base)</div>
-              <div className="addr">{CONTRACT}</div>
+              <span className="tc-tag">Charts & Trade</span>
             </div>
-            <button className={`copy-full-btn ${caFullCopied ? 'copied' : ''}`} onClick={() => caFullCopy(CONTRACT)}>
-              {caFullCopied ? '✓ Copied!' : '📋 Copy CA'}
-            </button>
-          </div>
+            <h3>DexScreener</h3>
+            <p>Track $VIBE price in real-time and trade directly from the chart. Powered by Dexscreener on Base network.</p>
+            <div className="tc-foot">
+              <span className="tc-foot-link">Trade on Dexscreener</span>
+              <div className="tc-arr">↗</div>
+            </div>
+          </a>
         </div>
-      </section>
 
-      {/* ── FOOTER ── */}
-      <footer>
-        <div className="container footer-inner">
-          <div className="footer-brand">
-            <span>$VIBE</span> · The Base Dog
+        <div className="ca-bar">
+          <div className="info">
+            <div className="l">Contract Address · Base</div>
+            <div className="a">{CA}</div>
           </div>
-          <p className="footer-copy">
-            © 2026 $VIBE. Not financial advice. Just a based dog. 🐾
-          </p>
-          <div className="footer-socials">
-            {/* X / Twitter */}
-            <a href="#" className="social-btn" title="Twitter / X">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </a>
-            {/* Telegram */}
-            <a href="#" className="social-btn" title="Telegram">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247l-2.035 9.587c-.148.665-.54.826-1.093.513l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.215-3.053 5.55-5.015c.242-.214-.051-.333-.37-.119l-6.86 4.32-2.953-.922c-.642-.2-.655-.642.135-.951l11.524-4.44c.535-.196 1.003.13.939.601z"/></svg>
-            </a>
-            {/* Dexscreener */}
-            <a href={DEX_URL} target="_blank" rel="noreferrer" className="social-btn" title="Dexscreener">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3L21 12L12 21L3 12Z" stroke="currentColor" strokeWidth="2"/></svg>
-            </a>
-          </div>
+          <button className={`cbtn${done ? ' ok' : ''}`} onClick={go}>
+            {done ? '✓ Copied!' : '📋 Copy CA'}
+          </button>
         </div>
-      </footer>
-    </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+function Footer() {
+  return (
+    <footer>
+      <div className="wrap foot-inner">
+        <div className="foot-logo"><span>$VIBE</span> · The Based Maltipoo</div>
+        <p className="foot-copy">© 2026 $VIBE · Not financial advice · Just a fluffy dog 🐾</p>
+        <div className="foot-socials">
+          <a href="#" className="soc" title="Twitter/X">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+          <a href="#" className="soc" title="Telegram">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-2.035 9.587c-.148.665-.54.826-1.093.513l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.215-3.053 5.55-5.015c.242-.214-.051-.333-.37-.119l-6.86 4.32-2.953-.922c-.642-.2-.655-.642.135-.951l11.524-4.44c.535-.196 1.003.13.939.601z"/>
+            </svg>
+          </a>
+          <a href={DEX_URL} target="_blank" rel="noreferrer" className="soc" title="DexScreener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+              <path d="M3 12L12 3L21 12L12 21L3 12Z" stroke="currentColor" strokeWidth="2"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ─────────────────────────────────────────
+   APP
+───────────────────────────────────────── */
+export default function App() {
+  return (
+    <>
+      <Nav />
+      <div style={{position:'relative', zIndex:1}}>
+        <Hero />
+        <Marquee />
+        <About />
+        <div className="divider" />
+        <Tokenomics />
+        <div className="divider" />
+        <Chart />
+        <div className="divider" />
+        <Trade />
+        <Footer />
+      </div>
+    </>
   );
 }
