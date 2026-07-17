@@ -88,7 +88,7 @@ function Hero() {
             <div className="eyebrow-dot"/>
             Live on Base B20
           </div>
-          <h1>I AM THE <span className="blue">VIBE.</span><br/><span className="line2"><span className="outline-black">THE</span> <span className="outline-blue">Base Dog.</span></span></h1>
+          <h1>I AM THE <span className="blue">VIBE.</span><br/>THE BASE DOG.</h1>
           <p className="hero-desc">
             Meet $VIBE — the Base Dog and the ultimate mood maker on Base B20.
             Good vibes and positive energy only.
@@ -187,8 +187,10 @@ function Tokenomics() {
               <div className="prog"><div className="prog-f" style={{width:'10%'}}/></div>
               <div className="prog-labs"><span>0M today</span><span>100M total</span></div>
               <div className="who">
-                <div className="who-r"><span className="who-ico">💎</span><div className="who-t">Diamond Holders<span>Hold $44+ in $VIBE to qualify</span></div></div>
-                <div className="who-r"><span className="who-ico">🐾</span><div className="who-t">Active Community<span>Engage, share, earn</span></div></div>
+                <div className="who-r">
+                  <div className="who-ico">💎</div>
+                  <div className="who-t">$VIBE Holders<span>Hold 2M+ $VIBE to qualify</span></div>
+                </div>
                 <div className="who-r"><span className="who-ico">📣</span><div className="who-t">Token Supporters<span>Spread the vibes, share the rewards</span></div></div>
               </div>
             </div>
