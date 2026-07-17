@@ -105,14 +105,16 @@ function Hero() {
               Dexscreener ↗
             </a>
           </div>
-          <div className="ca-box">
-            <div className="ca-left">
-              <span className="lbl">$VIBE Contract Address (Base)</span>
-              <span className="addr">{CA}</span>
+          <div className="hero-ca-wrap">
+            <div className="hero-ca-lbl">$VIBE Contract Address (Base)</div>
+            <div className="hero-ca-box">
+              <span className="hero-ca-addr">{CA}</span>
+              <button className={`hero-ca-btn${ok?' ok':''}`} onClick={go} title="Copy Address">
+                {ok ? '✓' : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                )}
+              </button>
             </div>
-            <button className={`cpbtn${ok?' ok':''}`} onClick={go}>
-              {ok ? '✓ Copied' : 'Copy'}
-            </button>
           </div>
         </div>
         <div className="dog-wrap">
@@ -128,22 +130,7 @@ function Hero() {
   );
 }
 
-/* TICKER */
-function Ticker() {
-  const all = [...TICKS,...TICKS];
-  return (
-    <div className="ticker">
-      <div className="ticker-track">
-        {all.map((t,i)=>(
-          <div key={i} className="t-item">
-            <span className="t-star">✦</span>
-            <span className="t-text"><b>{t}</b></span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+
 
 /* ABOUT */
 function About() {
@@ -152,7 +139,6 @@ function About() {
     <section id="about">
       <div className="wrap">
         <div className="sec-head rv" ref={r1}>
-          <div className="sec-tag">🐶 About $VIBE</div>
           <h2>More than a meme.<br/>The real <span className="bl">Base Dog</span>.</h2>
           <p className="sec-sub">The fluffiest, most loyal dog onchain & offchain.</p>
         </div>
@@ -185,7 +171,6 @@ function Tokenomics() {
     <section id="tokenomics" className="alt">
       <div className="wrap">
         <div className="sec-head rv" ref={r}>
-          <div className="sec-tag">📊 Tokenomics</div>
           <h2>Community-owned.<br/><span className="bl">Zero BS.</span></h2>
           <p className="sec-sub">100M tokens locked. Every unlock goes straight to you.</p>
         </div>
@@ -252,7 +237,6 @@ function Chart() {
       <div className="wrap">
         <div className="chart-hd rv" ref={r}>
           <div>
-            <div className="sec-tag">📈 Live Chart</div>
             <h2>Live <span className="bl">Chart</span>.</h2>
           </div>
           <a href={DEX} target="_blank" rel="noreferrer" className="btn-line">Open Dexscreener ↗</a>
@@ -278,7 +262,6 @@ function Trade() {
     <section id="trade" className="alt">
       <div className="wrap">
         <div className="rv" ref={r}>
-          <div className="sec-tag">💳 How to Buy</div>
           <h2>Get <span className="bl">$VIBE</span>.</h2>
           <p className="sec-sub">Live on Base. Pick your venue and start vibing.</p>
         </div>
@@ -352,8 +335,6 @@ export default function App() {
     <>
       <Nav/>
       <Hero/>
-      <div className="divr"/>
-      <Ticker/>
       <div className="divr"/>
       <About/>
       <div className="divr"/>
