@@ -87,9 +87,8 @@ function Hero() {
             Base Chain · Live Now
           </div>
           <h1>
-            I AM THE<br/>
-            <span className="blue">VIBE.</span><br/>
-            <span className="ghost">The Base Dog.</span>
+            I AM THE <span className="blue">VIBE.</span><br/>
+            <span className="line2">The Base Dog.</span>
           </h1>
           <p className="hero-desc">
             The most loyal, based, and fluffy Maltipoo on chain.
@@ -112,23 +111,25 @@ function Hero() {
             </button>
           </div>
         </div>
-        <div>
-          <div className="dog-card">
-            <img
-              src="/vibe-logo.png"
-              onError={e=>{e.target.onerror=null;e.target.src='/mascot.png';}}
-              alt="$VIBE"
-              className="dog-img"
-            />
-            <div className="dog-ticker">$VIBE</div>
-            <div className="dog-name">The Base Dog · B20</div>
-            <div className="dog-row">
-              <div className="dstat"><span className="dstat-v">1B</span><span className="dstat-l">Supply</span></div>
-              <div className="dstat"><span className="dstat-v">900M</span><span className="dstat-l">Circulating</span></div>
-              <div className="dstat"><span className="dstat-v">100M</span><span className="dstat-l">Vesting</span></div>
+        <div className="dog-wrap">
+          {/* Paw print trail SVG */}
+          {[...Array(8)].map((_,i) => (
+            <div key={i} className="paw">
+              <svg viewBox="0 0 40 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="20" cy="26" rx="10" ry="8" fill="#111"/>
+                <ellipse cx="9"  cy="14" rx="4.5" ry="5.5" fill="#111"/>
+                <ellipse cx="31" cy="14" rx="4.5" ry="5.5" fill="#111"/>
+                <ellipse cx="14" cy="5"  rx="3.5" ry="4"   fill="#111"/>
+                <ellipse cx="26" cy="5"  rx="3.5" ry="4"   fill="#111"/>
+              </svg>
             </div>
-            <div className="dog-paws">🐾 🐾 🐾 🐾 🐾</div>
-          </div>
+          ))}
+          <img
+            src="/vibe-logo.png"
+            onError={e=>{e.target.onerror=null;e.target.src='/mascot.png';}}
+            alt="$VIBE The Base Dog"
+            className="dog-img"
+          />
         </div>
       </div>
     </section>
