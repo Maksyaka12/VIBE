@@ -418,7 +418,7 @@ h2 .bl { color: var(--blue); }
 .sec-comic {
   position: relative;
   overflow: hidden;
-  padding: 100px 0;
+  padding: 240px 0;
 }
 .sec-comic .wrap { position: relative; z-index: 2; }
 .sec-bg {
