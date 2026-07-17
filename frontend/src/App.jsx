@@ -4,7 +4,7 @@ import './index.css';
 const CA      = '0xB200000000000000000000ba3068A5B447a81101';
 const O1      = 'https://launch.o1.exchange/token/0xb200000000000000000000ba3068a5b447a81101';
 const DEX     = 'https://dexscreener.com/base/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530';
-const DEX_EMB = 'https://dexscreener.com/base/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530?embed=1&theme=light';
+const DEX_EMB = 'https://dexscreener.com/base/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530?embed=1&theme=dark';
 
 const UNLOCKS = [
   {d:'Aug 8, 2026',  a:'10M'},{d:'Sep 7, 2026',  a:'20M'},
