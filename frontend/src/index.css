@@ -338,9 +338,9 @@ h2 .bl { color: var(--blue); }
 }
 .sunglasses {
   position: absolute;
-  top: 14%; 
-  left: 74%;
-  width: 17%;
+  top: 17%; 
+  left: 76%;
+  width: 18%;
   transform: translateX(-50%) translateY(-200px) scale(1.2) rotate(-15deg);
   opacity: 0;
   animation: glasses-drop 5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
@@ -349,9 +349,9 @@ h2 .bl { color: var(--blue); }
 @keyframes glasses-drop {
   0% { transform: translateX(-50%) translateY(-200px) scale(1.2) rotate(-25deg); opacity: 0; }
   5% { opacity: 1; }
-  20% { transform: translateX(-50%) translateY(0) scale(1) rotate(-8deg); opacity: 1; }
-  85% { transform: translateX(-50%) translateY(0) scale(1) rotate(-8deg); opacity: 1; }
-  100% { transform: translateX(-50%) translateY(20px) scale(1) rotate(-8deg); opacity: 0; }
+  20% { transform: translateX(-50%) translateY(0) scale(1) rotate(-6deg); opacity: 1; }
+  85% { transform: translateX(-50%) translateY(0) scale(1) rotate(-6deg); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(20px) scale(1) rotate(-6deg); opacity: 0; }
 }
 .glare {
   animation: glint 5s infinite;
