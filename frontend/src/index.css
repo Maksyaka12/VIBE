@@ -415,26 +415,7 @@ h2 .bl { color: var(--blue); }
 .tc:hover .tc-arr { background: var(--blue); color: #fff; border-color: var(--blue); }
 @media(max-width:700px){ .trade-grid{grid-template-columns:1fr;} }
 
-.sec-comic {
-  position: relative;
-  overflow: hidden;
-  padding: 240px 0;
-}
-.sec-comic .wrap { position: relative; z-index: 2; }
-.sec-bg {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-.sec-bg img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-.sec-comic h2, .sec-comic .sec-sub {
-  text-shadow: 0 4px 20px rgba(255,255,255,0.95), 0 0 50px rgba(255,255,255,1), 0 0 80px rgba(255,255,255,1);
-}
+
 
 /* ── FOOTER ── */
 footer { border-top: 1px solid var(--border); padding: 38px 0; }

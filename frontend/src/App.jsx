@@ -260,11 +260,7 @@ function Chart() {
 function Trade() {
   const r=useRev();
   return (
-    <section id="trade" className="alt sec-comic">
-      <div className="sec-bg">
-        <img src="/dog-scene1.jfif" alt="Vibe scene" />
-        <div className="sec-fade"></div>
-      </div>
+    <section id="trade" className="alt">
       <div className="wrap">
         <div className="rv" ref={r}>
           <h2>Get <span className="bl">$VIBE</span>.</h2>
