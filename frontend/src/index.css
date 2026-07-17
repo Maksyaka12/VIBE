@@ -418,7 +418,7 @@ h2 .bl { color: var(--blue); }
 .sec-comic {
   position: relative;
   overflow: hidden;
-  padding: 140px 0;
+  padding: 100px 0;
 }
 .sec-comic .wrap { position: relative; z-index: 2; }
 .sec-bg {
@@ -430,17 +430,10 @@ h2 .bl { color: var(--blue); }
 .sec-bg img {
   width: 100%; height: 100%;
   object-fit: cover;
-  object-position: center bottom;
-  opacity: 0.35;
-  filter: saturate(1.2);
-}
-.sec-bg .sec-fade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, var(--surface) 0%, rgba(246,246,246,0) 25%, rgba(246,246,246,0) 75%, var(--bg) 100%);
+  object-position: center;
 }
 .sec-comic h2, .sec-comic .sec-sub {
-  text-shadow: 0 4px 20px rgba(246,246,246,0.9), 0 0 40px rgba(255,255,255,1);
+  text-shadow: 0 4px 20px rgba(255,255,255,0.95), 0 0 50px rgba(255,255,255,1), 0 0 80px rgba(255,255,255,1);
 }
 
 /* ── FOOTER ── */
