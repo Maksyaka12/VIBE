@@ -156,10 +156,15 @@ h1 {
 }
 h1 .blue { color: var(--blue); }
 h1 .line2 {
-  font-weight: 900;
-  -webkit-text-stroke: 2px rgba(0,0,0,0.18);
-  color: transparent; display: block;
-  white-space: nowrap;
+  font-weight: 900; display: block; white-space: nowrap;
+}
+.outline-black {
+  -webkit-text-stroke: 2.5px var(--ink);
+  color: transparent;
+}
+.outline-blue {
+  -webkit-text-stroke: 2.5px var(--blue);
+  color: transparent;
 }
 @media(max-width:900px){ h1{ white-space:normal; font-size:clamp(2.4rem,8vw,3.5rem); } h1 .line2{white-space:normal;} }
 
@@ -203,7 +208,7 @@ h1 .line2 {
   display: flex; align-items: stretch; justify-content: space-between; overflow: hidden;
 }
 .hero-ca-addr {
-  font-family: 'Courier New', monospace; font-size: 1.05rem; font-weight: 600; color: var(--ink);
+  font-family: 'Courier New', monospace; font-size: 0.9rem; font-weight: 600; color: var(--ink);
   padding: 16px 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;
 }
 .hero-ca-btn {
@@ -221,7 +226,7 @@ h1 .line2 {
   width: 440px; height: 440px;
   background: var(--surface);
   border-radius: 64px;
-  padding: 30px;
+  padding: 44px;
   box-shadow: 0 12px 40px rgba(0,0,0,0.1);
   z-index: 1;
 }
