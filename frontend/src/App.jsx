@@ -179,11 +179,20 @@ function About() {
               <div className="trait"><span className="t-ico">🐾</span><div className="t-txt"><strong>Good Vibes Only</strong>Every paw print forward is a step toward the moon</div></div>
             </div>
           </div>
-          <div className="stat-tiles">
-            <div className="stile"><span className="v">1B</span><span className="l">Total Supply</span></div>
-            <div className="stile"><span className="v">900M</span><span className="l">Circulating</span></div>
-            <div className="stile"><span className="v">100M</span><span className="l">Community Vesting</span><div className="d">10% released monthly</div></div>
-            <div className="stile"><span className="v">10M</span><span className="l">Monthly Unlock</span><div className="d">Straight to holders</div></div>
+          <div className="about-img-wrap">
+            <img src="/picture-vibe.jfif" alt="The real VIBE dog" className="about-img" />
+            <div className="sunglasses">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 25">
+                <rect x="10" y="5" width="35" height="15" rx="3" fill="#111"/>
+                <rect x="55" y="5" width="35" height="15" rx="3" fill="#111"/>
+                <rect x="45" y="8" width="10" height="4" fill="#111"/>
+                <rect x="2" y="8" width="8" height="3" fill="#111"/>
+                <rect x="90" y="8" width="8" height="3" fill="#111"/>
+                {/* Glare effect */}
+                <rect x="14" y="8" width="8" height="3" fill="#fff" opacity="0.3"/>
+                <rect x="59" y="8" width="8" height="3" fill="#fff" opacity="0.3"/>
+              </svg>
+            </div>
           </div>
         </div>
       </div>
@@ -202,7 +211,15 @@ function Tokenomics() {
           <h2>Community-owned.<br/><span className="bl">Zero BS.</span></h2>
           <p className="sec-sub">100M tokens locked. Every unlock goes straight to you.</p>
         </div>
-        <div className="tok-layout">
+        
+        <div className="stat-tiles wide-stats rv">
+          <div className="stile"><span className="v">1B</span><span className="l">Total Supply</span></div>
+          <div className="stile"><span className="v">900M</span><span className="l">Circulating</span></div>
+          <div className="stile"><span className="v">100M</span><span className="l">Community Vesting</span><div className="d">10% released monthly</div></div>
+          <div className="stile"><span className="v">10M</span><span className="l">Monthly Unlock</span><div className="d">Straight to holders</div></div>
+        </div>
+
+        <div className="tok-layout rv">
           <div>
             <div className="tok-card">
               <h3>Community Vesting · 100M $VIBE</h3>
