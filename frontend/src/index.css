@@ -413,26 +413,35 @@ h2 .bl { color: var(--blue); }
 .tc-cta { font-size: 0.86rem; font-weight: 700; color: var(--blue); }
 .tc-arr { width: 30px; height: 30px; border-radius: 7px; background: var(--blue-d); border: 1px solid var(--borderf); display: flex; align-items: center; justify-content: center; color: var(--blue); transition: all 0.2s; }
 .tc:hover .tc-arr { background: var(--blue); color: #fff; border-color: var(--blue); }
-
-.scene-blend {
-  width: 100%;
-  max-width: 900px;
-  margin: 60px auto 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.scene-blend img {
-  width: 100%;
-  height: auto;
-  max-height: 500px;
-  object-fit: contain;
-  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%);
-  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%);
-  opacity: 0.95;
-}
-
 @media(max-width:700px){ .trade-grid{grid-template-columns:1fr;} }
+
+.sec-comic {
+  position: relative;
+  overflow: hidden;
+  padding: 140px 0;
+}
+.sec-comic .wrap { position: relative; z-index: 2; }
+.sec-bg {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.sec-bg img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  opacity: 0.35;
+  filter: saturate(1.2);
+}
+.sec-bg .sec-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, var(--surface) 0%, rgba(246,246,246,0) 25%, rgba(246,246,246,0) 75%, var(--bg) 100%);
+}
+.sec-comic h2, .sec-comic .sec-sub {
+  text-shadow: 0 4px 20px rgba(246,246,246,0.9), 0 0 40px rgba(255,255,255,1);
+}
 
 /* ── FOOTER ── */
 footer { border-top: 1px solid var(--border); padding: 38px 0; }
