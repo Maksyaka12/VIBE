@@ -373,9 +373,9 @@ h2 .bl { color: var(--blue); }
   background: var(--bg); border: 1px solid var(--border);
   border-radius: 18px; padding: 28px; flex: 1;
 }
-.sched h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 5px; color: var(--ink); }
-.sched .sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 18px; }
-.ul-wrap { display: flex; flex-direction: column; gap: 6px; max-height: 460px; overflow-y: auto; padding-right: 4px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+.sched h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: var(--ink); }
+.sched .sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; }
+.ul-wrap { display: flex; flex-direction: column; gap: 6px; max-height: none; overflow-y: visible; padding-right: 4px; }
 .ul-r {
   display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center;
   padding: 10px 14px; background: var(--surface); border-radius: 9px;
