@@ -4,7 +4,7 @@ import './index.css';
 const CA      = '0xB200000000000000000000ba3068A5B447a81101';
 const O1      = 'https://launch.o1.exchange/token/0xb200000000000000000000ba3068a5b447a81101';
 const DEX     = 'https://dexscreener.com/base/0xb200000000000000000000ba3068a5b447a81101';
-const DEX_EMB = 'https://dexscreener.com/base/0xb200000000000000000000ba3068a5b447a81101?embed=1&theme=light&trades=0&info=0';
+const DEX_EMB = 'https://dexscreener.com/base/0x4ed4e862860bed51a9570b96d89af5e1b0efefed?embed=1&theme=light&trades=0&info=0';
 
 const UNLOCKS = [
   {d:'Aug 8, 2026',  a:'10M'},{d:'Sep 7, 2026',  a:'20M'},
@@ -106,26 +106,16 @@ function Hero() {
             </a>
           </div>
           <div className="ca-box">
-            <span className="lbl">$VIBE Contract Address (Base)</span>
-            <span className="addr">{CA}</span>
+            <div className="ca-left">
+              <span className="lbl">$VIBE Contract Address (Base)</span>
+              <span className="addr">{CA}</span>
+            </div>
             <button className={`cpbtn${ok?' ok':''}`} onClick={go}>
               {ok ? '✓ Copied' : 'Copy'}
             </button>
           </div>
         </div>
         <div className="dog-wrap">
-          {/* Paw print trail SVG */}
-          {[...Array(8)].map((_,i) => (
-            <div key={i} className="paw">
-              <svg viewBox="0 0 40 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="20" cy="26" rx="10" ry="8" fill="#111"/>
-                <ellipse cx="9"  cy="14" rx="4.5" ry="5.5" fill="#111"/>
-                <ellipse cx="31" cy="14" rx="4.5" ry="5.5" fill="#111"/>
-                <ellipse cx="14" cy="5"  rx="3.5" ry="4"   fill="#111"/>
-                <ellipse cx="26" cy="5"  rx="3.5" ry="4"   fill="#111"/>
-              </svg>
-            </div>
-          ))}
           <img
             src="/vibe-logo.png"
             onError={e=>{e.target.onerror=null;e.target.src='/mascot.png';}}
@@ -181,18 +171,6 @@ function About() {
           </div>
           <div className="about-img-wrap">
             <img src="/picture-vibe.jfif" alt="The real VIBE dog" className="about-img" />
-            <div className="sunglasses">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 25">
-                <rect x="10" y="5" width="35" height="15" rx="3" fill="#111"/>
-                <rect x="55" y="5" width="35" height="15" rx="3" fill="#111"/>
-                <rect x="45" y="8" width="10" height="4" fill="#111"/>
-                <rect x="2" y="8" width="8" height="3" fill="#111"/>
-                <rect x="90" y="8" width="8" height="3" fill="#111"/>
-                {/* Glare effect */}
-                <rect className="glare" x="14" y="8" width="8" height="3" fill="#fff" opacity="0"/>
-                <rect className="glare" x="59" y="8" width="8" height="3" fill="#fff" opacity="0"/>
-              </svg>
-            </div>
           </div>
         </div>
       </div>
@@ -212,14 +190,14 @@ function Tokenomics() {
           <p className="sec-sub">100M tokens locked. Every unlock goes straight to you.</p>
         </div>
         
-        <div className="stat-tiles wide-stats rv">
+        <div className="stat-tiles wide-stats">
           <div className="stile"><span className="v">1B</span><span className="l">Total Supply</span></div>
           <div className="stile"><span className="v">900M</span><span className="l">Circulating</span></div>
           <div className="stile"><span className="v">100M</span><span className="l">Community Vesting</span><div className="d">10% released monthly</div></div>
           <div className="stile"><span className="v">10M</span><span className="l">Monthly Unlock</span><div className="d">Straight to holders</div></div>
         </div>
 
-        <div className="tok-layout rv">
+        <div className="tok-layout">
           <div>
             <div className="tok-card">
               <h3>Community Vesting · 100M $VIBE</h3>

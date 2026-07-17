@@ -194,22 +194,25 @@ h1 .line2 {
   background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: 14px; padding: 16px 22px;
-  display: inline-flex; align-items: center; gap: 14px;
-  max-width: 580px;
+  display: inline-flex; align-items: center; justify-content: space-between; gap: 14px;
+  max-width: 580px; width: 100%; text-align: left;
+}
+.ca-box .ca-left {
+  display: flex; flex-direction: column; gap: 4px; overflow: hidden;
 }
 .ca-box .lbl {
   font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--blue); flex-shrink: 0;
+  text-transform: uppercase; color: var(--blue);
   white-space: nowrap;
 }
 .ca-box .addr {
-  font-family: 'Courier New', monospace; font-size: 0.76rem;
-  color: var(--muted); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-family: 'Courier New', monospace; font-size: 0.8rem; font-weight: 600;
+  color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .ca-box .cpbtn {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
   color: var(--muted); font-family: var(--font); font-size: 0.74rem; font-weight: 600;
-  padding: 7px 14px; white-space: nowrap; transition: all 0.2s;
+  padding: 8px 16px; white-space: nowrap; transition: all 0.2s; height: fit-content; flex-shrink: 0;
 }
 .ca-box .cpbtn:hover { color: var(--ink); border-color: rgba(0,0,0,0.2); }
 .ca-box .cpbtn.ok { color: var(--blue); border-color: var(--borderf); }
@@ -336,31 +339,7 @@ h2 .bl { color: var(--blue); }
   border-radius: 32px;
   box-shadow: 0 32px 80px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.06);
 }
-.sunglasses {
-  position: absolute;
-  top: 17%; 
-  left: 76%;
-  width: 18%;
-  transform: translateX(-50%) translateY(-200px) scale(1.2) rotate(-15deg);
-  opacity: 0;
-  animation: glasses-drop 5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-  z-index: 10;
-}
-@keyframes glasses-drop {
-  0% { transform: translateX(-50%) translateY(-200px) scale(1.2) rotate(-25deg); opacity: 0; }
-  5% { opacity: 1; }
-  20% { transform: translateX(-50%) translateY(0) scale(1) rotate(-6deg); opacity: 1; }
-  85% { transform: translateX(-50%) translateY(0) scale(1) rotate(-6deg); opacity: 1; }
-  100% { transform: translateX(-50%) translateY(20px) scale(1) rotate(-6deg); opacity: 0; }
-}
-.glare {
-  animation: glint 5s infinite;
-}
-@keyframes glint {
-  0%, 25% { opacity: 0; }
-  30% { opacity: 0.9; }
-  35%, 100% { opacity: 0; }
-}
+
 
 /* Stats */
 .stat-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
