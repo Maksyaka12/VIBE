@@ -6,58 +6,6 @@ const O1      = 'https://launch.o1.exchange/token/0xb200000000000000000000ba3068
 const DEX     = 'https://dexscreener.com/base/0xb200000000000000000000ba3068a5b447a81101';
 const DEX_EMB = 'https://dexscreener.com/base/0xb200000000000000000000ba3068a5b447a81101?embed=1&theme=light&trades=0&info=0';
 
-/* ── Walking Paws ── */
-function WalkingPaws() {
-  const [paws, setPaws] = useState([]);
-  const idRef = useRef(0);
-
-  useEffect(() => {
-    let timer;
-
-    function spawnWalk() {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const startX = 60 + Math.random() * (vw - 120);
-      const startY = 60 + Math.random() * (vh - 120);
-      const angle  = Math.random() * Math.PI * 2;
-      const steps  = 5 + Math.floor(Math.random() * 5);
-      const stepLen = 44;
-      const sideOff = 11;
-
-      for (let i = 0; i < steps; i++) {
-        const side = i % 2 === 0 ? 1 : -1;
-        const x = startX + Math.cos(angle) * stepLen * i + Math.sin(angle) * sideOff * side;
-        const y = startY + Math.sin(angle) * stepLen * i - Math.cos(angle) * sideOff * side;
-        const rot = (angle * 180 / Math.PI) - 90;
-        const pawId = idRef.current++;
-
-        setTimeout(() => {
-          setPaws(prev => [...prev, { id: pawId, x, y, rot }]);
-          setTimeout(() => setPaws(prev => prev.filter(p => p.id !== pawId)), 2000);
-        }, i * 280);
-      }
-
-      const nextDelay = steps * 280 + 1200 + Math.random() * 800;
-      timer = setTimeout(spawnWalk, nextDelay);
-    }
-
-    timer = setTimeout(spawnWalk, 600);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <div className="paw-walker">
-      {paws.map(p => (
-        <span
-          key={p.id}
-          className="paw-step"
-          style={{ left: p.x, top: p.y, '--pr': `${p.rot}deg` }}
-        >🐾</span>
-      ))}
-    </div>
-  );
-}
-
 const UNLOCKS = [
   {d:'Aug 8, 2026',  a:'10M'},{d:'Sep 7, 2026',  a:'20M'},
   {d:'Oct 7, 2026',  a:'30M'},{d:'Nov 6, 2026',  a:'40M'},
@@ -147,8 +95,7 @@ function Hero() {
           <p className="hero-desc">
             Meet $VIBE — the Base Dog and the ultimate mood maker on Base B20.
             Good vibes and positive energy only.
-            Every great journey starts with a single paw print
-            {' '}<span style={{filter:'brightness(0)'}}>🐾</span>
+            Every great journey starts with a single paw print 🐾
           </p>
           <div className="hero-btns">
             <a href={O1} target="_blank" rel="noreferrer" className="btn-fill">
@@ -413,7 +360,6 @@ function Footer() {
 export default function App() {
   return (
     <>
-      <WalkingPaws/>
       <Nav/>
       <Hero/>
       <div className="divr"/>

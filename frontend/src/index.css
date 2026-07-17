@@ -71,7 +71,7 @@ nav.stuck {
   text-decoration: none;
 }
 .nav-logo {
-  width: 30px; height: 30px; border-radius: 50%;
+  width: 46px; height: 46px; border-radius: 50%;
   object-fit: cover; flex-shrink: 0;
   border: 1.5px solid var(--border);
 }
@@ -156,11 +156,10 @@ h1 {
 }
 h1 .blue { color: var(--blue); }
 h1 .line2 {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  -webkit-text-stroke: 2px rgba(0,0,0,0.2);
+  font-weight: 900;
+  -webkit-text-stroke: 2px rgba(0,0,0,0.18);
   color: transparent; display: block;
-  white-space: nowrap; letter-spacing: -0.03em;
+  white-space: nowrap;
 }
 @media(max-width:900px){ h1{ white-space:normal; font-size:clamp(2.4rem,8vw,3.5rem); } h1 .line2{white-space:normal;} }
 
@@ -435,28 +434,6 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
 .soc:hover { color: var(--blue); border-color: var(--borderf); transform: translateY(-2px); }
 
 @media(max-width:600px){ .foot-inner{flex-direction:column;text-align:center;} footer{padding:32px 0;} }
-
-/* ── WALKING PAWS ── */
-.paw-walker {
-  position: fixed; inset: 0;
-  pointer-events: none; z-index: 9999;
-  overflow: hidden;
-}
-.paw-step {
-  position: fixed;
-  font-size: 22px;
-  filter: brightness(0);
-  pointer-events: none;
-  animation: paw-fade 2s ease-in-out forwards;
-  transform-origin: center;
-}
-@keyframes paw-fade {
-  0%   { opacity: 0; transform: scale(0.4) rotate(var(--pr)); }
-  18%  { opacity: 0.4; transform: scale(1.05) rotate(var(--pr)); }
-  35%  { opacity: 0.35; transform: scale(1) rotate(var(--pr)); }
-  80%  { opacity: 0.18; }
-  100% { opacity: 0; }
-}
 
 /* ── REVEAL ── */
 .rv { opacity: 0; transform: translateY(20px); transition: opacity 0.55s, transform 0.55s; }
