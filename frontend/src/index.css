@@ -31,7 +31,8 @@ a, button {
   --border:  rgba(0,0,0,0.08);
   --borderf: rgba(0,0,255,0.2);
   --font:    'Inter', sans-serif;
-  --pad:     80px;
+  --max-w:   1100px;
+  --pad:     60px;
 }
 
 body {
@@ -57,6 +58,8 @@ nav.stuck {
   padding: 14px 0;
 }
 .nav-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
   padding: 0 var(--pad);
   display: flex; align-items: center; justify-content: space-between;
 }
@@ -102,7 +105,11 @@ nav.stuck {
 @media(max-width:820px){ .nav-menu{display:none;} .nav-buy.desk{display:none;} .ham{display:block;} }
 
 /* ── WRAP ── */
-.wrap { padding: 0 var(--pad); }
+.wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
 
 /* ── HERO ── */
 #hero {
@@ -111,10 +118,12 @@ nav.stuck {
   padding: 110px 0 80px;
 }
 .hero-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
   padding: 0 var(--pad);
   display: grid;
-  grid-template-columns: 1fr 480px;
-  gap: 80px; align-items: center;
+  grid-template-columns: 1fr 420px;
+  gap: 60px; align-items: center;
   width: 100%;
 }
 
@@ -266,7 +275,6 @@ h1 .line2 {
 /* ── SECTION ── */
 section { padding: 100px 0; }
 section.alt { background: var(--surface); }
-.wrap { padding: 0 var(--pad); }
 
 .sec-head { margin-bottom: 56px; }
 .sec-tag {
@@ -406,7 +414,7 @@ h2 .bl { color: var(--blue); }
 /* ── FOOTER ── */
 footer { border-top: 1px solid var(--border); padding: 38px 0; }
 .foot-inner {
-  padding: 0 var(--pad);
+  max-width: var(--max-w); margin: 0 auto; padding: 0 var(--pad);
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
 }
 .foot-brand { font-weight: 800; font-size: 1rem; color: var(--muted); }
