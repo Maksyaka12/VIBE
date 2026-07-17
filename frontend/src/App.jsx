@@ -163,19 +163,14 @@ function About() {
       <div className="wrap">
         <div className="sec-head rv" ref={r1}>
           <div className="sec-tag">🐶 About $VIBE</div>
-          <h2>More than a meme.<br/>A <span className="bl">companion</span>.</h2>
-          <p className="sec-sub">The fluffiest, most loyal dog on the Base blockchain.</p>
+          <h2>More than a meme.<br/>The real <span className="bl">Base Dog</span>.</h2>
+          <p className="sec-sub">The fluffiest, most loyal dog onchain & offchain.</p>
         </div>
         <div className="about-grid">
           <div className="rv d1" ref={r2}>
             <p>
-              $VIBE is the Based Maltipoo — the ultimate mood maker on Base B20.
-              Loyal. Fluffy. Vibing. Built to spread positive energy and immaculate
-              vibes with the based community.
-            </p>
-            <p>
-              Dreams. Happy paws. Unlimited vibes. Your loyal, vibing companion
-              is here and ready to take the Base ecosystem by storm 🌊
+              $VIBE is a real Maltipoo Dog who came to B20 to become the ultimate mood maker,
+              spread positive energy and immaculate vibes with the based community.
             </p>
             <div className="traits">
               <div className="trait"><span className="t-ico">🐶</span><div className="t-txt"><strong>Real Dog Energy</strong>Inspired by a real Maltipoo — the cutest, most vibing dog alive</div></div>
