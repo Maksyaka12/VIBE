@@ -1,138 +1,131 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './index.css';
 
-/* ── constants ── */
 const CA      = '0xB200000000000000000000ba3068A5B447a81101';
 const O1      = 'https://launch.o1.exchange/token/0xb200000000000000000000ba3068a5b447a81101';
 const DEX     = 'https://dexscreener.com/base/0xb200000000000000000000ba3068a5b447a81101';
-const DEX_EMB = 'https://dexscreener.com/base/0xb200000000000000000000ba3068a5b447a81101?embed=1&theme=dark&trades=0&info=0';
+const DEX_EMB = 'https://dexscreener.com/base/0xb200000000000000000000ba3068a5b447a81101?embed=1&theme=light&trades=0&info=0';
 
 const UNLOCKS = [
-  {date:'Aug 8, 2026',  amt:'10M'},
-  {date:'Sep 7, 2026',  amt:'20M'},
-  {date:'Oct 7, 2026',  amt:'30M'},
-  {date:'Nov 6, 2026',  amt:'40M'},
-  {date:'Dec 6, 2026',  amt:'50M'},
-  {date:'Jan 5, 2027',  amt:'60M'},
-  {date:'Feb 4, 2027',  amt:'70M'},
-  {date:'Mar 6, 2027',  amt:'80M'},
-  {date:'Apr 5, 2027',  amt:'90M'},
-  {date:'May 5, 2027',  amt:'100M'},
+  {d:'Aug 8, 2026',  a:'10M'},{d:'Sep 7, 2026',  a:'20M'},
+  {d:'Oct 7, 2026',  a:'30M'},{d:'Nov 6, 2026',  a:'40M'},
+  {d:'Dec 6, 2026',  a:'50M'},{d:'Jan 5, 2027',  a:'60M'},
+  {d:'Feb 4, 2027',  a:'70M'},{d:'Mar 6, 2027',  a:'80M'},
+  {d:'Apr 5, 2027',  a:'90M'},{d:'May 5, 2027',  a:'100M'},
 ];
 
-const TICKER = [
-  '🐾 $VIBE ON BASE','🐶 THE BASE DOG','✨ B20 STANDARD','🔥 GOOD BOY COIN',
-  '💛 BASED COMPANION','🚀 UNLIMITED VIBES','🐾 HAPPY PAWS','💎 COMMUNITY FIRST',
-  '🌊 RIDE THE VIBE','🤝 BASED & LOYAL',
+const TICKS = [
+  '🐾 $VIBE ON BASE','🐶 THE BASE DOG','✨ B20 STANDARD','💙 GOOD BOY COIN',
+  '🚀 UNLIMITED VIBES','🐾 HAPPY PAWS','💎 COMMUNITY FIRST','🌊 RIDE THE VIBE',
+  '🤝 BASED & LOYAL','🔥 MALTIPOO COIN',
 ];
 
-/* ── tiny hooks ── */
-const useCopy = (text) => {
-  const [done, setDone] = useState(false);
+/* hooks */
+function useCopy(txt) {
+  const [ok, setOk] = useState(false);
   const go = useCallback(() => {
-    navigator.clipboard.writeText(text).catch(()=>{});
-    setDone(true);
-    setTimeout(()=>setDone(false), 2000);
-  }, [text]);
-  return { done, go };
-};
-
-const useReveal = () => {
+    navigator.clipboard.writeText(txt).catch(()=>{});
+    setOk(true); setTimeout(() => setOk(false), 2000);
+  }, [txt]);
+  return { ok, go };
+}
+function useRev() {
   const ref = useRef(null);
-  useEffect(()=>{
-    const el = ref.current; if(!el) return;
-    const io = new IntersectionObserver(([e])=>{ if(e.isIntersecting) el.classList.add('in'); },{threshold:0.12});
-    io.observe(el);
-    return ()=>io.disconnect();
-  },[]);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) el.classList.add('on'); }, { threshold: 0.1 });
+    io.observe(el); return () => io.disconnect();
+  }, []);
   return ref;
-};
+}
 
-/* ── NAV ── */
+/* NAV */
 function Nav() {
   const [stuck, setStuck] = useState(false);
   const [open, setOpen]   = useState(false);
-  useEffect(()=>{
-    const h = ()=>setStuck(window.scrollY>60);
-    window.addEventListener('scroll',h);
-    return ()=>window.removeEventListener('scroll',h);
-  },[]);
-  const go=(id)=>{ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); setOpen(false); };
-  return(
+  useEffect(() => {
+    const h = () => setStuck(window.scrollY > 50);
+    window.addEventListener('scroll', h); return () => window.removeEventListener('scroll', h);
+  }, []);
+  const go = id => { document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); setOpen(false); };
+  return (
     <>
-      <nav className={stuck?'stuck':''}>
+      <nav className={stuck ? 'stuck' : ''}>
         <div className="nav-inner">
-          <div className="nav-brand" onClick={()=>go('hero')}>
-            <div className="dot"/>
-            $VIBE
+          <div className="nav-brand" onClick={() => go('hero')}>
+            <div className="dot"/>$VIBE
           </div>
           <ul className="nav-menu">
             {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
-              <li key={id}><a onClick={()=>go(id)}>{l}</a></li>
+              <li key={id}><a onClick={() => go(id)}>{l}</a></li>
             ))}
           </ul>
           <a href={O1} target="_blank" rel="noreferrer" className="nav-buy desk">Buy $VIBE ↗</a>
-          <button className="ham" onClick={()=>setOpen(true)}>☰</button>
+          <button className="ham" onClick={() => setOpen(true)}>☰</button>
         </div>
       </nav>
-      <div className={`mob${open?' open':''}`}>
-        <button className="mob-x" onClick={()=>setOpen(false)}>✕</button>
+      <div className={`mob${open ? ' open' : ''}`}>
+        <button className="mob-x" onClick={() => setOpen(false)}>✕</button>
         {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
-          <a key={id} onClick={()=>go(id)}>{l}</a>
+          <a key={id} onClick={() => go(id)}>{l}</a>
         ))}
-        <a href={O1} target="_blank" rel="noreferrer" className="btn-primary">Buy $VIBE ↗</a>
+        <a href={O1} target="_blank" rel="noreferrer" className="btn-fill">Buy $VIBE ↗</a>
       </div>
     </>
   );
 }
 
-/* ── HERO ── */
+/* HERO */
 function Hero() {
-  const {done, go} = useCopy(CA);
-  return(
+  const { ok, go } = useCopy(CA);
+  return (
     <section id="hero">
-      <div className="hero-wrap z1">
+      <div className="hero-inner">
         <div>
           <div className="hero-eyebrow">
-            <div className="live-dot"/>
-            Live on Base B20
+            <div className="eyebrow-dot"/>
+            Base Chain · Live Now
           </div>
           <h1>
-            The Base<br/>
-            <span className="accent">Dog.</span><br/>
-            <span className="ghost">Your Vibe.</span>
+            I AM THE<br/>
+            <span className="blue">VIBE.</span><br/>
+            <span className="ghost">The Base Dog.</span>
           </h1>
-          <p className="hero-sub">
-            Meet $VIBE — the Based Maltipoo and the ultimate mood maker on Base B20.
-            Loyal. Fluffy. Vibing. Built to spread positive energy and immaculate vibes
-            with the based community. Every great journey starts with a single paw print 🐾
+          <p className="hero-desc">
+            The most loyal, based, and fluffy Maltipoo on chain.
+            Meet $VIBE — your based companion on Base B20. Good vibes only.
+            Every great journey starts with a single paw print 🐾
           </p>
-          <div className="hero-actions">
-            <a href={O1} target="_blank" rel="noreferrer" className="btn-primary">
-              Buy $VIBE on o1 ↗
+          <div className="hero-btns">
+            <a href={O1} target="_blank" rel="noreferrer" className="btn-fill">
+              Buy $VIBE →
             </a>
-            <a href={DEX} target="_blank" rel="noreferrer" className="btn-ghost">
-              View Chart
+            <a href={DEX} target="_blank" rel="noreferrer" className="btn-line">
+              Dexscreener ↗
             </a>
           </div>
-          <div className="ca-row">
-            <span className="ca-label">CA</span>
-            <span className="ca-addr">{CA}</span>
-            <button className={`ca-copy${done?' ok':''}`} onClick={go}>
-              {done?'✓ Copied':'Copy'}
+          <div className="ca-box">
+            <span className="lbl">CA (Base)</span>
+            <span className="addr">{CA}</span>
+            <button className={`cpbtn${ok?' ok':''}`} onClick={go}>
+              {ok ? '✓ Copied' : 'Copy'}
             </button>
           </div>
         </div>
-
         <div>
           <div className="dog-card">
-            <img src="/vibe-logo.png" alt="$VIBE The Base Dog" className="dog-img"/>
+            <img
+              src="/vibe-logo.png"
+              onError={e=>{e.target.onerror=null;e.target.src='/mascot.png';}}
+              alt="$VIBE"
+              className="dog-img"
+            />
             <div className="dog-ticker">$VIBE</div>
-            <div className="dog-tagline">The Based Maltipoo · B20</div>
-            <div className="dog-stats">
-              <div className="ds"><span className="ds-v">1B</span><span className="ds-l">Supply</span></div>
-              <div className="ds"><span className="ds-v">900M</span><span className="ds-l">Circulating</span></div>
-              <div className="ds"><span className="ds-v">100M</span><span className="ds-l">Vesting</span></div>
+            <div className="dog-name">The Base Dog · B20</div>
+            <div className="dog-row">
+              <div className="dstat"><span className="dstat-v">1B</span><span className="dstat-l">Supply</span></div>
+              <div className="dstat"><span className="dstat-v">900M</span><span className="dstat-l">Circulating</span></div>
+              <div className="dstat"><span className="dstat-v">100M</span><span className="dstat-l">Vesting</span></div>
             </div>
             <div className="dog-paws">🐾 🐾 🐾 🐾 🐾</div>
           </div>
@@ -142,16 +135,16 @@ function Hero() {
   );
 }
 
-/* ── MARQUEE ── */
-function Marquee() {
-  const all = [...TICKER,...TICKER];
-  return(
-    <div className="marquee-bar">
-      <div className="marquee-track">
+/* TICKER */
+function Ticker() {
+  const all = [...TICKS,...TICKS];
+  return (
+    <div className="ticker">
+      <div className="ticker-track">
         {all.map((t,i)=>(
-          <div key={i} className="m-item">
-            <span className="m-star">✦</span>
-            <span className="m-bold">{t}</span>
+          <div key={i} className="t-item">
+            <span className="t-star">✦</span>
+            <span className="t-text"><b>{t}</b></span>
           </div>
         ))}
       </div>
@@ -159,80 +152,40 @@ function Marquee() {
   );
 }
 
-/* ── ABOUT ── */
+/* ABOUT */
 function About() {
-  const r1=useReveal(), r2=useReveal(), r3=useReveal();
-  return(
-    <section id="about" className="section">
-      <div className="sec-wrap z1">
-        <div ref={r1} className="reveal">
-          <div className="sec-tag">About $VIBE</div>
-          <h2>More than a token.<br/>A <span className="a">companion</span>.</h2>
-          <p className="sec-desc">The fluffiest, most based dog on the blockchain.</p>
+  const r1=useRev(), r2=useRev();
+  return (
+    <section id="about">
+      <div className="wrap">
+        <div className="sec-head rv" ref={r1}>
+          <div className="sec-tag">🐶 About $VIBE</div>
+          <h2>More than a meme.<br/>A <span className="bl">companion</span>.</h2>
+          <p className="sec-sub">The fluffiest, most loyal dog on the Base blockchain.</p>
         </div>
-        <div className="about-layout">
-          <div ref={r2} className="reveal d1 about-copy">
+        <div className="about-grid">
+          <div className="rv d1" ref={r2}>
             <p>
-              $VIBE isn't just a memecoin — it's a movement. Inspired by a real Maltipoo pup,
-              $VIBE embodies everything the Based community stands for: loyalty, good vibes,
-              and unwavering positivity.
+              $VIBE is the Based Maltipoo — the ultimate mood maker on Base B20.
+              Loyal. Fluffy. Vibing. Built to spread positive energy and immaculate
+              vibes with the based community.
             </p>
             <p>
-              Dreams. Happy paws. Unlimited vibes. Your loyal, vibing, based companion is here
-              and ready to take the Base ecosystem by storm 🌊
+              Dreams. Happy paws. Unlimited vibes. Your loyal, vibing companion
+              is here and ready to take the Base ecosystem by storm 🌊
             </p>
             <div className="traits">
-              <div className="trait">
-                <span className="trait-icon">🐶</span>
-                <div className="trait-text">
-                  <strong>Real Dog Energy</strong>
-                  Inspired by a real Maltipoo — the cutest, most vibing dog you'll ever meet
-                </div>
-              </div>
-              <div className="trait">
-                <span className="trait-icon">🏗️</span>
-                <div className="trait-text">
-                  <strong>B20 on Base</strong>
-                  Community-driven standard with fully transparent tokenomics
-                </div>
-              </div>
-              <div className="trait">
-                <span className="trait-icon">🤝</span>
-                <div className="trait-text">
-                  <strong>Loyal to Holders</strong>
-                  100% of vesting distributed to the community — no team bags
-                </div>
-              </div>
-              <div className="trait">
-                <span className="trait-icon">🐾</span>
-                <div className="trait-text">
-                  <strong>Good Vibes Only</strong>
-                  Every paw print forward is a step toward the moon
-                </div>
-              </div>
+              <div className="trait"><span className="t-ico">🐶</span><div className="t-txt"><strong>Real Dog Energy</strong>Inspired by a real Maltipoo — the cutest, most vibing dog alive</div></div>
+              <div className="trait"><span className="t-ico">🏗️</span><div className="t-txt"><strong>B20 on Base</strong>Community-driven standard, fully transparent tokenomics</div></div>
+              <div className="trait"><span className="t-ico">🤝</span><div className="t-txt"><strong>100% to Holders</strong>Every vested token distributed to the community — zero team bags</div></div>
+              <div className="trait"><span className="t-ico">🐾</span><div className="t-txt"><strong>Good Vibes Only</strong>Every paw print forward is a step toward the moon</div></div>
             </div>
           </div>
-          <div ref={r3} className="reveal d2">
-            <div className="stat-tiles">
-              <div className="tile">
-                <span className="v">1B</span>
-                <span className="l">Total Supply</span>
-              </div>
-              <div className="tile">
-                <span className="v">900M</span>
-                <span className="l">Circulating</span>
-              </div>
-              <div className="tile">
-                <span className="v">100M</span>
-                <span className="l">Community Vesting</span>
-                <div className="d">10% released monthly to holders &amp; supporters</div>
-              </div>
-              <div className="tile">
-                <span className="v">10M</span>
-                <span className="l">Monthly Unlock</span>
-                <div className="d">Distributed every single month</div>
-              </div>
-            </div>
+          <div className="stat-tiles">
+            <div className="stile"><span className="v">1B</span><span className="l">Total Supply</span></div>
+            <div className="stile"><span className="v">900M</span><span className="l">Circulating</span></div>
+            <div className="stile"><span className="v">100M</span><span className="l">Community Vesting</span><div className="d">10% released monthly</div></div>
+            <div className="stile"><span className="v">10M</span><span className="l">Monthly Unlock</span><div className="d">Straight to holders</div></div>
           </div>
         </div>
       </div>
@@ -240,55 +193,54 @@ function About() {
   );
 }
 
-/* ── TOKENOMICS ── */
+/* TOKENOMICS */
 function Tokenomics() {
-  const r=useReveal();
-  return(
-    <section id="tokenomics" className="section alt">
-      <div className="sec-wrap z1">
-        <div ref={r} className="reveal">
-          <div className="sec-tag">Tokenomics</div>
-          <h2>Community-owned.<br/><span className="a">Zero BS.</span></h2>
-          <p className="sec-desc">100M tokens locked. Every unlock goes straight back to you.</p>
+  const r=useRev();
+  return (
+    <section id="tokenomics" className="alt">
+      <div className="wrap">
+        <div className="sec-head rv" ref={r}>
+          <div className="sec-tag">📊 Tokenomics</div>
+          <h2>Community-owned.<br/><span className="bl">Zero BS.</span></h2>
+          <p className="sec-sub">100M tokens locked. Every unlock goes straight to you.</p>
         </div>
-        <div className="tok-grid">
+        <div className="tok-layout">
           <div>
-            <div className="tok-card" style={{marginBottom:20}}>
-              <h3>Vesting Overview</h3>
-              <p className="sub">10M unlocks each month · 10 months total</p>
-              <div className="prog-track"><div className="prog-fill" style={{width:'10%'}}/></div>
+            <div className="tok-card">
+              <h3>Community Vesting · 100M $VIBE</h3>
+              <p className="sub">10M unlocks monthly · starts Aug 8, 2026</p>
+              <div className="prog"><div className="prog-f" style={{width:'10%'}}/></div>
               <div className="prog-labs"><span>0M today</span><span>100M total</span></div>
-              <p style={{fontSize:'0.82rem',color:'var(--muted)',marginBottom:14}}>Who receives each monthly unlock:</p>
-              <div className="who-list">
-                <div className="who-item"><span className="wi">💎</span><div className="wt">Diamond Holders<span>Hold $44+ in $VIBE to qualify</span></div></div>
-                <div className="who-item"><span className="wi">🐾</span><div className="wt">Active Members<span>Engage with the community and earn</span></div></div>
-                <div className="who-item"><span className="wi">📣</span><div className="wt">Token Supporters<span>Spread the vibes, share the rewards</span></div></div>
+              <div className="who">
+                <div className="who-r"><span className="who-ico">💎</span><div className="who-t">Diamond Holders<span>Hold $44+ in $VIBE to qualify</span></div></div>
+                <div className="who-r"><span className="who-ico">🐾</span><div className="who-t">Active Community<span>Engage, share, earn</span></div></div>
+                <div className="who-r"><span className="who-ico">📣</span><div className="who-t">Token Supporters<span>Spread the vibes, share the rewards</span></div></div>
               </div>
             </div>
-            <div className="tok-card">
+            <div className="tok-card" style={{marginTop:14}}>
               <h3>Supply Breakdown</h3>
-              <p className="sub" style={{marginBottom:20}}>Where every token lives</p>
-              <div className="supply-grid">
-                <div className="supply-row">
-                  <div className="supply-top"><span className="supply-name">Circulating Supply</span><span className="supply-pct">90%</span></div>
-                  <div className="prog-track"><div className="prog-fill" style={{width:'90%',background:'var(--teal)'}}/></div>
+              <p className="sub" style={{marginBottom:18}}>Fixed supply, no minting ever.</p>
+              <div className="supply-bars">
+                <div className="sbar-row">
+                  <div className="sbar-top"><span className="sbar-name">Circulating</span><span className="sbar-pct">90%</span></div>
+                  <div className="prog"><div className="prog-f" style={{width:'90%'}}/></div>
                 </div>
-                <div className="supply-row">
-                  <div className="supply-top"><span className="supply-name">Community Vesting</span><span className="supply-pct">10%</span></div>
-                  <div className="prog-track"><div className="prog-fill" style={{width:'10%',background:'#00a8ff'}}/></div>
+                <div className="sbar-row">
+                  <div className="sbar-top"><span className="sbar-name">Vesting</span><span className="sbar-pct">10%</span></div>
+                  <div className="prog"><div className="prog-f" style={{width:'10%',background:'#4444dd'}}/></div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="sched-card">
+          <div className="sched">
             <h3>Unlock Schedule</h3>
             <p className="sub">Aug 2026 → May 2027</p>
-            <div className="ul-list">
+            <div className="ul-wrap">
               {UNLOCKS.map((u,i)=>(
-                <div key={i} className="ul-item">
-                  <span className="ul-date">{u.date}</span>
-                  <span className="ul-amt">{u.amt}</span>
-                  <span className="ul-tag">locked</span>
+                <div key={i} className="ul-r">
+                  <span className="ul-d">{u.d}</span>
+                  <span className="ul-a">{u.a}</span>
+                  <span className="ul-s">locked</span>
                 </div>
               ))}
             </div>
@@ -299,74 +251,79 @@ function Tokenomics() {
   );
 }
 
-/* ── CHART ── */
+/* CHART */
 function Chart() {
-  const r=useReveal();
-  return(
-    <section id="chart" className="section">
-      <div className="sec-wrap z1">
-        <div ref={r} className="reveal chart-header">
+  const r=useRev();
+  return (
+    <section id="chart">
+      <div className="wrap">
+        <div className="chart-hd rv" ref={r}>
           <div>
-            <div className="sec-tag">Live Chart</div>
-            <h2>Price <span className="a">Action</span>.</h2>
+            <div className="sec-tag">📈 Live Chart</div>
+            <h2>Price <span className="bl">Action</span>.</h2>
           </div>
-          <a href={DEX} target="_blank" rel="noreferrer" className="btn-ghost">Open Dexscreener ↗</a>
+          <a href={DEX} target="_blank" rel="noreferrer" className="btn-line">Open Dexscreener ↗</a>
         </div>
-        <div className="chart-frame">
-          <iframe src={DEX_EMB} title="$VIBE chart" width="100%" height="620" frameBorder="0" allowFullScreen/>
+        <div className="chart-box">
+          <iframe
+            src={DEX_EMB}
+            title="$VIBE chart"
+            width="100%" height="600"
+            frameBorder="0" allowFullScreen
+          />
         </div>
       </div>
     </section>
   );
 }
 
-/* ── TRADE ── */
+/* TRADE */
 function Trade() {
-  const r=useReveal();
-  const {done,go}=useCopy(CA);
-  return(
-    <section id="trade" className="section alt">
-      <div className="sec-wrap z1">
-        <div ref={r} className="reveal">
-          <div className="sec-tag">How to Buy</div>
-          <h2>Get <span className="a">$VIBE</span>.</h2>
-          <p className="sec-desc">Live on Base. Pick your venue.</p>
+  const r=useRev();
+  const {ok,go}=useCopy(CA);
+  return (
+    <section id="trade" className="alt">
+      <div className="wrap">
+        <div className="rv" ref={r}>
+          <div className="sec-tag">💳 How to Buy</div>
+          <h2>Get <span className="bl">$VIBE</span>.</h2>
+          <p className="sec-sub">Live on Base. Pick your venue and start vibing.</p>
         </div>
         <div className="trade-grid">
-          <a href={O1} target="_blank" rel="noreferrer" className="trade-link">
-            <div className="tl-top">
-              <div className="tl-logo tl-o1">o1</div>
-              <span className="tl-badge">Recommended</span>
+          <a href={O1} target="_blank" rel="noreferrer" className="tc">
+            <div className="tc-top">
+              <div className="tc-logo tc-o1">o1</div>
+              <span className="tc-badge">Recommended</span>
             </div>
             <h3>o1.exchange</h3>
-            <p>The launchpad where $VIBE was born. Bonded curve, simplest UX, lowest fees on Base. Best place to grab your vibes.</p>
-            <div className="tl-foot">
-              <span className="tl-cta">Open launch page</span>
-              <div className="tl-arr">↗</div>
+            <p>The launchpad where $VIBE was born. Bonded curve, lowest fees on Base. Best place to buy your vibes.</p>
+            <div className="tc-foot">
+              <span className="tc-cta">Open launch page</span>
+              <div className="tc-arr">↗</div>
             </div>
           </a>
-          <a href={DEX} target="_blank" rel="noreferrer" className="trade-link">
-            <div className="tl-top">
-              <div className="tl-logo tl-dx">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3L21 12L12 21L3 12Z" stroke="currentColor" strokeWidth="2"/></svg>
+          <a href={DEX} target="_blank" rel="noreferrer" className="tc">
+            <div className="tc-top">
+              <div className="tc-logo tc-dx">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3L21 12L12 21L3 12Z" stroke="currentColor" strokeWidth="2"/></svg>
               </div>
-              <span className="tl-badge">Charts &amp; Trade</span>
+              <span className="tc-badge">Charts & Trade</span>
             </div>
             <h3>DexScreener</h3>
-            <p>Track $VIBE live and trade directly from the chart. Real-time price action, volume, and liquidity data on Base.</p>
-            <div className="tl-foot">
-              <span className="tl-cta">Trade on Dexscreener</span>
-              <div className="tl-arr">↗</div>
+            <p>Track $VIBE in real-time and trade directly from the chart. Powered by Dexscreener on Base network.</p>
+            <div className="tc-foot">
+              <span className="tc-cta">Trade on Dexscreener</span>
+              <div className="tc-arr">↗</div>
             </div>
           </a>
         </div>
-        <div className="ca-full">
+        <div className="ca-full-row">
           <div>
-            <div className="cl">Contract Address · Base Network</div>
-            <div className="cv">{CA}</div>
+            <div className="lbl">Contract Address · Base Network</div>
+            <div className="addr">{CA}</div>
           </div>
-          <button className={`ca-full-btn${done?' ok':''}`} onClick={go}>
-            {done?'✓ Copied!':'📋 Copy CA'}
+          <button className={`cbtn${ok?' ok':''}`} onClick={go}>
+            {ok ? '✓ Copied!' : '📋 Copy CA'}
           </button>
         </div>
       </div>
@@ -374,22 +331,22 @@ function Trade() {
   );
 }
 
-/* ── FOOTER ── */
+/* FOOTER */
 function Footer() {
-  return(
+  return (
     <footer>
-      <div className="foot">
-        <div className="foot-logo"><span>$VIBE</span> · The Base Dog</div>
+      <div className="foot-inner">
+        <div className="foot-brand"><span>$VIBE</span> · The Base Dog</div>
         <p className="foot-copy">© 2026 $VIBE · Not financial advice · Just a very good boy 🐾</p>
         <div className="foot-soc">
-          <a href="#" className="soc-btn" title="X / Twitter">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          <a href="#" className="soc" title="X">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
-          <a href="#" className="soc-btn" title="Telegram">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-2.035 9.587c-.148.665-.54.826-1.093.513l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.215-3.053 5.55-5.015c.242-.214-.051-.333-.37-.119l-6.86 4.32-2.953-.922c-.642-.2-.655-.642.135-.951l11.524-4.44c.535-.196 1.003.13.939.601z"/></svg>
+          <a href="#" className="soc" title="Telegram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-2.035 9.587c-.148.665-.54.826-1.093.513l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.215-3.053 5.55-5.015c.242-.214-.051-.333-.37-.119l-6.86 4.32-2.953-.922c-.642-.2-.655-.642.135-.951l11.524-4.44c.535-.196 1.003.13.939.601z"/></svg>
           </a>
-          <a href={DEX} target="_blank" rel="noreferrer" className="soc-btn" title="DexScreener">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3L21 12L12 21L3 12Z" stroke="currentColor" strokeWidth="2"/></svg>
+          <a href={DEX} target="_blank" rel="noreferrer" className="soc" title="Dexscreener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3L21 12L12 21L3 12Z" stroke="currentColor" strokeWidth="2"/></svg>
           </a>
         </div>
       </div>
@@ -397,23 +354,20 @@ function Footer() {
   );
 }
 
-/* ── APP ── */
 export default function App() {
-  return(
+  return (
     <>
-      <div className="blob blob-1" aria-hidden="true"/>
-      <div className="blob blob-2" aria-hidden="true"/>
-      <div className="blob blob-3" aria-hidden="true"/>
       <Nav/>
       <Hero/>
-      <Marquee/>
-      <div className="div"/>
+      <div className="divr"/>
+      <Ticker/>
+      <div className="divr"/>
       <About/>
-      <div className="div"/>
+      <div className="divr"/>
       <Tokenomics/>
-      <div className="div"/>
+      <div className="divr"/>
       <Chart/>
-      <div className="div"/>
+      <div className="divr"/>
       <Trade/>
       <Footer/>
     </>
