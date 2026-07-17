@@ -88,7 +88,7 @@ function Hero() {
             <div className="eyebrow-dot"/>
             Live on Base B20
           </div>
-          <h1>I AM THE <span className="blue">VIBE.</span><br/>THE BASE DOG.</h1>
+          <h1>I AM THE <span className="blue">VIBE.</span><br/>THE <span className="blue">BASE</span> DOG.</h1>
           <p className="hero-desc">
             Meet $VIBE — the Base Dog and the ultimate mood maker on Base B20.
             Good vibes and positive energy only.
