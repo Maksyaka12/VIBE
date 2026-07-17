@@ -129,8 +129,8 @@ nav.stuck {
   margin: 0 auto;
   padding: 0 var(--pad);
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px; align-items: stretch;
+  grid-template-columns: 1fr 460px;
+  gap: 60px; align-items: center;
   width: 100%;
 }
 
@@ -190,10 +190,16 @@ h1 .line2 {
 .btn-line:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
 
 /* CA */
-.hero-ca-wrap { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; max-width: 580px; }
-.hero-ca-lbl { font-size: 0.85rem; font-weight: 700; color: var(--ink); letter-spacing: 0.02em; }
+.hero-ca-wrap {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  padding: 20px 24px;
+  display: flex; flex-direction: column; gap: 12px; margin-top: 10px; max-width: 580px; 
+}
+.hero-ca-lbl { font-size: 0.9rem; font-weight: 700; color: var(--ink); letter-spacing: 0.02em; }
 .hero-ca-box {
-  background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px;
+  background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px;
   display: flex; align-items: stretch; justify-content: space-between; overflow: hidden;
 }
 .hero-ca-addr {
@@ -203,7 +209,7 @@ h1 .line2 {
 .hero-ca-btn {
   background: var(--bg3); border: none; border-left: 1.5px solid var(--border);
   color: var(--ink); padding: 0 22px; transition: all 0.2s;
-  display: flex; align-items: center; justify-content: center;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
 }
 .hero-ca-btn:hover { background: var(--blue-d); color: var(--blue); }
 .hero-ca-btn.ok { color: #10B981; }
@@ -211,12 +217,12 @@ h1 .line2 {
 /* Dog card — floating */
 .dog-wrap {
   position: relative;
-  display: flex; align-items: stretch; justify-content: center;
-  width: 100%; min-height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  width: 460px; height: 460px;
 }
 .dog-img {
   width: 100%; height: 100%;
-  border-radius: 32px;
+  border-radius: 36px;
   object-fit: cover;
   box-shadow: 0 32px 80px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.06);
   animation: dog-float 7s ease-in-out infinite;
@@ -232,7 +238,7 @@ h1 .line2 {
   .hero-inner { grid-template-columns: 1fr; padding: 0 28px; }
   .hero-desc { max-width: 100%; }
   .hero-btns { flex-wrap: wrap; }
-  .dog-wrap { height: 400px; min-height: 400px; }
+  .dog-wrap { width: 340px; height: 340px; min-height: auto; margin: 0 auto; }
 }
 
 
