@@ -414,16 +414,23 @@ h2 .bl { color: var(--blue); }
 .tc-arr { width: 30px; height: 30px; border-radius: 7px; background: var(--blue-d); border: 1px solid var(--borderf); display: flex; align-items: center; justify-content: center; color: var(--blue); transition: all 0.2s; }
 .tc:hover .tc-arr { background: var(--blue); color: #fff; border-color: var(--blue); }
 
-.ca-full-row {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 18px 22px;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+.scene-blend {
+  width: 100%;
+  max-width: 900px;
+  margin: 60px auto 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.ca-full-row .lbl { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--blue); margin-bottom: 4px; }
-.ca-full-row .addr { font-family: 'Courier New', monospace; font-size: 0.85rem; color: var(--muted); word-break: break-all; }
-.ca-full-row .cbtn { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-family: var(--font); font-size: 0.78rem; font-weight: 600; padding: 9px 18px; white-space: nowrap; transition: all 0.2s; }
-.ca-full-row .cbtn:hover { color: var(--ink); border-color: rgba(0,0,0,0.2); }
-.ca-full-row .cbtn.ok { color: var(--blue); border-color: var(--borderf); }
+.scene-blend img {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: contain;
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%);
+  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 75%);
+  opacity: 0.95;
+}
 
 @media(max-width:700px){ .trade-grid{grid-template-columns:1fr;} }
 

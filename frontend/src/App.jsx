@@ -259,7 +259,6 @@ function Chart() {
 /* TRADE */
 function Trade() {
   const r=useRev();
-  const {ok,go}=useCopy(CA);
   return (
     <section id="trade" className="alt">
       <div className="wrap">
@@ -295,14 +294,8 @@ function Trade() {
             </div>
           </a>
         </div>
-        <div className="ca-full-row">
-          <div>
-            <div className="lbl">Contract Address · Base Network</div>
-            <div className="addr">{CA}</div>
-          </div>
-          <button className={`cbtn${ok?' ok':''}`} onClick={go}>
-            {ok ? '✓ Copied!' : '📋 Copy CA'}
-          </button>
+        <div className="scene-blend rv d1" ref={r}>
+          <img src="/dog-scene1.jfif" alt="Vibe scene" />
         </div>
       </div>
     </section>
