@@ -189,8 +189,8 @@ function About() {
                 <rect x="2" y="8" width="8" height="3" fill="#111"/>
                 <rect x="90" y="8" width="8" height="3" fill="#111"/>
                 {/* Glare effect */}
-                <rect x="14" y="8" width="8" height="3" fill="#fff" opacity="0.3"/>
-                <rect x="59" y="8" width="8" height="3" fill="#fff" opacity="0.3"/>
+                <rect className="glare" x="14" y="8" width="8" height="3" fill="#fff" opacity="0"/>
+                <rect className="glare" x="59" y="8" width="8" height="3" fill="#fff" opacity="0"/>
               </svg>
             </div>
           </div>
