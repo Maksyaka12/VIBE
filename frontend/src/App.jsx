@@ -4,8 +4,8 @@ import './index.css';
 /* ── constants ── */
 const CA      = '0xB200000000000000000000ba3068A5B447a81101';
 const O1      = 'https://launch.o1.exchange/token/0xb200000000000000000000ba3068a5b447a81101';
-const DEX     = 'https://dexscreener.com/base/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530';
-const DEX_EMB = 'https://dexscreener.com/base/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530?embed=1&theme=dark&info=0';
+const DEX     = 'https://dexscreener.com/base/0xb200000000000000000000ba3068a5b447a81101';
+const DEX_EMB = 'https://dexscreener.com/base/0xb200000000000000000000ba3068a5b447a81101?embed=1&theme=dark&trades=0&info=0';
 
 const UNLOCKS = [
   {date:'Aug 8, 2026',  amt:'10M'},
