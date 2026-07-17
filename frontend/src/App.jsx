@@ -147,7 +147,7 @@ function About() {
             </p>
             <div className="traits">
               <div className="trait"><span className="t-ico">🐶</span><div className="t-txt"><strong>Real Dog Energy</strong>Inspired by a real Maltipoo — the cutest, most vibing dog alive</div></div>
-              <div className="trait"><span className="t-ico">🏗️</span><div className="t-txt"><strong>B20 on Base</strong>Community-driven standard, fully transparent tokenomics</div></div>
+              <div className="trait"><div className="t-ico-img-wrap"><img src="/b20-logo.png" alt="B20" /></div><div className="t-txt"><strong>B20 on Base</strong>Community-driven standard, fully transparent tokenomics</div></div>
               <div className="trait"><span className="t-ico">🤝</span><div className="t-txt"><strong>100% to Holders</strong>Every vested token distributed to the community — zero team bags</div></div>
               <div className="trait"><span className="t-ico">🐾</span><div className="t-txt"><strong>Good Vibes Only</strong>Every paw print forward is a step toward the moon</div></div>
             </div>
@@ -188,10 +188,13 @@ function Tokenomics() {
               <div className="prog-labs"><span>0M today</span><span>100M total</span></div>
               <div className="who">
                 <div className="who-r">
-                  <div className="who-ico">💎</div>
+                  <div className="who-ico"><img src="/vibe-logo.png" className="who-img-sq" /></div>
                   <div className="who-t">$VIBE Holders<span>Hold 2M+ $VIBE to qualify</span></div>
                 </div>
-                <div className="who-r"><span className="who-ico">📣</span><div className="who-t">Token Supporters<span>Spread the vibes, share the rewards</span></div></div>
+                <div className="who-r">
+                  <div className="who-ico"><img src="/x-logo.jpg" className="who-img-sq" /></div>
+                  <div className="who-t">Token Supporters<span>Spread the vibes, share the rewards</span></div>
+                </div>
               </div>
             </div>
             <div className="tok-card" style={{marginTop:14}}>
@@ -267,13 +270,13 @@ function Trade() {
         <div className="trade-grid">
           <a href={O1} target="_blank" rel="noreferrer" className="tc">
             <div className="tc-top">
-              <div className="tc-logo tc-o1">o1</div>
+              <div className="tc-logo tc-o1"><img src="/o1-logo.png" className="tc-logo-img" /></div>
               <span className="tc-badge">Recommended</span>
             </div>
             <h3>o1.exchange</h3>
-            <p>The launchpad where $VIBE was born. Bonded curve, lowest fees on Base. Best place to buy your vibes.</p>
+            <p>$VIBE B20 was born here. The best place to buy your vibes.</p>
             <div className="tc-foot">
-              <span className="tc-cta">Open launch page</span>
+              <span className="tc-cta">Buy $VIBE</span>
               <div className="tc-arr">↗</div>
             </div>
           </a>
