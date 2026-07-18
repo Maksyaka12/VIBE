@@ -294,17 +294,23 @@ function Footer() {
   return (
     <footer>
       <div className="foot-inner">
-        <div className="foot-brand"><span>$VIBE</span> · The Base Dog</div>
-        <p className="foot-copy">© 2026 $VIBE · Not financial advice · Just a very good boy 🐾</p>
+        <div className="foot-brand">
+          <img src="/mascot.png" alt="Vibe" className="foot-logo" />
+          <span>$VIBE</span> · The Base Dog
+        </div>
+        <div className="foot-mid">
+          <p className="foot-copy">© 2026 $VIBE · Not financial advice · Just a very good boy 🐾</p>
+          <div className="foot-pow">powered by <img src="/o1-logo.png" alt="o1" /> o1_exchange</div>
+        </div>
         <div className="foot-soc">
           <a href="#" className="soc" title="X">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
-          <a href="#" className="soc" title="Telegram">
+          <a href="https://t.me/vibe_b20" target="_blank" rel="noreferrer" className="soc" title="Telegram">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-2.035 9.587c-.148.665-.54.826-1.093.513l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.215-3.053 5.55-5.015c.242-.214-.051-.333-.37-.119l-6.86 4.32-2.953-.922c-.642-.2-.655-.642.135-.951l11.524-4.44c.535-.196 1.003.13.939.601z"/></svg>
           </a>
-          <a href={DEX} target="_blank" rel="noreferrer" className="soc" title="Dexscreener">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3L21 12L12 21L3 12Z" stroke="currentColor" strokeWidth="2"/></svg>
+          <a href={DEX} target="_blank" rel="noreferrer" className="soc soc-img" title="Dexscreener">
+            <img src="/dexscreener-logo.jpg" alt="Dex" />
           </a>
         </div>
       </div>
