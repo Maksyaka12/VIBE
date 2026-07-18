@@ -81,8 +81,7 @@ function Nav() {
 function Hero() {
   const { ok, go } = useCopy(CA);
   return (
-    <section id="hero" className="sec-comic">
-      <div className="sec-bg"><img src="/bg-home.jfif" alt="bg" /></div>
+    <section id="hero">
       <div className="hero-inner">
         <div>
           <div className="hero-eyebrow">
@@ -134,8 +133,7 @@ function Hero() {
 function About() {
   const r1=useRev(), r2=useRev();
   return (
-    <section id="about" className="sec-comic">
-      <div className="sec-bg"><img src="/bg-about.jfif" alt="bg" /></div>
+    <section id="about">
       <div className="wrap">
         <div className="sec-head rv" ref={r1}>
           <h2>More than a meme.<br/>The real <span className="bl">Base Dog</span>.</h2>
@@ -167,8 +165,7 @@ function About() {
 function Tokenomics() {
   const r=useRev();
   return (
-    <section id="tokenomics" className="alt sec-comic">
-      <div className="sec-bg"><img src="/bg-tokenimic.jfif" alt="bg" /></div>
+    <section id="tokenomics" className="alt">
       <div className="wrap">
         <div className="sec-head rv" ref={r}>
           <h2>Community-owned.<br/><span className="bl">Zero BS.</span></h2>
@@ -238,8 +235,7 @@ function Tokenomics() {
 function Chart() {
   const r=useRev();
   return (
-    <section id="chart" className="sec-comic">
-      <div className="sec-bg"><img src="/bg-chart.jfif" alt="bg" /></div>
+    <section id="chart">
       <div className="wrap">
         <div className="chart-hd rv" ref={r}>
           <div>
@@ -264,8 +260,7 @@ function Chart() {
 function Trade() {
   const r=useRev();
   return (
-    <section id="trade" className="alt sec-comic">
-      <div className="sec-bg"><img src="/bg-trade.jfif" alt="bg" /></div>
+    <section id="trade" className="alt">
       <div className="wrap">
         <div className="rv" ref={r}>
           <h2>Get <span className="bl">$VIBE</span>.</h2>
