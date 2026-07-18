@@ -430,7 +430,7 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
 }
 .foot-brand { font-weight: 800; font-size: 1rem; color: var(--muted); display: flex; align-items: center; gap: 8px; }
 .foot-brand span { color: var(--blue); }
-.foot-logo { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1px solid var(--borderf); }
+.foot-logo { width: 24px; height: 24px; border-radius: 6px; object-fit: cover; border: 1px solid var(--borderf); }
 .foot-mid { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .foot-copy { font-size: 0.8rem; color: var(--muted); }
 .foot-pow { font-size: 0.75rem; color: var(--muted); display: flex; align-items: center; gap: 6px; font-weight: 600; }

@@ -295,7 +295,7 @@ function Footer() {
     <footer>
       <div className="foot-inner">
         <div className="foot-brand">
-          <img src="/mascot.png" alt="Vibe" className="foot-logo" />
+          <img src="/vibe-logo.png" alt="Vibe" className="foot-logo" />
           <span>$VIBE</span> · The Base Dog
         </div>
         <div className="foot-mid">
