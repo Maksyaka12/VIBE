@@ -413,6 +413,11 @@ h2 .bl { color: var(--blue); }
 .tc-cta { font-size: 0.86rem; font-weight: 700; color: var(--blue); }
 .tc-arr { width: 30px; height: 30px; border-radius: 7px; background: var(--blue-d); border: 1px solid var(--borderf); display: flex; align-items: center; justify-content: center; color: var(--blue); transition: all 0.2s; }
 .tc:hover .tc-arr { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+.tc-soon { justify-content: center; align-items: center; text-align: center; background: var(--surface); border: 2px dashed var(--borderf); }
+.tc-soon h3 { font-size: 1.15rem; font-weight: 700; color: var(--muted); }
+.soon-badge { font-size: 1.8rem; font-weight: 900; color: var(--blue); letter-spacing: -0.03em; }
+
 @media(max-width:700px){ .trade-grid{grid-template-columns:1fr;} }
 
 

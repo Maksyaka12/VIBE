@@ -279,20 +279,10 @@ function Trade() {
               <div className="tc-arr">↗</div>
             </div>
           </a>
-          <a href={DEX} target="_blank" rel="noreferrer" className="tc">
-            <div className="tc-top">
-              <div className="tc-logo tc-dx">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 12L12 3L21 12L12 21L3 12Z" stroke="currentColor" strokeWidth="2"/></svg>
-              </div>
-              <span className="tc-badge">Charts & Trade</span>
-            </div>
-            <h3>DexScreener</h3>
-            <p>Track $VIBE in real-time and trade directly from the chart. Powered by Dexscreener on Base network.</p>
-            <div className="tc-foot">
-              <span className="tc-cta">Trade on Dexscreener</span>
-              <div className="tc-arr">↗</div>
-            </div>
-          </a>
+          <div className="tc tc-soon">
+            <h3 style={{marginBottom: 10}}>Trade $VIBE directly on Vibe site</h3>
+            <div className="soon-badge">COMING SOON!</div>
+          </div>
         </div>
       </div>
     </section>
