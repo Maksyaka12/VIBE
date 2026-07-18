@@ -307,7 +307,7 @@ function Footer() {
             <img src="/x-logo.jpg" alt="X" />
           </a>
           <a href="https://t.me/vibe_b20" target="_blank" rel="noreferrer" className="soc soc-img" title="Telegram">
-            <img src="/tg-logo.webp" alt="Telegram" />
+            <img src="/tg-logo.png" alt="Telegram" />
           </a>
           <a href={DEX} target="_blank" rel="noreferrer" className="soc soc-img" title="Dexscreener">
             <img src="/dexscreener-logo.jpg" alt="Dex" />
