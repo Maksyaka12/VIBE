@@ -450,3 +450,33 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
 
 /* divider */
 .divr { height: 1px; background: var(--border); }
+
+/* COMIC BACKGROUNDS */
+.sec-comic {
+  position: relative;
+  background: none !important;
+}
+.sec-comic .wrap, .sec-comic .hero-inner {
+  position: relative;
+  z-index: 2;
+}
+.sec-bg {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.sec-bg img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.sec-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.4);
+}
+.sec-comic h2, .sec-comic .sec-sub, .sec-comic h1, .sec-comic p.hero-desc {
+  text-shadow: 0 4px 20px rgba(255,255,255,0.95), 0 0 50px rgba(255,255,255,1), 0 0 80px rgba(255,255,255,1);
+}
