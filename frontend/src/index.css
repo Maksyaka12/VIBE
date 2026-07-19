@@ -420,46 +420,13 @@ h2 .bl { color: var(--blue); }
 .chart-big-btn:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
 .chart-big-logo { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
 
-/* ── SWAP ── */
+/* ── SWAP / TRADE ── */
 .swap-hd { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
-.swap-grid { display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: stretch; }
-.swap-iframe-wrap { display: flex; flex-direction: column; gap: 12px; }
+.swap-grid { display: block; width: 100%; }
+.swap-iframe-wrap { display: flex; flex-direction: column; gap: 12px; width: 100%; }
 .swap-iframe { width: 100%; height: 750px; background: #111; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
 .swap-fallback { text-align: center; font-size: 0.85rem; color: var(--muted); }
 .swap-fallback a { color: var(--blue); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
-.swap-sidebar { display: flex; flex-direction: column; gap: 20px; }
-.swap-tips { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
-.tips-title { font-size: 0.8rem; font-weight: 800; color: var(--ink); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
-.tip-item { display: flex; gap: 16px; }
-.tip-ico { width: 40px; height: 40px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
-.tip-item h4 { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-.tip-item p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
-
-/* ── TRADE ── */
-.trade-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 52px; margin-bottom: 20px; }
-.tc {
-  background: var(--bg); border: 1.5px solid var(--border);
-  border-radius: 18px; padding: 26px; text-decoration: none; color: inherit;
-  display: flex; flex-direction: column;
-  transition: border-color 0.2s, transform 0.25s, box-shadow 0.25s;
-}
-.tc:hover { border-color: var(--blue); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,255,0.06); }
-.tc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
-.tc-logo { width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; overflow: hidden; }
-.tc-logo-img { width: 100%; height: 100%; object-fit: cover; }
-.tc-o1 { background: transparent; }
-.tc-dx { background: #111; color: #fff; }
-.tc-badge { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 8px; border-radius: 6px; background: var(--blue-d); color: var(--blue); }
-.tc h3 { font-size: 1.35rem; font-weight: 800; margin-bottom: 7px; color: var(--ink); }
-.tc p { font-size: 0.86rem; color: var(--muted); line-height: 1.65; flex: 1; margin-bottom: 22px; }
-.tc-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--border); }
-.tc-cta { font-size: 0.86rem; font-weight: 700; color: var(--blue); }
-.tc-arr { width: 30px; height: 30px; border-radius: 7px; background: var(--blue-d); border: 1px solid var(--borderf); display: flex; align-items: center; justify-content: center; color: var(--blue); transition: all 0.2s; }
-.tc:hover .tc-arr { background: var(--blue); color: #fff; border-color: var(--blue); }
-
-.tc-soon { justify-content: center; align-items: center; text-align: center; background: var(--surface); border: 2px dashed var(--borderf); }
-.tc-soon h3 { font-size: 1.15rem; font-weight: 700; color: var(--muted); }
-.soon-badge { font-size: 1.8rem; font-weight: 900; color: var(--blue); letter-spacing: -0.03em; }
 
 @media(max-width:700px){ .trade-grid{grid-template-columns:1fr;} }
 
@@ -607,7 +574,6 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   .chart-links { grid-template-columns: 1fr; margin-top: 10px; gap: 12px; }
   
   .swap-hd { flex-direction: column; align-items: flex-start; }
-  .swap-grid { grid-template-columns: 1fr; }
   .swap-iframe { height: 600px; }
   
   .foot-inner { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
