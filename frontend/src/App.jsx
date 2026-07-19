@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight } from 'lucide-react';
 import './index.css';
 
@@ -40,6 +41,14 @@ function useRev() {
   return ref;
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 /* NAV */
 function Nav() {
   const [stuck, setStuck] = useState(false);
@@ -48,19 +57,18 @@ function Nav() {
     const h = () => setStuck(window.scrollY > 50);
     window.addEventListener('scroll', h); return () => window.removeEventListener('scroll', h);
   }, []);
-  const go = id => { document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); setOpen(false); };
 
   return (
     <>
       <nav className={stuck ? 'stuck' : ''}>
         <div className="nav-inner">
-          <div className="nav-brand" onClick={() => go('hero')}>
+          <Link to="/" className="nav-brand" onClick={() => setOpen(false)}>
             <img src="/vibe-logo.png" className="nav-logo" alt="$VIBE" />
             $VIBE
-          </div>
+          </Link>
           <ul className="nav-menu">
             {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
-              <li key={id}><a onClick={() => go(id)}>{l}</a></li>
+              <li key={id}><Link to={`/${id}`} onClick={() => setOpen(false)}>{l}</Link></li>
             ))}
           </ul>
           <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
@@ -74,7 +82,7 @@ function Nav() {
       <div className={`mob-menu ${open ? 'open' : ''}`}>
         <div className="mob-links">
           {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
-            <a key={id} onClick={() => go(id)}>{l}</a>
+            <Link key={id} to={`/${id}`} onClick={() => setOpen(false)}>{l}</Link>
           ))}
           <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}}>Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} /></a>
         </div>
@@ -343,10 +351,9 @@ function Footer() {
   );
 }
 
-export default function App() {
+function LandingPage() {
   return (
     <>
-      <Nav/>
       <Hero/>
       <div className="divr"/>
       <About/>
@@ -356,7 +363,31 @@ export default function App() {
       <Chart/>
       <div className="divr"/>
       <Swap/>
-      <Footer/>
     </>
+  );
+}
+
+function Layout({ children }) {
+  return (
+    <>
+      <Nav />
+      {children}
+      <Footer />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<Layout><LandingPage /></Layout>} />
+        <Route path="/about" element={<Layout><About /></Layout>} />
+        <Route path="/tokenomics" element={<Layout><Tokenomics /></Layout>} />
+        <Route path="/chart" element={<Layout><Chart /></Layout>} />
+        <Route path="/trade" element={<Layout><Swap /></Layout>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
