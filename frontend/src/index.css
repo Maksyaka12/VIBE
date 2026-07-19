@@ -406,7 +406,19 @@ h2 .bl { color: var(--blue); }
 /* ── CHART ── */
 .chart-hd { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
 .chart-box { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
-.mob-chart-box { display: none; }
+
+.chart-links {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px;
+}
+.chart-big-btn {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px;
+  padding: 18px; text-decoration: none; color: var(--ink);
+  font-weight: 700; font-size: 1.1rem; transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+.chart-big-btn:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
+.chart-big-logo { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
 
 /* ── TRADE ── */
 .trade-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 52px; margin-bottom: 20px; }
@@ -576,18 +588,8 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   .tc-top { flex-direction: row; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .tc h3 { font-size: 1.15rem; }
   
-  .desk-chart-btn { display: none !important; }
   .desk-chart-box { display: none !important; }
-  .mob-chart-box { display: block; margin-top: 10px; }
-  .mob-chart-btn {
-    display: flex; align-items: center; justify-content: center; gap: 12px;
-    background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px;
-    padding: 18px; text-decoration: none; color: var(--ink);
-    font-weight: 700; font-size: 1.1rem; transition: all 0.2s;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04); width: 100%;
-  }
-  .mob-chart-btn:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
-  .mob-chart-logo { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
+  .chart-links { grid-template-columns: 1fr; margin-top: 10px; gap: 12px; }
   
   .foot-inner { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
 }
