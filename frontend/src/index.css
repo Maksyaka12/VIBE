@@ -537,8 +537,8 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   .hero-ca-wrap { width: 100%; padding: 0; background: transparent; border: none; box-shadow: none; margin-top: 0; }
   .hero-ca-lbl { font-size: 0.65rem; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 8px; }
   .hero-ca-box { flex-direction: row; border-radius: 12px; border: 1px solid var(--border); background: var(--bg2); align-items: center; width: 100%; min-width: 0; }
-  .hero-ca-addr { font-size: 0.55rem; padding: 12px; color: var(--ink2); width: 100%; min-width: 0; white-space: normal; word-break: break-all; line-height: 1.4; }
-  .hero-ca-btn { border-left: 1px solid var(--border); border-top: none; padding: 12px; background: transparent; width: auto; align-self: stretch; }
+  .hero-ca-addr { font-size: 0.75rem; padding: 14px 16px; color: var(--ink2); width: 100%; min-width: 0; white-space: normal; word-break: break-all; line-height: 1.5; }
+  .hero-ca-btn { border-left: 1px solid var(--border); border-top: none; padding: 14px 16px; background: transparent; width: auto; align-self: stretch; }
 
   /* HEADINGS */
   h2 { font-size: 1.9rem; text-align: left; margin-bottom: 12px; line-height: 1.1; }

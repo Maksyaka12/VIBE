@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Copy, Check, Menu, X } from 'lucide-react';
+import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight } from 'lucide-react';
 import './index.css';
 
 const CA      = '0xB200000000000000000000ba3068A5B447a81101';
@@ -64,7 +64,7 @@ function Nav() {
             ))}
           </ul>
           <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
-            <a href={O1} target="_blank" rel="noreferrer" className="nav-buy">Buy $VIBE ↗</a>
+            <a href={O1} target="_blank" rel="noreferrer" className="nav-buy">Buy $VIBE <ArrowUpRight size={16} strokeWidth={2.5} /></a>
             <button className="ham" onClick={() => setOpen(!open)}>
               {open ? <X size={26} color="var(--ink)" /> : <Menu size={26} color="var(--ink)" />}
             </button>
@@ -76,7 +76,7 @@ function Nav() {
           {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
             <a key={id} onClick={() => go(id)}>{l}</a>
           ))}
-          <a href={O1} target="_blank" rel="noreferrer" className="mob-buy">Buy $VIBE ↗</a>
+          <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}}>Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} /></a>
         </div>
       </div>
     </>
@@ -102,10 +102,10 @@ function Hero() {
           </p>
           <div className="hero-btns">
             <a href={O1} target="_blank" rel="noreferrer" className="btn-fill">
-              Buy $VIBE →
+              Buy $VIBE <ArrowRight size={20} strokeWidth={2.5} />
             </a>
             <a href={DEX} target="_blank" rel="noreferrer" className="btn-line">
-              Dexscreener ↗
+              Dexscreener <ArrowUpRight size={20} strokeWidth={2.5} />
             </a>
           </div>
           <div className="hero-ca-wrap">
@@ -247,7 +247,7 @@ function Chart() {
           <div>
             <h2>Live <span className="bl">Chart</span>.</h2>
           </div>
-          <a href={DEX} target="_blank" rel="noreferrer" className="btn-line">Open Dexscreener ↗</a>
+          <a href={DEX} target="_blank" rel="noreferrer" className="btn-line">Open Dexscreener <ArrowUpRight size={20} strokeWidth={2.5} /></a>
         </div>
         <div className="chart-box">
           <iframe
@@ -282,7 +282,7 @@ function Trade() {
             <p>$VIBE B20 was born here. The best place to buy your vibes.</p>
             <div className="tc-foot">
               <span className="tc-cta">Buy $VIBE</span>
-              <div className="tc-arr">↗</div>
+              <div className="tc-arr"><ArrowUpRight size={20} strokeWidth={2.5} /></div>
             </div>
           </a>
           <div className="tc tc-soon">
