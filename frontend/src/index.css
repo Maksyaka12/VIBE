@@ -280,7 +280,9 @@ h1 .line2 {
 section { padding: 100px 0; }
 section.alt { background: var(--surface); }
 
-.standalone-pt { padding-top: 80px; min-height: 85vh; }
+.standalone-page { min-height: 100vh; display: flex; flex-direction: column; }
+.standalone-page > section { flex: 1; }
+.standalone-page > section:first-of-type { padding-top: 110px; }
 
 .sec-head { margin-bottom: 56px; }
 h2 {
@@ -469,7 +471,7 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   section { padding: 40px 0; }
   section.alt { background: transparent; }
   
-  .standalone-pt { padding-top: 60px; }
+  .standalone-page > section:first-of-type { padding-top: 80px; }
   
   /* HEADER COMPACT */
   .nav-brand { font-size: 1.15rem; gap: 8px; }

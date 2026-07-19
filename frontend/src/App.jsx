@@ -367,13 +367,11 @@ function LandingPage() {
 
 function StandaloneLayout({ children }) {
   return (
-    <>
+    <div className="standalone-page">
       <Nav />
-      <div className="standalone-pt">
-        {children}
-      </div>
+      {children}
       <Footer />
-    </>
+    </div>
   );
 }
 
