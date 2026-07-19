@@ -420,6 +420,21 @@ h2 .bl { color: var(--blue); }
 .chart-big-btn:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
 .chart-big-logo { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
 
+/* ── SWAP ── */
+.swap-hd { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
+.swap-grid { display: grid; grid-template-columns: 1fr 380px; gap: 24px; align-items: stretch; }
+.swap-iframe-wrap { display: flex; flex-direction: column; gap: 12px; }
+.swap-iframe { width: 100%; height: 750px; background: #111; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+.swap-fallback { text-align: center; font-size: 0.85rem; color: var(--muted); }
+.swap-fallback a { color: var(--blue); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+.swap-sidebar { display: flex; flex-direction: column; gap: 20px; }
+.swap-tips { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.tips-title { font-size: 0.8rem; font-weight: 800; color: var(--ink); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.tip-item { display: flex; gap: 16px; }
+.tip-ico { width: 40px; height: 40px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+.tip-item h4 { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.tip-item p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
 /* ── TRADE ── */
 .trade-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 52px; margin-bottom: 20px; }
 .tc {
@@ -590,6 +605,10 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   
   .desk-chart-box { display: none !important; }
   .chart-links { grid-template-columns: 1fr; margin-top: 10px; gap: 12px; }
+  
+  .swap-hd { flex-direction: column; align-items: flex-start; }
+  .swap-grid { grid-template-columns: 1fr; }
+  .swap-iframe { height: 600px; }
   
   .foot-inner { flex-direction: column; align-items: center; text-align: center; gap: 20px; }
 }

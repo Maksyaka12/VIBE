@@ -59,7 +59,7 @@ function Nav() {
             $VIBE
           </div>
           <ul className="nav-menu">
-            {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
+            {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['swap','Swap'],['trade','Trade']].map(([id,l])=>(
               <li key={id}><a onClick={() => go(id)}>{l}</a></li>
             ))}
           </ul>
@@ -73,7 +73,7 @@ function Nav() {
       </nav>
       <div className={`mob-menu ${open ? 'open' : ''}`}>
         <div className="mob-links">
-          {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
+          {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['swap','Swap'],['trade','Trade']].map(([id,l])=>(
             <a key={id} onClick={() => go(id)}>{l}</a>
           ))}
           <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}}>Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} /></a>
@@ -273,6 +273,81 @@ function Chart() {
   );
 }
 
+/* SWAP */
+function Swap() {
+  const r=useRev();
+  const { ok, go } = useCopy(CA);
+  return (
+    <section id="swap" className="alt">
+      <div className="wrap">
+        <div className="swap-hd rv" ref={r}>
+          <div>
+            <h2>Swap <span className="bl">$VIBE</span>.</h2>
+            <p className="sec-sub">Base Chain · Zero BS · Ape responsibly</p>
+          </div>
+          <a href={O1} target="_blank" rel="noreferrer" className="btn-fill desk-chart-btn">Open on o1.exchange <ArrowUpRight size={20} strokeWidth={2.5} /></a>
+        </div>
+        
+        <div className="swap-grid">
+          <div className="swap-iframe-wrap">
+            <iframe
+              src="https://launch.o1.exchange/token/0xb200000000000000000000ba3068a5b447a81101?chain=8453"
+              title="$VIBE Swap"
+              className="swap-iframe"
+              frameBorder="0"
+              allowFullScreen
+            />
+            <div className="swap-fallback">
+              Swap not loading? <a href={O1} target="_blank" rel="noreferrer">Open directly on o1.exchange <ArrowUpRight size={14} strokeWidth={2.5} /></a>
+            </div>
+          </div>
+          
+          <div className="swap-sidebar">
+            <div className="hero-ca-wrap" style={{width:'100%', marginTop:0, background:'var(--surface)'}}>
+              <div className="hero-ca-lbl">Contract Address (Base)</div>
+              <div className="hero-ca-box">
+                <span className="hero-ca-addr">{CA}</span>
+                <button className={`hero-ca-btn${ok?' ok':''}`} onClick={go} title="Copy Address">
+                  {ok ? <Check size={18} /> : <Copy size={18} />}
+                </button>
+              </div>
+              <p style={{fontSize:'0.75rem', color:'var(--muted)', marginTop:'8px'}}>Always verify the CA before swapping.</p>
+            </div>
+            
+            <div className="swap-tips">
+              <h3 className="tips-title">SWAP TIPS</h3>
+              <div className="tip-item">
+                <div className="tip-ico">💳</div>
+                <div>
+                  <h4>Connect your wallet</h4>
+                  <p>Use MetaMask or Coinbase Wallet. Make sure you're on the Base network.</p>
+                </div>
+              </div>
+              <div className="tip-item">
+                <div className="tip-ico">🔍</div>
+                <div>
+                  <h4>Verify the token</h4>
+                  <p>Confirm CA matches: 0xB200...1101 before swapping.</p>
+                </div>
+              </div>
+              <div className="tip-item">
+                <div className="tip-ico">⚙️</div>
+                <div>
+                  <h4>Set slippage to ~5%</h4>
+                  <p>Meme coins can be volatile. A 5% slippage tolerance prevents failed transactions.</p>
+                </div>
+              </div>
+            </div>
+            <a href={O1} target="_blank" rel="noreferrer" className="btn-fill" style={{width:'100%', justifyContent:'center'}}>
+              Open on o1.exchange <ArrowUpRight size={20} strokeWidth={2.5} />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* TRADE */
 function Trade() {
   const r=useRev();
@@ -349,6 +424,8 @@ export default function App() {
       <Tokenomics/>
       <div className="divr"/>
       <Chart/>
+      <div className="divr"/>
+      <Swap/>
       <div className="divr"/>
       <Trade/>
       <Footer/>
