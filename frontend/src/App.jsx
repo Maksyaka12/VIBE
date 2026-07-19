@@ -294,7 +294,7 @@ function Trade() {
               <span className="tc-badge">Recommended</span>
             </div>
             <h3>o1.exchange</h3>
-            <p>$VIBE B20 was born here. The best place to buy your vibes.</p>
+            <p>$VIBE was born on o1.exchange. The best place to buy your vibes.</p>
             <div className="tc-foot">
               <span className="tc-cta">Buy $VIBE</span>
               <div className="tc-arr"><ArrowUpRight size={20} strokeWidth={2.5} /></div>
