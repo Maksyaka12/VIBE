@@ -64,7 +64,7 @@ function Nav() {
             ))}
           </ul>
           <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
-            <a href={O1} target="_blank" rel="noreferrer" className="nav-buy desk">Buy $VIBE ↗</a>
+            <a href={O1} target="_blank" rel="noreferrer" className="nav-buy">Buy $VIBE ↗</a>
             <button className="ham" onClick={() => setOpen(!open)}>
               {open ? <X size={26} color="var(--ink)" /> : <Menu size={26} color="var(--ink)" />}
             </button>

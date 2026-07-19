@@ -467,11 +467,18 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
 .divr { height: 1px; background: var(--border); }
 /* ── COMPREHENSIVE MOBILE RESPONSIVENESS (DOLLARCAT REFERENCE) ── */
 @media(max-width: 768px) {
-  :root { --pad: 20px; --nav-h: 60px; }
+  :root { --pad: 20px; --nav-h: 54px; }
   body { background: var(--bg); }
   section { padding: 40px 0; }
   section.alt { background: transparent; }
   
+  /* HEADER COMPACT */
+  .nav-brand { font-size: 1.15rem; gap: 8px; }
+  .nav-logo { width: 30px; height: 30px; }
+  .nav-buy { padding: 8px 12px; font-size: 0.75rem; border-radius: 8px; letter-spacing: 0; }
+  .ham { padding: 6px; }
+  .ham svg { width: 22px; height: 22px; }
+
   /* REMOVE COMIC BACKGROUNDS ON MOBILE FOR CLEAN UI */
   .sec-bg { display: none !important; }
   .sec-comic { border-bottom: none; background: transparent !important; padding: 40px 0; }
@@ -497,7 +504,7 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   }
 
   /* HERO */
-  #hero { padding: calc(var(--nav-h) + 40px) 0 40px; min-height: auto; }
+  #hero { padding: 100px 0 40px; min-height: auto; }
   .hero-inner {
     display: flex; flex-direction: column-reverse; gap: 24px;
   }
