@@ -365,11 +365,13 @@ function LandingPage() {
   );
 }
 
-function Layout({ children }) {
+function StandaloneLayout({ children }) {
   return (
     <>
       <Nav />
-      {children}
+      <div className="standalone-pt">
+        {children}
+      </div>
       <Footer />
     </>
   );
@@ -380,11 +382,11 @@ export default function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Layout><LandingPage /></Layout>} />
-        <Route path="/about" element={<Layout><About /></Layout>} />
-        <Route path="/tokenomics" element={<Layout><Tokenomics /></Layout>} />
-        <Route path="/chart" element={<Layout><Chart /></Layout>} />
-        <Route path="/trade" element={<Layout><Swap /></Layout>} />
+        <Route path="/" element={<><Nav /><LandingPage /><Footer /></>} />
+        <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
+        <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
+        <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
+        <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
       </Routes>
     </BrowserRouter>
   );
