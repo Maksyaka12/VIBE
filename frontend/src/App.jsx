@@ -247,7 +247,10 @@ function Chart() {
           <div>
             <h2>Live <span className="bl">Chart</span>.</h2>
           </div>
-          <a href={DEX} target="_blank" rel="noreferrer" className="btn-line desk-chart-btn">Open Dexscreener <ArrowUpRight size={20} strokeWidth={2.5} /></a>
+          <div style={{display:'flex', gap:'12px', flexWrap:'wrap'}}>
+            <a href={DEX} target="_blank" rel="noreferrer" className="btn-line desk-chart-btn">Open Dexscreener <ArrowUpRight size={20} strokeWidth={2.5} /></a>
+            <a href="https://www.geckoterminal.com/uk/base/pools/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530" target="_blank" rel="noreferrer" className="btn-line desk-chart-btn">Open GeckoTerminal <ArrowUpRight size={20} strokeWidth={2.5} /></a>
+          </div>
         </div>
         <div className="chart-box desk-chart-box">
           <iframe
@@ -257,10 +260,15 @@ function Chart() {
             frameBorder="0" allowFullScreen
           />
         </div>
-        <div className="mob-chart-box">
+        <div className="mob-chart-box" style={{display:'flex', flexDirection:'column', gap:'12px'}}>
           <a href={DEX} target="_blank" rel="noreferrer" className="mob-chart-btn">
             <img src="/dexscreener-logo.jpg" alt="Dexscreener" className="mob-chart-logo" />
             <span>View on Dexscreener</span>
+            <ArrowUpRight size={22} strokeWidth={2.5} />
+          </a>
+          <a href="https://www.geckoterminal.com/uk/base/pools/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530" target="_blank" rel="noreferrer" className="mob-chart-btn">
+            <img src="/geckoterminal-logo.jpg" alt="GeckoTerminal" className="mob-chart-logo" />
+            <span>View on GeckoTerminal</span>
             <ArrowUpRight size={22} strokeWidth={2.5} />
           </a>
         </div>
