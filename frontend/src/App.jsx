@@ -42,28 +42,35 @@ function useRev() {
 
 /* NAV */
 function Nav() {
-  const [open, setOpen] = useState(false);
-  const go = id => { setOpen(false); document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); };
+  const [stuck, setStuck] = useState(false);
+  const [open, setOpen]   = useState(false);
+  useEffect(() => {
+    const h = () => setStuck(window.scrollY > 50);
+    window.addEventListener('scroll', h); return () => window.removeEventListener('scroll', h);
+  }, []);
+  const go = id => { document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); setOpen(false); };
 
   return (
-    <nav className="nav">
-      <div className="in wrap">
-        <a className="logo">
-          <img src="/vibe-logo.png" alt="$VIBE" />
-          <span>$VIBE</span>
-        </a>
-        <div className="r">
-          <ul className="desk">
+    <>
+      <nav className={stuck ? 'stuck' : ''}>
+        <div className="nav-inner">
+          <div className="nav-brand" onClick={() => go('hero')}>
+            <img src="/vibe-logo.png" className="nav-logo" alt="$VIBE" />
+            $VIBE
+          </div>
+          <ul className="nav-menu">
             {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
               <li key={id}><a onClick={() => go(id)}>{l}</a></li>
             ))}
           </ul>
-          <a href={O1} target="_blank" rel="noreferrer" className="nav-buy desk">Buy $VIBE ↗</a>
-          <button className="ham" onClick={() => setOpen(!open)}>
-            {open ? <X size={26} color="var(--ink)" /> : <Menu size={26} color="var(--ink)" />}
-          </button>
+          <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
+            <a href={O1} target="_blank" rel="noreferrer" className="nav-buy desk">Buy $VIBE ↗</a>
+            <button className="ham" onClick={() => setOpen(!open)}>
+              {open ? <X size={26} color="var(--ink)" /> : <Menu size={26} color="var(--ink)" />}
+            </button>
+          </div>
         </div>
-      </div>
+      </nav>
       <div className={`mob-menu ${open ? 'open' : ''}`}>
         <div className="mob-links">
           {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
@@ -72,7 +79,7 @@ function Nav() {
           <a href={O1} target="_blank" rel="noreferrer" className="mob-buy">Buy $VIBE ↗</a>
         </div>
       </div>
-    </nav>
+    </>
   );
 }
 
