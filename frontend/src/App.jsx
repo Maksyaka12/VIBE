@@ -181,14 +181,14 @@ function Tokenomics() {
         <div className="stat-tiles wide-stats">
           <div className="stile"><span className="v">1B</span><span className="l">Total Supply</span></div>
           <div className="stile"><span className="v">900M</span><span className="l">Circulating</span></div>
-          <div className="stile"><span className="v">100M</span><span className="l">Community Vesting</span><div className="d">10% released monthly</div></div>
+          <div className="stile"><span className="v">100M</span><span className="l">Vesting Community Rewards</span><div className="d">10% released monthly</div></div>
           <div className="stile"><span className="v">10M</span><span className="l">Monthly Unlock</span><div className="d">Straight to holders</div></div>
         </div>
 
         <div className="tok-layout">
           <div>
             <div className="tok-card">
-              <h3>Community Vesting · 100M $VIBE</h3>
+              <h3>Community Rewards · 100M $VIBE</h3>
               <p className="sub">10M unlocks monthly · starts Aug 8, 2026</p>
               <div className="prog"><div className="prog-f" style={{width:'10%'}}/></div>
               <div className="prog-labs"><span>0M today</span><span>100M total</span></div>
@@ -317,6 +317,9 @@ function Footer() {
           </a>
           <a href={DEX} target="_blank" rel="noreferrer" className="soc soc-img" title="Dexscreener">
             <img src="/dexscreener-logo.jpg" alt="Dex" />
+          </a>
+          <a href="https://www.geckoterminal.com/uk/base/pools/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530" target="_blank" rel="noreferrer" className="soc soc-img" title="GeckoTerminal">
+            <img src="/geckoterminal-logo.jpg" alt="GeckoTerminal" />
           </a>
         </div>
       </div>
