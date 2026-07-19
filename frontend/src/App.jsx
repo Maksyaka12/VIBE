@@ -247,15 +247,22 @@ function Chart() {
           <div>
             <h2>Live <span className="bl">Chart</span>.</h2>
           </div>
-          <a href={DEX} target="_blank" rel="noreferrer" className="btn-line">Open Dexscreener <ArrowUpRight size={20} strokeWidth={2.5} /></a>
+          <a href={DEX} target="_blank" rel="noreferrer" className="btn-line desk-chart-btn">Open Dexscreener <ArrowUpRight size={20} strokeWidth={2.5} /></a>
         </div>
-        <div className="chart-box">
+        <div className="chart-box desk-chart-box">
           <iframe
             src={DEX_EMB}
             title="$VIBE chart"
             width="100%" height="600"
             frameBorder="0" allowFullScreen
           />
+        </div>
+        <div className="mob-chart-box">
+          <a href={DEX} target="_blank" rel="noreferrer" className="mob-chart-btn">
+            <img src="/dexscreener-logo.jpg" alt="Dexscreener" className="mob-chart-logo" />
+            <span>View on Dexscreener</span>
+            <ArrowUpRight size={22} strokeWidth={2.5} />
+          </a>
         </div>
       </div>
     </section>
