@@ -198,19 +198,19 @@ h1 .line2 {
 .hero-ca-lbl { font-size: 0.9rem; font-weight: 700; color: var(--ink); letter-spacing: 0.02em; }
 .hero-ca-box {
   background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px;
-  display: flex; align-items: stretch; justify-content: space-between; overflow: hidden;
+  display: flex; align-items: center; justify-content: space-between; padding: 8px 8px 8px 20px;
 }
 .hero-ca-addr {
   font-family: 'Courier New', monospace; font-size: 0.9rem; font-weight: 600; color: var(--ink);
-  padding: 16px 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;
 }
 .hero-ca-btn {
-  background: var(--bg3); border: none; border-left: 1.5px solid var(--border);
-  color: var(--ink); padding: 0 22px; transition: all 0.2s;
+  background: var(--bg3); border: none; border-radius: 8px; flex-shrink: 0;
+  color: var(--ink); width: 40px; height: 40px; transition: all 0.2s;
   display: flex; align-items: center; justify-content: center; cursor: pointer;
 }
-.hero-ca-btn:hover { background: var(--blue-d); color: var(--blue); }
-.hero-ca-btn.ok { color: #10B981; }
+.hero-ca-btn:hover { background: var(--border); color: var(--blue); }
+.hero-ca-btn.ok { background: var(--blue); color: #fff; }
 
 /* Dog card — Base logo style with magnetic storm */
 .dog-wrap {
@@ -529,11 +529,8 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   .btn-fill, .btn-line { width: 100%; justify-content: center; padding: 18px; font-size: 1rem; border-radius: 12px; }
   
   /* CA BOX */
-  .hero-ca-wrap { width: 100%; padding: 0; background: transparent; border: none; box-shadow: none; margin-top: 0; }
-  .hero-ca-lbl { font-size: 0.65rem; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 8px; }
-  .hero-ca-box { flex-direction: row; border-radius: 12px; border: 1px solid var(--border); background: var(--bg2); align-items: center; width: 100%; min-width: 0; }
-  .hero-ca-addr { font-size: 0.75rem; padding: 14px 16px; color: var(--ink2); width: 100%; min-width: 0; white-space: normal; word-break: break-all; line-height: 1.5; }
-  .hero-ca-btn { border-left: 1px solid var(--border); border-top: none; padding: 14px 16px; background: transparent; width: auto; align-self: stretch; }
+  .hero-ca-wrap { width: 100%; max-width: 100%; }
+  .hero-ca-addr { font-size: 0.75rem; white-space: normal; word-break: break-all; line-height: 1.5; padding-right: 12px; }
 
   /* HEADINGS */
   h2 { font-size: 1.9rem; text-align: left; margin-bottom: 12px; line-height: 1.1; }
