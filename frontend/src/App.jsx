@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight } from 'lucide-react';
+import Game from './Game';
 import './index.css';
 
 const CA      = '0xB200000000000000000000ba3068A5B447a81101';
@@ -67,7 +68,7 @@ function Nav() {
             $VIBE
           </Link>
           <ul className="nav-menu">
-            {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
+            {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade'],['game','Game']].map(([id,l])=>(
               <li key={id}><Link to={`/${id}`} onClick={() => setOpen(false)}>{l}</Link></li>
             ))}
           </ul>
@@ -81,7 +82,7 @@ function Nav() {
       </nav>
       <div className={`mob-menu ${open ? 'open' : ''}`}>
         <div className="mob-links">
-          {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
+          {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade'],['game','Game']].map(([id,l])=>(
             <Link key={id} to={`/${id}`} onClick={() => setOpen(false)}>{l}</Link>
           ))}
           <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}}>Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} /></a>
@@ -385,6 +386,7 @@ export default function App() {
         <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
         <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
         <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
+        <Route path="/game" element={<StandaloneLayout><Game /></StandaloneLayout>} />
       </Routes>
     </BrowserRouter>
   );
