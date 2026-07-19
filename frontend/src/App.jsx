@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Copy, Check, Menu, X } from 'lucide-react';
 import './index.css';
 
 const CA      = '0xB200000000000000000000ba3068A5B447a81101';
 const O1      = 'https://launch.o1.exchange/token/0xb200000000000000000000ba3068a5b447a81101';
 const DEX     = 'https://dexscreener.com/base/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530';
-const DEX_EMB = 'https://dexscreener.com/base/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530?embed=1&theme=dark';
+const DEX_EMB = 'https://dexscreener.com/base/0xba3068a5b447a811018596652bb2d9fb82d61081?embed=1&theme=dark&activeTab=chart';
 
 const UNLOCKS = [
   {d:'Aug 8, 2026',  a:'10M'},{d:'Sep 7, 2026',  a:'20M'},
@@ -41,39 +42,37 @@ function useRev() {
 
 /* NAV */
 function Nav() {
-  const [stuck, setStuck] = useState(false);
-  const [open, setOpen]   = useState(false);
-  useEffect(() => {
-    const h = () => setStuck(window.scrollY > 50);
-    window.addEventListener('scroll', h); return () => window.removeEventListener('scroll', h);
-  }, []);
-  const go = id => { document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); setOpen(false); };
+  const [open, setOpen] = useState(false);
+  const go = id => { setOpen(false); document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); };
+
   return (
-    <>
-      <nav className={stuck ? 'stuck' : ''}>
-        <div className="nav-inner">
-          <div className="nav-brand" onClick={() => go('hero')}>
-            <img src="/vibe-logo.png" className="nav-logo" alt="$VIBE"
-              onError={e=>{e.target.style.display='none';}}/>
-            $VIBE
-          </div>
-          <ul className="nav-menu">
+    <nav className="nav">
+      <div className="in wrap">
+        <a className="logo">
+          <img src="/vibe-logo.png" alt="$VIBE" />
+          <span>$VIBE</span>
+        </a>
+        <div className="r">
+          <ul className="desk">
             {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
               <li key={id}><a onClick={() => go(id)}>{l}</a></li>
             ))}
           </ul>
           <a href={O1} target="_blank" rel="noreferrer" className="nav-buy desk">Buy $VIBE ↗</a>
-          <button className="ham" onClick={() => setOpen(true)}>☰</button>
+          <button className="ham" onClick={() => setOpen(!open)}>
+            {open ? <X size={26} color="var(--ink)" /> : <Menu size={26} color="var(--ink)" />}
+          </button>
         </div>
-      </nav>
-      <div className={`mob${open ? ' open' : ''}`}>
-        <button className="mob-x" onClick={() => setOpen(false)}>✕</button>
-        {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
-          <a key={id} onClick={() => go(id)}>{l}</a>
-        ))}
-        <a href={O1} target="_blank" rel="noreferrer" className="btn-fill">Buy $VIBE ↗</a>
       </div>
-    </>
+      <div className={`mob-menu ${open ? 'open' : ''}`}>
+        <div className="mob-links">
+          {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
+            <a key={id} onClick={() => go(id)}>{l}</a>
+          ))}
+          <a href={O1} target="_blank" rel="noreferrer" className="mob-buy">Buy $VIBE ↗</a>
+        </div>
+      </div>
+    </nav>
   );
 }
 
