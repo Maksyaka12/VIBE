@@ -123,15 +123,15 @@ export default function Checker() {
               ) : (
                 <div className="ch-fail" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
                   <XCircle size={64} color="#ef4444" />
-                  <h3 style={{ fontSize: '1.6rem', color: '#ef4444', margin: 0 }}>Not Eligible</h3>
+                  <h3 style={{ fontSize: '1.6rem', color: '#ef4444', margin: 0 }}>Not Yet Eligible</h3>
                   <p style={{ fontSize: '1.05rem', color: 'var(--muted)' }}>
-                    Unfortunately, you are not eligible because you hold less than 2M $VIBE.
+                    You need to hold 2M+ $VIBE to become eligible.
                   </p>
                   <div style={{ background: '#fef2f2', padding: '16px 24px', borderRadius: '16px', color: '#b91c1c', fontWeight: 600, border: '1px solid #fecaca', width: '100%', marginBottom: '16px' }}>
                     Your balance: {balance.toLocaleString(undefined, {maximumFractionDigits: 0})} $VIBE
                   </div>
                   <a href={O1} target="_blank" rel="noreferrer" className="btn-fill" style={{ width: '100%', justifyContent: 'center' }}>
-                    Buy 2M+ $VIBE on o1.exchange <ArrowUpRight size={18} />
+                    Buy 2M+ $VIBE to become eligible <ArrowUpRight size={18} />
                   </a>
                 </div>
               )}
