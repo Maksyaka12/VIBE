@@ -70,7 +70,7 @@ function Nav() {
           </Link>
           <ul className="nav-menu">
             {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
-              <li key={id}><Link to={`/${id}`} onClick={() => setOpen(false)}>{l}</Link></li>
+              <li key={id}><Link to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>{l} {id === 'checker' && <span className="new-badge">NEW</span>}</Link></li>
             ))}
           </ul>
           <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
@@ -84,7 +84,7 @@ function Nav() {
       <div className={`mob-menu ${open ? 'open' : ''}`}>
         <div className="mob-links">
           {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
-            <Link key={id} to={`/${id}`} onClick={() => setOpen(false)}>{l}</Link>
+            <Link key={id} to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>{l} {id === 'checker' && <span className="new-badge">NEW</span>}</Link>
           ))}
           <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}}>Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} /></a>
         </div>

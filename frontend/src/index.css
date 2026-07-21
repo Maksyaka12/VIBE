@@ -92,6 +92,19 @@ nav.stuck {
 }
 .nav-menu a:hover { color: var(--ink); background: rgba(0,0,0,0.05); }
 
+.new-badge {
+  background: var(--blue);
+  color: white;
+  font-size: 0.65rem;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 .nav-buy {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 10px 22px; background: var(--blue); color: #fff;

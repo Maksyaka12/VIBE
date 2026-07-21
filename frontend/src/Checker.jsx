@@ -97,6 +97,9 @@ export default function Checker() {
               <button onClick={login} className="btn-fill" style={{ width: '100%', justifyContent: 'center' }}>
                 Connect Wallet
               </button>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'var(--muted)', fontSize: '0.8rem', marginTop: '16px' }}>
+                Protected by <span style={{ fontWeight: '700', color: 'var(--ink)' }}>privy</span>
+              </div>
             </div>
           )}
 
