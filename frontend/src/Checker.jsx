@@ -112,9 +112,9 @@ export default function Checker() {
               {isEligible ? (
                 <div className="ch-success" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
                   <CheckCircle2 size={64} color="#10b981" />
-                  <h3 style={{ fontSize: '1.6rem', color: '#10b981', margin: 0 }}>Congratulations!</h3>
+                  <h3 style={{ fontSize: '1.6rem', color: '#10b981', margin: 0 }}>Congratulations! You are eligible!</h3>
                   <p style={{ fontSize: '1.1rem', color: 'var(--ink)' }}>
-                    You are eligible for the next distribution on <strong>{nextDate}</strong>.
+                    Next $VIBE distribution on <strong>{nextDate}</strong>.
                   </p>
                   <div style={{ background: '#ecfdf5', padding: '16px 24px', borderRadius: '16px', color: '#047857', fontWeight: 600, border: '1px solid #a7f3d0', width: '100%' }}>
                     Your balance: {balance.toLocaleString(undefined, {maximumFractionDigits: 0})} $VIBE
