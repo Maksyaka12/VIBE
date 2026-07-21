@@ -69,7 +69,7 @@ export default function Checker() {
   const isEligible = balance >= MIN_BALANCE;
 
   return (
-    <section id="checker" style={{ padding: '80px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '60vh' }}>
+    <section id="checker" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '60vh' }}>
       <div className="wrap" style={{ maxWidth: 600 }}>
         
         <div className="sec-head" style={{ textAlign: 'center', alignItems: 'center', marginBottom: 40 }}>
