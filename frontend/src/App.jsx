@@ -379,7 +379,7 @@ function StandaloneLayout({ children }) {
 
 export default function App() {
   return (
-    <PrivyProvider appId="cmrugdvds02q60cl7tegmrnx7" config={{ appearance: { theme: 'light', accentColor: '#0052ff' } }}>
+    <PrivyProvider appId="cmrugdvds02q60cl7tegmrnx7" config={{ loginMethods: ['wallet'], appearance: { theme: 'light', accentColor: '#0052ff', logo: 'https://vibehome.dog/vibe-logo.png' } }}>
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
