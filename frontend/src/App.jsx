@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle } from 'lucide-react';
+import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock } from 'lucide-react';
 import { PrivyProvider } from '@privy-io/react-auth';
 import Checker from './Checker';
 import './index.css';
@@ -204,6 +204,14 @@ function Tokenomics() {
                 <div className="who-r">
                   <div className="who-ico"><img src="/vibe-logo.png" className="who-img-sq" /></div>
                   <div className="who-t">$VIBE Holders<span>Hold 2M+ $VIBE to qualify</span></div>
+                </div>
+                <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><TrendingUp color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Allocation Size<span>The more you hold, the larger your allocation</span></div>
+                </div>
+                <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Clock color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Snapshot Schedule<span>Balance snapshot at 00:00 UTC on the day of unlock</span></div>
                 </div>
                 <Link to="/checker" className="who-r" style={{textDecoration:'none', cursor:'pointer', background:'var(--blue)'}}>
                   <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Check color="#fff" size={20}/></div>
