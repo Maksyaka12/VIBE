@@ -328,7 +328,7 @@ function Footer() {
           <div className="foot-pow">powered by <img src="/o1-logo.png" alt="o1" /> o1_exchange</div>
         </div>
         <div className="foot-soc">
-          <a href="#" className="soc soc-img" title="X">
+          <a href="https://x.com/vibe_b20" target="_blank" rel="noreferrer" className="soc soc-img" title="X">
             <img src="/x-logo.jpg" alt="X" />
           </a>
           <a href="https://t.me/vibe_b20" target="_blank" rel="noreferrer" className="soc soc-img" title="Telegram">
