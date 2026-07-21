@@ -89,11 +89,11 @@ export default function Checker() {
 
           {ready && !authenticated && (
             <div className="ch-unauth">
-              <div style={{ width: 64, height: 64, background: 'var(--bg)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
-                <img src="/vibe-logo.png" style={{ width: 32, borderRadius: '50%' }} alt="VIBE" />
+              <div style={{ width: 64, height: 64, borderRadius: '50%', margin: '0 auto 20px', overflow: 'hidden' }}>
+                <img src="/vibe-logo.png" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="VIBE" />
               </div>
               <h3 style={{ fontSize: '1.4rem', marginBottom: '8px' }}>Wallet not connected</h3>
-              <p style={{ color: 'var(--muted)', marginBottom: '24px' }}>Please connect your wallet to check your $VIBE balance.</p>
+              <p style={{ color: 'var(--muted)', marginBottom: '24px' }}>Please connect your wallet to check your $VIBE balance and eligibility.</p>
               <button onClick={login} className="btn-fill" style={{ width: '100%', justifyContent: 'center' }}>
                 Connect Wallet
               </button>
