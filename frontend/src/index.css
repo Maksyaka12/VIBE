@@ -463,6 +463,9 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
 .rv.on { opacity: 1; transform: none; }
 .d1{transition-delay:.1s;} .d2{transition-delay:.2s;} .d3{transition-delay:.3s;}
 
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.spin { animation: spin 1s linear infinite; }
+
 /* divider */
 .divr { height: 1px; background: var(--border); }
 /* ── COMPREHENSIVE MOBILE RESPONSIVENESS (DOLLARCAT REFERENCE) ── */

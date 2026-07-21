@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle } from 'lucide-react';
+import { PrivyProvider } from '@privy-io/react-auth';
+import Checker from './Checker';
 import './index.css';
 
 const CA      = '0xB200000000000000000000ba3068A5B447a81101';
@@ -67,7 +69,7 @@ function Nav() {
             $VIBE
           </Link>
           <ul className="nav-menu">
-            {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
+            {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
               <li key={id}><Link to={`/${id}`} onClick={() => setOpen(false)}>{l}</Link></li>
             ))}
           </ul>
@@ -81,7 +83,7 @@ function Nav() {
       </nav>
       <div className={`mob-menu ${open ? 'open' : ''}`}>
         <div className="mob-links">
-          {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']].map(([id,l])=>(
+          {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
             <Link key={id} to={`/${id}`} onClick={() => setOpen(false)}>{l}</Link>
           ))}
           <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}}>Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} /></a>
@@ -203,10 +205,10 @@ function Tokenomics() {
                   <div className="who-ico"><img src="/vibe-logo.png" className="who-img-sq" /></div>
                   <div className="who-t">$VIBE Holders<span>Hold 2M+ $VIBE to qualify</span></div>
                 </div>
-                <div className="who-r">
-                  <div className="who-ico"><img src="/x-logo.jpg" className="who-img-sq" /></div>
-                  <div className="who-t">Token Supporters<span>Spread the vibes, share the rewards</span></div>
-                </div>
+                <Link to="/checker" className="who-r" style={{textDecoration:'none', cursor:'pointer', background:'var(--blue)'}}>
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Check color="#fff" size={20}/></div>
+                  <div className="who-t" style={{color:'#fff'}}>Check your eligibility<span style={{color:'rgba(255,255,255,0.8)'}}>See if you qualify for the next unlock <ArrowRightCircle size={14} style={{verticalAlign:'middle', marginLeft:4}}/></span></div>
+                </Link>
               </div>
             </div>
             <div className="tok-card" style={{marginTop:14}}>
@@ -377,15 +379,18 @@ function StandaloneLayout({ children }) {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<><Nav /><LandingPage /><Footer /></>} />
-        <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
-        <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
-        <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
-        <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
-      </Routes>
-    </BrowserRouter>
+    <PrivyProvider appId="cmrugdvds02q60cl7tegmrnx7" config={{ appearance: { theme: 'light', accentColor: '#0052ff' } }}>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<><Nav /><LandingPage /><Footer /></>} />
+          <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
+          <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
+          <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
+          <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
+          <Route path="/checker" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
+        </Routes>
+      </BrowserRouter>
+    </PrivyProvider>
   );
 }
