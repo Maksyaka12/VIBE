@@ -325,7 +325,7 @@ function Footer() {
         </div>
         <div className="foot-mid">
           <p className="foot-copy">© 2026 $VIBE · Not financial advice · Just a very good boy 🐾</p>
-          <div className="foot-pow">powered by <img src="/o1-logo.png" alt="o1" /> o1_exchange</div>
+          <a href="https://x.com/o1_exchange" target="_blank" rel="noreferrer" className="foot-pow">powered by <img src="/o1-logo.png" alt="o1" /> o1_exchange <ArrowUpRight size={12} strokeWidth={2.5} /></a>
         </div>
         <div className="foot-soc">
           <a href="https://x.com/vibe_b20" target="_blank" rel="noreferrer" className="soc soc-img" title="X">
