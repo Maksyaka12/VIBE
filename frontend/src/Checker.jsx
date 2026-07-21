@@ -111,7 +111,7 @@ export default function Checker() {
             <div className="ch-auth">
               {isEligible ? (
                 <div className="ch-success" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-                  <CheckCircle2 size={64} color="#10b981" />
+                  <img src="/vibe-logo-nobg.png" alt="Eligible VIBE" style={{ width: 120, height: 120, objectFit: 'contain', margin: '-10px 0 -20px 0' }} />
                   <h3 style={{ fontSize: '1.6rem', color: '#10b981', margin: 0 }}>Congratulations! You are eligible!</h3>
                   <p style={{ fontSize: '1.1rem', color: 'var(--ink)' }}>
                     Next $VIBE distribution on <strong>{nextDate}</strong>.
@@ -122,8 +122,8 @@ export default function Checker() {
                 </div>
               ) : (
                 <div className="ch-fail" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-                  <XCircle size={64} color="#ef4444" />
-                  <h3 style={{ fontSize: '1.6rem', color: '#ef4444', margin: 0 }}>Not Yet Eligible</h3>
+                  <img src="/vibe-sad-logo-nobg.png" alt="Sad VIBE" style={{ width: 120, height: 120, objectFit: 'contain', margin: '-10px 0 -20px 0' }} />
+                  <h3 style={{ fontSize: '1.6rem', color: '#ef4444', margin: 0 }}>Not Eligible Yet</h3>
                   <p style={{ fontSize: '1.05rem', color: 'var(--muted)' }}>
                     You need to hold 2M+ $VIBE to become eligible.
                   </p>
