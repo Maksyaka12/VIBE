@@ -291,7 +291,7 @@ h2 {
   color: var(--ink); margin-bottom: 14px;
 }
 h2 .bl { color: var(--blue); }
-.sec-sub { font-size: 1rem; color: var(--muted); max-width: 520px; }
+.sec-sub { font-size: 1rem; color: var(--muted); max-width: 650px; }
 
 /* ── ABOUT ── */
 .about-grid {
@@ -541,7 +541,8 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   /* HEADINGS */
   h2 { font-size: 1.9rem; text-align: left; margin-bottom: 12px; line-height: 1.1; }
   .sec-sub { text-align: left; margin-bottom: 20px; font-size: 0.9rem; }
-  #tokenomics .sec-sub { font-size: 0.85rem; max-width: 290px; } /* Prevent awkard widow word 'you.' */
+  #tokenomics h2 { font-size: clamp(1.4rem, 7.5vw, 1.9rem); }
+  #tokenomics .sec-sub { font-size: 0.85rem; max-width: 100%; }
   .sec-head { margin-bottom: 20px; display: flex; flex-direction: column; align-items: flex-start; }
   .chart-hd { flex-direction: column; align-items: flex-start; gap: 16px; }
   .chart-hd .btn-line { width: 100%; justify-content: center; padding: 14px; }
