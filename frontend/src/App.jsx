@@ -180,7 +180,7 @@ function Tokenomics() {
     <section id="tokenomics" className="alt">
       <div className="wrap">
         <div className="sec-head rv" ref={r}>
-          <h2>Community-owned.<br/><span className="bl">Zero Team. Zero BS.</span></h2>
+          <h2>Community-owned. Zero BS.<br/><span className="bl">Zero Team Allocation.</span></h2>
           <p className="sec-sub">100M tokens locked. Every unlock is distributed to $VIBE holders monthly.</p>
         </div>
         
