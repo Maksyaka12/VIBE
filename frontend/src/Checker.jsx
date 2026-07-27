@@ -8,12 +8,12 @@ import './index.css';
 const CA = '0xb200000000000000000000df24ecb8bf51100a01';
 const O1 = 'https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453';
 
-const MIN_BALANCE = 2000000; // 2M
+const MIN_BALANCE = 5000000; // 5M
 
 const UNLOCKS = [
-  {d:'Aug 8, 2026'},{d:'Sep 7, 2026'},{d:'Oct 7, 2026'},{d:'Nov 6, 2026'},
-  {d:'Dec 6, 2026'},{d:'Jan 5, 2027'},{d:'Feb 4, 2027'},{d:'Mar 6, 2027'},
-  {d:'Apr 5, 2027'},{d:'May 5, 2027'}
+  {d:'Aug 26, 2026'},{d:'Sep 25, 2026'},{d:'Oct 25, 2026'},{d:'Nov 24, 2026'},
+  {d:'Dec 24, 2026'},{d:'Jan 23, 2027'},{d:'Feb 22, 2027'},{d:'Mar 24, 2027'},
+  {d:'Apr 23, 2027'},{d:'May 23, 2027'}
 ];
 
 function getNextUnlockDate() {
@@ -128,13 +128,13 @@ export default function Checker() {
                   <img src="/vibe-sad-logo-nobg.png" alt="Sad VIBE" style={{ width: 120, height: 120, objectFit: 'contain', margin: '-10px 0 -20px 0' }} />
                   <h3 style={{ fontSize: '1.6rem', color: '#ef4444', margin: 0 }}>Not Eligible Yet</h3>
                   <p style={{ fontSize: '1.05rem', color: 'var(--muted)' }}>
-                    You need to hold 2M+ $VIBE to become eligible.
+                    You need to hold 5M+ $VIBE to become eligible.
                   </p>
                   <div style={{ background: '#fef2f2', padding: '16px 24px', borderRadius: '16px', color: '#b91c1c', fontWeight: 600, border: '1px solid #fecaca', width: '100%', marginBottom: '16px' }}>
                     Your balance: {balance.toLocaleString(undefined, {maximumFractionDigits: 0})} $VIBE
                   </div>
                   <a href={O1} target="_blank" rel="noreferrer" className="btn-fill" style={{ width: '100%', justifyContent: 'center' }}>
-                    Buy 2M+ $VIBE to become eligible <ArrowUpRight size={18} />
+                    Buy 5M+ $VIBE to become eligible <ArrowUpRight size={18} />
                   </a>
                 </div>
               )}
