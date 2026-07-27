@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock } from 'lucide-react';
+import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop } from 'lucide-react';
 import { PrivyProvider } from '@privy-io/react-auth';
 import Checker from './Checker';
 import './index.css';
@@ -69,7 +69,7 @@ function Nav() {
             $VIBE
           </Link>
           <ul className="nav-menu">
-            {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']/*,['checker','Checker']*/].map(([id,l])=>(
+            {[['about','About'],['tokenomics','Tokenomics'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade']/*,['checker','Checker']*/].map(([id,l])=>(
               <li key={id}><Link to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>{l} {id === 'checker' && <span className="new-badge">NEW</span>}</Link></li>
             ))}
           </ul>
@@ -83,7 +83,7 @@ function Nav() {
       </nav>
       <div className={`mob-menu ${open ? 'open' : ''}`}>
         <div className="mob-links">
-          {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade']/*,['checker','Checker']*/].map(([id,l])=>(
+          {[['about','About'],['tokenomics','Tokenomics'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade']/*,['checker','Checker']*/].map(([id,l])=>(
             <Link key={id} to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>{l} {id === 'checker' && <span className="new-badge">NEW</span>}</Link>
           ))}
           <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}}>Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} /></a>
@@ -324,6 +324,88 @@ function Swap() {
 
 
 
+/* ROADMAP */
+function Roadmap() {
+  const r=useRev();
+  return (
+    <section id="roadmap" className="alt" style={{ padding: '140px 0 100px 0' }}>
+      <div className="wrap">
+        <div className="sec-head rv" ref={r} style={{ textAlign: 'center' }}>
+          <h2>The <span className="bl">Masterplan</span>.</h2>
+          <p className="sec-sub">Our vision to make $VIBE the ultimate cultural phenomenon on Base.</p>
+        </div>
+        
+        <div className="roadmap-timeline">
+          {/* Phase 1 */}
+          <div className="roadmap-phase rv" ref={useRev()}>
+            <div className="roadmap-phase-title">Phase 1: The Foundation</div>
+            <div className="roadmap-items">
+              <div className="roadmap-item">
+                <div className="r-title"><Rocket size={24} color="var(--blue)"/> Fair Launch via o1</div>
+                <div className="r-desc">A 100% fair launch on the B20 standard. No presales, no team allocations, zero BS. Just pure, unadulterated vibes starting from day one.</div>
+              </div>
+              <div className="roadmap-item">
+                <div className="r-title"><Star size={24} color="var(--blue)"/> Community Rewards</div>
+                <div className="r-desc">10% of the total supply (100M $VIBE) is locked in a transparent smart contract, automatically vesting to our loyal holders over 10 months.</div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Phase 2 */}
+          <div className="roadmap-phase rv" ref={useRev()}>
+            <div className="roadmap-phase-title">Phase 2: Global Recognition</div>
+            <div className="roadmap-items">
+              <div className="roadmap-item">
+                <div className="r-title"><Laptop size={24} color="var(--blue)"/> Interactive Web Portal</div>
+                <div className="r-desc">Launch of a comprehensive dApp featuring an eligibility checker for rewards, integrated seamless swaps, and real-time holder analytics.</div>
+              </div>
+              <div className="roadmap-item">
+                <div className="r-title"><Globe size={24} color="var(--blue)"/> Wallet Integration</div>
+                <div className="r-desc">Securing top-tier visibility and native support across major platforms including the X Token Card, Base App, OKX Wallet, and the broader Web3 ecosystem.</div>
+              </div>
+              <div className="roadmap-item">
+                <div className="r-title"><TrendingUp size={24} color="var(--blue)"/> Premier Data Listings</div>
+                <div className="r-desc">Cementing our presence on industry-leading tracking platforms: Dexscreener, CoinGecko, and CoinMarketCap. Tracking the vibes everywhere.</div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Phase 3 */}
+          <div className="roadmap-phase rv" ref={useRev()}>
+            <div className="roadmap-phase-title">Phase 3: Ecosystem Dominance</div>
+            <div className="roadmap-items">
+              <div className="roadmap-item">
+                <div className="r-title"><Crown size={24} color="var(--blue)"/> The Face of o1</div>
+                <div className="r-desc">Establishing $VIBE as the official mascot and cultural phenomenon of o1 Exchange. Where o1 goes, $VIBE leads.</div>
+              </div>
+              <div className="roadmap-item">
+                <div className="r-title"><Crown size={24} color="var(--blue)"/> The Mascot of Base</div>
+                <div className="r-desc">Transcending a single DEX to become the undisputed, universally loved dog mascot of the entire Base blockchain ecosystem.</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Phase 4 */}
+          <div className="roadmap-phase rv" ref={useRev()}>
+            <div className="roadmap-phase-title">Phase 4: The Zenith</div>
+            <div className="roadmap-items">
+              <div className="roadmap-item">
+                <div className="r-title"><Rocket size={24} color="var(--blue)"/> The 100M B20 Runner</div>
+                <div className="r-desc">Cementing our legacy as the ultimate B20 token, breaking records and targeting the legendary 100M milestone on o1 Exchange.</div>
+              </div>
+              <div className="roadmap-item">
+                <div className="r-title"><Globe size={24} color="var(--blue)"/> Top Tier Listings</div>
+                <div className="r-desc">Expanding liquidity and accessibility globally through strategic listings on prominent Centralized and Decentralized Exchanges.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* FOOTER */
 function Footer() {
   return (
@@ -368,6 +450,8 @@ function LandingPage() {
       <div className="divr"/>
       <Tokenomics/>
       <div className="divr"/>
+      <Roadmap/>
+      <div className="divr"/>
       <Chart/>
       <div className="divr"/>
       <Swap/>
@@ -394,6 +478,7 @@ export default function App() {
           <Route path="/" element={<><Nav /><LandingPage /><Footer /></>} />
           <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
           <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
+          <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} />
           <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
           <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
           <Route path="/checker" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
