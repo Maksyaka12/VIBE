@@ -4,6 +4,7 @@ import { createPublicClient, http, formatUnits } from 'viem';
 import { base } from 'viem/chains';
 import { CheckCircle2, XCircle, ArrowRight, Loader2, ArrowUpRight } from 'lucide-react';
 import './index.css';
+import { ComingSoonBlock } from './App';
 
 const CA = '0xB200000000000000000000ba3068A5B447a81101';
 const O1 = 'https://launch.o1.exchange/token/0xb200000000000000000000ba3068a5b447a81101';
@@ -37,6 +38,7 @@ const erc20Abi = [
 ];
 
 export default function Checker() {
+  if (true) return <ComingSoonBlock title="Check Eligibility" />;
   const { ready, authenticated, user, login, logout } = usePrivy();
   const [balance, setBalance] = useState(null);
   const [loading, setLoading] = useState(false);
