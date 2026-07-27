@@ -603,7 +603,7 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
 /* ROADMAP TIMELINE */
 .roadmap-timeline {
   position: relative;
-  max-width: 800px;
+  max-width: 100%;
   margin: 60px auto 0;
   padding: 0 20px;
 }

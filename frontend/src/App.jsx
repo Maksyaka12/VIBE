@@ -69,8 +69,8 @@ function Nav() {
             $VIBE
           </Link>
           <ul className="nav-menu">
-            {[['about','About'],['tokenomics','Tokenomics'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade']/*,['checker','Checker']*/].map(([id,l])=>(
-              <li key={id}><Link to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>{l} {id === 'checker' && <span className="new-badge">NEW</span>}</Link></li>
+            {[['about','About'],['tokenomics','Tokenomics'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
+              <li key={id}><Link to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>{l}</Link></li>
             ))}
           </ul>
           <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
@@ -83,8 +83,8 @@ function Nav() {
       </nav>
       <div className={`mob-menu ${open ? 'open' : ''}`}>
         <div className="mob-links">
-          {[['about','About'],['tokenomics','Tokenomics'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade']/*,['checker','Checker']*/].map(([id,l])=>(
-            <Link key={id} to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>{l} {id === 'checker' && <span className="new-badge">NEW</span>}</Link>
+          {[['about','About'],['tokenomics','Tokenomics'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
+            <Link key={id} to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>{l}</Link>
           ))}
           <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}}>Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} /></a>
         </div>
@@ -332,7 +332,7 @@ function Roadmap() {
       <div className="wrap">
         <div className="sec-head rv" ref={r} style={{ textAlign: 'center' }}>
           <h2>The <span className="bl">Masterplan</span>.</h2>
-          <p className="sec-sub">Our vision to make $VIBE the ultimate cultural phenomenon on Base.</p>
+          <p className="sec-sub" style={{ margin: '0 auto' }}>Our vision to make $VIBE the ultimate cultural phenomenon on Base.</p>
         </div>
         
         <div className="roadmap-timeline">
