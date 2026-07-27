@@ -5,10 +5,10 @@ import { PrivyProvider } from '@privy-io/react-auth';
 import Checker from './Checker';
 import './index.css';
 
-const CA      = '0xB200000000000000000000ba3068A5B447a81101';
-const O1      = 'https://launch.o1.exchange/token/0xb200000000000000000000ba3068a5b447a81101';
-const DEX     = 'https://dexscreener.com/base/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530';
-const DEX_EMB = 'https://dexscreener.com/base/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530?embed=1&theme=dark&activeTab=chart';
+const CA      = '0xb200000000000000000000df24ecb8bf51100a01';
+const O1      = 'https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453';
+const DEX     = 'https://dexscreener.com/base/0xa1a4159e61ac9fc48aa9e9992c8d4870ef8a496d5749af1d219e8002f74835c5';
+const DEX_EMB = 'https://dexscreener.com/base/0xa1a4159e61ac9fc48aa9e9992c8d4870ef8a496d5749af1d219e8002f74835c5?embed=1&theme=dark&activeTab=chart';
 
 const UNLOCKS = [
   {d:'Aug 8, 2026',  a:'10M'},{d:'Sep 7, 2026',  a:'20M'},
@@ -74,7 +74,7 @@ function Nav() {
             ))}
           </ul>
           <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
-            <a href="#" onClick={e => {e.preventDefault(); alert('We are relaunching. Stay tuned!');}} className="nav-buy" style={{ background: 'var(--muted)', cursor: 'not-allowed' }}>Coming Soon <ArrowUpRight size={16} strokeWidth={2.5} /></a>
+            <a href={O1} target="_blank" rel="noreferrer" className="nav-buy">Buy $VIBE <ArrowUpRight size={16} strokeWidth={2.5} /></a>
             <button className="ham" onClick={() => setOpen(!open)}>
               {open ? <X size={26} color="var(--ink)" /> : <Menu size={26} color="var(--ink)" />}
             </button>
@@ -86,7 +86,7 @@ function Nav() {
           {[['about','About'],['tokenomics','Tokenomics'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
             <Link key={id} to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>{l} {id === 'checker' && <span className="new-badge">NEW</span>}</Link>
           ))}
-          <a href="#" onClick={e => {e.preventDefault(); alert('We are relaunching. Stay tuned!');}} className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', background: 'var(--muted)', cursor: 'not-allowed'}}>Coming Soon <ArrowUpRight size={20} strokeWidth={2.5} /></a>
+          <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}}>Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} /></a>
         </div>
       </div>
     </>
@@ -110,9 +110,13 @@ function Hero() {
             Good vibes and positive energy only.
             Every great journey starts with a single paw print 🐾
           </p>
-          <div className="hero-btns rv" ref={r2}>
-            <a href="#" onClick={e => {e.preventDefault(); alert('We are relaunching. Stay tuned!');}} className="btn-fill" style={{ background: 'var(--muted)', cursor: 'not-allowed' }}>Coming Soon</a>
-            <Link to="/about" className="btn-out">Learn More</Link>
+          <div className="hero-btns">
+            <a href={O1} target="_blank" rel="noreferrer" className="btn-fill">
+              Buy $VIBE <ArrowRight size={20} strokeWidth={2.5} />
+            </a>
+            <a href={DEX} target="_blank" rel="noreferrer" className="btn-line">
+              Dexscreener <ArrowUpRight size={20} strokeWidth={2.5} />
+            </a>
           </div>
           <div className="hero-ca-wrap">
             <div className="hero-ca-lbl">$VIBE Contract Address (Base)</div>
@@ -171,26 +175,8 @@ function About() {
   );
 }
 
-export function ComingSoonBlock({ title }) {
-  const r=useRev();
-  return (
-    <section className="alt" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', padding: '100px 20px' }}>
-      <div className="rv" ref={r} style={{ textAlign: 'center' }}>
-        <h2 style={{ fontSize: '3rem', marginBottom: '24px', color: 'var(--ink)' }}>{title}</h2>
-        <div style={{ display: 'inline-flex', background: 'var(--blue)', color: '#fff', padding: '10px 24px', borderRadius: '99px', fontSize: '1.2rem', fontWeight: 700 }}>
-          Coming Soon
-        </div>
-        <p style={{ marginTop: '24px', color: 'var(--muted)', maxWidth: 400, margin: '24px auto 0', fontSize: '1.1rem', lineHeight: 1.6 }}>
-          We are relaunching with a new contract to make everything perfect from day 1. Stay tuned!
-        </p>
-      </div>
-    </section>
-  );
-}
-
 /* TOKENOMICS */
 function Tokenomics() {
-  if (true) return <ComingSoonBlock title="Tokenomics" />;
   const r=useRev();
   return (
     <section id="tokenomics" className="alt">
@@ -269,7 +255,6 @@ function Tokenomics() {
 
 /* CHART */
 function Chart() {
-  if (true) return <ComingSoonBlock title="Live Chart" />;
   const r=useRev();
   return (
     <section id="chart">
@@ -293,7 +278,7 @@ function Chart() {
             <span>View on Dexscreener</span>
             <ArrowUpRight size={22} strokeWidth={2.5} />
           </a>
-          <a href="https://www.geckoterminal.com/uk/base/pools/0x6fd5a9c697b93ce1740b1833a17c1460086b72b256f343d862d3ed6d2dbc6530" target="_blank" rel="noreferrer" className="chart-big-btn">
+          <a href="https://www.geckoterminal.com/uk/base/pools/0xa1a4159e61ac9fc48aa9e9992c8d4870ef8a496d5749af1d219e8002f74835c5" target="_blank" rel="noreferrer" className="chart-big-btn">
             <img src="/geckoterminal-logo.jpg" alt="GeckoTerminal" className="chart-big-logo" />
             <span>View on GeckoTerminal</span>
             <ArrowUpRight size={22} strokeWidth={2.5} />
@@ -306,7 +291,6 @@ function Chart() {
 
 /* SWAP / TRADE */
 function Swap() {
-  if (true) return <ComingSoonBlock title="Trade $VIBE" />;
   const r=useRev();
   return (
     <section id="trade" className="alt">
@@ -322,7 +306,7 @@ function Swap() {
         <div className="swap-grid">
           <div className="swap-iframe-wrap">
             <iframe
-              src="https://launch.o1.exchange/token/0xb200000000000000000000ba3068a5b447a81101?chain=8453"
+              src="https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453"
               title="$VIBE Trade"
               className="swap-iframe"
               frameBorder="0"
@@ -363,14 +347,12 @@ function Footer() {
           <a href={O1} target="_blank" rel="noreferrer" className="soc soc-img" title="o1.exchange">
             <img src="/o1-logo.png" alt="o1" />
           </a>
-          <div className="socs">
-          <a href="#" onClick={e => e.preventDefault()} className="soc soc-img" title="Dexscreener" style={{ cursor: 'not-allowed', opacity: 0.5 }}>
+          <a href={DEX} target="_blank" rel="noreferrer" className="soc soc-img" title="Dexscreener">
             <img src="/dexscreener-logo.jpg" alt="Dex" />
           </a>
-          <a href="#" onClick={e => e.preventDefault()} className="soc soc-img" title="GeckoTerminal" style={{ cursor: 'not-allowed', opacity: 0.5 }}>
+          <a href="https://www.geckoterminal.com/uk/base/pools/0xa1a4159e61ac9fc48aa9e9992c8d4870ef8a496d5749af1d219e8002f74835c5" target="_blank" rel="noreferrer" className="soc soc-img" title="GeckoTerminal">
             <img src="/geckoterminal-logo.jpg" alt="GeckoTerminal" />
           </a>
-          </div>
         </div>
       </div>
     </footer>

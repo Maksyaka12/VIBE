@@ -5,8 +5,8 @@ import { base } from 'viem/chains';
 import { CheckCircle2, XCircle, ArrowRight, Loader2, ArrowUpRight } from 'lucide-react';
 import './index.css';
 
-const CA = '0xB200000000000000000000ba3068A5B447a81101';
-const O1 = 'https://launch.o1.exchange/token/0xb200000000000000000000ba3068a5b447a81101';
+const CA = '0xb200000000000000000000df24ecb8bf51100a01';
+const O1 = 'https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453';
 
 const MIN_BALANCE = 2000000; // 2M
 
@@ -37,20 +37,6 @@ const erc20Abi = [
 ];
 
 export default function Checker() {
-  if (true) return (
-    <section className="alt" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', padding: '100px 20px' }}>
-      <div style={{ textAlign: 'center' }}>
-        <h2 style={{ fontSize: '3rem', marginBottom: '24px', color: 'var(--ink)' }}>Check Eligibility</h2>
-        <div style={{ display: 'inline-flex', background: 'var(--blue)', color: '#fff', padding: '10px 24px', borderRadius: '99px', fontSize: '1.2rem', fontWeight: 700 }}>
-          Coming Soon
-        </div>
-        <p style={{ marginTop: '24px', color: 'var(--muted)', maxWidth: 400, margin: '24px auto 0', fontSize: '1.1rem', lineHeight: 1.6 }}>
-          We are relaunching with a new contract to make everything perfect from day 1. Stay tuned!
-        </p>
-      </div>
-    </section>
-  );
-  
   const { ready, authenticated, user, login, logout } = usePrivy();
   const [balance, setBalance] = useState(null);
   const [loading, setLoading] = useState(false);
