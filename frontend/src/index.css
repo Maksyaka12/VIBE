@@ -686,10 +686,10 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   border: 4px solid var(--bg);
 }
 .roadmap-item:nth-child(odd)::after {
-  right: -52px;
+  right: -48px;
 }
 .roadmap-item:nth-child(even)::after {
-  left: -52px;
+  left: -48px;
 }
 .r-title {
   font-size: 1.25rem;
@@ -783,7 +783,7 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
     width: 20px;
   }
   .roadmap-item:nth-child(odd)::after, .roadmap-item:nth-child(even)::after {
-    left: -32px;
+    left: -28px;
     right: auto;
   }
   .roadmap-item:nth-child(odd) .r-title {
