@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop } from 'lucide-react';
+import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2 } from 'lucide-react';
 import { PrivyProvider } from '@privy-io/react-auth';
 import Checker from './Checker';
 import './index.css';
@@ -341,11 +341,11 @@ function Roadmap() {
             <div className="roadmap-phase-title">Phase 1: The Foundation</div>
             <div className="roadmap-items">
               <div className="roadmap-item done">
-                <div className="r-title"><Rocket size={24} color="var(--blue)"/> Fair Launch via o1 <span className="badge-rm done">Done</span></div>
+                <div className="r-title"><Rocket size={24} color="var(--blue)"/> Fair Launch via o1 <span className="badge-rm done"><Check size={14} strokeWidth={3}/> DONE</span></div>
                 <div className="r-desc">A 100% fair launch on o1 Exchange. No presales, no team allocations, no insider buys. Public launch time: July 27, 14:00 UTC.</div>
               </div>
               <div className="roadmap-item done">
-                <div className="r-title"><Star size={24} color="var(--blue)"/> Community Rewards <span className="badge-rm done">Done</span></div>
+                <div className="r-title"><Star size={24} color="var(--blue)"/> Community Rewards <span className="badge-rm done"><Check size={14} strokeWidth={3}/> DONE</span></div>
                 <div className="r-desc">Develop a transparent smart contract to distribute a vested 10% of the total supply (100M $VIBE) as monthly rewards for the community.</div>
               </div>
             </div>
@@ -356,11 +356,11 @@ function Roadmap() {
             <div className="roadmap-phase-title">Phase 2: Global Recognition</div>
             <div className="roadmap-items">
               <div className="roadmap-item done">
-                <div className="r-title"><Laptop size={24} color="var(--blue)"/> Interactive Web Portal <span className="badge-rm done">Done</span></div>
+                <div className="r-title"><Laptop size={24} color="var(--blue)"/> Interactive Web Portal <span className="badge-rm done"><Check size={14} strokeWidth={3}/> DONE</span></div>
                 <div className="r-desc">Launch of a comprehensive dApp featuring an eligibility checker for rewards, integrated seamless swaps, real-time holder analytics, tokenomics, and project details.</div>
               </div>
               <div className="roadmap-item in-progress">
-                <div className="r-title"><Globe size={24} color="var(--blue)"/> Enhance $VIBE Visibility <span className="badge-rm prog">In Progress</span></div>
+                <div className="r-title"><Globe size={24} color="var(--blue)"/> Enhance $VIBE Visibility <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
                 <div className="r-desc">Securing top-tier visibility and native support across major platforms including the X Token Card, Base App, OKX Wallet, and the broader Web3 ecosystem.</div>
               </div>
               <div className="roadmap-item">
