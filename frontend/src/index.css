@@ -721,18 +721,19 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   100% { box-shadow: 0 0 0 0 rgba(245,158,11, 0); }
 }
 .badge-rm {
-  font-size: 0.7rem;
-  padding: 4px 10px;
+  font-size: 0.75rem;
+  padding: 6px 12px;
   border-radius: 99px;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-left: 8px;
+  margin-left: auto;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   white-space: nowrap;
   flex-shrink: 0;
+  min-width: max-content;
 }
 .badge-rm.done { background: #d1fae5; color: #047857; }
 .badge-rm.prog { background: #fef3c7; color: #b45309; }
