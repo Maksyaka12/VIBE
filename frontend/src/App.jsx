@@ -363,8 +363,8 @@ function Roadmap() {
                 <div className="r-title"><Globe size={24} color="var(--blue)"/> Enhance $VIBE Visibility <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
                 <div className="r-desc">Securing top-tier visibility and native support across major platforms including the X Token Card, Base App, OKX Wallet, and the broader Web3 ecosystem.</div>
               </div>
-              <div className="roadmap-item">
-                <div className="r-title"><TrendingUp size={24} color="var(--blue)"/> Premier Listings</div>
+              <div className="roadmap-item in-progress">
+                <div className="r-title"><TrendingUp size={24} color="var(--blue)"/> Premier Listings <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
                 <div className="r-desc">Cementing our presence on industry-leading tracking platforms: Dexscreener, CoinGecko, and CoinMarketCap.</div>
               </div>
             </div>
