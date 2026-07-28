@@ -698,6 +698,7 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 .roadmap-item:nth-child(odd) .r-title {
   justify-content: flex-end;
@@ -731,6 +732,7 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   align-items: center;
   gap: 4px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 .badge-rm.done { background: #d1fae5; color: #047857; }
 .badge-rm.prog { background: #fef3c7; color: #b45309; }
@@ -783,6 +785,12 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   }
   .roadmap-item:nth-child(odd) .r-title {
     justify-content: flex-start;
+  }
+  .r-title {
+    font-size: 1.1rem;
+  }
+  .r-desc {
+    font-size: 0.95rem;
   }
   .roadmap-more {
     left: 20px;
