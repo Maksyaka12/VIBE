@@ -730,6 +730,15 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   background: #f59e0b;
   animation: pulse-amber 2s infinite;
 }
+.r-subnote.done {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #065f46;
+}
+.r-subnote-dot.done {
+  background: #10b981;
+  animation: none;
+}
 .roadmap-item.done::after { background: #10b981; border-color: var(--bg); }
 .roadmap-item.done::before { background: #10b981; }
 .roadmap-item.in-progress::after { 

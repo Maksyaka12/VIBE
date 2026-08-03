@@ -366,6 +366,16 @@ function Roadmap() {
               <div className="roadmap-item in-progress">
                 <div className="r-title"><TrendingUp size={24} color="var(--blue)"/> Premier Listings <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
                 <div className="r-desc">Cementing our presence on industry-leading tracking platforms: Dexscreener, CoinGecko, CoinMarketCap, and others.</div>
+                <div className="r-subnote done">
+                  <span className="r-subnote-dot done"></span>
+                  <span>DEX &amp; GeckoTerminal updated</span>
+                  <span className="badge-rm done" style={{marginLeft:'auto',fontSize:'0.65rem',padding:'4px 8px'}}><Check size={11} strokeWidth={3}/> DONE</span>
+                </div>
+                <div className="r-subnote">
+                  <span className="r-subnote-dot"></span>
+                  <span>Working on CoinGecko &amp; CoinMarketCap updating</span>
+                  <span className="badge-rm prog" style={{marginLeft:'auto',fontSize:'0.65rem',padding:'4px 8px'}}><Loader2 size={11} className="spin"/> IN PROGRESS</span>
+                </div>
                 <div className="r-subnote">
                   <span className="r-subnote-dot"></span>
                   <span>Fixing DEX LP displaying issue directly with both o1 &amp; DEX teams</span>
