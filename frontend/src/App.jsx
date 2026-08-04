@@ -288,27 +288,32 @@ function useRevenueStats() {
         const abiBalance = parseAbiItem('function balanceOf(address account) view returns (uint256)');
         const eventTransfer = parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)');
         
-        // 1. Fetch Balances (Burned and Current Rewards)
+        // 1. Fetch Balances (Burned and Current Rewards) via RPC
         const [burnedRaw, rewardsRaw] = await Promise.all([
           client.readContract({ address: CA, abi: [abiBalance], functionName: 'balanceOf', args: [BURN_WALLET] }),
           client.readContract({ address: CA, abi: [abiBalance], functionName: 'balanceOf', args: [BUYBACK_WALLET] })
         ]);
 
-        // 2. Fetch Logs for Buyback Wallet (Incoming and Outgoing)
-        const [incomingLogs, outgoingLogs] = await Promise.all([
-          client.getLogs({ address: CA, event: eventTransfer, args: { to: BUYBACK_WALLET }, fromBlock: START_BLOCK }),
-          client.getLogs({ address: CA, event: eventTransfer, args: { from: BUYBACK_WALLET }, fromBlock: START_BLOCK })
-        ]);
-
-        // Calculate Total Buyback (Sum of Incoming)
+        // 2. Fetch Historical Transfers via BaseScan API (bypasses RPC getLogs limits)
+        const apiUrl = `https://api.basescan.org/api?module=account&action=tokentx&contractaddress=${CA}&address=${BUYBACK_WALLET}&page=1&offset=1000&sort=asc`;
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+        
         let buybackSum = 0n;
-        for (const log of incomingLogs) buybackSum += log.args.value;
-
-        // Calculate Distributed (Sum of Outgoing EXCLUDING Burn)
         let distributedSum = 0n;
-        for (const log of outgoingLogs) {
-          if (log.args.to.toLowerCase() !== BURN_WALLET.toLowerCase()) {
-            distributedSum += log.args.value;
+
+        if (data.status === "1" && Array.isArray(data.result)) {
+          for (const tx of data.result) {
+            const val = BigInt(tx.value);
+            if (tx.to.toLowerCase() === BUYBACK_WALLET.toLowerCase()) {
+              buybackSum += val; // Incoming to buyback wallet
+            }
+            if (tx.from.toLowerCase() === BUYBACK_WALLET.toLowerCase()) {
+              // Outgoing from buyback wallet
+              if (tx.to.toLowerCase() !== BURN_WALLET.toLowerCase()) {
+                distributedSum += val; // Not burned => distributed
+              }
+            }
           }
         }
 
