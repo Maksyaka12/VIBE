@@ -22,7 +22,9 @@ const UNLOCKS = [
 
 const BUYBACK_WALLET = '0x067c66aDdD3C6D484c1882B68E197B614f7f3Ebf';
 const BURN_WALLET = '0x000000000000000000000000000000000000dEaD';
-const START_BLOCK = 17000000n;
+const DIST_WALLET = '0x3b277d566b4557a53392712b1dc830da5d13ba91';
+const START_BLOCK = 17870000n; // ~July 26, 2026
+const CONST_BUYBACK = 585682n * 10n**18n;
 
 const REVENUE_EVENTS = [
   {
@@ -294,27 +296,22 @@ function useRevenueStats() {
           client.readContract({ address: CA, abi: [abiBalance], functionName: 'balanceOf', args: [BUYBACK_WALLET] })
         ]);
 
-        // 2. Fetch Historical Transfers via BaseScan API (bypasses RPC getLogs limits)
-        const apiUrl = `https://api.basescan.org/api?module=account&action=tokentx&contractaddress=${CA}&address=${BUYBACK_WALLET}&page=1&offset=1000&sort=asc`;
-        const res = await fetch(apiUrl);
-        const data = await res.json();
-        
-        let buybackSum = 0n;
+        // 2. Fetch Logs via viem (Chunked to bypass limits)
+        const currentBlock = await client.getBlockNumber();
+        const chunkSize = 10000n;
+        let buybackSum = CONST_BUYBACK; // Start with constant
         let distributedSum = 0n;
 
-        if (data.status === "1" && Array.isArray(data.result)) {
-          for (const tx of data.result) {
-            const val = BigInt(tx.value);
-            if (tx.to.toLowerCase() === BUYBACK_WALLET.toLowerCase()) {
-              buybackSum += val; // Incoming to buyback wallet
-            }
-            if (tx.from.toLowerCase() === BUYBACK_WALLET.toLowerCase()) {
-              // Outgoing from buyback wallet
-              if (tx.to.toLowerCase() !== BURN_WALLET.toLowerCase()) {
-                distributedSum += val; // Not burned => distributed
-              }
-            }
-          }
+        for (let fromB = START_BLOCK; fromB <= currentBlock; fromB += chunkSize) {
+          const toB = fromB + chunkSize - 1n > currentBlock ? currentBlock : fromB + chunkSize - 1n;
+          
+          const [inLogs, outLogs] = await Promise.all([
+            client.getLogs({ address: CA, event: eventTransfer, args: { to: BUYBACK_WALLET }, fromBlock: fromB, toBlock: toB }),
+            client.getLogs({ address: CA, event: eventTransfer, args: { from: DIST_WALLET }, fromBlock: fromB, toBlock: toB })
+          ]);
+
+          for (const log of inLogs) buybackSum += log.args.value;
+          for (const log of outLogs) distributedSum += log.args.value;
         }
 
         const formatNumber = (numStr) => {
@@ -361,22 +358,18 @@ function CreatorRevenue() {
           <div className="stile">
             <span className="v">{loading ? <Loader2 size={24} className="spin"/> : totalBuybacks}</span>
             <span className="l">Total Buyback</span>
-            <div className="d">Accumulated VIBE</div>
           </div>
           <div className="stile">
             <span className="v">{loading ? <Loader2 size={24} className="spin"/> : totalBurned}</span>
             <span className="l">Total Burned</span>
-            <div className="d">Permanently removed</div>
           </div>
           <div className="stile">
             <span className="v">{loading ? <Loader2 size={24} className="spin"/> : communityRewards}</span>
             <span className="l">Community Rewards</span>
-            <div className="d">Current wallet balance</div>
           </div>
           <div className="stile">
             <span className="v">{loading ? <Loader2 size={24} className="spin"/> : distributedRewards}</span>
             <span className="l">Distributed to Community</span>
-            <div className="d">Total VIBE distributed</div>
           </div>
         </div>
 
