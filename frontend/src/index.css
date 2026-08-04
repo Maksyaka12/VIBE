@@ -830,3 +830,78 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
     transform: none;
   }
 }
+
+/* CREATOR REVENUE */
+.rev-events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 10px;
+}
+.rev-event-card {
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 16px 20px;
+  border-radius: 16px;
+  gap: 20px;
+}
+.rev-event-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 120px;
+}
+.rev-type-badge {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.rev-type-badge.payment { background: #e0e7ff; color: #3730a3; }
+.rev-type-badge.buyback { background: #dcfce7; color: #166534; }
+.rev-type-badge.burn { background: #fee2e2; color: #991b1b; }
+
+.rev-date {
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+.rev-event-mid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rev-event-mid h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+.rev-amount {
+  font-size: 0.95rem;
+  color: var(--blue);
+  font-weight: 700;
+}
+.rev-event-right {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 600px) {
+  .rev-event-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .rev-event-left {
+    min-width: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
