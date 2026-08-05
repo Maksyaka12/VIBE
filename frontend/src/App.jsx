@@ -26,7 +26,7 @@ const DIST_WALLET = '0x3b277d566b4557a53392712b1dc830da5d13ba91';
 
 // Historical data constants (RPC getLogs is impossible for 31M block range on frontend)
 const CONST_TOTAL_BUYBACK = 8493747 + 585682;
-const CONST_DISTRIBUTED = 0; // Update this manually as needed
+const CONST_DISTRIBUTED = 585682;
 
 const REVENUE_EVENTS = [
   {
