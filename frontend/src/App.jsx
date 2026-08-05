@@ -212,7 +212,7 @@ function Tokenomics() {
       <div className="wrap">
         <div className="sec-head rv" ref={r}>
           <h2>Community-owned.<br/><span className="bl">Zero BS & Team Allocation.</span></h2>
-          <p className="sec-sub">100M tokens locked. Every unlock is distributed to $VIBE holders monthly.</p>
+          <p className="sec-sub">100M tokens vested. Every month 10M unlocks and get distributed among holders.</p>
         </div>
         
         <div className="stat-tiles wide-stats">
@@ -246,7 +246,7 @@ function Tokenomics() {
         <div className="tok-layout">
           <div>
             <div className="tok-card">
-              <h3>Community Rewards · 100M $VIBE</h3>
+              <h3>Holder Rewards · 100M $VIBE</h3>
               <p className="sub">10M unlocks monthly · starts Aug 26, 2026</p>
               <div className="prog"><div className="prog-f" style={{width:'10%'}}/></div>
               <div className="prog-labs"><span>0M today</span><span>100M total</span></div>
