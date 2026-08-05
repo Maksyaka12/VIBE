@@ -691,7 +691,7 @@ function Events() {
                 padding: '10px 24px',
                 borderRadius: '99px',
                 border: 'none',
-                background: filter === f ? 'var(--blue)' : 'var(--bg)',
+                background: filter === f ? 'var(--blue)' : '#fff',
                 color: filter === f ? '#fff' : 'var(--ink)',
                 fontWeight: 'bold',
                 cursor: 'pointer',
