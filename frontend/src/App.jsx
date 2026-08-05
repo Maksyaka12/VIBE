@@ -218,26 +218,26 @@ function Tokenomics() {
         <div className="stat-tiles wide-stats">
           <div className="stile"><span className="v">1B</span><span className="l">Total Supply</span></div>
           <div className="stile">
-            <span className="v" style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-              {circulatingStr}
+            <span className="v">{circulatingStr}</span>
+            <span className="l" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              Circulating
               {!loading && totalBurnedNum > 0 && (
                 <span style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '4px',
-                  fontSize: '1.2rem',
+                  fontSize: '0.8rem',
                   background: 'rgba(239, 68, 68, 0.12)',
                   color: '#ef4444',
-                  padding: '4px 12px',
+                  padding: '2px 8px',
                   borderRadius: '99px',
                   fontWeight: '800',
                   lineHeight: '1'
                 }}>
-                  <Flame size={18} strokeWidth={2.5} /> {totalBurned}
+                  <Flame size={14} strokeWidth={2.5} /> {totalBurned}
                 </span>
               )}
             </span>
-            <span className="l">Circulating</span>
           </div>
           <div className="stile"><span className="v">100M</span><span className="l">Vesting Community Rewards</span><div className="d">10% released monthly</div></div>
           <div className="stile"><span className="v">10M</span><span className="l">Monthly Unlock</span><div className="d">Straight to holders</div></div>
@@ -405,9 +405,9 @@ function CreatorRevenue() {
             <p className="sub">Strategic utilization of buybacks.</p>
           </div>
           
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '32px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
             
-            <div style={{ flex: '1 1 300px', background: 'rgba(255,255,255,0.4)', borderRadius: '16px', padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
+            <div style={{ flex: '1 1 300px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
               <div style={{ background: 'var(--ink)', color: 'var(--bg)', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <Flame size={32} />
               </div>
@@ -419,7 +419,7 @@ function CreatorRevenue() {
               </div>
             </div>
 
-            <div style={{ flex: '1 1 300px', background: 'rgba(255,255,255,0.4)', borderRadius: '16px', padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
+            <div style={{ flex: '1 1 300px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
               <div style={{ background: 'var(--blue)', color: '#fff', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                 <Gift size={32} />
               </div>
