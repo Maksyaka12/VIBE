@@ -31,11 +31,10 @@ const CONST_DISTRIBUTED = 585682;
 const REVENUE_EVENTS = [
   {
     date: 'Aug 5, 2026',
-    type: 'payment',
     title: 'DEX Listing Payment',
     amount: '$300 USDC',
-    txLink: '', // can add base scan link later
-    tweetLink: ''
+    txLink: 'https://etherscan.io/tx/0x93cb092fc6cec2c49a3f129ed9814c272186beece9992ef8078eb412df7f1c04', 
+    tweetLink: 'https://x.com/mksvibe/status/2083175935138824413'
   }
 ];
 
@@ -377,20 +376,16 @@ function CreatorRevenue() {
           <div className="sched" style={{minWidth:'350px'}}>
             <h3>Revenue Events</h3>
             <p className="sub">Dynamic log of actions</p>
-            <div className="rev-events-list">
+            <div className="ul-wrap">
               {REVENUE_EVENTS.map((ev, i) => (
-                <div key={i} className="rev-event-card" style={{padding:'12px', gap:'12px', flexDirection:'column', alignItems:'flex-start'}}>
-                  <div className="rev-event-left" style={{flexDirection:'row', width:'100%', justifyContent:'space-between', alignItems:'center'}}>
-                    <div className={`rev-type-badge ${ev.type}`}>{ev.type.toUpperCase()}</div>
-                    <div className="rev-date">{ev.date}</div>
-                  </div>
-                  <div className="rev-event-mid" style={{width:'100%'}}>
-                    <h4 style={{fontSize:'1rem', marginBottom:'2px'}}>{ev.title}</h4>
-                    <div className="rev-amount">{ev.amount}</div>
-                  </div>
-                  <div className="rev-event-right">
-                    {ev.txLink && <a href={ev.txLink} target="_blank" rel="noreferrer" className="btn-line" style={{padding:'4px 8px', fontSize:'0.75rem'}}>Tx <ArrowUpRight size={12}/></a>}
-                    {ev.tweetLink && <a href={ev.tweetLink} target="_blank" rel="noreferrer" className="btn-line" style={{padding:'4px 8px', fontSize:'0.75rem'}}>Tweet <ArrowUpRight size={12}/></a>}
+                <div key={i} className="ul-r" style={{ alignItems: 'center', padding: '12px 16px' }}>
+                  <span className="ul-d" style={{ minWidth: '95px', fontSize: '0.85rem' }}>{ev.date}</span>
+                  <span className="ul-a" style={{ flex: 1, color: 'var(--ink)', fontSize: '0.95rem' }}>
+                    {ev.title} <span style={{color: 'var(--blue)', fontWeight: 700, marginLeft: '6px'}}>{ev.amount}</span>
+                  </span>
+                  <div style={{ display: 'flex', gap: '6px', marginLeft: 'auto' }}>
+                    {ev.txLink && <a href={ev.txLink} target="_blank" rel="noreferrer" className="btn-line" style={{padding:'4px 8px', fontSize:'0.7rem', borderRadius:'6px'}}>Tx <ArrowUpRight size={12}/></a>}
+                    {ev.tweetLink && <a href={ev.tweetLink} target="_blank" rel="noreferrer" className="btn-line" style={{padding:'4px 8px', fontSize:'0.7rem', borderRadius:'6px'}}>X <ArrowUpRight size={12}/></a>}
                   </div>
                 </div>
               ))}
