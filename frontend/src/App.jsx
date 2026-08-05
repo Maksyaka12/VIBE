@@ -426,7 +426,7 @@ function CreatorRevenue() {
               <div>
                 <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '8px' }}>Community Incentives (70%)</h4>
                 <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>
-                  Strategic rewards and competitions.
+                  Strategic rewards, events and competitions.
                 </p>
               </div>
             </div>
