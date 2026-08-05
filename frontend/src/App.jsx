@@ -654,6 +654,7 @@ const EVENT_DATA = [
     image: '/event1.png',
     winners: '50',
     prizePool: 'TBA',
+    distribution: 'Still Live',
     status: 'ongoing',
     link: 'https://x.com/mksvibe'
   },
@@ -663,6 +664,7 @@ const EVENT_DATA = [
     image: '/event2.png',
     winners: 'N/A',
     prizePool: '585,682 VIBE',
+    distribution: 'Completed',
     status: 'ended',
     link: 'https://x.com/mksvibe'
   }
@@ -728,14 +730,18 @@ function Events() {
                   </div>
                 </div>
                 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px', background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '24px', background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
                   <div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Prize Pool</div>
-                    <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '1.1rem' }}>{ev.prizePool}</div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Prize Pool</div>
+                    <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.95rem' }}>{ev.prizePool}</div>
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Winners</div>
-                    <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '1.1rem' }}>{ev.winners}</div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Winners</div>
+                    <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.95rem' }}>{ev.winners}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Distribution</div>
+                    <div style={{ fontWeight: 800, color: ev.distribution === 'Completed' ? '#10b981' : 'var(--ink)', fontSize: '0.95rem' }}>{ev.distribution}</div>
                   </div>
                 </div>
 
