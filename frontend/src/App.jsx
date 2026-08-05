@@ -659,7 +659,7 @@ const EVENT_DATA = [
   },
   {
     id: 2,
-    title: 'Base App users rewards',
+    title: 'Base App Bonus',
     image: '/event2.png',
     winners: 'N/A',
     prizePool: '585,682 VIBE',
@@ -677,12 +677,12 @@ function Events() {
   return (
     <section id="events" className="alt" style={{ padding: '120px 20px', minHeight: '80vh' }}>
       <div className="wrap">
-        <div className="sec-head rv" ref={r} style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <div className="sec-head rv" ref={r} style={{ marginBottom: '40px' }}>
           <h2>Community <span className="bl">Events</span> & Giveaways.</h2>
           <p className="sec-sub">Track active and past events, participate, and win $VIBE rewards.</p>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '40px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '40px', flexWrap: 'wrap' }}>
           {['all', 'ongoing', 'ended'].map(f => (
             <button 
               key={f}
@@ -700,31 +700,33 @@ function Events() {
                 transition: 'all 0.2s'
               }}
             >
-              {f}
+              {f === 'all' ? 'All Events' : f}
             </button>
           ))}
         </div>
 
         <div className="events-grid" style={{ display: 'grid', gap: '24px', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
           {filteredEvents.map(ev => (
-            <div key={ev.id} className="tok-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <div key={ev.id} className="tok-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: ev.status === 'ended' ? 0.7 : 1, filter: ev.status === 'ended' ? 'grayscale(40%)' : 'none', transition: 'all 0.2s' }}>
               <div style={{ position: 'relative', height: '220px', background: '#f8fafc' }}>
                 <img src={ev.image} alt={ev.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                <div style={{
-                  position: 'absolute', top: '16px', right: '16px', 
-                  background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(4px)',
-                  padding: '6px 14px', borderRadius: '99px',
-                  display: 'flex', alignItems: 'center', gap: '6px',
-                  fontSize: '0.85rem', fontWeight: 'bold',
-                  color: ev.status === 'ongoing' ? '#10b981' : '#64748b',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                }}>
-                  {ev.status === 'ongoing' && <span style={{ width: '8px', height: '8px', background: '#10b981', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 8px #10b981' }}></span>}
-                  {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
-                </div>
               </div>
               <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 800, margin: '0 0 20px 0', color: 'var(--ink)' }}>{ev.title}</h3>
+                
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '20px' }}>
+                  <h3 style={{ fontSize: '1.4rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
+                  <div style={{
+                    background: ev.status === 'ongoing' ? 'rgba(16, 185, 129, 0.15)' : '#f1f5f9',
+                    padding: '4px 12px', borderRadius: '99px',
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    fontSize: '0.75rem', fontWeight: 'bold',
+                    color: ev.status === 'ongoing' ? '#10b981' : '#64748b',
+                    flexShrink: 0, marginTop: '2px'
+                  }}>
+                    {ev.status === 'ongoing' && <span style={{ width: '6px', height: '6px', background: '#10b981', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 6px #10b981' }}></span>}
+                    {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
+                  </div>
+                </div>
                 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px', background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
                   <div>
@@ -740,13 +742,13 @@ function Events() {
                 <a href={ev.link} target="_blank" rel="noreferrer" style={{
                   marginTop: 'auto',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                  background: ev.status === 'ongoing' ? 'var(--blue)' : '#f1f5f9',
-                  color: ev.status === 'ongoing' ? '#fff' : 'var(--muted)',
+                  background: 'var(--blue)',
+                  color: '#fff',
                   padding: '14px', borderRadius: '12px',
                   fontWeight: 'bold', textDecoration: 'none',
-                  transition: 'background 0.2s'
+                  transition: 'opacity 0.2s'
                 }}>
-                  View on X <ArrowUpRight size={18} strokeWidth={2.5} />
+                  Participate on X <ArrowUpRight size={18} strokeWidth={2.5} />
                 </a>
               </div>
             </div>
