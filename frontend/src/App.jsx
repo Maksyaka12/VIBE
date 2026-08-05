@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2 } from 'lucide-react';
+import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift } from 'lucide-react';
 import { PrivyProvider } from '@privy-io/react-auth';
 import { createPublicClient, http, formatUnits, parseAbiItem } from 'viem';
 import { base } from 'viem/chains';
@@ -346,26 +346,38 @@ function CreatorRevenue() {
           </div>
         </div>
 
-        <div className="b-prog-full" style={{ background: 'var(--blue-light)', borderRadius: '24px', padding: '40px', marginTop: '24px' }}>
-          <div style={{textAlign: 'center', marginBottom: '40px'}}>
-            <h3 style={{fontSize: '1.8rem', fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.02em'}}>Buyback Program</h3>
-            <p style={{color: 'var(--muted)', marginTop: '8px', fontSize: '1.1rem'}}>Strategic utilization of creator revenue.</p>
+        <div className="tok-card" style={{ marginTop: '24px' }}>
+          <div className="tok-card-hd" style={{ marginBottom: '32px' }}>
+            <h3>Buyback Program</h3>
+            <p className="sub">Strategic utilization of creator revenue.</p>
           </div>
           
-          <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px'}}>
-            <div className="alloc-card" style={{ background: 'rgba(255,255,255,0.5)', borderRadius: '20px', padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', border: '1px solid rgba(255,255,255,0.7)', backdropFilter: 'blur(10px)', transition: 'transform 0.2s ease', cursor: 'default' }} onMouseEnter={(e)=>e.currentTarget.style.transform='translateY(-5px)'} onMouseLeave={(e)=>e.currentTarget.style.transform='translateY(0)'}>
-              <div style={{ fontSize: '3rem', marginBottom: '16px', filter: 'drop-shadow(0 4px 12px rgba(239, 68, 68, 0.3))' }}>🔥</div>
-              <h4 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.02em' }}>Burn</h4>
-              <div style={{ fontSize: '3.5rem', fontWeight: 900, color: '#ef4444', margin: '8px 0', lineHeight: '1' }}>30%</div>
-              <p style={{ color: 'var(--muted)', fontSize: '0.95rem', lineHeight: '1.5', marginTop: '12px' }}>Permanently removed from circulation to increase scarcity and token value over time.</p>
-            </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '32px' }}>
             
-            <div className="alloc-card" style={{ background: 'rgba(255,255,255,0.5)', borderRadius: '20px', padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', border: '1px solid rgba(255,255,255,0.7)', backdropFilter: 'blur(10px)', transition: 'transform 0.2s ease', cursor: 'default' }} onMouseEnter={(e)=>e.currentTarget.style.transform='translateY(-5px)'} onMouseLeave={(e)=>e.currentTarget.style.transform='translateY(0)'}>
-              <div style={{ fontSize: '3rem', marginBottom: '16px', filter: 'drop-shadow(0 4px 12px rgba(37, 99, 235, 0.3))' }}>💎</div>
-              <h4 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.02em' }}>Community Incentives</h4>
-              <div style={{ fontSize: '3.5rem', fontWeight: 900, color: 'var(--blue)', margin: '8px 0', lineHeight: '1' }}>70%</div>
-              <p style={{ color: 'var(--muted)', fontSize: '0.95rem', lineHeight: '1.5', marginTop: '12px' }}>Strategic rewards, competitions, and airdrops to actively grow and incentivize our ecosystem.</p>
+            <div style={{ flex: '1 1 300px', background: 'rgba(255,255,255,0.4)', borderRadius: '16px', padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
+              <div style={{ background: 'var(--ink)', color: 'var(--bg)', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Flame size={32} />
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '8px' }}>Burn (30%)</h4>
+                <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>
+                  Permanently removed from circulation to increase scarcity and token value over time.
+                </p>
+              </div>
             </div>
+
+            <div style={{ flex: '1 1 300px', background: 'rgba(255,255,255,0.4)', borderRadius: '16px', padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
+              <div style={{ background: 'var(--blue)', color: '#fff', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Gift size={32} />
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '8px' }}>Community Incentives (70%)</h4>
+                <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>
+                  Strategic rewards, competitions, and airdrops to actively grow and incentivize our ecosystem.
+                </p>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
