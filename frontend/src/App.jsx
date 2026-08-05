@@ -205,6 +205,7 @@ function Tokenomics() {
 
   const circulatingStr = loading ? <Loader2 size={24} className="spin"/> : formatCirculating(currentCirculating);
   const pct = loading ? 90 : ((currentCirculating / 1_000_000_000) * 100).toFixed(1);
+  const burnPct = loading ? 0 : ((totalBurnedNum / 1_000_000_000) * 100).toFixed(2);
 
   return (
     <section id="tokenomics" className="alt">
@@ -280,6 +281,12 @@ function Tokenomics() {
                   <div className="sbar-top"><span className="sbar-name">Vesting</span><span className="sbar-pct">10%</span></div>
                   <div className="prog"><div className="prog-f" style={{width:'10%',background:'#4444dd'}}/></div>
                 </div>
+                {!loading && totalBurnedNum > 0 && (
+                  <div className="sbar-row">
+                    <div className="sbar-top"><span className="sbar-name">Burned</span><span className="sbar-pct">{burnPct}%</span></div>
+                    <div className="prog"><div className="prog-f" style={{width:`${burnPct}%`, background:'#ef4444'}}/></div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
