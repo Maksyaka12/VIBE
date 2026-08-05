@@ -707,7 +707,7 @@ function Events() {
 
         <div className="events-grid" style={{ display: 'grid', gap: '24px', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
           {filteredEvents.map(ev => (
-            <div key={ev.id} className="tok-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: ev.status === 'ended' ? 0.7 : 1, filter: ev.status === 'ended' ? 'grayscale(40%)' : 'none', transition: 'all 0.2s' }}>
+            <div key={ev.id} className="tok-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
               <div style={{ position: 'relative', height: '220px', background: '#f8fafc' }}>
                 <img src={ev.image} alt={ev.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
@@ -729,11 +729,11 @@ function Events() {
                   <div>
                     <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Status</div>
                     <div style={{
-                      background: ev.status === 'ongoing' ? '#10b981' : '#cbd5e1',
+                      background: ev.status === 'ongoing' ? '#10b981' : '#ef4444',
                       padding: '4px 10px', borderRadius: '99px',
                       display: 'inline-flex', alignItems: 'center', gap: '6px',
                       fontSize: '0.7rem', fontWeight: '900',
-                      color: ev.status === 'ongoing' ? '#fff' : '#334155',
+                      color: '#fff',
                       boxShadow: ev.status === 'ongoing' ? '0 4px 12px rgba(16, 185, 129, 0.3)' : 'none',
                       textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '2px'
                     }}>
