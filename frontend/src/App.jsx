@@ -717,16 +717,16 @@ function Events() {
                   <h3 style={{ fontSize: '1.4rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
                 </div>
                 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '24px', background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
-                  <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', marginBottom: '24px', background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
+                  <div style={{ flex: 1 }}>
                     <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Prize Pool</div>
                     <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.95rem' }}>{ev.prizePool}</div>
                   </div>
-                  <div>
+                  <div style={{ paddingRight: '16px' }}>
                     <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Winners</div>
                     <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.95rem' }}>{ev.winners}</div>
                   </div>
-                  <div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
                     <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Status</div>
                     <div style={{
                       background: ev.status === 'ongoing' ? '#10b981' : '#ef4444',
