@@ -23,8 +23,10 @@ const UNLOCKS = [
 const BUYBACK_WALLET = '0x067c66aDdD3C6D484c1882B68E197B614f7f3Ebf';
 const BURN_WALLET = '0x000000000000000000000000000000000000dEaD';
 const DIST_WALLET = '0x3b277d566b4557a53392712b1dc830da5d13ba91';
-const START_BLOCK = 17870000n; // ~July 26, 2026
-const CONST_BUYBACK = 585682n * 10n**18n;
+
+// Historical data constants (RPC getLogs is impossible for 31M block range on frontend)
+const CONST_TOTAL_BUYBACK = 8493747 + 585682;
+const CONST_DISTRIBUTED = 0; // Update this manually as needed
 
 const REVENUE_EVENTS = [
   {
@@ -296,24 +298,6 @@ function useRevenueStats() {
           client.readContract({ address: CA, abi: [abiBalance], functionName: 'balanceOf', args: [BUYBACK_WALLET] })
         ]);
 
-        // 2. Fetch Logs via viem (Chunked to bypass limits)
-        const currentBlock = await client.getBlockNumber();
-        const chunkSize = 10000n;
-        let buybackSum = CONST_BUYBACK; // Start with constant
-        let distributedSum = 0n;
-
-        for (let fromB = START_BLOCK; fromB <= currentBlock; fromB += chunkSize) {
-          const toB = fromB + chunkSize - 1n > currentBlock ? currentBlock : fromB + chunkSize - 1n;
-          
-          const [inLogs, outLogs] = await Promise.all([
-            client.getLogs({ address: CA, event: eventTransfer, args: { to: BUYBACK_WALLET }, fromBlock: fromB, toBlock: toB }),
-            client.getLogs({ address: CA, event: eventTransfer, args: { from: DIST_WALLET }, fromBlock: fromB, toBlock: toB })
-          ]);
-
-          for (const log of inLogs) buybackSum += log.args.value;
-          for (const log of outLogs) distributedSum += log.args.value;
-        }
-
         const formatNumber = (numStr) => {
           const num = parseFloat(numStr);
           if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
@@ -325,8 +309,8 @@ function useRevenueStats() {
           setStats({
             totalBurned: formatNumber(formatUnits(burnedRaw, 18)),
             communityRewards: formatNumber(formatUnits(rewardsRaw, 18)),
-            totalBuybacks: formatNumber(formatUnits(buybackSum, 18)),
-            distributedRewards: formatNumber(formatUnits(distributedSum, 18)),
+            totalBuybacks: formatNumber(CONST_TOTAL_BUYBACK),
+            distributedRewards: formatNumber(CONST_DISTRIBUTED),
             loading: false
           });
         }
