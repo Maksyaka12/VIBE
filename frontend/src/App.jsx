@@ -79,7 +79,7 @@ function Nav() {
             $VIBE
           </Link>
           <ul className="nav-menu">
-            {[['about','About'],['tokenomics','Tokenomics'],['revenue','Revenue Economy'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
+            {[['about','About'],['tokenomics','Tokenomics'],['revenue','Revenue Economy'],['events','Events'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
               <li key={id}><Link to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>{l}</Link></li>
             ))}
           </ul>
@@ -93,7 +93,7 @@ function Nav() {
       </nav>
       <div className={`mob-menu ${open ? 'open' : ''}`}>
         <div className="mob-links">
-          {[['about','About'],['tokenomics','Tokenomics'],['revenue','Creator Revenue'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
+          {[['about','About'],['tokenomics','Tokenomics'],['revenue','Creator Revenue'],['events','Events'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
             <Link key={id} to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>{l}</Link>
           ))}
           <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}}>Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} /></a>
@@ -644,6 +644,121 @@ function Footer() {
   );
 }
 
+const EVENT_DATA = [
+  {
+    id: 1,
+    title: 'Giveaway 1M MC',
+    image: '/event1.png',
+    winners: '50',
+    prizePool: 'TBA',
+    status: 'ongoing',
+    link: 'https://x.com/mksvibe'
+  },
+  {
+    id: 2,
+    title: 'Base App users rewards',
+    image: '/event2.png',
+    winners: 'N/A',
+    prizePool: '585,682 VIBE',
+    status: 'ended',
+    link: 'https://x.com/mksvibe'
+  }
+];
+
+function Events() {
+  const [filter, setFilter] = useState('all');
+  const r = useRev();
+
+  const filteredEvents = EVENT_DATA.filter(e => filter === 'all' || e.status === filter);
+
+  return (
+    <section id="events" className="alt" style={{ padding: '120px 20px', minHeight: '80vh' }}>
+      <div className="wrap">
+        <div className="sec-head rv" ref={r} style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <h2>Community <span className="bl">Events</span> & Giveaways.</h2>
+          <p className="sec-sub">Track active and past events, participate, and win $VIBE rewards.</p>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '40px', flexWrap: 'wrap' }}>
+          {['all', 'ongoing', 'ended'].map(f => (
+            <button 
+              key={f}
+              onClick={() => setFilter(f)}
+              style={{
+                padding: '10px 24px',
+                borderRadius: '99px',
+                border: 'none',
+                background: filter === f ? 'var(--blue)' : 'var(--bg)',
+                color: filter === f ? '#fff' : 'var(--ink)',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                boxShadow: filter === f ? '0 4px 12px rgba(0, 82, 255, 0.3)' : '0 2px 8px rgba(0,0,0,0.05)',
+                textTransform: 'capitalize',
+                transition: 'all 0.2s'
+              }}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+
+        <div className="events-grid" style={{ display: 'grid', gap: '24px', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
+          {filteredEvents.map(ev => (
+            <div key={ev.id} className="tok-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ position: 'relative', height: '220px', background: '#f8fafc' }}>
+                <img src={ev.image} alt={ev.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <div style={{
+                  position: 'absolute', top: '16px', right: '16px', 
+                  background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(4px)',
+                  padding: '6px 14px', borderRadius: '99px',
+                  display: 'flex', alignItems: 'center', gap: '6px',
+                  fontSize: '0.85rem', fontWeight: 'bold',
+                  color: ev.status === 'ongoing' ? '#10b981' : '#64748b',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                }}>
+                  {ev.status === 'ongoing' && <span style={{ width: '8px', height: '8px', background: '#10b981', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 8px #10b981' }}></span>}
+                  {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
+                </div>
+              </div>
+              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 800, margin: '0 0 20px 0', color: 'var(--ink)' }}>{ev.title}</h3>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px', background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
+                  <div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Prize Pool</div>
+                    <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '1.1rem' }}>{ev.prizePool}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Winners</div>
+                    <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '1.1rem' }}>{ev.winners}</div>
+                  </div>
+                </div>
+
+                <a href={ev.link} target="_blank" rel="noreferrer" style={{
+                  marginTop: 'auto',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                  background: ev.status === 'ongoing' ? 'var(--blue)' : '#f1f5f9',
+                  color: ev.status === 'ongoing' ? '#fff' : 'var(--muted)',
+                  padding: '14px', borderRadius: '12px',
+                  fontWeight: 'bold', textDecoration: 'none',
+                  transition: 'background 0.2s'
+                }}>
+                  View on X <ArrowUpRight size={18} strokeWidth={2.5} />
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+        {filteredEvents.length === 0 && (
+          <div style={{ textAlign: 'center', color: 'var(--muted)', padding: '60px 20px', fontSize: '1.1rem' }}>
+            No events found for this category.
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 function LandingPage() {
   return (
     <>
@@ -682,6 +797,7 @@ export default function App() {
           <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
           <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
           <Route path="/revenue" element={<StandaloneLayout><CreatorRevenue /></StandaloneLayout>} />
+          <Route path="/events" element={<StandaloneLayout><Events /></StandaloneLayout>} />
           <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} />
           <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
           <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
