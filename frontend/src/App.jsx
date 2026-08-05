@@ -386,16 +386,16 @@ function CreatorRevenue() {
             <span className="l">Total Buyback</span>
           </div>
           <div className="stile">
-            <span className="v">{loading ? <Loader2 size={24} className="spin"/> : totalBurned}</span>
-            <span className="l">Total Burned</span>
-          </div>
-          <div className="stile">
             <span className="v">{loading ? <Loader2 size={24} className="spin"/> : communityRewards}</span>
-            <span className="l">Community Rewards</span>
+            <span className="l">Reserved for Community</span>
           </div>
           <div className="stile">
             <span className="v">{loading ? <Loader2 size={24} className="spin"/> : distributedRewards}</span>
             <span className="l">Distributed to Community</span>
+          </div>
+          <div className="stile">
+            <span className="v" style={{color: '#ef4444'}}>{loading ? <Loader2 size={24} className="spin"/> : totalBurned}</span>
+            <span className="l">Total Burned</span>
           </div>
         </div>
 
