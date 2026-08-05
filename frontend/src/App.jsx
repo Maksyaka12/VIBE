@@ -28,16 +28,6 @@ const DIST_WALLET = '0x3b277d566b4557a53392712b1dc830da5d13ba91';
 const CONST_TOTAL_BUYBACK = 8493747 + 585682;
 const CONST_DISTRIBUTED = 585682;
 
-const REVENUE_EVENTS = [
-  {
-    date: 'Aug 5, 2026',
-    title: 'DEX Listing Payment',
-    amount: '$300 USDC',
-    txLink: 'https://etherscan.io/tx/0x93cb092fc6cec2c49a3f129ed9814c272186beece9992ef8078eb412df7f1c04', 
-    tweetLink: 'https://x.com/mksvibe/status/2083175935138824413'
-  }
-];
-
 const TICKS = [
   '🐾 $VIBE ON BASE','🐶 THE BASE DOG','✨ B20 STANDARD','💙 GOOD BOY COIN',
   '🚀 UNLIMITED VIBES','🐾 HAPPY PAWS','💎 COMMUNITY FIRST','🌊 RIDE THE VIBE',
@@ -356,42 +346,25 @@ function CreatorRevenue() {
           </div>
         </div>
 
-        <div className="tok-layout">
-          <div>
-            <div className="tok-card">
-              <h3>Buyback Program</h3>
-              <p className="sub" style={{marginBottom:18}}>Strategic utilization of creator revenue.</p>
-              <div className="supply-bars">
-                <div className="sbar-row">
-                  <div className="sbar-top"><span className="sbar-name">Burn</span><span className="sbar-pct">30%</span></div>
-                  <div className="prog"><div className="prog-f" style={{width:'30%', background:'#ef4444'}}/></div>
-                </div>
-                <div className="sbar-row">
-                  <div className="sbar-top"><span className="sbar-name">Upcoming community incentives</span><span className="sbar-pct">70%</span></div>
-                  <div className="prog"><div className="prog-f" style={{width:'70%', background:'#3b82f6'}}/></div>
-                </div>
-              </div>
-            </div>
+        <div className="b-prog-full" style={{ background: 'var(--blue-light)', borderRadius: '24px', padding: '40px', marginTop: '24px' }}>
+          <div style={{textAlign: 'center', marginBottom: '40px'}}>
+            <h3 style={{fontSize: '1.8rem', fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.02em'}}>Buyback Program</h3>
+            <p style={{color: 'var(--muted)', marginTop: '8px', fontSize: '1.1rem'}}>Strategic utilization of creator revenue.</p>
           </div>
-          <div className="sched" style={{minWidth:'350px'}}>
-            <h3>Revenue Events</h3>
-            <p className="sub">Dynamic log of actions</p>
-            <div className="ul-wrap">
-              {REVENUE_EVENTS.map((ev, i) => (
-                <div key={i} className="ul-r" style={{ alignItems: 'center', padding: '12px 16px' }}>
-                  <span className="ul-d" style={{ minWidth: '95px', fontSize: '0.85rem' }}>{ev.date}</span>
-                  <span className="ul-a" style={{ flex: 1, color: 'var(--ink)', fontSize: '0.95rem' }}>
-                    {ev.title} <span style={{color: 'var(--blue)', fontWeight: 700, marginLeft: '6px'}}>{ev.amount}</span>
-                  </span>
-                  <div style={{ display: 'flex', gap: '6px', marginLeft: 'auto' }}>
-                    {ev.txLink && <a href={ev.txLink} target="_blank" rel="noreferrer" className="btn-line" style={{padding:'4px 8px', fontSize:'0.7rem', borderRadius:'6px'}}>Tx <ArrowUpRight size={12}/></a>}
-                    {ev.tweetLink && <a href={ev.tweetLink} target="_blank" rel="noreferrer" className="btn-line" style={{padding:'4px 8px', fontSize:'0.7rem', borderRadius:'6px'}}>X <ArrowUpRight size={12}/></a>}
-                  </div>
-                </div>
-              ))}
-              {REVENUE_EVENTS.length === 0 && (
-                <p style={{color:'var(--muted)'}}>No events recorded yet.</p>
-              )}
+          
+          <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px'}}>
+            <div className="alloc-card" style={{ background: 'rgba(255,255,255,0.5)', borderRadius: '20px', padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', border: '1px solid rgba(255,255,255,0.7)', backdropFilter: 'blur(10px)', transition: 'transform 0.2s ease', cursor: 'default' }} onMouseEnter={(e)=>e.currentTarget.style.transform='translateY(-5px)'} onMouseLeave={(e)=>e.currentTarget.style.transform='translateY(0)'}>
+              <div style={{ fontSize: '3rem', marginBottom: '16px', filter: 'drop-shadow(0 4px 12px rgba(239, 68, 68, 0.3))' }}>🔥</div>
+              <h4 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.02em' }}>Burn</h4>
+              <div style={{ fontSize: '3.5rem', fontWeight: 900, color: '#ef4444', margin: '8px 0', lineHeight: '1' }}>30%</div>
+              <p style={{ color: 'var(--muted)', fontSize: '0.95rem', lineHeight: '1.5', marginTop: '12px' }}>Permanently removed from circulation to increase scarcity and token value over time.</p>
+            </div>
+            
+            <div className="alloc-card" style={{ background: 'rgba(255,255,255,0.5)', borderRadius: '20px', padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', border: '1px solid rgba(255,255,255,0.7)', backdropFilter: 'blur(10px)', transition: 'transform 0.2s ease', cursor: 'default' }} onMouseEnter={(e)=>e.currentTarget.style.transform='translateY(-5px)'} onMouseLeave={(e)=>e.currentTarget.style.transform='translateY(0)'}>
+              <div style={{ fontSize: '3rem', marginBottom: '16px', filter: 'drop-shadow(0 4px 12px rgba(37, 99, 235, 0.3))' }}>💎</div>
+              <h4 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.02em' }}>Community Incentives</h4>
+              <div style={{ fontSize: '3.5rem', fontWeight: 900, color: 'var(--blue)', margin: '8px 0', lineHeight: '1' }}>70%</div>
+              <p style={{ color: 'var(--muted)', fontSize: '0.95rem', lineHeight: '1.5', marginTop: '12px' }}>Strategic rewards, competitions, and airdrops to actively grow and incentivize our ecosystem.</p>
             </div>
           </div>
         </div>
