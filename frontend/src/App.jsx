@@ -675,7 +675,7 @@ function Events() {
   const filteredEvents = EVENT_DATA.filter(e => filter === 'all' || e.status === filter);
 
   return (
-    <section id="events" className="alt" style={{ padding: '120px 20px', minHeight: '80vh' }}>
+    <section id="events" className="alt">
       <div className="wrap">
         <div className="sec-head rv" ref={r} style={{ marginBottom: '40px' }}>
           <h2>Community <span className="bl">Events</span> & Giveaways.</h2>
