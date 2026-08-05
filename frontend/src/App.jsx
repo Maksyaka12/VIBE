@@ -324,7 +324,7 @@ function CreatorRevenue() {
       <div className="wrap">
         <div className="sec-head rv" ref={r}>
           <h2>Revenue <span className="bl">Economy</span>.</h2>
-          <p className="sec-sub">Creator Revenue is going towards buybacks and actions aimed at strengthening the token.</p>
+          <p className="sec-sub">Creator Revenue is going towards buybacks and actions aimed at strengthening the token economy, driving long-term value for all holders.</p>
         </div>
         
         <div className="stat-tiles wide-stats">
@@ -349,7 +349,7 @@ function CreatorRevenue() {
         <div className="tok-card" style={{ marginTop: '24px' }}>
           <div className="tok-card-hd" style={{ marginBottom: '32px' }}>
             <h3>Buyback Program</h3>
-            <p className="sub">Strategic utilization of creator revenue.</p>
+            <p className="sub">Strategic utilization of buybacks.</p>
           </div>
           
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '32px' }}>
@@ -361,7 +361,7 @@ function CreatorRevenue() {
               <div>
                 <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '8px' }}>Burn (30%)</h4>
                 <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>
-                  Permanently removed from circulation to increase scarcity and token value over time.
+                  Permanently removed from circulation.
                 </p>
               </div>
             </div>
@@ -373,7 +373,7 @@ function CreatorRevenue() {
               <div>
                 <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '8px' }}>Community Incentives (70%)</h4>
                 <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>
-                  Strategic rewards, competitions, and airdrops to actively grow and incentivize our ecosystem.
+                  Strategic rewards and competitions.
                 </p>
               </div>
             </div>
