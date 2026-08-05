@@ -705,13 +705,13 @@ function Events() {
           ))}
         </div>
 
-        <div className="events-grid" style={{ display: 'grid', gap: '24px', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
+        <div className="events-grid" style={{ display: 'grid', gap: '24px', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
           {filteredEvents.map(ev => (
             <div key={ev.id} className="tok-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ position: 'relative', height: '220px', background: '#f8fafc' }}>
-                <img src={ev.image} alt={ev.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ position: 'relative', background: '#f8fafc', borderBottom: '1px solid var(--borderf)' }}>
+                <img src={ev.image} alt={ev.title} style={{ width: '100%', height: 'auto', display: 'block' }} />
               </div>
-              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+              <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                 
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '20px' }}>
                   <h3 style={{ fontSize: '1.4rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
