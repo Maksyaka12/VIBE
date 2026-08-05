@@ -654,7 +654,6 @@ const EVENT_DATA = [
     image: '/event1.png',
     winners: '50',
     prizePool: 'TBA',
-    distribution: 'Still Live',
     status: 'ongoing',
     link: 'https://x.com/mksvibe'
   },
@@ -664,7 +663,6 @@ const EVENT_DATA = [
     image: '/event2.png',
     winners: 'N/A',
     prizePool: '585,682 VIBE',
-    distribution: 'Completed',
     status: 'ended',
     link: 'https://x.com/mksvibe'
   }
@@ -717,17 +715,6 @@ function Events() {
                 
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '20px' }}>
                   <h3 style={{ fontSize: '1.4rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
-                  <div style={{
-                    background: ev.status === 'ongoing' ? 'rgba(16, 185, 129, 0.15)' : '#f1f5f9',
-                    padding: '4px 12px', borderRadius: '99px',
-                    display: 'flex', alignItems: 'center', gap: '6px',
-                    fontSize: '0.75rem', fontWeight: 'bold',
-                    color: ev.status === 'ongoing' ? '#10b981' : '#64748b',
-                    flexShrink: 0, marginTop: '2px'
-                  }}>
-                    {ev.status === 'ongoing' && <span style={{ width: '6px', height: '6px', background: '#10b981', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 6px #10b981' }}></span>}
-                    {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
-                  </div>
                 </div>
                 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '24px', background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
@@ -740,8 +727,19 @@ function Events() {
                     <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.95rem' }}>{ev.winners}</div>
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Distribution</div>
-                    <div style={{ fontWeight: 800, color: ev.distribution === 'Completed' ? '#10b981' : 'var(--ink)', fontSize: '0.95rem' }}>{ev.distribution}</div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Status</div>
+                    <div style={{
+                      background: ev.status === 'ongoing' ? '#10b981' : '#cbd5e1',
+                      padding: '4px 10px', borderRadius: '99px',
+                      display: 'inline-flex', alignItems: 'center', gap: '6px',
+                      fontSize: '0.7rem', fontWeight: '900',
+                      color: ev.status === 'ongoing' ? '#fff' : '#334155',
+                      boxShadow: ev.status === 'ongoing' ? '0 4px 12px rgba(16, 185, 129, 0.3)' : 'none',
+                      textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '2px'
+                    }}>
+                      {ev.status === 'ongoing' && <span style={{ width: '6px', height: '6px', background: '#fff', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 6px rgba(255,255,255,0.8)' }}></span>}
+                      {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
+                    </div>
                   </div>
                 </div>
 
