@@ -188,6 +188,24 @@ function About() {
 /* TOKENOMICS */
 function Tokenomics() {
   const r=useRev();
+  const { totalBurnedNum, loading } = useRevenueStats();
+  
+  const now = new Date();
+  const unlockedCount = UNLOCKS.filter(u => new Date(u.d) <= now).length;
+  const unlockedTokens = unlockedCount * 10_000_000;
+  
+  const baseCirculating = 900_000_000;
+  const currentCirculating = baseCirculating + unlockedTokens - (totalBurnedNum || 0);
+  
+  const formatCirculating = (num) => {
+    if (num >= 1000000) return (num / 1000000).toFixed(2).replace(/\.00$/, '') + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+    return num.toLocaleString();
+  };
+
+  const circulatingStr = loading ? <Loader2 size={24} className="spin"/> : formatCirculating(currentCirculating);
+  const pct = loading ? 90 : ((currentCirculating / 1_000_000_000) * 100).toFixed(1);
+
   return (
     <section id="tokenomics" className="alt">
       <div className="wrap">
@@ -198,7 +216,7 @@ function Tokenomics() {
         
         <div className="stat-tiles wide-stats">
           <div className="stile"><span className="v">1B</span><span className="l">Total Supply</span></div>
-          <div className="stile"><span className="v">900M</span><span className="l">Circulating</span></div>
+          <div className="stile"><span className="v">{circulatingStr}</span><span className="l">Circulating</span></div>
           <div className="stile"><span className="v">100M</span><span className="l">Vesting Community Rewards</span><div className="d">10% released monthly</div></div>
           <div className="stile"><span className="v">10M</span><span className="l">Monthly Unlock</span><div className="d">Straight to holders</div></div>
         </div>
@@ -234,8 +252,8 @@ function Tokenomics() {
               <p className="sub" style={{marginBottom:18}}>Fixed supply, no minting ever.</p>
               <div className="supply-bars">
                 <div className="sbar-row">
-                  <div className="sbar-top"><span className="sbar-name">Circulating</span><span className="sbar-pct">90%</span></div>
-                  <div className="prog"><div className="prog-f" style={{width:'90%'}}/></div>
+                  <div className="sbar-top"><span className="sbar-name">Circulating</span><span className="sbar-pct">{pct}%</span></div>
+                  <div className="prog"><div className="prog-f" style={{width:`${pct}%`}}/></div>
                 </div>
                 <div className="sbar-row">
                   <div className="sbar-top"><span className="sbar-name">Vesting</span><span className="sbar-pct">10%</span></div>
@@ -248,13 +266,18 @@ function Tokenomics() {
             <h3>Unlock Schedule</h3>
             <p className="sub">Aug 2026 → May 2027</p>
             <div className="ul-wrap">
-              {UNLOCKS.map((u,i)=>(
-                <div key={i} className="ul-r">
-                  <span className="ul-d">{u.d}</span>
-                  <span className="ul-a">{u.a}</span>
-                  <span className="ul-s">locked</span>
-                </div>
-              ))}
+              {UNLOCKS.map((u,i)=>{
+                const isUnlocked = new Date(u.d) <= now;
+                return (
+                  <div key={i} className="ul-r">
+                    <span className="ul-d">{u.d}</span>
+                    <span className="ul-a">{u.a}</span>
+                    <span className="ul-s" style={{ color: isUnlocked ? 'var(--blue)' : 'inherit', fontWeight: isUnlocked ? 'bold' : 'normal' }}>
+                      {isUnlocked ? 'unlocked' : 'locked'}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -268,6 +291,7 @@ function useRevenueStats() {
   const [stats, setStats] = useState({
     totalBuybacks: '...',
     totalBurned: '...',
+    totalBurnedNum: 0,
     communityRewards: '...',
     distributedRewards: '...',
     loading: true
@@ -297,6 +321,7 @@ function useRevenueStats() {
         if (mounted) {
           setStats({
             totalBurned: formatNumber(formatUnits(burnedRaw, 18)),
+            totalBurnedNum: parseFloat(formatUnits(burnedRaw, 18)),
             communityRewards: formatNumber(formatUnits(rewardsRaw, 18)),
             totalBuybacks: formatNumber(CONST_TOTAL_BUYBACK),
             distributedRewards: formatNumber(CONST_DISTRIBUTED),
