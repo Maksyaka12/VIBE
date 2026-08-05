@@ -188,7 +188,7 @@ function About() {
 /* TOKENOMICS */
 function Tokenomics() {
   const r=useRev();
-  const { totalBurnedNum, loading } = useRevenueStats();
+  const { totalBurned, totalBurnedNum, loading } = useRevenueStats();
   
   const now = new Date();
   const unlockedCount = UNLOCKS.filter(u => new Date(u.d) <= now).length;
@@ -216,7 +216,28 @@ function Tokenomics() {
         
         <div className="stat-tiles wide-stats">
           <div className="stile"><span className="v">1B</span><span className="l">Total Supply</span></div>
-          <div className="stile"><span className="v">{circulatingStr}</span><span className="l">Circulating</span></div>
+          <div className="stile">
+            <span className="v" style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+              {circulatingStr}
+              {!loading && totalBurnedNum > 0 && (
+                <span style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontSize: '1.2rem',
+                  background: 'rgba(239, 68, 68, 0.12)',
+                  color: '#ef4444',
+                  padding: '4px 12px',
+                  borderRadius: '99px',
+                  fontWeight: '800',
+                  lineHeight: '1'
+                }}>
+                  <Flame size={18} strokeWidth={2.5} /> {totalBurned}
+                </span>
+              )}
+            </span>
+            <span className="l">Circulating</span>
+          </div>
           <div className="stile"><span className="v">100M</span><span className="l">Vesting Community Rewards</span><div className="d">10% released monthly</div></div>
           <div className="stile"><span className="v">10M</span><span className="l">Monthly Unlock</span><div className="d">Straight to holders</div></div>
         </div>
