@@ -719,7 +719,7 @@ function Events() {
                 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', marginBottom: '24px', background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Prize Pool</div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Total Prize Pool</div>
                     <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.95rem' }}>{ev.prizePool}</div>
                   </div>
                   <div style={{ paddingRight: '16px' }}>
