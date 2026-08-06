@@ -300,55 +300,52 @@ function Tokenomics() {
           <p className="sec-sub">Creator Revenue is going towards buybacks and actions aimed at strengthening the token economy, driving long-term value for all holders.</p>
         </div>
 
-        <div className="stat-tiles wide-stats" style={{ marginBottom: '40px' }}>
-          <div className="stile">
-            <span className="v">{loading ? <Loader2 size={24} className="spin"/> : totalBuybacks}</span>
-            <span className="l">Total Buyback</span>
-          </div>
-          <div className="stile">
-            <span className="v" style={{color: '#ef4444'}}>{loading ? <Loader2 size={24} className="spin"/> : totalBurned}</span>
-            <span className="l">Total Burned</span>
-          </div>
-          <div className="stile">
-            <span className="v">{loading ? <Loader2 size={24} className="spin"/> : communityRewards}</span>
-            <span className="l">Reserved for Community</span>
-          </div>
-          <div className="stile">
-            <span className="v">{loading ? <Loader2 size={24} className="spin"/> : distributedRewards}</span>
-            <span className="l">Distributed to Community</span>
-          </div>
-        </div>
-
-        <div className="tok-card" style={{ marginBottom: '60px', padding: '40px', textAlign: 'center' }}>
-          <h3 style={{ fontSize: '1.5rem', marginBottom: '8px' }}>Buyback Program</h3>
-          <p className="sub" style={{ fontSize: '1rem', marginBottom: '40px' }}>Strategic utilization of revenue generated.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))', gap: '24px', marginBottom: '60px' }}>
           
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '30px', flexWrap: 'wrap' }}>
-            <div style={{ textAlign: 'right', flex: '1 1 200px' }}>
-              <div style={{ background: 'rgba(239, 68, 68, 0.1)', display: 'inline-flex', padding: '12px', borderRadius: '12px', marginBottom: '12px' }}>
-                <Flame size={24} color="#ef4444" />
-              </div>
-              <h4 style={{ color: '#ef4444', margin: '0 0 8px 0', fontWeight: 900, fontSize: '1.2rem' }}>Burn (30%)</h4>
-              <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--muted)', lineHeight: '1.5' }}>Permanently removed from circulation, reducing total supply.</p>
+          {/* Left Side: Stat Tiles */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <span className="v" style={{ fontSize: '1.4rem' }}>{loading ? <Loader2 size={24} className="spin"/> : totalBuybacks}</span>
+              <span className="l" style={{ fontSize: '0.8rem' }}>Total Buyback</span>
             </div>
-            
-            <div style={{ position: 'relative', width: '220px', height: '220px', flexShrink: 0 }}>
-              <svg viewBox="0 0 36 36" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
-                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--blue)" strokeWidth="4" strokeDasharray="70, 100" />
-                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#ef4444" strokeWidth="4" strokeDasharray="30, 100" strokeDashoffset="-70" />
-              </svg>
-              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ fontSize: '1.4rem', fontWeight: 900 }}>100%</div>
-                <div style={{ fontSize: '0.85rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Buybacks</div>
-              </div>
+            <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <span className="v" style={{ fontSize: '1.4rem', color: '#ef4444' }}>{loading ? <Loader2 size={24} className="spin"/> : totalBurned}</span>
+              <span className="l" style={{ fontSize: '0.8rem' }}>Total Burned</span>
             </div>
+            <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <span className="v" style={{ fontSize: '1.4rem' }}>{loading ? <Loader2 size={24} className="spin"/> : communityRewards}</span>
+              <span className="l" style={{ fontSize: '0.8rem' }}>Reserved for Community</span>
+            </div>
+            <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <span className="v" style={{ fontSize: '1.4rem' }}>{loading ? <Loader2 size={24} className="spin"/> : distributedRewards}</span>
+              <span className="l" style={{ fontSize: '0.8rem' }}>Distributed to Community</span>
+            </div>
+          </div>
+
+          {/* Right Side: Buyback Program */}
+          <div className="tok-card" style={{ padding: '32px', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <h3 style={{ fontSize: '1.25rem', marginBottom: '4px' }}>Buyback Program</h3>
+            <p className="sub" style={{ fontSize: '0.9rem', marginBottom: '32px' }}>Strategic utilization of revenue generated.</p>
             
-            <div style={{ textAlign: 'left', flex: '1 1 200px' }}>
-              <div style={{ background: 'rgba(0, 82, 255, 0.1)', display: 'inline-flex', padding: '12px', borderRadius: '12px', marginBottom: '12px' }}>
-                <Gift size={24} color="var(--blue)" />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+              <div style={{ textAlign: 'right' }}>
+                <h4 style={{ color: '#ef4444', margin: '0', fontWeight: 900, fontSize: '0.95rem' }}>Burn (30%)</h4>
               </div>
-              <h4 style={{ color: 'var(--blue)', margin: '0 0 8px 0', fontWeight: 900, fontSize: '1.2rem' }}>Reserved for Community (70%)</h4>
-              <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--muted)', lineHeight: '1.5' }}>Strategic rewards, events and ecosystem incentives.</p>
+              
+              <div style={{ position: 'relative', width: '160px', height: '160px', flexShrink: 0 }}>
+                <svg viewBox="0 0 36 36" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--blue)" strokeWidth="4" strokeDasharray="70, 100" />
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#ef4444" strokeWidth="4" strokeDasharray="30, 100" strokeDashoffset="-70" />
+                </svg>
+                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ fontSize: '1.15rem', fontWeight: 900 }}>100%</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Buybacks</div>
+                </div>
+              </div>
+              
+              <div style={{ textAlign: 'left' }}>
+                <h4 style={{ color: 'var(--blue)', margin: '0', fontWeight: 900, fontSize: '0.95rem' }}>Reserved for Community (70%)</h4>
+              </div>
             </div>
           </div>
         </div>
