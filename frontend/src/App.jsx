@@ -262,17 +262,17 @@ function Tokenomics() {
         
         {/* BLOCK 1: TOKENOMICS INFO */}
         <div className="sec-head rv" ref={r} style={{ marginBottom: '40px' }}>
-          <h2>Tokenomics.<br/><span className="bl">Zero BS & Team Allocation.</span></h2>
-          <p className="sec-sub">100M tokens vested. Every month 10M unlocks and get distributed among holders.</p>
+          <h2>Tokenomics. Zero BS.<br/><span className="bl">No Team Allocation.</span></h2>
+          <p className="sec-sub">Fair launch via o1.exchange. Launch time was publicly announced in advance. No team allocations and no insider buys.</p>
         </div>
         
         <div className="stat-tiles wide-stats" style={{ marginBottom: '60px' }}>
           <div className="stile"><span className="v">1B</span><span className="l">Total Supply</span></div>
           <div className="stile">
             <span className="v">{circulatingStr}</span>
-            <span className="l" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-              Circulating
-              {!loading && totalBurnedNum > 0 && (
+            <span className="l">Circulating</span>
+            {!loading && totalBurnedNum > 0 && (
+              <div className="d" style={{ marginTop: '8px' }}>
                 <span style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -287,10 +287,10 @@ function Tokenomics() {
                 }}>
                   <Flame size={14} strokeWidth={2.5} /> {totalBurned}
                 </span>
-              )}
-            </span>
+              </div>
+            )}
           </div>
-          <div className="stile"><span className="v">100M</span><span className="l">Vesting Community Rewards</span><div className="d">10% released monthly</div></div>
+          <div className="stile"><span className="v">100M</span><span className="l">Vesting Community Rewards</span><div className="d">10% unlocks monthly</div></div>
           <div className="stile"><span className="v">10M</span><span className="l">Monthly Unlock</span><div className="d">Straight to holders</div></div>
         </div>
 
@@ -356,7 +356,7 @@ function Tokenomics() {
         {/* BLOCK 3: VESTING DETAILS */}
         <div className="sec-head" style={{ marginBottom: '40px', marginTop: '40px' }}>
           <h2>Vesting <span className="bl">Details</span>.</h2>
-          <p className="sec-sub">Transparent and fair distribution for long-term holders.</p>
+          <p className="sec-sub">100M tokens vested. Every month 10M unlocks and get distributed among holders.</p>
         </div>
 
         <div className="tok-layout">
