@@ -262,7 +262,7 @@ function Tokenomics() {
         
         {/* BLOCK 1: TOKENOMICS INFO */}
         <div className="sec-head rv" ref={r} style={{ marginBottom: '40px' }}>
-          <h2>Community-owned.<br/><span className="bl">Zero BS & Team Allocation.</span></h2>
+          <h2>Tokenomics.<br/><span className="bl">Zero BS & Team Allocation.</span></h2>
           <p className="sec-sub">100M tokens vested. Every month 10M unlocks and get distributed among holders.</p>
         </div>
         
