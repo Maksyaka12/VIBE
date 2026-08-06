@@ -738,7 +738,7 @@ export default function App() {
           <Route path="/" element={<><Nav /><LandingPage /><Footer /></>} />
           <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
           <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
-          <Route path="/revenue" element={<StandaloneLayout><CreatorRevenue /></StandaloneLayout>} />
+
           <Route path="/events" element={<StandaloneLayout><Events /></StandaloneLayout>} />
           <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} />
           <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
