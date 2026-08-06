@@ -327,25 +327,31 @@ function Tokenomics() {
             <h3 style={{ fontSize: '1.25rem', marginBottom: '4px' }}>Buyback Program</h3>
             <p className="sub" style={{ fontSize: '0.9rem', marginBottom: '32px' }}>Strategic utilization of revenue generated.</p>
             
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-              <div style={{ textAlign: 'right' }}>
-                <h4 style={{ color: '#ef4444', margin: '0', fontWeight: 900, fontSize: '0.95rem' }}>Burn (30%)</h4>
-              </div>
-              
-              <div style={{ position: 'relative', width: '160px', height: '160px', flexShrink: 0 }}>
-                <svg viewBox="0 0 36 36" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
-                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--blue)" strokeWidth="4" strokeDasharray="70, 100" />
-                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#ef4444" strokeWidth="4" strokeDasharray="30, 100" strokeDashoffset="-70" />
-                </svg>
-                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 900 }}>100%</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Buybacks</div>
-                </div>
-              </div>
-              
-              <div style={{ textAlign: 'left' }}>
-                <h4 style={{ color: 'var(--blue)', margin: '0', fontWeight: 900, fontSize: '0.95rem' }}>Reserved for Community (70%)</h4>
-              </div>
+            <div style={{ position: 'relative', width: '100%', maxWidth: '350px', margin: '0 auto', flexShrink: 0 }}>
+              <svg viewBox="0 0 160 60" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}>
+                <g transform="translate(80, 30)">
+                  {/* Blue circle */}
+                  <circle cx="0" cy="0" r="20" fill="none" stroke="var(--blue)" strokeWidth="5" pathLength="100" />
+                  
+                  {/* Red circle (30%) centered on the left */}
+                  <circle cx="0" cy="0" r="20" fill="none" stroke="#ef4444" strokeWidth="5" 
+                          pathLength="100" strokeDasharray="30 70" strokeDashoffset="-60" transform="rotate(-90)" />
+  
+                  {/* Line pointing left from red segment */}
+                  <polyline points="-20,0 -35,-15 -70,-15" fill="none" stroke="#ef4444" strokeWidth="0.75" />
+                  
+                  {/* Line pointing right from blue segment */}
+                  <polyline points="20,0 35,-15 70,-15" fill="none" stroke="var(--blue)" strokeWidth="0.75" />
+                  
+                  {/* Texts */}
+                  <text x="-70" y="-17" fill="#ef4444" fontSize="4.5" fontWeight="800" textAnchor="start">Burn (30%)</text>
+                  <text x="70" y="-17" fill="var(--blue)" fontSize="4.5" fontWeight="800" textAnchor="end">Reserved for Community (70%)</text>
+  
+                  {/* Center Text */}
+                  <text x="0" y="-1" fill="var(--ink)" fontSize="6.5" fontWeight="900" textAnchor="middle">100%</text>
+                  <text x="0" y="6" fill="var(--muted)" fontSize="3.5" textAnchor="middle" fontWeight="bold">BUYBACKS</text>
+                </g>
+              </svg>
             </div>
           </div>
         </div>
