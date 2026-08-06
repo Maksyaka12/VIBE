@@ -255,117 +255,157 @@ function Tokenomics() {
   };
 
   const circulatingStr = loading ? <Loader2 size={24} className="spin"/> : formatCirculating(currentCirculating);
-  const pct = loading ? 90 : ((currentCirculating / 1_000_000_000) * 100).toFixed(1);
-  const burnPct = loading ? 0 : ((totalBurnedNum / 1_000_000_000) * 100).toFixed(2);
 
   return (
     <section id="tokenomics" className="alt">
       <div className="wrap">
+        
+        {/* BLOCK 1: TOKENOMICS INFO */}
         <div className="sec-head rv" ref={r} style={{ marginBottom: '40px' }}>
-          <h2>Tokenomics & <span className="bl">Revenue Economy</span>.</h2>
-          <p className="sec-sub">100M tokens vested for the community. Revenue drives buybacks, strengthening the ecosystem for all holders.</p>
+          <h2>Community-owned.<br/><span className="bl">Zero BS & Team Allocation.</span></h2>
+          <p className="sec-sub">100M tokens vested. Every month 10M unlocks and get distributed among holders.</p>
         </div>
         
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))', gap: '32px' }}>
-          
-          {/* LEFT COLUMN: TOKENOMICS */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            
-            <div className="stat-tiles" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div className="stile" style={{ padding: '24px', margin: 0, minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span className="v" style={{ fontSize: '1.6rem', marginBottom: '8px' }}>1B</span>
-                <span className="l" style={{ fontSize: '0.85rem' }}>Total Supply</span>
-              </div>
-              <div className="stile" style={{ padding: '24px', margin: 0, minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span className="v" style={{ fontSize: '1.6rem', marginBottom: '8px' }}>{circulatingStr}</span>
-                <span className="l" style={{ fontSize: '0.85rem' }}>Circulating</span>
-              </div>
-            </div>
-
-            <div className="tok-card" style={{ padding: '32px' }}>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '8px' }}>Supply Breakdown</h3>
-              <p className="sub" style={{ marginBottom: '24px', fontSize: '0.9rem' }}>Fixed supply, no minting ever.</p>
-              <div className="supply-bars">
-                <div className="sbar-row" style={{ marginBottom: '16px' }}>
-                  <div className="sbar-top"><span className="sbar-name">Circulating</span><span className="sbar-pct">{pct}%</span></div>
-                  <div className="prog"><div className="prog-f" style={{width:`${pct}%`}}/></div>
-                </div>
-                <div className="sbar-row" style={{ marginBottom: '16px' }}>
-                  <div className="sbar-top"><span className="sbar-name">Vesting</span><span className="sbar-pct">10%</span></div>
-                  <div className="prog"><div className="prog-f" style={{width:'10%',background:'#4444dd'}}/></div>
-                </div>
-                {!loading && totalBurnedNum > 0 && (
-                  <div className="sbar-row">
-                    <div className="sbar-top"><span className="sbar-name">Burned</span><span className="sbar-pct">{burnPct}%</span></div>
-                    <div className="prog"><div className="prog-f" style={{width:`${burnPct}%`, background:'#ef4444'}}/></div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="tok-card" style={{ padding: '32px' }}>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '8px' }}>Holder Rewards (100M)</h3>
-              <p className="sub" style={{ fontSize: '0.9rem', marginBottom: '24px' }}>10M unlocks monthly · Aug 2026 → May 2027</p>
-              <div className="prog" style={{ marginBottom: '12px' }}><div className="prog-f" style={{width:'10%'}}/></div>
-              <div className="prog-labs" style={{ marginBottom: '24px' }}><span>0M today</span><span>100M total</span></div>
-              
-              <Link to="/checker" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--blue)', padding: '16px 24px', borderRadius: '12px', color: '#fff', textDecoration: 'none', fontWeight: 800, fontSize: '1rem', transition: 'all 0.2s' }}>
-                Check eligibility <ArrowRightCircle size={20} />
-              </Link>
-            </div>
+        <div className="stat-tiles wide-stats" style={{ marginBottom: '60px' }}>
+          <div className="stile"><span className="v">1B</span><span className="l">Total Supply</span></div>
+          <div className="stile">
+            <span className="v">{circulatingStr}</span>
+            <span className="l" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              Circulating
+              {!loading && totalBurnedNum > 0 && (
+                <span style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontSize: '0.8rem',
+                  background: 'rgba(239, 68, 68, 0.12)',
+                  color: '#ef4444',
+                  padding: '2px 8px',
+                  borderRadius: '99px',
+                  fontWeight: '800',
+                  lineHeight: '1'
+                }}>
+                  <Flame size={14} strokeWidth={2.5} /> {totalBurned}
+                </span>
+              )}
+            </span>
           </div>
+          <div className="stile"><span className="v">100M</span><span className="l">Vesting Community Rewards</span><div className="d">10% released monthly</div></div>
+          <div className="stile"><span className="v">10M</span><span className="l">Monthly Unlock</span><div className="d">Straight to holders</div></div>
+        </div>
 
-          {/* RIGHT COLUMN: REVENUE */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            
-            <div className="stat-tiles" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div className="stile" style={{ padding: '24px', margin: 0, minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span className="v" style={{ fontSize: '1.6rem', marginBottom: '8px' }}>{loading ? <Loader2 size={24} className="spin"/> : totalBuybacks}</span>
-                <span className="l" style={{ fontSize: '0.85rem' }}>Total Buybacks</span>
-              </div>
-              <div className="stile" style={{ padding: '24px', margin: 0, minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span className="v" style={{ fontSize: '1.6rem', color: '#ef4444', marginBottom: '8px' }}>{loading ? <Loader2 size={24} className="spin"/> : totalBurned}</span>
-                <span className="l" style={{ fontSize: '0.85rem' }}>Total Burned</span>
-              </div>
-              <div className="stile" style={{ padding: '24px', margin: 0, minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span className="v" style={{ fontSize: '1.6rem', marginBottom: '8px' }}>{loading ? <Loader2 size={24} className="spin"/> : communityRewards}</span>
-                <span className="l" style={{ fontSize: '0.85rem' }}>Reserved</span>
-              </div>
-              <div className="stile" style={{ padding: '24px', margin: 0, minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span className="v" style={{ fontSize: '1.6rem', marginBottom: '8px' }}>{loading ? <Loader2 size={24} className="spin"/> : distributedRewards}</span>
-                <span className="l" style={{ fontSize: '0.85rem' }}>Distributed</span>
-              </div>
-            </div>
+        {/* BLOCK 2: REVENUE ECONOMY */}
+        <div className="sec-head" style={{ marginBottom: '40px', marginTop: '40px' }}>
+          <h2>Revenue <span className="bl">Economy</span>.</h2>
+          <p className="sec-sub">Creator Revenue is going towards buybacks and actions aimed at strengthening the token economy, driving long-term value for all holders.</p>
+        </div>
 
-            <div className="tok-card" style={{ padding: '32px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '8px' }}>Buyback Program</h3>
-              <p className="sub" style={{ fontSize: '0.9rem', marginBottom: '32px' }}>Strategic utilization of revenue generated.</p>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
-                  <div style={{ background: 'var(--ink)', color: 'var(--bg)', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Flame size={28} />
-                  </div>
-                  <div>
-                    <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '8px' }}>Burn (30%)</h4>
-                    <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>Permanently removed from circulation.</p>
-                  </div>
-                </div>
-
-                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
-                  <div style={{ background: 'var(--blue)', color: '#fff', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Gift size={28} />
-                  </div>
-                  <div>
-                    <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '8px' }}>Community Incentives (70%)</h4>
-                    <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>Strategic rewards, events and competitions.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+        <div className="stat-tiles wide-stats" style={{ marginBottom: '40px' }}>
+          <div className="stile">
+            <span className="v">{loading ? <Loader2 size={24} className="spin"/> : totalBuybacks}</span>
+            <span className="l">Total Buyback</span>
+          </div>
+          <div className="stile">
+            <span className="v" style={{color: '#ef4444'}}>{loading ? <Loader2 size={24} className="spin"/> : totalBurned}</span>
+            <span className="l">Total Burned</span>
+          </div>
+          <div className="stile">
+            <span className="v">{loading ? <Loader2 size={24} className="spin"/> : communityRewards}</span>
+            <span className="l">Reserved for Community</span>
+          </div>
+          <div className="stile">
+            <span className="v">{loading ? <Loader2 size={24} className="spin"/> : distributedRewards}</span>
+            <span className="l">Distributed to Community</span>
           </div>
         </div>
+
+        <div className="tok-card" style={{ marginBottom: '60px', padding: '40px', textAlign: 'center' }}>
+          <h3 style={{ fontSize: '1.5rem', marginBottom: '8px' }}>Buyback Program</h3>
+          <p className="sub" style={{ fontSize: '1rem', marginBottom: '40px' }}>Strategic utilization of revenue generated.</p>
+          
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '30px', flexWrap: 'wrap' }}>
+            <div style={{ textAlign: 'right', flex: '1 1 200px' }}>
+              <div style={{ background: 'rgba(239, 68, 68, 0.1)', display: 'inline-flex', padding: '12px', borderRadius: '12px', marginBottom: '12px' }}>
+                <Flame size={24} color="#ef4444" />
+              </div>
+              <h4 style={{ color: '#ef4444', margin: '0 0 8px 0', fontWeight: 900, fontSize: '1.2rem' }}>Burn (30%)</h4>
+              <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--muted)', lineHeight: '1.5' }}>Permanently removed from circulation, reducing total supply.</p>
+            </div>
+            
+            <div style={{ position: 'relative', width: '220px', height: '220px', flexShrink: 0 }}>
+              <svg viewBox="0 0 36 36" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--blue)" strokeWidth="4" strokeDasharray="70, 100" />
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#ef4444" strokeWidth="4" strokeDasharray="30, 100" strokeDashoffset="-70" />
+              </svg>
+              <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ fontSize: '1.4rem', fontWeight: 900 }}>100%</div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Buybacks</div>
+              </div>
+            </div>
+            
+            <div style={{ textAlign: 'left', flex: '1 1 200px' }}>
+              <div style={{ background: 'rgba(0, 82, 255, 0.1)', display: 'inline-flex', padding: '12px', borderRadius: '12px', marginBottom: '12px' }}>
+                <Gift size={24} color="var(--blue)" />
+              </div>
+              <h4 style={{ color: 'var(--blue)', margin: '0 0 8px 0', fontWeight: 900, fontSize: '1.2rem' }}>Reserved for Community (70%)</h4>
+              <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--muted)', lineHeight: '1.5' }}>Strategic rewards, events and ecosystem incentives.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* BLOCK 3: VESTING DETAILS */}
+        <div className="sec-head" style={{ marginBottom: '40px', marginTop: '40px' }}>
+          <h2>Vesting <span className="bl">Details</span>.</h2>
+          <p className="sec-sub">Transparent and fair distribution for long-term holders.</p>
+        </div>
+
+        <div className="tok-layout">
+          <div>
+            <div className="tok-card">
+              <h3>Holder Rewards · 100M $VIBE</h3>
+              <p className="sub">10M unlocks monthly · starts Aug 26, 2026</p>
+              <div className="prog"><div className="prog-f" style={{width:'10%'}}/></div>
+              <div className="prog-labs"><span>0M today</span><span>100M total</span></div>
+              <div className="who">
+                <div className="who-r">
+                  <div className="who-ico"><img src="/vibe-logo.png" className="who-img-sq" /></div>
+                  <div className="who-t">$VIBE Holders<span>Hold 5M+ $VIBE to qualify</span></div>
+                </div>
+                <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><TrendingUp color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Allocation Size<span>The more you hold, the larger your allocation</span></div>
+                </div>
+                <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Clock color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Snapshot Schedule<span>Balance snapshot at 00:00 UTC on the day of unlock</span></div>
+                </div>
+                <Link to="/checker" className="who-r" style={{textDecoration:'none', cursor:'pointer', background:'var(--blue)'}}>
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Check color="#fff" size={20}/></div>
+                  <div className="who-t" style={{color:'#fff'}}>Check your eligibility<span style={{color:'rgba(255,255,255,0.8)'}}>Qualify for the next distribution <ArrowRightCircle size={14} style={{verticalAlign:'middle', marginLeft:4}}/></span></div>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="sched">
+            <h3>Unlock Schedule</h3>
+            <p className="sub">Aug 2026 &rarr; May 2027</p>
+            <div className="ul-wrap">
+              {UNLOCKS.map((u,i)=>{
+                const isUnlocked = new Date(u.d) <= now;
+                return (
+                  <div key={i} className="ul-r">
+                    <span className="ul-d">{u.d}</span>
+                    <span className="ul-a">{u.a}</span>
+                    <span className="ul-s" style={{ color: isUnlocked ? 'var(--blue)' : 'inherit', fontWeight: isUnlocked ? 'bold' : 'normal' }}>
+                      {isUnlocked ? 'unlocked' : 'locked'}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   );
