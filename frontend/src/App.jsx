@@ -305,20 +305,20 @@ function Tokenomics() {
           {/* Left Side: Stat Tiles */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <span className="v" style={{ fontSize: '1.4rem' }}>{loading ? <Loader2 size={24} className="spin"/> : totalBuybacks}</span>
-              <span className="l" style={{ fontSize: '0.8rem' }}>Total Buyback</span>
+              <span className="v">{loading ? <Loader2 size={24} className="spin"/> : totalBuybacks}</span>
+              <span className="l">Total Buyback</span>
             </div>
             <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <span className="v" style={{ fontSize: '1.4rem', color: '#ef4444' }}>{loading ? <Loader2 size={24} className="spin"/> : totalBurned}</span>
-              <span className="l" style={{ fontSize: '0.8rem' }}>Total Burned</span>
+              <span className="v" style={{ color: '#ef4444' }}>{loading ? <Loader2 size={24} className="spin"/> : totalBurned}</span>
+              <span className="l">Total Burned</span>
             </div>
             <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <span className="v" style={{ fontSize: '1.4rem' }}>{loading ? <Loader2 size={24} className="spin"/> : communityRewards}</span>
-              <span className="l" style={{ fontSize: '0.8rem' }}>Reserved for Community</span>
+              <span className="v">{loading ? <Loader2 size={24} className="spin"/> : communityRewards}</span>
+              <span className="l">Reserved for Community</span>
             </div>
             <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <span className="v" style={{ fontSize: '1.4rem' }}>{loading ? <Loader2 size={24} className="spin"/> : distributedRewards}</span>
-              <span className="l" style={{ fontSize: '0.8rem' }}>Distributed to Community</span>
+              <span className="v">{loading ? <Loader2 size={24} className="spin"/> : distributedRewards}</span>
+              <span className="l">Distributed to Community</span>
             </div>
           </div>
 
@@ -327,29 +327,31 @@ function Tokenomics() {
             <h3 style={{ fontSize: '1.25rem', marginBottom: '4px' }}>Buyback Program</h3>
             <p className="sub" style={{ fontSize: '0.9rem', marginBottom: '32px' }}>Strategic utilization of revenue generated.</p>
             
-            <div style={{ position: 'relative', width: '100%', maxWidth: '350px', margin: '0 auto', flexShrink: 0 }}>
-              <svg viewBox="0 0 160 60" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}>
-                <g transform="translate(80, 30)">
+            <div style={{ position: 'relative', width: '100%', margin: '0 auto', flexShrink: 0 }}>
+              <svg viewBox="0 0 200 80" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}>
+                <g transform="translate(100, 40)">
                   {/* Blue circle */}
-                  <circle cx="0" cy="0" r="20" fill="none" stroke="var(--blue)" strokeWidth="5" pathLength="100" />
+                  <circle cx="0" cy="0" r="28" fill="none" stroke="var(--blue)" strokeWidth="6" pathLength="100" />
                   
                   {/* Red circle (30%) centered on the left */}
-                  <circle cx="0" cy="0" r="20" fill="none" stroke="#ef4444" strokeWidth="5" 
+                  <circle cx="0" cy="0" r="28" fill="none" stroke="#ef4444" strokeWidth="6" 
                           pathLength="100" strokeDasharray="30 70" strokeDashoffset="-60" transform="rotate(-90)" />
   
                   {/* Line pointing left from red segment */}
-                  <polyline points="-20,0 -35,-15 -70,-15" fill="none" stroke="#ef4444" strokeWidth="0.75" />
+                  <polyline points="-28,0 -40,-20 -85,-20" fill="none" stroke="#ef4444" strokeWidth="1" />
                   
                   {/* Line pointing right from blue segment */}
-                  <polyline points="20,0 35,-15 70,-15" fill="none" stroke="var(--blue)" strokeWidth="0.75" />
+                  <polyline points="28,0 40,-20 85,-20" fill="none" stroke="var(--blue)" strokeWidth="1" />
                   
                   {/* Texts */}
-                  <text x="-70" y="-17" fill="#ef4444" fontSize="4.5" fontWeight="800" textAnchor="start">Burn (30%)</text>
-                  <text x="70" y="-17" fill="var(--blue)" fontSize="4.5" fontWeight="800" textAnchor="end">Reserved for Community (70%)</text>
+                  <text x="-85" y="-23" fill="#ef4444" fontSize="5" fontWeight="800" textAnchor="start">Burn (30%)</text>
+                  
+                  <text x="85" y="-28" fill="var(--blue)" fontSize="5" fontWeight="800" textAnchor="end">Reserved for</text>
+                  <text x="85" y="-21" fill="var(--blue)" fontSize="5" fontWeight="800" textAnchor="end">Community (70%)</text>
   
                   {/* Center Text */}
-                  <text x="0" y="-1" fill="var(--ink)" fontSize="6.5" fontWeight="900" textAnchor="middle">100%</text>
-                  <text x="0" y="6" fill="var(--muted)" fontSize="3.5" textAnchor="middle" fontWeight="bold">BUYBACKS</text>
+                  <text x="0" y="-2" fill="var(--ink)" fontSize="9" fontWeight="900" textAnchor="middle">100%</text>
+                  <text x="0" y="8" fill="var(--muted)" fontSize="4" textAnchor="middle" fontWeight="bold">BUYBACKS</text>
                 </g>
               </svg>
             </div>
