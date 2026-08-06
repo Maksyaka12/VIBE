@@ -262,7 +262,7 @@ function Tokenomics() {
         
         {/* BLOCK 1: TOKENOMICS INFO */}
         <div className="sec-head rv" ref={r} style={{ marginBottom: '40px' }}>
-          <h2>Tokenomics. Zero BS.<br/><span className="bl">No Team Allocation.</span></h2>
+          <h2>$VIBE <span className="bl">Tokenomics</span>.</h2>
           <p className="sec-sub">Fair launch via o1.exchange. $VIBE B20 launch time was publicly announced in advance. No team allocations. No insider buys.</p>
         </div>
         
