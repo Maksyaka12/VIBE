@@ -323,37 +323,74 @@ function Tokenomics() {
           </div>
 
           {/* Right Side: Buyback Program */}
-          <div className="tok-card" style={{ padding: '32px', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <h3 style={{ fontSize: '1.25rem', marginBottom: '4px' }}>Buyback Program</h3>
-            <p className="sub" style={{ fontSize: '0.9rem', marginBottom: '32px' }}>Strategic utilization of revenue generated.</p>
+          <div className="tok-card" style={{ padding: '32px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '4px', color: 'var(--ink)' }}>Buyback Program</h3>
+              <p className="sub" style={{ fontSize: '0.85rem', color: 'var(--muted)', margin: 0 }}>Strategic utilization of revenue generated.</p>
+            </div>
             
-            <div style={{ position: 'relative', width: '100%', margin: '0 auto', flexShrink: 0 }}>
-              <svg viewBox="0 0 200 80" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}>
-                <g transform="translate(100, 40)">
-                  {/* Blue circle */}
-                  <circle cx="0" cy="0" r="28" fill="none" stroke="var(--blue)" strokeWidth="6" pathLength="100" />
-                  
-                  {/* Red circle (30%) centered on the left */}
-                  <circle cx="0" cy="0" r="28" fill="none" stroke="#ef4444" strokeWidth="6" 
-                          pathLength="100" strokeDasharray="30 70" strokeDashoffset="-60" transform="rotate(-90)" />
-  
-                  {/* Line pointing left from red segment */}
-                  <polyline points="-28,0 -40,-20 -85,-20" fill="none" stroke="#ef4444" strokeWidth="1" />
-                  
-                  {/* Line pointing right from blue segment */}
-                  <polyline points="28,0 40,-20 85,-20" fill="none" stroke="var(--blue)" strokeWidth="1" />
-                  
-                  {/* Texts */}
-                  <text x="-85" y="-23" fill="#ef4444" fontSize="5" fontWeight="800" textAnchor="start">Burn (30%)</text>
-                  
-                  <text x="85" y="-28" fill="var(--blue)" fontSize="5" fontWeight="800" textAnchor="end">Reserved for</text>
-                  <text x="85" y="-21" fill="var(--blue)" fontSize="5" fontWeight="800" textAnchor="end">Community (70%)</text>
-  
+            <div style={{ position: 'relative', width: '100%', maxWidth: '340px', margin: '16px auto 8px', flexShrink: 0 }}>
+              <svg viewBox="0 0 340 230" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}>
+                <defs>
+                  <linearGradient id="burnGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ff5f5f" />
+                    <stop offset="100%" stopColor="#ef4444" />
+                  </linearGradient>
+                  <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#3b82f6" />
+                    <stop offset="100%" stopColor="#0052ff" />
+                  </linearGradient>
+
+                  <filter id="redGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="5" floodColor="#ef4444" floodOpacity="0.25" />
+                  </filter>
+                  <filter id="blueGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="5" floodColor="#0052ff" floodOpacity="0.25" />
+                  </filter>
+                </defs>
+
+                <g transform="translate(170, 120)">
+                  {/* Track Ring */}
+                  <circle cx="0" cy="0" r="70" fill="none" stroke="#f1f5f9" strokeWidth="15" />
+
+                  {/* 70% Reserved for Community */}
+                  <circle cx="0" cy="0" r="70" fill="none" stroke="url(#blueGradient)" strokeWidth="15"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="66 100" strokeDashoffset="0"
+                          transform="rotate(-85)" filter="url(#blueGlow)" style={{ transition: 'all 0.5s ease' }} />
+
+                  {/* 30% Burn */}
+                  <circle cx="0" cy="0" r="70" fill="none" stroke="url(#burnGradient)" strokeWidth="15"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="26 100" strokeDashoffset="-71"
+                          transform="rotate(-85)" filter="url(#redGlow)" style={{ transition: 'all 0.5s ease' }} />
+
+                  {/* Micro Anchor Dots */}
+                  <circle cx="-66" cy="-22" r="3.5" fill="#ef4444" />
+                  <polyline points="-66,-22 -85,-45 -145,-45" fill="none" stroke="#ef4444" strokeWidth="1.2" strokeDasharray="3 3" />
+
+                  <circle cx="66" cy="-22" r="3.5" fill="#0052ff" />
+                  <polyline points="66,-22 85,-45 145,-45" fill="none" stroke="#0052ff" strokeWidth="1.2" strokeDasharray="3 3" />
+
+                  {/* Callout Texts */}
+                  <text x="-145" y="-53" fill="#ef4444" fontSize="12" fontWeight="800" textAnchor="start">Burn (30%)</text>
+
+                  <text x="145" y="-60" fill="#0052ff" fontSize="12" fontWeight="800" textAnchor="end">Reserved for</text>
+                  <text x="145" y="-45" fill="#0052ff" fontSize="12" fontWeight="800" textAnchor="end">Community (70%)</text>
+
                   {/* Center Text */}
-                  <text x="0" y="-2" fill="var(--ink)" fontSize="9" fontWeight="900" textAnchor="middle">100%</text>
-                  <text x="0" y="8" fill="var(--muted)" fontSize="4" textAnchor="middle" fontWeight="bold">BUYBACKS</text>
+                  <text x="0" y="-3" fill="var(--ink)" fontSize="26" fontWeight="900" textAnchor="middle" letterSpacing="-0.5px">100%</text>
+                  <text x="0" y="16" fill="var(--muted)" fontSize="9" fontWeight="800" textAnchor="middle" letterSpacing="1.5px">BUYBACKS</text>
                 </g>
               </svg>
+            </div>
+
+            {/* Bottom Legend Pills */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '8px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '5px 12px', borderRadius: '99px', fontSize: '0.8rem', fontWeight: 800, color: '#ef4444' }}>
+                <Flame size={14} /> Burn (30%)
+              </div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0, 82, 255, 0.08)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '5px 12px', borderRadius: '99px', fontSize: '0.8rem', fontWeight: 800, color: 'var(--blue)' }}>
+                <Gift size={14} /> Community (70%)
+              </div>
             </div>
           </div>
         </div>
