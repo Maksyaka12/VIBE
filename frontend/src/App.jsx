@@ -694,6 +694,16 @@ function Footer() {
 
 const EVENT_DATA = [
   {
+    id: 3,
+    title: '1000 Holders Party',
+    image: '/event3.png',
+    winners: '33 Winners',
+    prizePool: 'TBA',
+    status: 'ongoing',
+    distribution: 'Not Started',
+    link: 'https://x.com/mksvibe'
+  },
+  {
     id: 1,
     title: 'Giveaway $1M Market Cap',
     image: '/event1.png',
@@ -712,16 +722,6 @@ const EVENT_DATA = [
     status: 'ended',
     distribution: 'In Progress (58.5%)',
     link: 'https://x.com/mksvibe/status/2084601445844689003'
-  },
-  {
-    id: 3,
-    title: '1000 Holders Party',
-    image: '/event3.png',
-    winners: '33 Winners',
-    prizePool: 'TBA',
-    status: 'ongoing',
-    distribution: 'Not Started',
-    link: 'https://x.com/mksvibe'
   }
 ];
 
