@@ -708,7 +708,7 @@ const EVENT_DATA = [
     id: 2,
     title: 'Base App Welcome Bonus',
     image: '/event2.png',
-    winners: 'All Eligible',
+    winners: 'TBA',
     prizePool: '1M $VIBE',
     status: 'ended',
     distribution: 'In Progress (58.5%)',
