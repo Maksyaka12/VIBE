@@ -775,18 +775,18 @@ function Events() {
               </div>
 
               {/* Event Body */}
-              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+              <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                 
                 {/* Title & Status Header */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '16px' }}>
-                  <h3 style={{ fontSize: '1.35rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '14px' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
 
                   <span style={{
                     background: ev.status === 'ongoing' ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
                     color: ev.status === 'ongoing' ? '#10b981' : '#ef4444',
                     padding: '4px 10px',
                     borderRadius: '99px',
-                    fontSize: '0.75rem',
+                    fontSize: '0.72rem',
                     fontWeight: 900,
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -800,65 +800,45 @@ function Events() {
                   </span>
                 </div>
 
-                {/* Stylish 2-Line Requirements Callout Box with Bullet Dot */}
-                <div style={{
-                  background: 'rgba(0, 82, 255, 0.05)',
-                  borderLeft: '4px solid var(--blue)',
-                  borderRadius: '0 10px 10px 0',
-                  padding: '12px 16px',
-                  marginBottom: '20px',
-                  borderTop: '1px solid rgba(0, 82, 255, 0.1)',
-                  borderRight: '1px solid rgba(0, 82, 255, 0.1)',
-                  borderBottom: '1px solid rgba(0, 82, 255, 0.1)'
-                }}>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--blue)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
-                    Requirements
-                  </div>
-                  <div style={{ fontSize: '0.88rem', color: 'var(--ink)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ width: '6px', height: '6px', background: 'var(--blue)', borderRadius: '50%', flexShrink: 0, display: 'inline-block' }} />
-                    {ev.requirements}
-                  </div>
-                </div>
-
-                {/* 4 Separate Stat Tiles in 2x2 Grid */}
+                {/* 4 Separate Compact Stat Tiles in 2x2 Grid */}
                 <div style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr',
-                  gap: '12px',
-                  marginBottom: '24px'
+                  gap: '10px',
+                  marginBottom: '16px'
                 }}>
-                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 16px' }}>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px 12px' }}>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
                       Prize Pool
                     </div>
-                    <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.95rem' }}>
+                    <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.9rem' }}>
                       {ev.prizePool}
                     </div>
                   </div>
 
-                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 16px' }}>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px 12px' }}>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
                       Winners
                     </div>
-                    <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.95rem' }}>
+                    <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.9rem' }}>
                       {ev.winners}
                     </div>
                   </div>
 
-                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 16px' }}>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px 12px' }}>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
                       Status
                     </div>
-                    <div style={{ fontWeight: 800, color: ev.status === 'ongoing' ? '#10b981' : 'var(--ink)', fontSize: '0.95rem', textTransform: 'capitalize' }}>
+                    <div style={{ fontWeight: 800, color: ev.status === 'ongoing' ? '#10b981' : '#ef4444', fontSize: '0.9rem', textTransform: 'capitalize' }}>
                       {ev.status}
                     </div>
                   </div>
 
-                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 16px' }}>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px 12px' }}>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '2px' }}>
                       Distribution
                     </div>
-                    <div style={{ fontWeight: 800, color: ev.distribution === 'Completed' ? '#10b981' : '#d97706', fontSize: '0.88rem' }}>
+                    <div style={{ fontWeight: 800, color: ev.distribution === 'Completed' ? '#10b981' : '#d97706', fontSize: '0.85rem' }}>
                       {ev.distribution === 'Completed' ? '✓ Completed' : '⏱ Not Started'}
                     </div>
                   </div>
@@ -874,18 +854,18 @@ function Events() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '8px',
+                    gap: '6px',
                     background: 'var(--blue)',
                     color: '#fff',
-                    padding: '14px',
-                    borderRadius: '12px',
+                    padding: '12px',
+                    borderRadius: '10px',
                     fontWeight: 800,
-                    fontSize: '0.95rem',
+                    fontSize: '0.9rem',
                     textDecoration: 'none',
                     transition: 'all 0.2s'
                   }}
                 >
-                  {ev.status === 'ongoing' ? 'Participate' : 'View Event'} <ArrowUpRight size={18} strokeWidth={2.5} />
+                  {ev.status === 'ongoing' ? 'Participate' : 'View Event'} <ArrowUpRight size={16} strokeWidth={2.5} />
                 </a>
               </div>
             </div>
