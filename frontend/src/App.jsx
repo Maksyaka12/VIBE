@@ -772,32 +772,36 @@ function Events() {
               {/* Event Image Banner */}
               <div style={{ position: 'relative', background: '#f8fafc', borderBottom: '1px solid var(--borderf)' }}>
                 <img src={ev.image} alt={ev.title} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                
+                {/* Status Pill on Banner Bottom-Right */}
+                <span style={{
+                  position: 'absolute',
+                  bottom: '12px',
+                  right: '12px',
+                  background: ev.status === 'ongoing' ? '#10b981' : '#ef4444',
+                  color: '#fff',
+                  padding: '4px 12px',
+                  borderRadius: '99px',
+                  fontSize: '0.72rem',
+                  fontWeight: 900,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  boxShadow: ev.status === 'ongoing' ? '0 4px 12px rgba(16, 185, 129, 0.4)' : '0 4px 12px rgba(239, 68, 68, 0.4)'
+                }}>
+                  {ev.status === 'ongoing' && <span style={{ width: '6px', height: '6px', background: '#fff', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,255,255,0.8)' }} />}
+                  {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
+                </span>
               </div>
 
               {/* Event Body */}
               <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                 
-                {/* Title & Status Header */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '14px' }}>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
-
-                  <span style={{
-                    background: ev.status === 'ongoing' ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
-                    color: ev.status === 'ongoing' ? '#10b981' : '#ef4444',
-                    padding: '4px 10px',
-                    borderRadius: '99px',
-                    fontSize: '0.72rem',
-                    fontWeight: 900,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
-                    flexShrink: 0
-                  }}>
-                    {ev.status === 'ongoing' && <span style={{ width: '6px', height: '6px', background: '#10b981', borderRadius: '50%', boxShadow: '0 0 6px rgba(16,185,129,0.8)' }} />}
-                    {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
-                  </span>
+                {/* Title Header */}
+                <div style={{ marginBottom: '14px' }}>
+                  <h3 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
                 </div>
 
                 {/* 4 Separate Compact Stat Tiles in 2x2 Grid */}
