@@ -702,7 +702,7 @@ const EVENT_DATA = [
     status: 'ongoing',
     distribution: 'Not Started',
     requirements: 'Drop Base wallet address in replies',
-    link: 'https://x.com/mksvibe'
+    link: 'https://x.com/mksvibe/status/2083993197861073025'
   },
   {
     id: 2,
@@ -713,7 +713,7 @@ const EVENT_DATA = [
     status: 'ended',
     distribution: 'In Progress (58.5%)',
     requirements: 'Drop Base App wallet or basename',
-    link: 'https://x.com/mksvibe'
+    link: 'https://x.com/mksvibe/status/2084601445844689003'
   }
 ];
 
