@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift } from 'lucide-react';
+import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift, Users } from 'lucide-react';
 import { PrivyProvider } from '@privy-io/react-auth';
 import { createPublicClient, http, formatUnits, parseAbiItem } from 'viem';
 import { base } from 'viem/chains';
@@ -355,24 +355,24 @@ function Tokenomics() {
 
                   {/* 70% Reserved for Community */}
                   <circle cx="0" cy="0" r="80" fill="none" stroke="url(#blueGradient)" strokeWidth="18"
-                          strokeLinecap="round" pathLength="100" strokeDasharray="70 100" strokeDashoffset="0"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="66 100" strokeDashoffset="-2"
                           transform="rotate(-90)" filter="url(#blueGlow)" style={{ transition: 'all 0.5s ease' }} />
 
                   {/* 30% Burn */}
                   <circle cx="0" cy="0" r="80" fill="none" stroke="url(#burnGradient)" strokeWidth="18"
-                          strokeLinecap="round" pathLength="100" strokeDasharray="30 100" strokeDashoffset="-70"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="26 100" strokeDashoffset="-71"
                           transform="rotate(-90)" filter="url(#redGlow)" style={{ transition: 'all 0.5s ease' }} />
 
                   {/* Left Callout (Burn 30% - Top Left) */}
                   <circle cx="-65" cy="-47" r="4" fill="#ef4444" />
                   <polyline points="-65,-47 -95,-70 -125,-70" fill="none" stroke="#ef4444" strokeWidth="1.2" strokeDasharray="3 3" />
-                  <text x="-130" y="-64" fill="#ef4444" fontSize="13" fontWeight="800" textAnchor="end">Burn (30%)</text>
+                  <text x="-130" y="-64" fill="#ef4444" fontSize="13" fontWeight="800" textAnchor="end">Burn 30%</text>
 
                   {/* Right Callout (Reserved for Community 70% - Bottom Right) */}
                   <circle cx="47" cy="65" r="4" fill="#0052ff" />
                   <polyline points="47,65 75,90 115,90" fill="none" stroke="#0052ff" strokeWidth="1.2" strokeDasharray="3 3" />
                   <text x="122" y="84" fill="#0052ff" fontSize="13" fontWeight="800" textAnchor="start">Reserved for</text>
-                  <text x="122" y="99" fill="#0052ff" fontSize="13" fontWeight="800" textAnchor="start">Community (70%)</text>
+                  <text x="122" y="99" fill="#0052ff" fontSize="13" fontWeight="800" textAnchor="start">Community 70%</text>
 
                   {/* Center Text */}
                   <text x="0" y="-3" fill="var(--ink)" fontSize="30" fontWeight="900" textAnchor="middle" letterSpacing="-0.5px">100%</text>
@@ -384,10 +384,10 @@ function Tokenomics() {
             {/* Bottom Legend Pills */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '8px', flexWrap: 'wrap' }}>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '5px 12px', borderRadius: '99px', fontSize: '0.8rem', fontWeight: 800, color: '#ef4444' }}>
-                <Flame size={14} /> Burn (30%)
+                <Flame size={14} /> Burn 30%
               </div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0, 82, 255, 0.08)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '5px 12px', borderRadius: '99px', fontSize: '0.8rem', fontWeight: 800, color: 'var(--blue)' }}>
-                <Gift size={14} /> Community (70%)
+                <Users size={14} /> Community 70%
               </div>
             </div>
           </div>
