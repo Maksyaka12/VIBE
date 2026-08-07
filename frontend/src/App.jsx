@@ -696,25 +696,23 @@ const EVENT_DATA = [
   {
     id: 1,
     title: 'Giveaway 1M MC',
-    category: 'Community Contest',
     image: '/event1.png',
     winners: '50 Winners',
     prizePool: 'TBA',
     status: 'ongoing',
     distribution: 'In Progress',
-    description: 'Participate in our milestone celebration giveaway! Hold $VIBE and join the community on X to win.',
+    requirements: 'Drop Base wallet address in replies',
     link: 'https://x.com/mksvibe'
   },
   {
     id: 2,
     title: 'Base App Bonus',
-    category: 'Special Campaign',
     image: '/event2.png',
     winners: 'All Eligible',
     prizePool: '585,682 VIBE',
     status: 'ended',
     distribution: 'Completed',
-    description: 'Exclusive bonus distribution for early supporters and active Base App ecosystem users.',
+    requirements: 'Drop Base App wallet address / basename',
     link: 'https://x.com/mksvibe'
   }
 ];
@@ -769,11 +767,9 @@ function Events() {
               {/* Event Body */}
               <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                 
-                {/* Category & Status Header */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--blue)', textTransform: 'uppercase', letterSpacing: '0.5px', background: 'rgba(0, 82, 255, 0.08)', padding: '4px 10px', borderRadius: '6px' }}>
-                    {ev.category}
-                  </span>
+                {/* Title & Status Header */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '12px' }}>
+                  <h3 style={{ fontSize: '1.35rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
 
                   <span style={{
                     background: ev.status === 'ongoing' ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
@@ -786,30 +782,28 @@ function Events() {
                     alignItems: 'center',
                     gap: '6px',
                     textTransform: 'uppercase',
-                    letterSpacing: '0.5px'
+                    letterSpacing: '0.5px',
+                    flexShrink: 0
                   }}>
                     {ev.status === 'ongoing' && <span style={{ width: '6px', height: '6px', background: '#10b981', borderRadius: '50%', boxShadow: '0 0 6px rgba(16,185,129,0.8)' }} />}
                     {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
                   </span>
                 </div>
 
-                {/* Title & Description */}
-                <h3 style={{ fontSize: '1.35rem', fontWeight: 800, margin: '0 0 8px 0', color: 'var(--ink)', lineHeight: '1.3' }}>{ev.title}</h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--muted)', lineHeight: '1.5', margin: '0 0 20px 0' }}>{ev.description}</p>
+                {/* Requirements */}
+                <div style={{ fontSize: '0.88rem', color: 'var(--muted)', lineHeight: '1.5', marginBottom: '20px' }}>
+                  <strong style={{ color: 'var(--ink)', fontWeight: 800 }}>Requirements:</strong> {ev.requirements}
+                </div>
 
-                {/* Metadata Grid (Happy Hour Style) */}
+                {/* 4 Separate Stat Tiles in 2x2 Grid */}
                 <div style={{
-                  background: '#f8fafc',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '16px',
-                  padding: '16px',
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr',
-                  gap: '14px',
+                  gap: '12px',
                   marginBottom: '24px'
                 }}>
-                  <div>
-                    <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 16px' }}>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '4px' }}>
                       Total Prize Pool
                     </div>
                     <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.95rem' }}>
@@ -817,8 +811,8 @@ function Events() {
                     </div>
                   </div>
 
-                  <div>
-                    <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 16px' }}>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '4px' }}>
                       Winners
                     </div>
                     <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.95rem' }}>
@@ -826,8 +820,8 @@ function Events() {
                     </div>
                   </div>
 
-                  <div>
-                    <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 16px' }}>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '4px' }}>
                       Status
                     </div>
                     <div style={{ fontWeight: 800, color: ev.status === 'ongoing' ? '#10b981' : 'var(--ink)', fontSize: '0.95rem', textTransform: 'capitalize' }}>
@@ -835,21 +829,12 @@ function Events() {
                     </div>
                   </div>
 
-                  <div>
-                    <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 16px' }}>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '4px' }}>
                       Distribution
                     </div>
-                    <div>
-                      <span style={{
-                        color: ev.distribution === 'Completed' ? '#10b981' : 'var(--blue)',
-                        fontSize: '0.85rem',
-                        fontWeight: 800,
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '4px'
-                      }}>
-                        {ev.distribution === 'Completed' ? '✓ Completed' : '⏳ In Progress'}
-                      </span>
+                    <div style={{ fontWeight: 800, color: ev.distribution === 'Completed' ? '#10b981' : 'var(--blue)', fontSize: '0.88rem' }}>
+                      {ev.distribution === 'Completed' ? '✓ Completed' : '⏳ In Progress'}
                     </div>
                   </div>
                 </div>
