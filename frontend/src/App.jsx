@@ -695,7 +695,7 @@ function Footer() {
 const EVENT_DATA = [
   {
     id: 1,
-    title: 'Giveaway 1M MC',
+    title: 'Giveaway VIBE $1M Market Cap',
     image: '/event1.png',
     winners: '50 Winners',
     prizePool: 'TBA',
@@ -706,7 +706,7 @@ const EVENT_DATA = [
   },
   {
     id: 2,
-    title: 'Base App Bonus',
+    title: 'Base App Welcome Bonus',
     image: '/event2.png',
     winners: 'All Eligible',
     prizePool: '585,682 VIBE',
