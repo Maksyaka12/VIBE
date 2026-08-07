@@ -695,10 +695,10 @@ function Footer() {
 const EVENT_DATA = [
   {
     id: 1,
-    title: 'Giveaway VIBE $1M Market Cap',
+    title: 'Giveaway $1M Market Cap',
     image: '/event1.png',
     winners: '50 Winners',
-    prizePool: 'TBA',
+    prizePool: '1M $VIBE',
     status: 'ongoing',
     distribution: 'Not Started',
     requirements: 'Drop Base wallet address in replies',
@@ -711,7 +711,7 @@ const EVENT_DATA = [
     winners: 'All Eligible',
     prizePool: '585,682 VIBE',
     status: 'ended',
-    distribution: 'Completed',
+    distribution: 'In Progress (58.5%)',
     requirements: 'Drop Base App wallet or basename',
     link: 'https://x.com/mksvibe'
   }
@@ -842,8 +842,28 @@ function Events() {
                     <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '2px' }}>
                       Distribution
                     </div>
-                    <div style={{ fontWeight: 800, color: ev.distribution === 'Completed' ? '#10b981' : '#d97706', fontSize: '0.85rem' }}>
-                      {ev.distribution === 'Completed' ? '✓ Completed' : '⏱ Not Started'}
+                    <div style={{
+                      fontWeight: 800,
+                      color: ev.distribution.startsWith('In Progress') ? 'var(--blue)' : ev.distribution === 'Completed' ? '#10b981' : '#d97706',
+                      fontSize: '0.82rem',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}>
+                      {ev.distribution.startsWith('In Progress') && (
+                        <span style={{
+                          width: '6px',
+                          height: '6px',
+                          background: 'var(--blue)',
+                          borderRadius: '50%',
+                          display: 'inline-block',
+                          flexShrink: 0,
+                          boxShadow: '0 0 6px rgba(0, 82, 255, 0.8)'
+                        }} />
+                      )}
+                      {ev.distribution === 'Completed' && '✓ '}
+                      {ev.distribution === 'Not Started' && '⏱ '}
+                      {ev.distribution}
                     </div>
                   </div>
                 </div>
