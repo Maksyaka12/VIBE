@@ -712,7 +712,7 @@ const EVENT_DATA = [
     prizePool: '585,682 VIBE',
     status: 'ended',
     distribution: 'Completed',
-    requirements: 'Drop Base App wallet address / basename',
+    requirements: 'Drop Base App wallet or basename',
     link: 'https://x.com/mksvibe'
   }
 ];
@@ -731,28 +731,38 @@ function Events() {
           <p className="sec-sub">Track active and past events, participate, and win $VIBE rewards.</p>
         </div>
 
-        {/* Filter Pills */}
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '40px', flexWrap: 'wrap' }}>
-          {['all', 'ongoing', 'ended'].map(f => (
-            <button 
-              key={f}
-              onClick={() => setFilter(f)}
-              style={{
-                padding: '10px 24px',
-                borderRadius: '99px',
-                border: 'none',
-                background: filter === f ? 'var(--blue)' : '#fff',
-                color: filter === f ? '#fff' : 'var(--ink)',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                boxShadow: filter === f ? '0 4px 12px rgba(0, 82, 255, 0.3)' : '0 2px 8px rgba(0,0,0,0.05)',
-                textTransform: 'capitalize',
-                transition: 'all 0.2s'
-              }}
-            >
-              {f === 'all' ? 'All Events' : f}
-            </button>
-          ))}
+        {/* High-Contrast Segmented Filter Bar */}
+        <div style={{ display: 'flex', marginBottom: '40px' }}>
+          <div style={{
+            display: 'inline-flex',
+            background: '#e2e8f0',
+            padding: '5px',
+            borderRadius: '99px',
+            gap: '4px',
+            border: '1px solid #cbd5e1'
+          }}>
+            {['all', 'ongoing', 'ended'].map(f => (
+              <button 
+                key={f}
+                onClick={() => setFilter(f)}
+                style={{
+                  padding: '8px 22px',
+                  borderRadius: '99px',
+                  border: 'none',
+                  background: filter === f ? 'var(--blue)' : 'transparent',
+                  color: filter === f ? '#fff' : '#475569',
+                  fontWeight: filter === f ? 800 : 700,
+                  fontSize: '0.9rem',
+                  cursor: 'pointer',
+                  boxShadow: filter === f ? '0 4px 12px rgba(0, 82, 255, 0.35)' : 'none',
+                  textTransform: 'capitalize',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {f === 'all' ? 'All Events' : f}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Events Grid */}
@@ -768,7 +778,7 @@ function Events() {
               <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                 
                 {/* Title & Status Header */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '16px' }}>
                   <h3 style={{ fontSize: '1.35rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
 
                   <span style={{
@@ -790,9 +800,20 @@ function Events() {
                   </span>
                 </div>
 
-                {/* Requirements */}
-                <div style={{ fontSize: '0.88rem', color: 'var(--muted)', lineHeight: '1.5', marginBottom: '20px' }}>
-                  <strong style={{ color: 'var(--ink)', fontWeight: 800 }}>Requirements:</strong> {ev.requirements}
+                {/* Stylish Requirements Callout Box */}
+                <div style={{
+                  background: 'rgba(0, 82, 255, 0.05)',
+                  borderLeft: '4px solid var(--blue)',
+                  borderRadius: '0 10px 10px 0',
+                  padding: '10px 14px',
+                  marginBottom: '20px',
+                  borderTop: '1px solid rgba(0, 82, 255, 0.1)',
+                  borderRight: '1px solid rgba(0, 82, 255, 0.1)',
+                  borderBottom: '1px solid rgba(0, 82, 255, 0.1)'
+                }}>
+                  <div style={{ fontSize: '0.86rem', color: 'var(--ink)', lineHeight: '1.45' }}>
+                    <strong style={{ color: 'var(--blue)', fontWeight: 800 }}>Requirements:</strong> {ev.requirements}
+                  </div>
                 </div>
 
                 {/* 4 Separate Stat Tiles in 2x2 Grid */}
@@ -830,7 +851,7 @@ function Events() {
                   </div>
 
                   <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 16px' }}>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '4px' }}>
                       Distribution
                     </div>
                     <div style={{ fontWeight: 800, color: ev.distribution === 'Completed' ? '#10b981' : 'var(--blue)', fontSize: '0.88rem' }}>
