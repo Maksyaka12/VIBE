@@ -700,7 +700,7 @@ const EVENT_DATA = [
     winners: '50 Winners',
     prizePool: 'TBA',
     status: 'ongoing',
-    distribution: 'In Progress',
+    distribution: 'Not Started',
     requirements: 'Drop Base wallet address in replies',
     link: 'https://x.com/mksvibe'
   },
@@ -723,6 +723,12 @@ function Events() {
 
   const filteredEvents = EVENT_DATA.filter(e => filter === 'all' || e.status === filter);
 
+  const counts = {
+    all: EVENT_DATA.length,
+    ongoing: EVENT_DATA.filter(e => e.status === 'ongoing').length,
+    ended: EVENT_DATA.filter(e => e.status === 'ended').length
+  };
+
   return (
     <section id="events" className="alt">
       <div className="wrap">
@@ -731,38 +737,32 @@ function Events() {
           <p className="sec-sub">Track active and past events, participate, and win $VIBE rewards.</p>
         </div>
 
-        {/* High-Contrast Segmented Filter Bar */}
-        <div style={{ display: 'flex', marginBottom: '40px' }}>
-          <div style={{
-            display: 'inline-flex',
-            background: '#e2e8f0',
-            padding: '5px',
-            borderRadius: '99px',
-            gap: '4px',
-            border: '1px solid #cbd5e1'
-          }}>
-            {['all', 'ongoing', 'ended'].map(f => (
+        {/* High-Contrast Individual Filter Buttons */}
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '40px', flexWrap: 'wrap' }}>
+          {['all', 'ongoing', 'ended'].map(f => {
+            const label = f === 'all' ? `All Events (${counts.all})` : f === 'ongoing' ? `Ongoing (${counts.ongoing})` : `Ended (${counts.ended})`;
+            const isActive = filter === f;
+            return (
               <button 
                 key={f}
                 onClick={() => setFilter(f)}
                 style={{
-                  padding: '8px 22px',
+                  padding: '10px 24px',
                   borderRadius: '99px',
-                  border: 'none',
-                  background: filter === f ? 'var(--blue)' : 'transparent',
-                  color: filter === f ? '#fff' : '#475569',
-                  fontWeight: filter === f ? 800 : 700,
+                  border: isActive ? '1px solid var(--blue)' : '1px solid #cbd5e1',
+                  background: isActive ? 'var(--blue)' : '#f8fafc',
+                  color: isActive ? '#fff' : 'var(--ink)',
+                  fontWeight: 800,
                   fontSize: '0.9rem',
                   cursor: 'pointer',
-                  boxShadow: filter === f ? '0 4px 12px rgba(0, 82, 255, 0.35)' : 'none',
-                  textTransform: 'capitalize',
+                  boxShadow: isActive ? '0 4px 14px rgba(0, 82, 255, 0.35)' : '0 2px 8px rgba(0,0,0,0.06)',
                   transition: 'all 0.2s'
                 }}
               >
-                {f === 'all' ? 'All Events' : f}
+                {label}
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
 
         {/* Events Grid */}
@@ -800,19 +800,23 @@ function Events() {
                   </span>
                 </div>
 
-                {/* Stylish Requirements Callout Box */}
+                {/* Stylish 2-Line Requirements Callout Box with Bullet Dot */}
                 <div style={{
                   background: 'rgba(0, 82, 255, 0.05)',
                   borderLeft: '4px solid var(--blue)',
                   borderRadius: '0 10px 10px 0',
-                  padding: '10px 14px',
+                  padding: '12px 16px',
                   marginBottom: '20px',
                   borderTop: '1px solid rgba(0, 82, 255, 0.1)',
                   borderRight: '1px solid rgba(0, 82, 255, 0.1)',
                   borderBottom: '1px solid rgba(0, 82, 255, 0.1)'
                 }}>
-                  <div style={{ fontSize: '0.86rem', color: 'var(--ink)', lineHeight: '1.45' }}>
-                    <strong style={{ color: 'var(--blue)', fontWeight: 800 }}>Requirements:</strong> {ev.requirements}
+                  <div style={{ fontSize: '0.78rem', color: 'var(--blue)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
+                    Requirements
+                  </div>
+                  <div style={{ fontSize: '0.88rem', color: 'var(--ink)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ width: '6px', height: '6px', background: 'var(--blue)', borderRadius: '50%', flexShrink: 0, display: 'inline-block' }} />
+                    {ev.requirements}
                   </div>
                 </div>
 
@@ -825,7 +829,7 @@ function Events() {
                 }}>
                   <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '14px 16px' }}>
                     <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '4px' }}>
-                      Total Prize Pool
+                      Prize Pool
                     </div>
                     <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.95rem' }}>
                       {ev.prizePool}
@@ -854,8 +858,8 @@ function Events() {
                     <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '4px' }}>
                       Distribution
                     </div>
-                    <div style={{ fontWeight: 800, color: ev.distribution === 'Completed' ? '#10b981' : 'var(--blue)', fontSize: '0.88rem' }}>
-                      {ev.distribution === 'Completed' ? '✓ Completed' : '⏳ In Progress'}
+                    <div style={{ fontWeight: 800, color: ev.distribution === 'Completed' ? '#10b981' : '#d97706', fontSize: '0.88rem' }}>
+                      {ev.distribution === 'Completed' ? '✓ Completed' : '⏱ Not Started'}
                     </div>
                   </div>
                 </div>
@@ -881,7 +885,7 @@ function Events() {
                     transition: 'all 0.2s'
                   }}
                 >
-                  {ev.status === 'ongoing' ? 'Participate' : 'View Campaign'} <ArrowUpRight size={18} strokeWidth={2.5} />
+                  {ev.status === 'ongoing' ? 'Participate' : 'View Event'} <ArrowUpRight size={18} strokeWidth={2.5} />
                 </a>
               </div>
             </div>
