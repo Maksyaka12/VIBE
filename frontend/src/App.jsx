@@ -701,7 +701,6 @@ const EVENT_DATA = [
     prizePool: 'TBA',
     status: 'ongoing',
     distribution: 'Not Started',
-    requirements: 'Drop Base wallet address in replies',
     link: 'https://x.com/mksvibe/status/2083993197861073025'
   },
   {
@@ -712,8 +711,17 @@ const EVENT_DATA = [
     prizePool: '1M $VIBE',
     status: 'ended',
     distribution: 'In Progress (58.5%)',
-    requirements: 'Drop Base App wallet or basename',
     link: 'https://x.com/mksvibe/status/2084601445844689003'
+  },
+  {
+    id: 3,
+    title: '1000 Holders Party',
+    image: '/event3.png',
+    winners: '33 Winners',
+    prizePool: 'TBA',
+    status: 'ongoing',
+    distribution: 'Not Started',
+    link: 'https://x.com/mksvibe'
   }
 ];
 
