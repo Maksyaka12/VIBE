@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift } from 'lucide-react';
+import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift, Users, ShieldCheck, Calculator, Calendar, RotateCcw } from 'lucide-react';
 import { PrivyProvider } from '@privy-io/react-auth';
 import { createPublicClient, http, formatUnits, parseAbiItem } from 'viem';
 import { base } from 'viem/chains';
@@ -79,7 +79,7 @@ function Nav() {
             $VIBE
           </Link>
           <ul className="nav-menu">
-            {[['about','About'],['tokenomics','Tokenomics'],['revenue','Revenue Economy'],['events','Events'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
+            {[['about','About'],['tokenomics','Tokenomics'],['events','Events'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
               <li key={id}><Link to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>{l}</Link></li>
             ))}
           </ul>
@@ -93,7 +93,7 @@ function Nav() {
       </nav>
       <div className={`mob-menu ${open ? 'open' : ''}`}>
         <div className="mob-links">
-          {[['about','About'],['tokenomics','Tokenomics'],['revenue','Creator Revenue'],['events','Events'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
+          {[['about','About'],['tokenomics','Tokenomics'],['events','Events'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
             <Link key={id} to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>{l}</Link>
           ))}
           <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}}>Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} /></a>
@@ -162,6 +162,22 @@ function About() {
         <div className="sec-head rv" ref={r1}>
           <h2>More than a meme.<br/>The real <span className="bl">Base Dog</span>.</h2>
           <p className="sec-sub">The fluffiest, most loyal dog onchain & offchain.</p>
+          <div style={{
+            marginTop: '20px',
+            background: 'rgba(255, 255, 255, 0.65)',
+            borderLeft: '4px solid var(--blue)',
+            borderRadius: '0 12px 12px 0',
+            padding: '12px 18px',
+            display: 'inline-block',
+            borderTop: '1px solid rgba(0, 82, 255, 0.12)',
+            borderRight: '1px solid rgba(0, 82, 255, 0.12)',
+            borderBottom: '1px solid rgba(0, 82, 255, 0.12)'
+          }}>
+            <p style={{ margin: 0, fontStyle: 'italic', fontSize: '0.95rem', fontWeight: 600, color: 'var(--ink)', lineHeight: '1.5' }}>
+              Vibe belongs to only one owner offchain.<br/>
+              <span style={{ color: 'var(--blue)', fontWeight: 700 }}>$VIBE belongs to everyone onchain.</span>
+            </p>
+          </div>
         </div>
         <div className="about-grid">
           <div className="rv d1" ref={r2}>
@@ -186,135 +202,6 @@ function About() {
 }
 
 /* TOKENOMICS */
-function Tokenomics() {
-  const r=useRev();
-  const { totalBurned, totalBurnedNum, loading } = useRevenueStats();
-  
-  const now = new Date();
-  const unlockedCount = UNLOCKS.filter(u => new Date(u.d) <= now).length;
-  const unlockedTokens = unlockedCount * 10_000_000;
-  
-  const baseCirculating = 900_000_000;
-  const currentCirculating = baseCirculating + unlockedTokens - (totalBurnedNum || 0);
-  
-  const formatCirculating = (num) => {
-    if (num >= 1000000) return (num / 1000000).toFixed(2).replace(/\.00$/, '') + 'M';
-    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-    return num.toLocaleString();
-  };
-
-  const circulatingStr = loading ? <Loader2 size={24} className="spin"/> : formatCirculating(currentCirculating);
-  const pct = loading ? 90 : ((currentCirculating / 1_000_000_000) * 100).toFixed(1);
-  const burnPct = loading ? 0 : ((totalBurnedNum / 1_000_000_000) * 100).toFixed(2);
-
-  return (
-    <section id="tokenomics" className="alt">
-      <div className="wrap">
-        <div className="sec-head rv" ref={r}>
-          <h2>Community-owned.<br/><span className="bl">Zero BS & Team Allocation.</span></h2>
-          <p className="sec-sub">100M tokens vested. Every month 10M unlocks and get distributed among holders.</p>
-        </div>
-        
-        <div className="stat-tiles wide-stats">
-          <div className="stile"><span className="v">1B</span><span className="l">Total Supply</span></div>
-          <div className="stile">
-            <span className="v">{circulatingStr}</span>
-            <span className="l" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-              Circulating
-              {!loading && totalBurnedNum > 0 && (
-                <span style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  fontSize: '0.8rem',
-                  background: 'rgba(239, 68, 68, 0.12)',
-                  color: '#ef4444',
-                  padding: '2px 8px',
-                  borderRadius: '99px',
-                  fontWeight: '800',
-                  lineHeight: '1'
-                }}>
-                  <Flame size={14} strokeWidth={2.5} /> {totalBurned}
-                </span>
-              )}
-            </span>
-          </div>
-          <div className="stile"><span className="v">100M</span><span className="l">Vesting Community Rewards</span><div className="d">10% released monthly</div></div>
-          <div className="stile"><span className="v">10M</span><span className="l">Monthly Unlock</span><div className="d">Straight to holders</div></div>
-        </div>
-
-        <div className="tok-layout">
-          <div>
-            <div className="tok-card">
-              <h3>Holder Rewards · 100M $VIBE</h3>
-              <p className="sub">10M unlocks monthly · starts Aug 26, 2026</p>
-              <div className="prog"><div className="prog-f" style={{width:'10%'}}/></div>
-              <div className="prog-labs"><span>0M today</span><span>100M total</span></div>
-              <div className="who">
-                <div className="who-r">
-                  <div className="who-ico"><img src="/vibe-logo.png" className="who-img-sq" /></div>
-                  <div className="who-t">$VIBE Holders<span>Hold 5M+ $VIBE to qualify</span></div>
-                </div>
-                <div className="who-r">
-                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><TrendingUp color="var(--blue)" size={20}/></div>
-                  <div className="who-t">Allocation Size<span>The more you hold, the larger your allocation</span></div>
-                </div>
-                <div className="who-r">
-                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Clock color="var(--blue)" size={20}/></div>
-                  <div className="who-t">Snapshot Schedule<span>Balance snapshot at 00:00 UTC on the day of unlock</span></div>
-                </div>
-                <Link to="/checker" className="who-r" style={{textDecoration:'none', cursor:'pointer', background:'var(--blue)'}}>
-                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Check color="#fff" size={20}/></div>
-                  <div className="who-t" style={{color:'#fff'}}>Check your eligibility<span style={{color:'rgba(255,255,255,0.8)'}}>Qualify for the next distribution <ArrowRightCircle size={14} style={{verticalAlign:'middle', marginLeft:4}}/></span></div>
-                </Link>
-              </div>
-            </div>
-            <div className="tok-card" style={{marginTop:14}}>
-              <h3>Supply Breakdown</h3>
-              <p className="sub" style={{marginBottom:18}}>Fixed supply, no minting ever.</p>
-              <div className="supply-bars">
-                <div className="sbar-row">
-                  <div className="sbar-top"><span className="sbar-name">Circulating</span><span className="sbar-pct">{pct}%</span></div>
-                  <div className="prog"><div className="prog-f" style={{width:`${pct}%`}}/></div>
-                </div>
-                <div className="sbar-row">
-                  <div className="sbar-top"><span className="sbar-name">Vesting</span><span className="sbar-pct">10%</span></div>
-                  <div className="prog"><div className="prog-f" style={{width:'10%',background:'#4444dd'}}/></div>
-                </div>
-                {!loading && totalBurnedNum > 0 && (
-                  <div className="sbar-row">
-                    <div className="sbar-top"><span className="sbar-name">Burned</span><span className="sbar-pct">{burnPct}%</span></div>
-                    <div className="prog"><div className="prog-f" style={{width:`${burnPct}%`, background:'#ef4444'}}/></div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="sched">
-            <h3>Unlock Schedule</h3>
-            <p className="sub">Aug 2026 → May 2027</p>
-            <div className="ul-wrap">
-              {UNLOCKS.map((u,i)=>{
-                const isUnlocked = new Date(u.d) <= now;
-                return (
-                  <div key={i} className="ul-r">
-                    <span className="ul-d">{u.d}</span>
-                    <span className="ul-a">{u.a}</span>
-                    <span className="ul-s" style={{ color: isUnlocked ? 'var(--blue)' : 'inherit', fontWeight: isUnlocked ? 'bold' : 'normal' }}>
-                      {isUnlocked ? 'unlocked' : 'locked'}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* REVENUE ECONOMY */
 function useRevenueStats() {
   const [stats, setStats] = useState({
     totalBuybacks: '...',
@@ -331,9 +218,7 @@ function useRevenueStats() {
       try {
         const client = createPublicClient({ chain: base, transport: http() });
         const abiBalance = parseAbiItem('function balanceOf(address account) view returns (uint256)');
-        const eventTransfer = parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)');
         
-        // 1. Fetch Balances (Burned and Current Rewards) via RPC
         const [burnedRaw, rewardsRaw] = await Promise.all([
           client.readContract({ address: CA, abi: [abiBalance], functionName: 'balanceOf', args: [BURN_WALLET] }),
           client.readContract({ address: CA, abi: [abiBalance], functionName: 'balanceOf', args: [BUYBACK_WALLET] })
@@ -368,71 +253,231 @@ function useRevenueStats() {
   return stats;
 }
 
-function CreatorRevenue() {
+function Tokenomics() {
   const r = useRev();
-  const { totalBuybacks, totalBurned, communityRewards, distributedRewards, loading } = useRevenueStats();
+  const { totalBurned, totalBurnedNum, totalBuybacks, communityRewards, distributedRewards, loading } = useRevenueStats();
+  
+  const now = new Date();
+  const unlockedCount = UNLOCKS.filter(u => new Date(u.d) <= now).length;
+  const unlockedTokens = unlockedCount * 10_000_000;
+  
+  const baseCirculating = 900_000_000;
+  const currentCirculating = baseCirculating + unlockedTokens - (totalBurnedNum || 0);
+  
+  const formatCirculating = (num) => {
+    if (num >= 1000000) return (num / 1000000).toFixed(2).replace(/\.00$/, '') + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+    return num.toLocaleString();
+  };
+
+  const circulatingStr = loading ? <Loader2 size={24} className="spin"/> : formatCirculating(currentCirculating);
 
   return (
-    <section id="revenue" className="alt">
+    <section id="tokenomics" className="alt">
       <div className="wrap">
-        <div className="sec-head rv" ref={r}>
+        
+        {/* BLOCK 1: TOKENOMICS INFO */}
+        <div className="sec-head rv" ref={r} style={{ marginBottom: '40px' }}>
+          <h2>$VIBE <span className="bl">Tokenomics</span>.</h2>
+          <p className="sec-sub">Fair launch via o1.exchange. $VIBE B20 launch time was publicly announced in advance. Zero BS. No team allocations. No insider buys.</p>
+        </div>
+        
+        <div className="stat-tiles wide-stats" style={{ marginBottom: '60px' }}>
+          <div className="stile"><span className="v">1B</span><span className="l">Total Supply</span></div>
+          <div className="stile">
+            <span className="v">{circulatingStr}</span>
+            <span className="l">Circulating</span>
+            {!loading && totalBurnedNum > 0 && (
+              <div className="d" style={{ marginTop: '8px' }}>
+                <span style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontSize: '0.8rem',
+                  background: 'rgba(239, 68, 68, 0.12)',
+                  color: '#ef4444',
+                  padding: '2px 8px',
+                  borderRadius: '99px',
+                  fontWeight: '800',
+                  lineHeight: '1'
+                }}>
+                  <Flame size={14} strokeWidth={2.5} /> {totalBurned}
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="stile"><span className="v">100M</span><span className="l">Vesting Community Rewards</span><div className="d">10% unlocks monthly</div></div>
+          <div className="stile"><span className="v">10M</span><span className="l">Monthly Unlock</span><div className="d">Straight to holders</div></div>
+        </div>
+
+        {/* BLOCK 2: REVENUE ECONOMY */}
+        <div className="sec-head" style={{ marginBottom: '40px', marginTop: '40px' }}>
           <h2>Revenue <span className="bl">Economy</span>.</h2>
           <p className="sec-sub">Creator Revenue is going towards buybacks and actions aimed at strengthening the token economy, driving long-term value for all holders.</p>
         </div>
-        
-        <div className="stat-tiles wide-stats">
-          <div className="stile">
-            <span className="v">{loading ? <Loader2 size={24} className="spin"/> : totalBuybacks}</span>
-            <span className="l">Total Buyback</span>
-          </div>
-          <div className="stile">
-            <span className="v">{loading ? <Loader2 size={24} className="spin"/> : communityRewards}</span>
-            <span className="l">Reserved for Community</span>
-          </div>
-          <div className="stile">
-            <span className="v">{loading ? <Loader2 size={24} className="spin"/> : distributedRewards}</span>
-            <span className="l">Distributed to Community</span>
-          </div>
-          <div className="stile">
-            <span className="v" style={{color: '#ef4444'}}>{loading ? <Loader2 size={24} className="spin"/> : totalBurned}</span>
-            <span className="l">Total Burned</span>
-          </div>
-        </div>
 
-        <div className="tok-card" style={{ marginTop: '24px' }}>
-          <div className="tok-card-hd" style={{ marginBottom: '32px' }}>
-            <h3>Buyback Program</h3>
-            <p className="sub">Strategic utilization of buybacks.</p>
-          </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))', gap: '24px', marginBottom: '60px' }}>
           
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px' }}>
+          {/* Left Side: Stat Tiles */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <span className="v">{loading ? <Loader2 size={24} className="spin"/> : totalBuybacks}</span>
+              <span className="l">Total Buyback</span>
+            </div>
+            <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <span className="v" style={{ color: '#ef4444' }}>{loading ? <Loader2 size={24} className="spin"/> : totalBurned}</span>
+              <span className="l">Total Burned</span>
+            </div>
+            <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <span className="v">{loading ? <Loader2 size={24} className="spin"/> : communityRewards}</span>
+              <span className="l">Reserved for Community</span>
+            </div>
+            <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <span className="v">{loading ? <Loader2 size={24} className="spin"/> : distributedRewards}</span>
+              <span className="l">Distributed to Community</span>
+            </div>
+          </div>
+
+          {/* Right Side: Buyback Program */}
+          <div className="tok-card" style={{ padding: '32px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '4px', color: 'var(--ink)' }}>Buyback Program</h3>
+              <p className="sub" style={{ fontSize: '0.85rem', color: 'var(--muted)', margin: 0 }}>Strategic utilization of revenue generated.</p>
+            </div>
             
-            <div style={{ flex: '1 1 300px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
-              <div style={{ background: 'var(--ink)', color: 'var(--bg)', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <Flame size={32} />
-              </div>
-              <div>
-                <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '8px' }}>Burn (30%)</h4>
-                <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>
-                  Permanently removed from circulation.
-                </p>
-              </div>
+            <div style={{ position: 'relative', width: '100%', maxWidth: '420px', margin: '16px auto 8px', flexShrink: 0 }}>
+              <svg viewBox="0 0 420 280" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}>
+                <defs>
+                  <linearGradient id="burnGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ff5f5f" />
+                    <stop offset="100%" stopColor="#ef4444" />
+                  </linearGradient>
+                  <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#3b82f6" />
+                    <stop offset="100%" stopColor="#0052ff" />
+                  </linearGradient>
+
+                  <filter id="redGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#ef4444" floodOpacity="0.25" />
+                  </filter>
+                  <filter id="blueGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#0052ff" floodOpacity="0.25" />
+                  </filter>
+                </defs>
+
+                <g transform="translate(210, 140)">
+                  {/* Track Ring */}
+                  <circle cx="0" cy="0" r="80" fill="none" stroke="#f1f5f9" strokeWidth="18" />
+
+                  {/* 70% Reserved for Community */}
+                  <circle cx="0" cy="0" r="80" fill="none" stroke="url(#blueGradient)" strokeWidth="18"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="65 100" strokeDashoffset="-2.5"
+                          transform="rotate(-90)" filter="url(#blueGlow)" style={{ transition: 'all 0.5s ease' }} />
+
+                  {/* 30% Burn */}
+                  <circle cx="0" cy="0" r="80" fill="none" stroke="url(#burnGradient)" strokeWidth="18"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="25 100" strokeDashoffset="-72.5"
+                          transform="rotate(-90)" filter="url(#redGlow)" style={{ transition: 'all 0.5s ease' }} />
+
+                  {/* Left Callout (Burn 30% - Top Left) */}
+                  <circle cx="-65" cy="-47" r="4" fill="#ef4444" />
+                  <polyline points="-65,-47 -95,-70 -125,-70" fill="none" stroke="#ef4444" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="-130" y="-64" fill="#ef4444" fontSize="13" fontWeight="800" textAnchor="end">Burn 30%</text>
+
+                  {/* Right Callout (Reserved for Community 70% - Bottom Right) */}
+                  <circle cx="47" cy="65" r="4" fill="#0052ff" />
+                  <polyline points="47,65 75,90 115,90" fill="none" stroke="#0052ff" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="122" y="84" fill="#0052ff" fontSize="13" fontWeight="800" textAnchor="start">Reserved for</text>
+                  <text x="122" y="99" fill="#0052ff" fontSize="13" fontWeight="800" textAnchor="start">Community 70%</text>
+
+                  {/* Center Text */}
+                  <text x="0" y="-3" fill="var(--ink)" fontSize="30" fontWeight="900" textAnchor="middle" letterSpacing="-0.5px">100%</text>
+                  <text x="0" y="18" fill="var(--muted)" fontSize="10" fontWeight="800" textAnchor="middle" letterSpacing="1.5px">BUYBACKS</text>
+                </g>
+              </svg>
             </div>
 
-            <div style={{ flex: '1 1 300px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '24px', display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
-              <div style={{ background: 'var(--blue)', color: '#fff', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <Gift size={32} />
+            {/* Bottom Legend Pills */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '8px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '5px 12px', borderRadius: '99px', fontSize: '0.8rem', fontWeight: 800, color: '#ef4444' }}>
+                <Flame size={14} /> Burn 30%
               </div>
-              <div>
-                <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '8px' }}>Community Incentives (70%)</h4>
-                <p style={{ color: 'var(--muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>
-                  Strategic rewards, events and competitions.
-                </p>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0, 82, 255, 0.08)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '5px 12px', borderRadius: '99px', fontSize: '0.8rem', fontWeight: 800, color: 'var(--blue)' }}>
+                <Users size={14} /> Community 70%
               </div>
             </div>
-
           </div>
         </div>
+
+        {/* BLOCK 3: VESTING DETAILS */}
+        <div className="sec-head" style={{ marginBottom: '40px', marginTop: '40px' }}>
+          <h2>Vesting <span className="bl">Details</span>.</h2>
+          <p className="sec-sub">100M tokens vested. Every month 10M unlocks and get distributed among holders.</p>
+        </div>
+
+        <div className="tok-layout">
+          <div>
+            <div className="tok-card">
+              <h3>Holder Rewards · 100M $VIBE</h3>
+              <p className="sub">10M unlocks monthly · starts Aug 26, 2026</p>
+              <div className="prog"><div className="prog-f" style={{width:'10%'}}/></div>
+              <div className="prog-labs"><span>0M today</span><span>100M total</span></div>
+              <div className="who">
+                <div className="who-r">
+                  <div className="who-ico"><img src="/vibe-logo.png" className="who-img-sq" /></div>
+                  <div className="who-t">$VIBE Holders<span>Hold 5M+ $VIBE to qualify</span></div>
+                </div>
+                <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><TrendingUp color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Allocation Size<span>The more you hold, the larger your allocation</span></div>
+                </div>
+                <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><ShieldCheck color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Max Allocation Cap<span>Set to prevent whale dominance & ensure fair distribution</span></div>
+                </div>
+                <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Calculator color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Allocation Calculation<span>Proportionally calculated based on holding balance</span></div>
+                </div>
+                <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Clock color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Snapshot Schedule<span>Balance snapshot at 00:00 UTC on the day of unlock</span></div>
+                </div>
+                <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Calendar color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Claim Window<span>Stays open for 30 days until the next unlock</span></div>
+                </div>
+                <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><RotateCcw color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Unclaimed Tokens<span>Returned to the community reserved pool</span></div>
+                </div>
+                <Link to="/checker" className="who-r" style={{textDecoration:'none', cursor:'pointer', background:'var(--blue)'}}>
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Check color="#fff" size={20}/></div>
+                  <div className="who-t" style={{color:'#fff'}}>Check your eligibility<span style={{color:'rgba(255,255,255,0.8)'}}>Qualify for the next distribution <ArrowRightCircle size={14} style={{verticalAlign:'middle', marginLeft:4}}/></span></div>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className="sched">
+            <h3>Unlock Schedule</h3>
+            <p className="sub">Aug 2026 &rarr; May 2027</p>
+            <div className="ul-wrap">
+              {UNLOCKS.map((u,i)=>{
+                const isUnlocked = new Date(u.d) <= now;
+                return (
+                  <div key={i} className="ul-r">
+                    <span className="ul-d">{u.d}</span>
+                    <span className="ul-a">{u.a}</span>
+                    <span className="ul-s" style={{ color: isUnlocked ? 'var(--blue)' : 'inherit', fontWeight: isUnlocked ? 'bold' : 'normal' }}>
+                      {isUnlocked ? 'unlocked' : 'locked'}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   );
@@ -649,22 +694,34 @@ function Footer() {
 
 const EVENT_DATA = [
   {
-    id: 1,
-    title: 'Giveaway 1M MC',
-    image: '/event1.png',
-    winners: '50',
+    id: 3,
+    title: '1000 Holders Party',
+    image: '/event3.png',
+    winners: '33 Winners',
     prizePool: 'TBA',
     status: 'ongoing',
+    distribution: 'Not Started',
     link: 'https://x.com/mksvibe'
   },
   {
+    id: 1,
+    title: 'Giveaway $1M Market Cap',
+    image: '/event1.png',
+    winners: '50 Winners',
+    prizePool: 'TBA',
+    status: 'ongoing',
+    distribution: 'Not Started',
+    link: 'https://x.com/mksvibe/status/2083993197861073025'
+  },
+  {
     id: 2,
-    title: 'Base App Bonus',
+    title: 'Base App Welcome Bonus',
     image: '/event2.png',
-    winners: 'N/A',
-    prizePool: '585,682 VIBE',
+    winners: 'TBA',
+    prizePool: '1M $VIBE',
     status: 'ended',
-    link: 'https://x.com/mksvibe'
+    distribution: 'In Progress (58.5%)',
+    link: 'https://x.com/mksvibe/status/2084601445844689003'
   }
 ];
 
@@ -674,85 +731,173 @@ function Events() {
 
   const filteredEvents = EVENT_DATA.filter(e => filter === 'all' || e.status === filter);
 
+  const counts = {
+    all: EVENT_DATA.length,
+    ongoing: EVENT_DATA.filter(e => e.status === 'ongoing').length,
+    ended: EVENT_DATA.filter(e => e.status === 'ended').length
+  };
+
   return (
     <section id="events" className="alt">
       <div className="wrap">
         <div className="sec-head rv" ref={r} style={{ marginBottom: '40px' }}>
-          <h2>Community <span className="bl">Events</span> & Giveaways.</h2>
+          <h2>Community <span className="bl">Events</span> & Rewards.</h2>
           <p className="sec-sub">Track active and past events, participate, and win $VIBE rewards.</p>
         </div>
 
+        {/* High-Contrast Individual Filter Buttons */}
         <div style={{ display: 'flex', gap: '12px', marginBottom: '40px', flexWrap: 'wrap' }}>
-          {['all', 'ongoing', 'ended'].map(f => (
-            <button 
-              key={f}
-              onClick={() => setFilter(f)}
-              style={{
-                padding: '10px 24px',
-                borderRadius: '99px',
-                border: 'none',
-                background: filter === f ? 'var(--blue)' : '#fff',
-                color: filter === f ? '#fff' : 'var(--ink)',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                boxShadow: filter === f ? '0 4px 12px rgba(0, 82, 255, 0.3)' : '0 2px 8px rgba(0,0,0,0.05)',
-                textTransform: 'capitalize',
-                transition: 'all 0.2s'
-              }}
-            >
-              {f === 'all' ? 'All Events' : f}
-            </button>
-          ))}
+          {['all', 'ongoing', 'ended'].map(f => {
+            const label = f === 'all' ? `All Events (${counts.all})` : f === 'ongoing' ? `Ongoing (${counts.ongoing})` : `Ended (${counts.ended})`;
+            const isActive = filter === f;
+            return (
+              <button 
+                key={f}
+                onClick={() => setFilter(f)}
+                style={{
+                  padding: '10px 24px',
+                  borderRadius: '99px',
+                  border: isActive ? '1px solid var(--blue)' : '1px solid #cbd5e1',
+                  background: isActive ? 'var(--blue)' : '#f8fafc',
+                  color: isActive ? '#fff' : 'var(--ink)',
+                  fontWeight: 800,
+                  fontSize: '0.9rem',
+                  cursor: 'pointer',
+                  boxShadow: isActive ? '0 4px 14px rgba(0, 82, 255, 0.35)' : '0 2px 8px rgba(0,0,0,0.06)',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {label}
+              </button>
+            );
+          })}
         </div>
 
-        <div className="events-grid" style={{ display: 'grid', gap: '24px', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 360px), 1fr))' }}>
+        {/* Events Grid */}
+        <div className="events-grid" style={{ display: 'grid', gap: '24px', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 380px), 1fr))' }}>
           {filteredEvents.map(ev => (
-            <div key={ev.id} className="tok-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <div key={ev.id} className="tok-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              {/* Event Image Banner */}
               <div style={{ position: 'relative', background: '#f8fafc', borderBottom: '1px solid var(--borderf)' }}>
                 <img src={ev.image} alt={ev.title} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                
+                {/* Status Pill on Banner Bottom-Right */}
+                <span style={{
+                  position: 'absolute',
+                  bottom: '12px',
+                  right: '12px',
+                  background: ev.status === 'ongoing' ? '#10b981' : '#ef4444',
+                  color: '#fff',
+                  padding: '4px 12px',
+                  borderRadius: '99px',
+                  fontSize: '0.72rem',
+                  fontWeight: 900,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  boxShadow: ev.status === 'ongoing' ? '0 4px 12px rgba(16, 185, 129, 0.4)' : '0 4px 12px rgba(239, 68, 68, 0.4)'
+                }}>
+                  {ev.status === 'ongoing' && <span style={{ width: '6px', height: '6px', background: '#fff', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,255,255,0.8)' }} />}
+                  {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
+                </span>
               </div>
-              <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+
+              {/* Event Body */}
+              <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                 
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '20px' }}>
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
+                {/* Title Header */}
+                <div style={{ marginBottom: '14px' }}>
+                  <h3 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
                 </div>
-                
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', marginBottom: '24px', background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Total Prize Pool</div>
-                    <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.95rem' }}>{ev.prizePool}</div>
+
+                {/* 4 Separate Compact Stat Tiles in 2x2 Grid */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '10px',
+                  marginBottom: '16px'
+                }}>
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px 12px' }}>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
+                      Prize Pool
+                    </div>
+                    <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.9rem' }}>
+                      {ev.prizePool}
+                    </div>
                   </div>
-                  <div style={{ paddingRight: '16px' }}>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Winners</div>
-                    <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.95rem' }}>{ev.winners}</div>
+
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px 12px' }}>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
+                      Winners
+                    </div>
+                    <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.9rem' }}>
+                      {ev.winners}
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Status</div>
+
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px 12px' }}>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
+                      Status
+                    </div>
+                    <div style={{ fontWeight: 800, color: ev.status === 'ongoing' ? '#10b981' : '#ef4444', fontSize: '0.9rem', textTransform: 'capitalize' }}>
+                      {ev.status}
+                    </div>
+                  </div>
+
+                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px 12px' }}>
+                    <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '2px' }}>
+                      Distribution
+                    </div>
                     <div style={{
-                      background: ev.status === 'ongoing' ? '#10b981' : '#ef4444',
-                      padding: '4px 10px', borderRadius: '99px',
-                      display: 'inline-flex', alignItems: 'center', gap: '6px',
-                      fontSize: '0.7rem', fontWeight: '900',
-                      color: '#fff',
-                      boxShadow: ev.status === 'ongoing' ? '0 4px 12px rgba(16, 185, 129, 0.3)' : 'none',
-                      textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '2px'
+                      fontWeight: 800,
+                      color: ev.distribution.startsWith('In Progress') ? 'var(--blue)' : ev.distribution === 'Completed' ? '#10b981' : '#d97706',
+                      fontSize: '0.82rem',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px'
                     }}>
-                      {ev.status === 'ongoing' && <span style={{ width: '6px', height: '6px', background: '#fff', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 6px rgba(255,255,255,0.8)' }}></span>}
-                      {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
+                      {ev.distribution.startsWith('In Progress') && (
+                        <span style={{
+                          width: '6px',
+                          height: '6px',
+                          background: 'var(--blue)',
+                          borderRadius: '50%',
+                          display: 'inline-block',
+                          flexShrink: 0,
+                          boxShadow: '0 0 6px rgba(0, 82, 255, 0.8)'
+                        }} />
+                      )}
+                      {ev.distribution === 'Completed' && '✓ '}
+                      {ev.distribution === 'Not Started' && '⏱ '}
+                      {ev.distribution}
                     </div>
                   </div>
                 </div>
 
-                <a href={ev.link} target="_blank" rel="noreferrer" style={{
-                  marginTop: 'auto',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                  background: 'var(--blue)',
-                  color: '#fff',
-                  padding: '14px', borderRadius: '12px',
-                  fontWeight: 'bold', textDecoration: 'none',
-                  transition: 'opacity 0.2s'
-                }}>
-                  Participate on X <ArrowUpRight size={18} strokeWidth={2.5} />
+                {/* Action Button */}
+                <a 
+                  href={ev.link} 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  style={{
+                    marginTop: 'auto',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    background: 'var(--blue)',
+                    color: '#fff',
+                    padding: '12px',
+                    borderRadius: '10px',
+                    fontWeight: 800,
+                    fontSize: '0.9rem',
+                    textDecoration: 'none',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  {ev.status === 'ongoing' ? 'Participate' : 'View Event'} <ArrowUpRight size={16} strokeWidth={2.5} />
                 </a>
               </div>
             </div>
@@ -805,7 +950,7 @@ export default function App() {
           <Route path="/" element={<><Nav /><LandingPage /><Footer /></>} />
           <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
           <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
-          <Route path="/revenue" element={<StandaloneLayout><CreatorRevenue /></StandaloneLayout>} />
+
           <Route path="/events" element={<StandaloneLayout><Events /></StandaloneLayout>} />
           <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} />
           <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
