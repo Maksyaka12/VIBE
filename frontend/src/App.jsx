@@ -169,6 +169,9 @@ function About() {
               $VIBE is a real Maltipoo Dog who came to B20 to become the ultimate mood maker,
               spread positive energy and immaculate vibes with the based community.
             </p>
+            <p style={{ marginTop: '14px', fontSize: '1.05rem', fontWeight: 700, color: 'var(--ink)' }}>
+              Vibe belongs to only one owner offchain. <span className="bl">$VIBE belongs to everyone onchain.</span>
+            </p>
             <div className="traits">
               <div className="trait"><span className="t-ico">🐶</span><div className="t-txt"><strong>Real Dog Energy</strong>Inspired by a real Maltipoo — the cutest, most vibing dog alive</div></div>
               <div className="trait"><div className="t-ico-img-wrap"><img src="/b20-logo.png" alt="B20" /></div><div className="t-txt"><strong>B20 on Base</strong>Community-driven standard, fully transparent tokenomics</div></div>
