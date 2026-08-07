@@ -162,9 +162,21 @@ function About() {
         <div className="sec-head rv" ref={r1}>
           <h2>More than a meme.<br/>The real <span className="bl">Base Dog</span>.</h2>
           <p className="sec-sub">The fluffiest, most loyal dog onchain & offchain.</p>
-          <div style={{ marginTop: '16px', fontSize: '1.05rem', fontStyle: 'italic', color: 'var(--muted)', lineHeight: '1.5', fontWeight: 500 }}>
-            “Vibe belongs to only one owner offchain.<br/>
-            $VIBE belongs to everyone onchain.”
+          <div style={{
+            marginTop: '20px',
+            background: 'rgba(255, 255, 255, 0.65)',
+            borderLeft: '4px solid var(--blue)',
+            borderRadius: '0 12px 12px 0',
+            padding: '12px 18px',
+            display: 'inline-block',
+            borderTop: '1px solid rgba(0, 82, 255, 0.12)',
+            borderRight: '1px solid rgba(0, 82, 255, 0.12)',
+            borderBottom: '1px solid rgba(0, 82, 255, 0.12)'
+          }}>
+            <p style={{ margin: 0, fontStyle: 'italic', fontSize: '0.95rem', fontWeight: 600, color: 'var(--ink)', lineHeight: '1.5' }}>
+              Vibe belongs to only one owner offchain.<br/>
+              <span style={{ color: 'var(--blue)', fontWeight: 700 }}>$VIBE belongs to everyone onchain.</span>
+            </p>
           </div>
         </div>
         <div className="about-grid">
