@@ -701,7 +701,7 @@ const EVENT_DATA = [
     prizePool: 'TBA',
     status: 'ongoing',
     distribution: 'Not Started',
-    link: 'https://x.com/mksvibe'
+    link: 'https://x.com/vibeB20/status/2085778007960977418'
   },
   {
     id: 1,
