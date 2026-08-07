@@ -355,12 +355,12 @@ function Tokenomics() {
 
                   {/* 70% Reserved for Community */}
                   <circle cx="0" cy="0" r="80" fill="none" stroke="url(#blueGradient)" strokeWidth="18"
-                          strokeLinecap="round" pathLength="100" strokeDasharray="66 100" strokeDashoffset="-2"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="65 100" strokeDashoffset="-2.5"
                           transform="rotate(-90)" filter="url(#blueGlow)" style={{ transition: 'all 0.5s ease' }} />
 
                   {/* 30% Burn */}
                   <circle cx="0" cy="0" r="80" fill="none" stroke="url(#burnGradient)" strokeWidth="18"
-                          strokeLinecap="round" pathLength="100" strokeDasharray="26 100" strokeDashoffset="-71"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="25 100" strokeDashoffset="-72.5"
                           transform="rotate(-90)" filter="url(#redGlow)" style={{ transition: 'all 0.5s ease' }} />
 
                   {/* Left Callout (Burn 30% - Top Left) */}
