@@ -733,7 +733,7 @@ function Events() {
     <section id="events" className="alt">
       <div className="wrap">
         <div className="sec-head rv" ref={r} style={{ marginBottom: '40px' }}>
-          <h2>Community <span className="bl">Events</span> & Giveaways.</h2>
+          <h2>Community <span className="bl">Events</span> & Rewards.</h2>
           <p className="sec-sub">Track active and past events, participate, and win $VIBE rewards.</p>
         </div>
 
