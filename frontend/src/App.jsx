@@ -696,19 +696,25 @@ const EVENT_DATA = [
   {
     id: 1,
     title: 'Giveaway 1M MC',
+    category: 'Community Contest',
     image: '/event1.png',
-    winners: '50',
+    winners: '50 Winners',
     prizePool: 'TBA',
     status: 'ongoing',
+    distribution: 'In Progress',
+    description: 'Participate in our milestone celebration giveaway! Hold $VIBE and join the community on X to win.',
     link: 'https://x.com/mksvibe'
   },
   {
     id: 2,
     title: 'Base App Bonus',
+    category: 'Special Campaign',
     image: '/event2.png',
-    winners: 'N/A',
+    winners: 'All Eligible',
     prizePool: '585,682 VIBE',
     status: 'ended',
+    distribution: 'Completed',
+    description: 'Exclusive bonus distribution for early supporters and active Base App ecosystem users.',
     link: 'https://x.com/mksvibe'
   }
 ];
@@ -727,6 +733,7 @@ function Events() {
           <p className="sec-sub">Track active and past events, participate, and win $VIBE rewards.</p>
         </div>
 
+        {/* Filter Pills */}
         <div style={{ display: 'flex', gap: '12px', marginBottom: '40px', flexWrap: 'wrap' }}>
           {['all', 'ongoing', 'ended'].map(f => (
             <button 
@@ -750,54 +757,125 @@ function Events() {
           ))}
         </div>
 
-        <div className="events-grid" style={{ display: 'grid', gap: '24px', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 360px), 1fr))' }}>
+        {/* Events Grid */}
+        <div className="events-grid" style={{ display: 'grid', gap: '24px', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 380px), 1fr))' }}>
           {filteredEvents.map(ev => (
-            <div key={ev.id} className="tok-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+            <div key={ev.id} className="tok-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              {/* Event Image Banner */}
               <div style={{ position: 'relative', background: '#f8fafc', borderBottom: '1px solid var(--borderf)' }}>
                 <img src={ev.image} alt={ev.title} style={{ width: '100%', height: 'auto', display: 'block' }} />
               </div>
-              <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+
+              {/* Event Body */}
+              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                 
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '20px' }}>
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
+                {/* Category & Status Header */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--blue)', textTransform: 'uppercase', letterSpacing: '0.5px', background: 'rgba(0, 82, 255, 0.08)', padding: '4px 10px', borderRadius: '6px' }}>
+                    {ev.category}
+                  </span>
+
+                  <span style={{
+                    background: ev.status === 'ongoing' ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+                    color: ev.status === 'ongoing' ? '#10b981' : '#ef4444',
+                    padding: '4px 10px',
+                    borderRadius: '99px',
+                    fontSize: '0.75rem',
+                    fontWeight: 900,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                  }}>
+                    {ev.status === 'ongoing' && <span style={{ width: '6px', height: '6px', background: '#10b981', borderRadius: '50%', boxShadow: '0 0 6px rgba(16,185,129,0.8)' }} />}
+                    {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
+                  </span>
                 </div>
-                
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', marginBottom: '24px', background: '#f8fafc', padding: '16px', borderRadius: '12px' }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Total Prize Pool</div>
-                    <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.95rem' }}>{ev.prizePool}</div>
+
+                {/* Title & Description */}
+                <h3 style={{ fontSize: '1.35rem', fontWeight: 800, margin: '0 0 8px 0', color: 'var(--ink)', lineHeight: '1.3' }}>{ev.title}</h3>
+                <p style={{ fontSize: '0.88rem', color: 'var(--muted)', lineHeight: '1.5', margin: '0 0 20px 0' }}>{ev.description}</p>
+
+                {/* Metadata Grid (Happy Hour Style) */}
+                <div style={{
+                  background: '#f8fafc',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '16px',
+                  padding: '16px',
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '14px',
+                  marginBottom: '24px'
+                }}>
+                  <div>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                      Total Prize Pool
+                    </div>
+                    <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.95rem' }}>
+                      {ev.prizePool}
+                    </div>
                   </div>
-                  <div style={{ paddingRight: '16px' }}>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Winners</div>
-                    <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.95rem' }}>{ev.winners}</div>
+
+                  <div>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                      Winners
+                    </div>
+                    <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.95rem' }}>
+                      {ev.winners}
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>Status</div>
-                    <div style={{
-                      background: ev.status === 'ongoing' ? '#10b981' : '#ef4444',
-                      padding: '4px 10px', borderRadius: '99px',
-                      display: 'inline-flex', alignItems: 'center', gap: '6px',
-                      fontSize: '0.7rem', fontWeight: '900',
-                      color: '#fff',
-                      boxShadow: ev.status === 'ongoing' ? '0 4px 12px rgba(16, 185, 129, 0.3)' : 'none',
-                      textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: '2px'
-                    }}>
-                      {ev.status === 'ongoing' && <span style={{ width: '6px', height: '6px', background: '#fff', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 6px rgba(255,255,255,0.8)' }}></span>}
-                      {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
+
+                  <div>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                      Status
+                    </div>
+                    <div style={{ fontWeight: 800, color: ev.status === 'ongoing' ? '#10b981' : 'var(--ink)', fontSize: '0.95rem', textTransform: 'capitalize' }}>
+                      {ev.status}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '4px' }}>
+                      Distribution
+                    </div>
+                    <div>
+                      <span style={{
+                        color: ev.distribution === 'Completed' ? '#10b981' : 'var(--blue)',
+                        fontSize: '0.85rem',
+                        fontWeight: 800,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}>
+                        {ev.distribution === 'Completed' ? '✓ Completed' : '⏳ In Progress'}
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <a href={ev.link} target="_blank" rel="noreferrer" style={{
-                  marginTop: 'auto',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                  background: 'var(--blue)',
-                  color: '#fff',
-                  padding: '14px', borderRadius: '12px',
-                  fontWeight: 'bold', textDecoration: 'none',
-                  transition: 'opacity 0.2s'
-                }}>
-                  Participate on X <ArrowUpRight size={18} strokeWidth={2.5} />
+                {/* Action Button */}
+                <a 
+                  href={ev.link} 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  style={{
+                    marginTop: 'auto',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    background: 'var(--blue)',
+                    color: '#fff',
+                    padding: '14px',
+                    borderRadius: '12px',
+                    fontWeight: 800,
+                    fontSize: '0.95rem',
+                    textDecoration: 'none',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  {ev.status === 'ongoing' ? 'Participate' : 'View Campaign'} <ArrowUpRight size={18} strokeWidth={2.5} />
                 </a>
               </div>
             </div>
