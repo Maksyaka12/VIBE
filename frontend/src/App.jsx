@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift, Users } from 'lucide-react';
+import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift, Users, ShieldCheck, Calculator, Calendar, RotateCcw } from 'lucide-react';
 import { PrivyProvider } from '@privy-io/react-auth';
 import { createPublicClient, http, formatUnits, parseAbiItem } from 'viem';
 import { base } from 'viem/chains';
@@ -416,8 +416,24 @@ function Tokenomics() {
                   <div className="who-t">Allocation Size<span>The more you hold, the larger your allocation</span></div>
                 </div>
                 <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><ShieldCheck color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Max Allocation Cap<span>Set to prevent whale dominance & ensure fair distribution</span></div>
+                </div>
+                <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Calculator color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Allocation Calculation<span>Proportionally calculated based on holding balance</span></div>
+                </div>
+                <div className="who-r">
                   <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Clock color="var(--blue)" size={20}/></div>
                   <div className="who-t">Snapshot Schedule<span>Balance snapshot at 00:00 UTC on the day of unlock</span></div>
+                </div>
+                <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Calendar color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Claim Window<span>Stays open for 30 days until the next unlock</span></div>
+                </div>
+                <div className="who-r">
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><RotateCcw color="var(--blue)" size={20}/></div>
+                  <div className="who-t">Unclaimed Tokens<span>Returned to the community reserved pool</span></div>
                 </div>
                 <Link to="/checker" className="who-r" style={{textDecoration:'none', cursor:'pointer', background:'var(--blue)'}}>
                   <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Check color="#fff" size={20}/></div>
