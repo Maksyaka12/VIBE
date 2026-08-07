@@ -162,15 +162,16 @@ function About() {
         <div className="sec-head rv" ref={r1}>
           <h2>More than a meme.<br/>The real <span className="bl">Base Dog</span>.</h2>
           <p className="sec-sub">The fluffiest, most loyal dog onchain & offchain.</p>
+          <div style={{ marginTop: '16px', fontSize: '1.05rem', fontStyle: 'italic', color: 'var(--muted)', lineHeight: '1.5', fontWeight: 500 }}>
+            “Vibe belongs to only one owner offchain.<br/>
+            $VIBE belongs to everyone onchain.”
+          </div>
         </div>
         <div className="about-grid">
           <div className="rv d1" ref={r2}>
             <p>
               $VIBE is a real Maltipoo Dog who came to B20 to become the ultimate mood maker,
               spread positive energy and immaculate vibes with the based community.
-            </p>
-            <p style={{ marginTop: '14px', fontSize: '1.05rem', fontWeight: 700, color: 'var(--ink)' }}>
-              Vibe belongs to only one owner offchain. <span className="bl">$VIBE belongs to everyone onchain.</span>
             </p>
             <div className="traits">
               <div className="trait"><span className="t-ico">🐶</span><div className="t-txt"><strong>Real Dog Energy</strong>Inspired by a real Maltipoo — the cutest, most vibing dog alive</div></div>
