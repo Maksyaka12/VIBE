@@ -5,6 +5,7 @@ import { PrivyProvider } from '@privy-io/react-auth';
 import { createPublicClient, http, formatUnits, parseAbiItem } from 'viem';
 import { base } from 'viem/chains';
 import Checker from './Checker';
+import VibeVerse from './verse/VibeVerse';
 import './index.css';
 
 const CA      = '0xb200000000000000000000df24ecb8bf51100a01';
@@ -956,6 +957,7 @@ export default function App() {
           <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
           <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
           <Route path="/checker" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
+          <Route path="/verse" element={<VibeVerse />} />
         </Routes>
       </BrowserRouter>
     </PrivyProvider>
