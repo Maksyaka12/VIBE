@@ -25,8 +25,8 @@ const BURN_WALLET = '0x000000000000000000000000000000000000dEaD';
 const DIST_WALLET = '0x3b277d566b4557a53392712b1dc830da5d13ba91';
 
 // Historical data constants (RPC getLogs is impossible for 31M block range on frontend)
-const CONST_TOTAL_BUYBACK = 8441747.16191129 + 585682 + 2822654 + 2070000;
-const CONST_DISTRIBUTED = 585682;
+const CONST_TOTAL_BUYBACK = 8441747.16191129 + 585682 + 2822654 + 2070000 + 422000;
+const CONST_DISTRIBUTED = 920000;
 
 const TICKS = [
   '🐾 $VIBE ON BASE','🐶 THE BASE DOG','✨ B20 STANDARD','💙 GOOD BOY COIN',
@@ -720,7 +720,7 @@ const EVENT_DATA = [
     winners: 'TBA',
     prizePool: '1M $VIBE',
     status: 'ended',
-    distribution: 'In Progress (58.5%)',
+    distribution: 'In Progress (92%)',
     link: 'https://x.com/mksvibe/status/2084601445844689003'
   }
 ];
