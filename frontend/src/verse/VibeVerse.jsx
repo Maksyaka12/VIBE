@@ -222,7 +222,7 @@ function buildRoadSvgPaths(roadNodes, roadEdges) {
 /* ════════════════════════════════════════════════════════════════
    LOCATION OVERLAY / MODAL SYSTEM
 ════════════════════════════════════════════════════════════════ */
-function LocationOverlay({ zone, zones, player, onClose, onNavigate }) {
+function LocationOverlay({ zone, zones, player, onClose, onNavigate, onUpdatePlayer }) {
   const [closing, setClosing] = useState(false);
   const close = useCallback(() => { setClosing(true); setTimeout(onClose, 200); }, [onClose]);
 
@@ -258,7 +258,7 @@ function LocationOverlay({ zone, zones, player, onClose, onNavigate }) {
             <span className="vv-overlay__nav-text">vibehome.dog/verse</span>
           </div>
         </div>
-        <div className="vv-overlay__content">{PANELS[zone]?.(player, { close, onNavigate })}</div>
+        <div className="vv-overlay__content">{PANELS[zone]?.(player, { close, onNavigate, onUpdatePlayer })}</div>
       </div>
     );
   }
@@ -278,7 +278,7 @@ function LocationOverlay({ zone, zones, player, onClose, onNavigate }) {
           <button className="vv-modal-header__close" onClick={close} title="Close (ESC)">✕</button>
         </div>
         <div className="vv-modal-body">
-          {PANELS[zone]?.(player, { close, onNavigate })}
+          {PANELS[zone]?.(player, { close, onNavigate, onUpdatePlayer })}
         </div>
       </div>
     </div>
@@ -894,9 +894,15 @@ export default function VibeVerse() {
               style={{ left: `${posRef.current.x}%`, top: `${posRef.current.y}%` }}
             >
               <div className="vv-character-sprite">
-                <DogSprite walking={isWalking} direction={direction} />
+                <DogSprite walking={isWalking} direction={direction} nftEmoji={player?.nft?.emoji || '👑'} />
               </div>
-              {player && <div className="vv-character__tag">{player.name}.vibe</div>}
+              {player && (
+                <div className="vv-character__tag">
+                  {player.nft ? `${player.nft.emoji} ` : '👑 '}
+                  {player.name}.vibe
+                  {player.nft?.role ? <span style={{ color: '#ffd700', marginLeft: '4px' }}>[{player.nft.role}]</span> : ''}
+                </div>
+              )}
               <div className="vv-character__shadow" />
             </div>
           </div>
@@ -960,6 +966,11 @@ export default function VibeVerse() {
           zones={config.zones}
           player={player}
           onClose={() => setOpenLocation(null)}
+          onNavigate={(targetZone) => setOpenLocation(targetZone)}
+          onUpdatePlayer={(updatedPlayer) => {
+            setPlayer(updatedPlayer);
+            localStorage.setItem('vv_player', JSON.stringify(updatedPlayer));
+          }}
         />
       )}
       {showSetup && <CharacterSetup onComplete={handleSetup} />}

@@ -4,8 +4,10 @@ import { usePrivy } from '@privy-io/react-auth';
 export default function HomePanel({ player, onNavigate }) {
   const { authenticated, user, linkTwitter, login } = usePrivy();
 
-  const isClubMember = true; // Will connect to NFT contract balance check
-  const nftId = '#042 Aviator';
+  const activeNft = player?.nft;
+  const isClubMember = !!activeNft || true; // NFT member check
+  const nftTitle = activeNft ? activeNft.name : 'Vibe Club: #004 Footballer';
+  const nftRole = activeNft ? `${activeNft.role} ${activeNft.emoji}` : 'Footballer ⚽';
   const twitterUsername = user?.twitter?.username ? `@${user.twitter.username}` : null;
   const walletAddress = user?.wallet?.address
     ? `${user.wallet.address.slice(0, 6)}...${user.wallet.address.slice(-4)}`
@@ -33,37 +35,35 @@ export default function HomePanel({ player, onNavigate }) {
               width: '72px',
               height: '72px',
               borderRadius: '10px',
-              border: '3px solid #00f5ff',
+              border: '3px solid #ffd700',
               objectFit: 'cover'
             }}
           />
-          {isClubMember && (
-            <div style={{
-              position: 'absolute',
-              bottom: '-6px',
-              right: '-6px',
-              background: '#ffd700',
-              color: '#000',
-              fontSize: '11px',
-              borderRadius: '6px',
-              padding: '3px 6px',
-              fontWeight: 900,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.5)'
-            }}>
-              👑
-            </div>
-          )}
+          <div style={{
+            position: 'absolute',
+            bottom: '-6px',
+            right: '-6px',
+            background: '#ffd700',
+            color: '#000',
+            fontSize: '14px',
+            borderRadius: '6px',
+            padding: '2px 4px',
+            fontWeight: 900,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.5)'
+          }}>
+            {activeNft?.emoji || '⚽'}
+          </div>
         </div>
 
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: '18px', color: '#00f5ff', marginBottom: '6px', letterSpacing: '0.5px' }}>
+          <div style={{ fontSize: '18px', color: '#00f5ff', marginBottom: '6px', letterSpacing: '0.5px', fontWeight: 900 }}>
             {player?.name || 'sanoki'}<span style={{ color: '#ffd700' }}>.vibe</span>
           </div>
-          <div style={{ fontSize: '11px', color: isClubMember ? '#ffd700' : '#888', marginBottom: '8px' }}>
-            {isClubMember ? `VIBE CLUB MEMBER: ${nftId}` : 'NON-MEMBER'}
+          <div style={{ fontSize: '11px', color: '#ffd700', marginBottom: '4px', fontWeight: 900 }}>
+            {nftTitle}
           </div>
           <div style={{ fontSize: '9px', color: '#aaa' }}>
-            STATUS: <span style={{ color: '#00ff88', fontWeight: 900 }}>ACTIVE VIBER</span>
+            EQUIPPED ROLE SKIN: <span style={{ color: '#00ff88', fontWeight: 900 }}>{nftRole}</span>
           </div>
         </div>
 
