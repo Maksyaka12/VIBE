@@ -2,24 +2,35 @@ import React, { useState } from 'react';
 
 const UNLOCKS = [
   { month: 1, d: 'Aug 26, 2026', a: '10M', status: 'UNLOCKED' },
-  { month: 2, d: 'Sep 25, 2026', a: '20M', status: 'LOCKED' },
-  { month: 3, d: 'Oct 25, 2026', a: '30M', status: 'LOCKED' },
-  { month: 4, d: 'Nov 24, 2026', a: '40M', status: 'LOCKED' },
-  { month: 5, d: 'Dec 24, 2026', a: '50M', status: 'LOCKED' },
-  { month: 6, d: 'Jan 23, 2027', a: '60M', status: 'LOCKED' },
-  { month: 7, d: 'Feb 22, 2027', a: '70M', status: 'LOCKED' },
-  { month: 8, d: 'Mar 24, 2027', a: '80M', status: 'LOCKED' },
-  { month: 9, d: 'Apr 23, 2027', a: '90M', status: 'LOCKED' },
-  { month: 10, d: 'May 23, 2027', a: '100M', status: 'LOCKED' },
+  { month: 2, d: 'Sep 25, 2026', a: '10M', status: 'LOCKED' },
+  { month: 3, d: 'Oct 25, 2026', a: '10M', status: 'LOCKED' },
+  { month: 4, d: 'Nov 24, 2026', a: '10M', status: 'LOCKED' },
+  { month: 5, d: 'Dec 24, 2026', a: '10M', status: 'LOCKED' },
+  { month: 6, d: 'Jan 23, 2027', a: '10M', status: 'LOCKED' },
+  { month: 7, d: 'Feb 22, 2027', a: '10M', status: 'LOCKED' },
+  { month: 8, d: 'Mar 24, 2027', a: '10M', status: 'LOCKED' },
+  { month: 9, d: 'Apr 23, 2027', a: '10M', status: 'LOCKED' },
+  { month: 10, d: 'May 23, 2027', a: '10M', status: 'LOCKED' },
+];
+
+const RULES = [
+  { icon: '🐶', title: '$VIBE Holders', desc: 'Hold 5M+ $VIBE to qualify' },
+  { icon: '📈', title: 'Allocation Size', desc: 'The more you hold, the larger your allocation' },
+  { icon: '🛡️', title: 'Max Allocation Cap', desc: 'Set at 500K max to prevent whale dominance & ensure fair distribution' },
+  { icon: '🧮', title: 'Allocation Calculation', desc: 'Proportionally calculated based on holding balance' },
+  { icon: '⏰', title: 'Snapshot Schedule', desc: 'Balance snapshot at 00:00 UTC on the day of unlock' },
+  { icon: '📅', title: 'Claim Window', desc: 'Stays open for 30 days until the next unlock' },
+  { icon: '🔄', title: 'Unclaimed Tokens', desc: 'Returned to the community reserved pool' },
 ];
 
 export default function HoldersZonePanel({ player, onNavigate }) {
   const [claimedMonth, setClaimedMonth] = useState({});
   const [claiming, setClaiming] = useState(null);
 
-  // Holding balance & eligibility state
-  const vibeBalance = 1250000; // Simulated $VIBE balance
-  const minRequired = 100000;
+  // Simulated balance & 5M holding threshold check
+  const vibeBalance = 6500000; // Simulated $VIBE balance (6.5M)
+  const minRequired = 5000000; // 5M+ $VIBE to qualify
+  const maxCap = 500000;       // 500K max allocation cap
   const isEligible = vibeBalance >= minRequired;
 
   const handleClaim = (m) => {
@@ -46,44 +57,45 @@ export default function HoldersZonePanel({ player, onNavigate }) {
         border: '1.5px solid rgba(255, 215, 0, 0.5)',
         borderRadius: '10px',
         padding: '12px 18px',
-        marginBottom: '18px',
+        marginBottom: '16px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         boxShadow: '0 4px 16px rgba(255, 215, 0, 0.15)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '20px' }}>👑</span>
+          <span style={{ fontSize: '22px' }}>👑</span>
           <div>
-            <div style={{ color: '#ffd700', fontSize: '11px', fontWeight: 900, letterSpacing: '0.5px' }}>
-              VIBE HOLDERS VAULT
+            <div style={{ color: '#ffd700', fontSize: '12px', fontWeight: 900, letterSpacing: '0.5px' }}>
+              HOLDER REWARDS · 100M $VIBE
             </div>
-            <div style={{ fontSize: '9px', color: '#aaa' }}>
-              Exclusive 10-Month Unlock Rewards Program
+            <div style={{ fontSize: '9px', color: '#00f5ff' }}>
+              10M unlocks monthly · Aug 2026 → May 2027
             </div>
           </div>
         </div>
-        <div style={{ fontSize: '10px', color: '#00f5ff', fontWeight: 900 }}>
-          MIN HOLDING: <strong style={{ color: '#fff' }}>100,000 $VIBE</strong>
+        <div style={{ fontSize: '10px', color: '#00ff88', fontWeight: 900 }}>
+          QUALIFY THRESHOLD: <strong style={{ color: '#fff' }}>5M+ $VIBE</strong>
         </div>
       </div>
 
       {/* Two-Column Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.15fr', gap: '18px' }}>
-        {/* LEFT COLUMN: Eligibility Checker & Balance */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          {/* Eligibility Card */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: '16px' }}>
+        {/* LEFT COLUMN: Eligibility Checker & Rules */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {/* Wallet Balance & Eligibility Card */}
           <div style={{
             background: 'rgba(4, 20, 48, 0.95)',
             border: isEligible ? '2px solid #00ff88' : '2px solid #ff4466',
             borderRadius: '12px',
-            padding: '18px',
+            padding: '16px',
             boxShadow: isEligible ? '0 0 20px rgba(0,255,136,0.2)' : '0 0 20px rgba(255,68,102,0.2)'
           }}>
-            <div style={{ fontSize: '10px', color: '#aaa', marginBottom: '6px' }}>
-              WALLET BALANCE
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <span style={{ fontSize: '9px', color: '#aaa' }}>YOUR WALLET BALANCE</span>
+              <span style={{ fontSize: '9px', color: '#00f5ff' }}>MAX CAP: 500K</span>
             </div>
-            <div style={{ fontSize: '18px', color: '#ffd700', fontWeight: 900, marginBottom: '14px' }}>
+            <div style={{ fontSize: '18px', color: '#ffd700', fontWeight: 900, marginBottom: '12px' }}>
               {vibeBalance.toLocaleString()} <span style={{ fontSize: '12px', color: '#00f5ff' }}>$VIBE</span>
             </div>
 
@@ -93,74 +105,81 @@ export default function HoldersZonePanel({ player, onNavigate }) {
               border: isEligible ? '1.5px solid #00ff88' : '1.5px solid #ff4466',
               borderRadius: '8px',
               padding: '10px 14px',
-              marginBottom: '14px',
-              textAlign: 'center'
+              textAlign: 'center',
+              boxShadow: isEligible ? '0 0 12px rgba(0,255,136,0.3)' : 'none'
             }}>
               <div style={{
-                fontSize: '12px',
+                fontSize: '11px',
                 fontWeight: 900,
                 color: isEligible ? '#00ff88' : '#ff4466',
                 letterSpacing: '0.5px'
               }}>
-                {isEligible ? 'YOU ARE ELIGIBLE ✓' : 'YOU ARE NOT ELIGIBLE ✕'}
+                {isEligible ? 'YOU ARE ELIGIBLE FOR NEXT DISTRIBUTION ✓' : 'YOU ARE NOT ELIGIBLE (HOLD 5M+ TO QUALIFY) ✕'}
               </div>
             </div>
 
-            {/* Dynamic Status Action / Information */}
-            {isEligible ? (
-              <div style={{
-                fontSize: '9px',
-                color: '#00f5ff',
-                lineHeight: 1.6,
-                background: 'rgba(0, 245, 255, 0.08)',
-                padding: '10px 12px',
-                borderRadius: '6px',
-                border: '1px solid rgba(0, 245, 255, 0.2)'
-              }}>
-                ℹ️ <strong>ALLOCATION INFO:</strong> Allocation & share weight will be revealed during token unlock distribution.
-              </div>
-            ) : (
-              <div>
-                <div style={{ fontSize: '9px', color: '#aaa', marginBottom: '12px', lineHeight: 1.5 }}>
-                  You need at least 100,000 $VIBE tokens to qualify for monthly rewards unlocks.
-                </div>
-                <button
-                  onClick={handleBuyVibe}
-                  style={{
-                    width: '100%',
-                    fontFamily: 'var(--vv-pixel)',
-                    fontSize: '10px',
-                    background: 'linear-gradient(135deg, #ff007f, #b44dff)',
-                    border: '2px solid #fff',
-                    borderRadius: '8px',
-                    padding: '12px',
-                    color: '#fff',
-                    fontWeight: 900,
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 0 #660044, 0 0 16px rgba(255, 0, 127, 0.5)'
-                  }}
-                >
-                  BUY $VIBE ON O1 EXCHANGE 🚀
-                </button>
-              </div>
+            {!isEligible && (
+              <button
+                onClick={handleBuyVibe}
+                style={{
+                  width: '100%',
+                  marginTop: '10px',
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '10px',
+                  background: 'linear-gradient(135deg, #ff007f, #b44dff)',
+                  border: '2px solid #fff',
+                  borderRadius: '8px',
+                  padding: '10px',
+                  color: '#fff',
+                  fontWeight: 900,
+                  cursor: 'pointer',
+                  boxShadow: '0 3px 0 #660044, 0 0 14px rgba(255, 0, 127, 0.5)'
+                }}
+              >
+                BUY $VIBE ON O1 EXCHANGE 🚀
+              </button>
             )}
           </div>
 
-          {/* Perks Summary Card */}
+          {/* Website Rule Items List */}
           <div style={{
             background: 'rgba(2, 11, 26, 0.85)',
             border: '1.5px solid rgba(0, 245, 255, 0.25)',
             borderRadius: '12px',
-            padding: '16px'
+            padding: '14px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            maxHeight: '260px',
+            overflowY: 'auto'
           }}>
-            <div style={{ color: '#ffd700', fontSize: '10px', fontWeight: 900, marginBottom: '10px' }}>
-              👑 HOLDER REWARDS BENEFITS
+            <div style={{ color: '#ffd700', fontSize: '10px', fontWeight: 900, marginBottom: '4px' }}>
+              📋 ELIGIBILITY & DISTRIBUTION RULES
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '9px', color: '#aaa' }}>
-              <div>• Access to 10-Month Pool Distributions (470M Total $VIBE)</div>
-              <div>• VIP Multipliers in Vibe Bank & o1 Staking Vaults</div>
-              <div>• Exclusive Crown Badge in Vibe Verse World</div>
-            </div>
+            {RULES.map((r) => (
+              <div
+                key={r.title}
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '10px',
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid rgba(255, 255, 255, 0.06)',
+                  borderRadius: '6px',
+                  padding: '8px 10px'
+                }}
+              >
+                <span style={{ fontSize: '14px', flexShrink: 0 }}>{r.icon}</span>
+                <div>
+                  <div style={{ color: '#00f5ff', fontSize: '9px', fontWeight: 900, marginBottom: '2px' }}>
+                    {r.title}
+                  </div>
+                  <div style={{ color: '#ccc', fontSize: '8px', lineHeight: 1.4 }}>
+                    {r.desc}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -183,7 +202,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
             justifyContent: 'space-between',
             alignItems: 'center'
           }}>
-            <span>10-MONTH UNLOCKS TIMELINE</span>
+            <span>UNLOCK SCHEDULE (10 MONTHS)</span>
             <span style={{ color: '#00ff88', fontSize: '9px' }}>1/10 UNLOCKED</span>
           </div>
 
@@ -192,7 +211,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
             display: 'flex',
             flexDirection: 'column',
             gap: '8px',
-            maxHeight: '380px',
+            maxHeight: '430px',
             overflowY: 'auto',
             paddingRight: '4px'
           }}>
