@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import VibeNftCard from '../components/VibeNftCard';
 
 export default function NftMintPanel({ player, onUpdatePlayer }) {
   const [collection, setCollection] = useState([]);
@@ -81,53 +82,21 @@ export default function NftMintPanel({ player, onUpdatePlayer }) {
           justifyContent: 'center',
           boxShadow: '0 6px 20px rgba(0,0,0,0.6)'
         }}>
-          <div style={{ position: 'relative', display: 'inline-block', marginBottom: '14px' }}>
-            <div style={{
-              width: '120px',
-              height: '120px',
-              borderRadius: '12px',
-              border: '3px solid #ffd700',
-              background: '#020b1a',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 20px rgba(255, 215, 0, 0.4)',
-              position: 'relative',
-              overflow: 'hidden'
-            }}>
-              <img
-                src="/vibe-dog.jpg"
-                alt="Genesis NFT"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }}
-              />
-              <div style={{
-                position: 'absolute',
-                top: '8px',
-                right: '8px',
-                fontSize: '22px',
-                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))'
-              }}>
-                {selectedNft?.emoji || '⚽'}
-              </div>
-            </div>
-
+          <div style={{ position: 'relative', marginBottom: '16px' }}>
+            <VibeNftCard nft={selectedNft} width={210} />
             <span style={{
               position: 'absolute',
-              bottom: '-6px',
-              right: '-6px',
+              top: '10px',
+              left: '10px',
               background: '#ff007f',
               color: '#fff',
               fontSize: '9px',
-              padding: '3px 6px',
+              padding: '3px 8px',
               borderRadius: '4px',
-              fontWeight: 900
+              fontWeight: 900,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.5)'
             }}>
-              GENESIS
+              GENESIS NFT
             </span>
           </div>
 
