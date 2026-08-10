@@ -26,7 +26,7 @@ const BURN_WALLET = '0x000000000000000000000000000000000000dEaD';
 const DIST_WALLET = '0x3b277d566b4557a53392712b1dc830da5d13ba91';
 
 // Historical data constants (RPC getLogs is impossible for 31M block range on frontend)
-const CONST_TOTAL_BUYBACK = 8441747.16191129 + 585682 + 2822654;
+const CONST_TOTAL_BUYBACK = 8441747.16191129 + 585682 + 2822654 + 2250000;
 const CONST_DISTRIBUTED = 585682;
 
 const TICKS = [
@@ -944,7 +944,7 @@ function StandaloneLayout({ children }) {
 
 export default function App() {
   return (
-    <PrivyProvider appId="cmrugdvds02q60cl7tegmrnx7" config={{ loginMethods: ['wallet'], appearance: { theme: 'light', accentColor: '#0052ff', logo: 'https://vibehome.dog/vibe-logo.png' } }}>
+    <PrivyProvider appId="cmrugdvds02q60cl7tegmrnx7" config={{ loginMethods: ['wallet', 'twitter'], appearance: { theme: 'dark', accentColor: '#00f5ff', logo: 'https://vibehome.dog/vibe-logo.png' } }}>
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
