@@ -4,7 +4,6 @@ export default function NftMintPanel({ player }) {
   const [minted, setMinted] = useState(false);
   const [minting, setMinting] = useState(false);
 
-  const currentPhase = 'Phase 1: Early Birds';
   const currentPrice = '0.005 ETH';
   const totalMinted = 4;
   const maxSupply = 334;
@@ -26,109 +25,124 @@ export default function NftMintPanel({ player }) {
   ];
 
   return (
-    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '9px' }}>
+    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px' }}>
       {/* Auto Burn Banner */}
       <div style={{
-        background: 'rgba(255, 68, 170, 0.12)',
-        border: '1px solid rgba(255, 68, 170, 0.4)',
-        borderRadius: '8px',
-        padding: '10px 14px',
-        marginBottom: '16px',
+        background: 'rgba(255, 68, 170, 0.15)',
+        border: '1.5px solid rgba(255, 68, 170, 0.5)',
+        borderRadius: '10px',
+        padding: '14px 18px',
+        marginBottom: '20px',
         display: 'flex',
         alignItems: 'center',
-        gap: '10px'
+        gap: '14px',
+        boxShadow: '0 4px 16px rgba(255, 68, 170, 0.2)'
       }}>
-        <span style={{ fontSize: '16px' }}>🔥</span>
-        <div style={{ fontSize: '7.5px', color: '#ff44aa', lineHeight: 1.5 }}>
-          <strong>100% AUTO BUYBACK & BURN:</strong> All ETH raised from minting is instantly swapped on-chain for $VIBE and sent to the <code>0x00...dEaD</code> burner address!
+        <span style={{ fontSize: '24px' }}>🔥</span>
+        <div style={{ fontSize: '10px', color: '#ff44aa', lineHeight: 1.6 }}>
+          <strong style={{ color: '#fff' }}>100% AUTO BUYBACK & BURN:</strong> All ETH raised from minting is instantly swapped on-chain for $VIBE and sent directly to the <code>0x00...dEaD</code> burner address!
         </div>
       </div>
 
-      {/* Main NFT Mint Card */}
-      <div style={{
-        background: 'rgba(4, 20, 48, 0.95)',
-        border: '2px solid #00f5ff',
-        borderRadius: '10px',
-        padding: '16px',
-        textAlign: 'center',
-        marginBottom: '16px'
-      }}>
-        <div style={{ position: 'relative', display: 'inline-block', marginBottom: '10px' }}>
-          <img
-            src="/vibe-dog.jpg"
-            alt="Genesis NFT"
-            style={{
-              width: '80px',
-              height: '80px',
-              borderRadius: '8px',
-              border: '2px solid #ffd700',
-              objectFit: 'cover'
-            }}
-          />
-          <span style={{
-            position: 'absolute',
-            bottom: '-4px',
-            right: '-4px',
-            background: '#ff007f',
-            color: '#fff',
-            fontSize: '7px',
-            padding: '2px 4px',
-            borderRadius: '3px'
-          }}>
-            GENESIS
-          </span>
-        </div>
-
-        <div style={{ fontSize: '11px', color: '#ffd700', marginBottom: '4px' }}>
-          GENESIS PIXEL DOG #{String(totalMinted + 1).padStart(3, '0')}
-        </div>
-        <div style={{ fontSize: '7.5px', color: '#00f5ff', marginBottom: '12px' }}>
-          TOTAL MINTED: {totalMinted} / {maxSupply}
-        </div>
-
-        <button
-          onClick={handleMint}
-          disabled={minting || minted}
-          style={{
-            fontFamily: 'var(--vv-pixel)',
-            fontSize: '9px',
-            background: minted ? '#00ff88' : 'linear-gradient(135deg, #ff44aa, #b44dff)',
-            border: '2px solid #fff',
-            borderRadius: '6px',
-            padding: '10px 20px',
-            color: minted ? '#000' : '#fff',
-            cursor: minted ? 'default' : 'pointer',
-            boxShadow: '0 3px 0 #660044, 0 0 15px rgba(255, 68, 170, 0.5)'
-          }}
-        >
-          {minted ? 'MINTED! ✓' : minting ? 'MINTING ON BASE...' : `MINT FOR ${currentPrice}`}
-        </button>
-      </div>
-
-      {/* Tiered Pricing Phases Tracker */}
-      <div style={{ background: 'rgba(2, 11, 26, 0.8)', border: '1px solid rgba(0, 245, 255, 0.2)', borderRadius: '8px', padding: '12px' }}>
-        <div style={{ color: '#aaa', fontSize: '7px', marginBottom: '8px', textTransform: 'uppercase' }}>
-          MINT PRICING PHASES
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-          {phases.map((p) => (
-            <div
-              key={p.phase}
+      {/* Two Column Layout */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '20px' }}>
+        {/* Left Column: NFT Preview & Mint Button */}
+        <div style={{
+          background: 'rgba(4, 20, 48, 0.95)',
+          border: '2px solid #00f5ff',
+          borderRadius: '12px',
+          padding: '20px',
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 6px 20px rgba(0,0,0,0.6)'
+        }}>
+          <div style={{ position: 'relative', display: 'inline-block', marginBottom: '14px' }}>
+            <img
+              src="/vibe-dog.jpg"
+              alt="Genesis NFT"
               style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '6px 10px',
-                borderRadius: '4px',
-                background: p.active ? 'rgba(0, 245, 255, 0.15)' : 'rgba(255,255,255,0.03)',
-                border: p.active ? '1px solid #00f5ff' : '1px solid rgba(255,255,255,0.05)',
-                color: p.active ? '#ffd700' : p.done ? '#00ff88' : '#888'
+                width: '120px',
+                height: '120px',
+                borderRadius: '12px',
+                border: '3px solid #ffd700',
+                objectFit: 'cover',
+                boxShadow: '0 0 20px rgba(255, 215, 0, 0.4)'
               }}
-            >
-              <span>{p.phase}: {p.label}</span>
-              <span style={{ fontWeight: 900 }}>{p.done ? 'COMPLETED ✓' : p.price}</span>
-            </div>
-          ))}
+            />
+            <span style={{
+              position: 'absolute',
+              bottom: '-6px',
+              right: '-6px',
+              background: '#ff007f',
+              color: '#fff',
+              fontSize: '9px',
+              padding: '3px 6px',
+              borderRadius: '4px',
+              fontWeight: 900
+            }}>
+              GENESIS
+            </span>
+          </div>
+
+          <div style={{ fontSize: '14px', color: '#ffd700', marginBottom: '6px', letterSpacing: '0.5px' }}>
+            GENESIS DOG #{String(totalMinted + 1).padStart(3, '0')}
+          </div>
+          <div style={{ fontSize: '10px', color: '#00f5ff', marginBottom: '16px' }}>
+            MINTED: <strong style={{ color: '#fff' }}>{totalMinted}</strong> / {maxSupply}
+          </div>
+
+          <button
+            onClick={handleMint}
+            disabled={minting || minted}
+            style={{
+              width: '100%',
+              fontFamily: 'var(--vv-pixel)',
+              fontSize: '11px',
+              background: minted ? '#00ff88' : 'linear-gradient(135deg, #ff44aa, #b44dff)',
+              border: '2px solid #fff',
+              borderRadius: '8px',
+              padding: '14px',
+              color: minted ? '#000' : '#fff',
+              fontWeight: 900,
+              cursor: minted ? 'default' : 'pointer',
+              boxShadow: '0 4px 0 #660044, 0 0 20px rgba(255, 68, 170, 0.6)'
+            }}
+          >
+            {minted ? 'MINTED! ✓' : minting ? 'MINTING ON BASE...' : `MINT FOR ${currentPrice}`}
+          </button>
+        </div>
+
+        {/* Right Column: Mint Pricing Phases */}
+        <div style={{ background: 'rgba(2, 11, 26, 0.85)', border: '1.5px solid rgba(0, 245, 255, 0.3)', borderRadius: '12px', padding: '18px' }}>
+          <div style={{ color: '#ffd700', fontSize: '11px', marginBottom: '14px', letterSpacing: '0.5px' }}>
+            MINT PRICING PHASES
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {phases.map((p) => (
+              <div
+                key={p.phase}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '10px 14px',
+                  borderRadius: '6px',
+                  background: p.active ? 'rgba(0, 245, 255, 0.15)' : 'rgba(255,255,255,0.03)',
+                  border: p.active ? '1.5px solid #00f5ff' : '1px solid rgba(255,255,255,0.08)',
+                  color: p.active ? '#ffd700' : p.done ? '#00ff88' : '#aaa'
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: '10px', fontWeight: 900, marginBottom: '2px' }}>{p.phase}</div>
+                  <div style={{ fontSize: '9px', opacity: 0.8 }}>{p.label}</div>
+                </div>
+                <span style={{ fontSize: '10px', fontWeight: 900 }}>{p.done ? 'COMPLETED ✓' : p.price}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

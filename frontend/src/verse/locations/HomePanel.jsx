@@ -12,42 +12,43 @@ export default function HomePanel({ player, onNavigate }) {
     : 'Not Connected';
 
   return (
-    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '9px' }}>
+    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px' }}>
       {/* Header Info Card */}
       <div style={{
         background: 'rgba(4, 20, 48, 0.95)',
         border: '2px solid rgba(0, 245, 255, 0.4)',
-        borderRadius: '10px',
-        padding: '16px',
+        borderRadius: '12px',
+        padding: '20px',
         display: 'flex',
         alignItems: 'center',
-        gap: '16px',
-        marginBottom: '16px',
-        boxShadow: '0 4px 16px rgba(0,0,0,0.6)'
+        gap: '20px',
+        marginBottom: '20px',
+        boxShadow: '0 6px 20px rgba(0,0,0,0.6)'
       }}>
         <div style={{ position: 'relative', flexShrink: 0 }}>
           <img
             src="/vibe-dog.jpg"
             alt="Dog Avatar"
             style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: '8px',
-              border: '2px solid #00f5ff',
+              width: '72px',
+              height: '72px',
+              borderRadius: '10px',
+              border: '3px solid #00f5ff',
               objectFit: 'cover'
             }}
           />
           {isClubMember && (
             <div style={{
               position: 'absolute',
-              bottom: '-4px',
-              right: '-4px',
+              bottom: '-6px',
+              right: '-6px',
               background: '#ffd700',
               color: '#000',
-              fontSize: '8px',
-              borderRadius: '4px',
-              padding: '2px 4px',
-              fontWeight: 900
+              fontSize: '11px',
+              borderRadius: '6px',
+              padding: '3px 6px',
+              fontWeight: 900,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.5)'
             }}>
               👑
             </div>
@@ -55,14 +56,14 @@ export default function HomePanel({ player, onNavigate }) {
         </div>
 
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: '13px', color: '#00f5ff', marginBottom: '4px' }}>
+          <div style={{ fontSize: '18px', color: '#00f5ff', marginBottom: '6px', letterSpacing: '0.5px' }}>
             {player?.name || 'sanoki'}<span style={{ color: '#ffd700' }}>.vibe</span>
           </div>
-          <div style={{ fontSize: '8px', color: isClubMember ? '#ffd700' : '#888', marginBottom: '6px' }}>
+          <div style={{ fontSize: '11px', color: isClubMember ? '#ffd700' : '#888', marginBottom: '8px' }}>
             {isClubMember ? `VIBE CLUB MEMBER: ${nftId}` : 'NON-MEMBER'}
           </div>
-          <div style={{ fontSize: '7px', color: '#aaa' }}>
-            STATUS: <span style={{ color: '#00ff88' }}>ACTIVE VIBER</span>
+          <div style={{ fontSize: '9px', color: '#aaa' }}>
+            STATUS: <span style={{ color: '#00ff88', fontWeight: 900 }}>ACTIVE VIBER</span>
           </div>
         </div>
 
@@ -71,14 +72,14 @@ export default function HomePanel({ player, onNavigate }) {
             onClick={() => onNavigate?.('nft_mint')}
             style={{
               fontFamily: 'var(--vv-pixel)',
-              fontSize: '8px',
+              fontSize: '10px',
               background: 'linear-gradient(135deg, #ff44aa, #b44dff)',
-              border: '1px solid #fff',
-              borderRadius: '6px',
+              border: '2px solid #fff',
+              borderRadius: '8px',
               color: '#fff',
-              padding: '8px 12px',
+              padding: '12px 18px',
               cursor: 'pointer',
-              boxShadow: '0 2px 0 #660044'
+              boxShadow: '0 3px 0 #660044'
             }}
           >
             MINT NFT
@@ -90,18 +91,18 @@ export default function HomePanel({ player, onNavigate }) {
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gap: '12px',
-        marginBottom: '16px'
+        gap: '16px',
+        marginBottom: '20px'
       }}>
         {/* Linked X Account */}
         <div style={{
-          background: 'rgba(2, 11, 26, 0.8)',
-          border: '1px solid rgba(0, 245, 255, 0.2)',
-          borderRadius: '8px',
-          padding: '12px'
+          background: 'rgba(2, 11, 26, 0.85)',
+          border: '1.5px solid rgba(0, 245, 255, 0.25)',
+          borderRadius: '10px',
+          padding: '16px'
         }}>
-          <div style={{ color: '#aaa', fontSize: '7px', marginBottom: '6px' }}>LINKED X ACCOUNT</div>
-          <div style={{ fontSize: '9px', color: twitterUsername ? '#00f5ff' : '#888', marginBottom: '8px' }}>
+          <div style={{ color: '#aaa', fontSize: '9px', marginBottom: '8px', letterSpacing: '0.5px' }}>LINKED X ACCOUNT</div>
+          <div style={{ fontSize: '12px', color: twitterUsername ? '#00f5ff' : '#888', marginBottom: '10px', fontWeight: 900 }}>
             {twitterUsername || 'Not Linked'}
           </div>
           {authenticated && !twitterUsername && (
@@ -109,12 +110,12 @@ export default function HomePanel({ player, onNavigate }) {
               onClick={linkTwitter}
               style={{
                 fontFamily: 'var(--vv-pixel)',
-                fontSize: '7px',
+                fontSize: '9px',
                 background: 'rgba(0, 245, 255, 0.15)',
-                border: '1px solid #00f5ff',
+                border: '1.5px solid #00f5ff',
                 color: '#00f5ff',
-                borderRadius: '4px',
-                padding: '4px 8px',
+                borderRadius: '6px',
+                padding: '6px 12px',
                 cursor: 'pointer'
               }}
             >
@@ -125,16 +126,16 @@ export default function HomePanel({ player, onNavigate }) {
 
         {/* Wallet Address */}
         <div style={{
-          background: 'rgba(2, 11, 26, 0.8)',
-          border: '1px solid rgba(0, 245, 255, 0.2)',
-          borderRadius: '8px',
-          padding: '12px'
+          background: 'rgba(2, 11, 26, 0.85)',
+          border: '1.5px solid rgba(0, 245, 255, 0.25)',
+          borderRadius: '10px',
+          padding: '16px'
         }}>
-          <div style={{ color: '#aaa', fontSize: '7px', marginBottom: '6px' }}>CONNECTED WALLET</div>
-          <div style={{ fontSize: '9px', color: '#ffd700', marginBottom: '4px' }}>
+          <div style={{ color: '#aaa', fontSize: '9px', marginBottom: '8px', letterSpacing: '0.5px' }}>CONNECTED WALLET</div>
+          <div style={{ fontSize: '12px', color: '#ffd700', marginBottom: '6px', fontWeight: 900 }}>
             {walletAddress}
           </div>
-          <div style={{ fontSize: '7px', color: '#00ff88' }}>
+          <div style={{ fontSize: '9px', color: '#00ff88' }}>
             NETWORK: BASE MAINNET
           </div>
         </div>
@@ -142,22 +143,22 @@ export default function HomePanel({ player, onNavigate }) {
 
       {/* Balances Card */}
       <div style={{
-        background: 'rgba(2, 11, 26, 0.8)',
-        border: '1px solid rgba(255, 215, 0, 0.3)',
-        borderRadius: '8px',
-        padding: '12px',
+        background: 'rgba(2, 11, 26, 0.85)',
+        border: '1.5px solid rgba(255, 215, 0, 0.35)',
+        borderRadius: '10px',
+        padding: '18px',
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center'
       }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ color: '#aaa', fontSize: '7px', marginBottom: '4px' }}>$VIBE BALANCE</div>
-          <div style={{ fontSize: '11px', color: '#ffd700', fontWeight: 900 }}>100,000 $VIBE</div>
+          <div style={{ color: '#aaa', fontSize: '9px', marginBottom: '6px' }}>$VIBE BALANCE</div>
+          <div style={{ fontSize: '15px', color: '#ffd700', fontWeight: 900 }}>100,000 $VIBE</div>
         </div>
-        <div style={{ width: '1px', height: '24px', background: 'rgba(255,255,255,0.1)' }} />
+        <div style={{ width: '2px', height: '32px', background: 'rgba(255,255,255,0.12)' }} />
         <div style={{ textAlign: 'center' }}>
-          <div style={{ color: '#aaa', fontSize: '7px', marginBottom: '4px' }}>ETH BALANCE</div>
-          <div style={{ fontSize: '11px', color: '#00f5ff', fontWeight: 900 }}>0.42 ETH</div>
+          <div style={{ color: '#aaa', fontSize: '9px', marginBottom: '6px' }}>ETH BALANCE</div>
+          <div style={{ fontSize: '15px', color: '#00f5ff', fontWeight: 900 }}>0.42 ETH</div>
         </div>
       </div>
     </div>

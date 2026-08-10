@@ -20,21 +20,22 @@ export default function VibeBankPanel({ player }) {
   };
 
   return (
-    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '9px' }}>
+    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px' }}>
       {/* Whale Cap Protection Banner */}
       <div style={{
-        background: 'rgba(0, 245, 255, 0.12)',
-        border: '1px solid rgba(0, 245, 255, 0.4)',
-        borderRadius: '8px',
-        padding: '10px 14px',
-        marginBottom: '16px',
+        background: 'rgba(0, 245, 255, 0.15)',
+        border: '1.5px solid rgba(0, 245, 255, 0.5)',
+        borderRadius: '10px',
+        padding: '14px 18px',
+        marginBottom: '20px',
         display: 'flex',
         alignItems: 'center',
-        gap: '10px'
+        gap: '14px',
+        boxShadow: '0 4px 16px rgba(0, 245, 255, 0.2)'
       }}>
-        <span style={{ fontSize: '16px' }}>🛡️</span>
-        <div style={{ fontSize: '7.5px', color: '#00f5ff', lineHeight: 1.5 }}>
-          <strong>WHALE THRESHOLD CAP ({whaleCapPercent}):</strong> Maximum reward allocation is capped at {maxWhaleStake.toLocaleString()} $VIBE per wallet so large stakers cannot drain the community pool!
+        <span style={{ fontSize: '24px' }}>🛡️</span>
+        <div style={{ fontSize: '10px', color: '#00f5ff', lineHeight: 1.6 }}>
+          <strong style={{ color: '#fff' }}>WHALE THRESHOLD CAP ({whaleCapPercent}):</strong> Maximum reward allocation is capped at {maxWhaleStake.toLocaleString()} $VIBE per wallet so large stakers cannot drain the community pool!
         </div>
       </div>
 
@@ -42,22 +43,22 @@ export default function VibeBankPanel({ player }) {
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr 1fr',
-        gap: '10px',
-        marginBottom: '16px'
+        gap: '14px',
+        marginBottom: '20px'
       }}>
-        <div style={{ background: 'rgba(2, 11, 26, 0.8)', border: '1px solid rgba(0, 245, 255, 0.2)', borderRadius: '8px', padding: '10px', textAlign: 'center' }}>
-          <div style={{ color: '#aaa', fontSize: '7px', marginBottom: '4px' }}>TOTAL STAKED</div>
-          <div style={{ color: '#00f5ff', fontSize: '10px', fontWeight: 900 }}>50.0M $VIBE</div>
+        <div style={{ background: 'rgba(2, 11, 26, 0.85)', border: '1.5px solid rgba(0, 245, 255, 0.3)', borderRadius: '10px', padding: '16px', textAlign: 'center' }}>
+          <div style={{ color: '#aaa', fontSize: '9px', marginBottom: '6px', letterSpacing: '0.5px' }}>TOTAL STAKED</div>
+          <div style={{ color: '#00f5ff', fontSize: '14px', fontWeight: 900 }}>50.0M $VIBE</div>
         </div>
 
-        <div style={{ background: 'rgba(2, 11, 26, 0.8)', border: '1px solid rgba(0, 255, 136, 0.2)', borderRadius: '8px', padding: '10px', textAlign: 'center' }}>
-          <div style={{ color: '#aaa', fontSize: '7px', marginBottom: '4px' }}>YOUR STAKE</div>
-          <div style={{ color: '#00ff88', fontSize: '10px', fontWeight: 900 }}>{activeStaked.toLocaleString()} $VIBE</div>
+        <div style={{ background: 'rgba(2, 11, 26, 0.85)', border: '1.5px solid rgba(0, 255, 136, 0.3)', borderRadius: '10px', padding: '16px', textAlign: 'center' }}>
+          <div style={{ color: '#aaa', fontSize: '9px', marginBottom: '6px', letterSpacing: '0.5px' }}>YOUR STAKE</div>
+          <div style={{ color: '#00ff88', fontSize: '14px', fontWeight: 900 }}>{activeStaked.toLocaleString()} $VIBE</div>
         </div>
 
-        <div style={{ background: 'rgba(2, 11, 26, 0.8)', border: '1px solid rgba(255, 215, 0, 0.2)', borderRadius: '8px', padding: '10px', textAlign: 'center' }}>
-          <div style={{ color: '#aaa', fontSize: '7px', marginBottom: '4px' }}>YOUR POOL SHARE</div>
-          <div style={{ color: '#ffd700', fontSize: '10px', fontWeight: 900 }}>
+        <div style={{ background: 'rgba(2, 11, 26, 0.85)', border: '1.5px solid rgba(255, 215, 0, 0.3)', borderRadius: '10px', padding: '16px', textAlign: 'center' }}>
+          <div style={{ color: '#aaa', fontSize: '9px', marginBottom: '6px', letterSpacing: '0.5px' }}>YOUR POOL SHARE</div>
+          <div style={{ color: '#ffd700', fontSize: '14px', fontWeight: 900 }}>
             {((activeStaked / poolTotal) * 100).toFixed(2)}%
           </div>
         </div>
@@ -67,15 +68,16 @@ export default function VibeBankPanel({ player }) {
       <div style={{
         background: 'rgba(4, 20, 48, 0.95)',
         border: '2px solid #00f5ff',
-        borderRadius: '10px',
-        padding: '14px',
-        marginBottom: '16px'
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '16px',
+        boxShadow: '0 6px 20px rgba(0,0,0,0.6)'
       }}>
-        <div style={{ fontSize: '9px', color: '#ffd700', marginBottom: '10px' }}>
+        <div style={{ fontSize: '12px', color: '#ffd700', marginBottom: '14px', letterSpacing: '0.5px' }}>
           DEPOSIT $VIBE TO STAKING VAULT
         </div>
 
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+        <div style={{ display: 'flex', gap: '10px', marginBottom: '14px' }}>
           <input
             type="number"
             placeholder="Amount $VIBE..."
@@ -84,25 +86,26 @@ export default function VibeBankPanel({ player }) {
             style={{
               flex: 1,
               fontFamily: 'var(--vv-pixel)',
-              fontSize: '8px',
+              fontSize: '11px',
               background: '#020b1a',
-              border: '1px solid rgba(0,245,255,0.4)',
+              border: '1.5px solid rgba(0,245,255,0.4)',
               color: '#fff',
-              borderRadius: '4px',
-              padding: '8px 10px'
+              borderRadius: '6px',
+              padding: '12px 14px'
             }}
           />
           <button
             onClick={() => setStakeAmount('100000')}
             style={{
               fontFamily: 'var(--vv-pixel)',
-              fontSize: '7px',
+              fontSize: '10px',
               background: 'rgba(0,245,255,0.2)',
-              border: '1px solid #00f5ff',
+              border: '1.5px solid #00f5ff',
               color: '#00f5ff',
-              borderRadius: '4px',
-              padding: '8px 10px',
-              cursor: 'pointer'
+              borderRadius: '6px',
+              padding: '12px 16px',
+              cursor: 'pointer',
+              fontWeight: 900
             }}
           >
             100K
@@ -112,22 +115,23 @@ export default function VibeBankPanel({ player }) {
             disabled={staking || !stakeAmount || Number(stakeAmount) <= 0}
             style={{
               fontFamily: 'var(--vv-pixel)',
-              fontSize: '8px',
+              fontSize: '11px',
               background: 'linear-gradient(135deg, #00ff88, #0099aa)',
-              border: '1px solid #fff',
+              border: '2px solid #fff',
               color: '#000',
               fontWeight: 900,
-              borderRadius: '4px',
-              padding: '8px 16px',
-              cursor: 'pointer'
+              borderRadius: '6px',
+              padding: '12px 22px',
+              cursor: 'pointer',
+              boxShadow: '0 3px 0 #006644'
             }}
           >
             {staking ? 'STAKING...' : 'STAKE'}
           </button>
         </div>
 
-        <div style={{ fontSize: '7px', color: '#888' }}>
-          AVAILABLE BALANCE: <span style={{ color: '#00f5ff' }}>1,000,000 $VIBE</span>
+        <div style={{ fontSize: '9px', color: '#aaa' }}>
+          AVAILABLE BALANCE: <span style={{ color: '#00f5ff', fontWeight: 900 }}>1,000,000 $VIBE</span>
         </div>
       </div>
     </div>
