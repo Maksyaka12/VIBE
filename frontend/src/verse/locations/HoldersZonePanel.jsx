@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 
 const UNLOCKS = [
-  { month: 1, d: 'Aug 26, 2026', a: '10M', status: 'UNLOCKED' },
-  { month: 2, d: 'Sep 25, 2026', a: '10M', status: 'LOCKED' },
-  { month: 3, d: 'Oct 25, 2026', a: '10M', status: 'LOCKED' },
-  { month: 4, d: 'Nov 24, 2026', a: '10M', status: 'LOCKED' },
-  { month: 5, d: 'Dec 24, 2026', a: '10M', status: 'LOCKED' },
-  { month: 6, d: 'Jan 23, 2027', a: '10M', status: 'LOCKED' },
-  { month: 7, d: 'Feb 22, 2027', a: '10M', status: 'LOCKED' },
-  { month: 8, d: 'Mar 24, 2027', a: '10M', status: 'LOCKED' },
-  { month: 9, d: 'Apr 23, 2027', a: '10M', status: 'LOCKED' },
-  { month: 10, d: 'May 23, 2027', a: '10M', status: 'LOCKED' },
+  { month: 1, d: 'Aug 26, 2026', a: '10M $VIBE POOL', status: 'UNLOCKED' },
+  { month: 2, d: 'Sep 25, 2026', a: '10M $VIBE POOL', status: 'LOCKED' },
+  { month: 3, d: 'Oct 25, 2026', a: '10M $VIBE POOL', status: 'LOCKED' },
+  { month: 4, d: 'Nov 24, 2026', a: '10M $VIBE POOL', status: 'LOCKED' },
+  { month: 5, d: 'Dec 24, 2026', a: '10M $VIBE POOL', status: 'LOCKED' },
+  { month: 6, d: 'Jan 23, 2027', a: '10M $VIBE POOL', status: 'LOCKED' },
+  { month: 7, d: 'Feb 22, 2027', a: '10M $VIBE POOL', status: 'LOCKED' },
+  { month: 8, d: 'Mar 24, 2027', a: '10M $VIBE POOL', status: 'LOCKED' },
+  { month: 9, d: 'Apr 23, 2027', a: '10M $VIBE POOL', status: 'LOCKED' },
+  { month: 10, d: 'May 23, 2027', a: '10M $VIBE POOL', status: 'LOCKED' },
 ];
 
 const RULES = [
@@ -55,7 +55,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
         background: 'rgba(255, 215, 0, 0.12)',
         border: '1.5px solid rgba(255, 215, 0, 0.5)',
         borderRadius: '10px',
-        padding: '14px 20px',
+        padding: '14px 22px',
         marginBottom: '18px',
         display: 'flex',
         alignItems: 'center',
@@ -64,7 +64,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <span style={{ fontSize: '24px' }}>👑</span>
-          <div style={{ color: '#ffd700', fontSize: '13px', fontWeight: 900, letterSpacing: '0.5px' }}>
+          <div style={{ color: '#ffd700', fontSize: '14px', fontWeight: 900, letterSpacing: '0.5px' }}>
             HOLDER REWARDS · 100M $VIBE
           </div>
         </div>
@@ -73,22 +73,23 @@ export default function HoldersZonePanel({ player, onNavigate }) {
         </div>
       </div>
 
-      {/* Two-Column Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: '20px' }}>
-        {/* LEFT COLUMN: Eligibility Checker & Rules */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      {/* Two-Column Grid (Left: Balance + Rules, Right: Unlock Schedule equal height) */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.25fr', gap: '20px', alignItems: 'stretch' }}>
+        {/* LEFT COLUMN */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', height: '520px' }}>
           {/* Wallet Balance & Eligibility Card */}
           <div style={{
             background: 'rgba(4, 20, 48, 0.95)',
             border: isEligible ? '2px solid #00ff88' : '2px solid #ff4466',
             borderRadius: '12px',
             padding: '18px',
-            boxShadow: isEligible ? '0 0 20px rgba(0,255,136,0.2)' : '0 0 20px rgba(255,68,102,0.2)'
+            boxShadow: isEligible ? '0 0 20px rgba(0,255,136,0.2)' : '0 0 20px rgba(255,68,102,0.2)',
+            flexShrink: 0
           }}>
             <div style={{ fontSize: '10px', color: '#aaa', marginBottom: '6px' }}>
               YOUR WALLET BALANCE
             </div>
-            <div style={{ fontSize: '20px', color: '#ffd700', fontWeight: 900, marginBottom: '14px' }}>
+            <div style={{ fontSize: '22px', color: '#ffd700', fontWeight: 900, marginBottom: '14px' }}>
               {vibeBalance.toLocaleString()} <span style={{ fontSize: '13px', color: '#00f5ff' }}>$VIBE</span>
             </div>
 
@@ -134,7 +135,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
             )}
           </div>
 
-          {/* Website Rule Items List — Extended Height to match Unlock Schedule */}
+          {/* Website Rules List with Retro Pixel Custom Scrollbar */}
           <div style={{
             background: 'rgba(2, 11, 26, 0.85)',
             border: '1.5px solid rgba(0, 245, 255, 0.25)',
@@ -142,49 +143,60 @@ export default function HoldersZonePanel({ player, onNavigate }) {
             padding: '16px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '10px',
-            height: '430px',
-            overflowY: 'auto'
+            flex: 1,
+            overflow: 'hidden'
           }}>
-            <div style={{ color: '#ffd700', fontSize: '11px', fontWeight: 900, marginBottom: '4px' }}>
+            <div style={{ color: '#ffd700', fontSize: '11px', fontWeight: 900, marginBottom: '10px', flexShrink: 0 }}>
               📋 ELIGIBILITY & DISTRIBUTION RULES
             </div>
-            {RULES.map((r) => (
-              <div
-                key={r.title}
-                style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '12px',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.07)',
-                  borderRadius: '8px',
-                  padding: '10px 12px'
-                }}
-              >
-                <span style={{ fontSize: '16px', flexShrink: 0 }}>{r.icon}</span>
-                <div>
-                  <div style={{ color: '#00f5ff', fontSize: '10px', fontWeight: 900, marginBottom: '3px' }}>
-                    {r.title}
-                  </div>
-                  <div style={{ color: '#ccc', fontSize: '9px', lineHeight: 1.4 }}>
-                    {r.desc}
+            <div
+              className="vv-custom-scroll"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                flex: 1,
+                overflowY: 'auto',
+                paddingRight: '6px'
+              }}
+            >
+              {RULES.map((r) => (
+                <div
+                  key={r.title}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '12px',
+                    background: 'rgba(255, 255, 255, 0.03)',
+                    border: '1px solid rgba(255, 255, 255, 0.07)',
+                    borderRadius: '8px',
+                    padding: '10px 12px'
+                  }}
+                >
+                  <span style={{ fontSize: '16px', flexShrink: 0 }}>{r.icon}</span>
+                  <div>
+                    <div style={{ color: '#00f5ff', fontSize: '10px', fontWeight: 900, marginBottom: '3px' }}>
+                      {r.title}
+                    </div>
+                    <div style={{ color: '#ccc', fontSize: '9px', lineHeight: 1.4 }}>
+                      {r.desc}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* RIGHT COLUMN: 10 Unlocks Stacked Vertically */}
+        {/* RIGHT COLUMN: Unlock Schedule (Exact Height Matching Left Column) */}
         <div style={{
           background: 'rgba(2, 11, 26, 0.85)',
           border: '1.5px solid rgba(0, 245, 255, 0.3)',
           borderRadius: '12px',
-          padding: '16px',
+          padding: '18px',
           display: 'flex',
           flexDirection: 'column',
-          height: '575px'
+          height: '520px'
         }}>
           <div style={{
             color: '#ffd700',
@@ -194,21 +206,25 @@ export default function HoldersZonePanel({ player, onNavigate }) {
             letterSpacing: '0.5px',
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
+            flexShrink: 0
           }}>
             <span>UNLOCK SCHEDULE (10 MONTHS)</span>
             <span style={{ color: '#00ff88', fontSize: '10px' }}>1/10 UNLOCKED</span>
           </div>
 
-          {/* Vertical Stack List */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-            flex: 1,
-            overflowY: 'auto',
-            paddingRight: '4px'
-          }}>
+          {/* Vertical Stack List with Retro Pixel Custom Scrollbar */}
+          <div
+            className="vv-custom-scroll"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+              flex: 1,
+              overflowY: 'auto',
+              paddingRight: '6px'
+            }}
+          >
             {UNLOCKS.map((u) => {
               const isUnlocked = u.status === 'UNLOCKED';
               const isClaimed = claimedMonth[u.month];
@@ -217,21 +233,22 @@ export default function HoldersZonePanel({ player, onNavigate }) {
                 <div
                   key={u.month}
                   style={{
-                    padding: '12px 16px',
+                    padding: '12px 18px',
                     borderRadius: '8px',
                     background: isUnlocked ? 'rgba(0, 255, 136, 0.12)' : 'rgba(255,255,255,0.03)',
                     border: isUnlocked ? '1.5px solid #00ff88' : '1px solid rgba(255,255,255,0.08)',
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    whiteSpace: 'nowrap'
                   }}
                 >
-                  <div>
-                    <div style={{ color: isUnlocked ? '#00ff88' : '#aaa', fontSize: '9px', marginBottom: '3px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ color: isUnlocked ? '#00ff88' : '#aaa', fontSize: '10px', fontWeight: 900 }}>
                       UNLOCK #{u.month} · {u.d}
                     </div>
-                    <div style={{ color: '#ffd700', fontSize: '12px', fontWeight: 900 }}>
-                      {u.a} $VIBE POOL
+                    <div style={{ color: '#ffd700', fontSize: '11px', fontWeight: 900 }}>
+                      {u.a}
                     </div>
                   </div>
 
@@ -245,7 +262,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
                         background: isClaimed ? '#444' : 'linear-gradient(135deg, #ffd700, #ff6b35)',
                         border: 'none',
                         borderRadius: '6px',
-                        padding: '8px 16px',
+                        padding: '8px 18px',
                         color: isClaimed ? '#aaa' : '#000',
                         fontWeight: 900,
                         cursor: isClaimed ? 'default' : 'pointer',
@@ -259,7 +276,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
                       fontSize: '9px',
                       color: '#ff007f',
                       background: 'rgba(255,0,127,0.15)',
-                      padding: '5px 10px',
+                      padding: '5px 12px',
                       borderRadius: '4px',
                       fontWeight: 900
                     }}>

@@ -1344,7 +1344,30 @@
 .vv-modal-home        { width: 640px; max-width: 92vw; }
 .vv-modal-nft_mint   { width: 740px; max-width: 92vw; }
 .vv-modal-bank       { width: 840px; max-width: 92vw; }
-.vv-modal-holders    { width: 1040px; max-width: 96vw; max-height: 94vh; }
+.vv-modal-holders    { width: 1180px; max-width: 96vw; max-height: 94vh; }
+
+/* Retro Pixel Custom Scrollbars for Game Modals */
+.vv-custom-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.vv-custom-scroll::-webkit-scrollbar-track {
+  background: rgba(2, 11, 26, 0.9);
+  border-radius: 4px;
+  border: 1px solid rgba(0, 245, 255, 0.15);
+}
+
+.vv-custom-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00f5ff 0%, #0088aa 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(0, 245, 255, 0.6);
+}
+
+.vv-custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ffd700 0%, #ff8800 100%);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
 .vv-modal-poster     { width: 900px; max-width: 92vw; }
 .vv-modal-defi       { width: 640px; max-width: 92vw; }
 .vv-modal-leaderboard { width: 700px; max-width: 92vw; }
