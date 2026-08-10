@@ -4,10 +4,7 @@ import { usePrivy } from '@privy-io/react-auth';
 export default function HomePanel({ player, onNavigate }) {
   const { authenticated, user, linkTwitter, login } = usePrivy();
 
-  const activeNft = player?.nft;
-  const isClubMember = !!activeNft || true; // NFT member check
-  const nftTitle = activeNft ? activeNft.name : 'Vibe Club: #004 Footballer';
-  const nftRole = activeNft ? `${activeNft.role} ${activeNft.emoji}` : 'Footballer ⚽';
+  const isClubMember = true;
   const twitterUsername = user?.twitter?.username ? `@${user.twitter.username}` : null;
   const walletAddress = user?.wallet?.address
     ? `${user.wallet.address.slice(0, 6)}...${user.wallet.address.slice(-4)}`
@@ -35,7 +32,7 @@ export default function HomePanel({ player, onNavigate }) {
               width: '72px',
               height: '72px',
               borderRadius: '10px',
-              border: '3px solid #ffd700',
+              border: '3px solid #00f5ff',
               objectFit: 'cover'
             }}
           />
@@ -45,13 +42,13 @@ export default function HomePanel({ player, onNavigate }) {
             right: '-6px',
             background: '#ffd700',
             color: '#000',
-            fontSize: '14px',
+            fontSize: '12px',
             borderRadius: '6px',
-            padding: '2px 4px',
+            padding: '2px 5px',
             fontWeight: 900,
             boxShadow: '0 2px 8px rgba(0,0,0,0.5)'
           }}>
-            {activeNft?.emoji || '⚽'}
+            👑
           </div>
         </div>
 
@@ -60,10 +57,10 @@ export default function HomePanel({ player, onNavigate }) {
             {player?.name || 'sanoki'}<span style={{ color: '#ffd700' }}>.vibe</span>
           </div>
           <div style={{ fontSize: '11px', color: '#ffd700', marginBottom: '4px', fontWeight: 900 }}>
-            {nftTitle}
+            VIBE CLUB MEMBER
           </div>
           <div style={{ fontSize: '9px', color: '#aaa' }}>
-            EQUIPPED ROLE SKIN: <span style={{ color: '#00ff88', fontWeight: 900 }}>{nftRole}</span>
+            STATUS: <span style={{ color: '#00ff88', fontWeight: 900 }}>ACTIVE VIBER</span>
           </div>
         </div>
 

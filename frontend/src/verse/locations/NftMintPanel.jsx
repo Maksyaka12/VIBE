@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import VibeNftCard from '../components/VibeNftCard';
+import React, { useState } from 'react';
 
-export default function NftMintPanel({ player, onUpdatePlayer }) {
-  const [collection, setCollection] = useState([]);
-  const [selectedNft, setSelectedNft] = useState(null);
+export default function NftMintPanel({ player }) {
   const [minted, setMinted] = useState(false);
   const [minting, setMinting] = useState(false);
 
@@ -11,31 +8,11 @@ export default function NftMintPanel({ player, onUpdatePlayer }) {
   const totalMinted = 4;
   const maxSupply = 334;
 
-  useEffect(() => {
-    fetch('/nft/collection.json')
-      .then((r) => r.json())
-      .then((data) => {
-        setCollection(data);
-        // Default to #004 Footballer for Phase 1 mint preview
-        const defaultNext = data.find((n) => n.tokenId === 4) || data[4];
-        setSelectedNft(defaultNext);
-      })
-      .catch(() => console.error('Failed to load NFT collection'));
-  }, []);
-
   const handleMint = () => {
-    if (!selectedNft) return;
     setMinting(true);
     setTimeout(() => {
       setMinting(false);
       setMinted(true);
-      // Equip NFT to player character!
-      if (onUpdatePlayer) {
-        onUpdatePlayer({
-          ...player,
-          nft: selectedNft
-        });
-      }
     }, 1500);
   };
 
@@ -82,35 +59,38 @@ export default function NftMintPanel({ player, onUpdatePlayer }) {
           justifyContent: 'center',
           boxShadow: '0 6px 20px rgba(0,0,0,0.6)'
         }}>
-          <div style={{ position: 'relative', marginBottom: '16px' }}>
-            <VibeNftCard nft={selectedNft} width={210} />
+          <div style={{ position: 'relative', display: 'inline-block', marginBottom: '14px' }}>
+            <img
+              src="/vibe-dog.jpg"
+              alt="Genesis NFT"
+              style={{
+                width: '130px',
+                height: '130px',
+                borderRadius: '12px',
+                border: '3px solid #ffd700',
+                objectFit: 'cover',
+                boxShadow: '0 0 20px rgba(255, 215, 0, 0.4)'
+              }}
+            />
             <span style={{
               position: 'absolute',
-              top: '10px',
-              left: '10px',
+              bottom: '-6px',
+              right: '-6px',
               background: '#ff007f',
               color: '#fff',
               fontSize: '9px',
-              padding: '3px 8px',
+              padding: '3px 6px',
               borderRadius: '4px',
-              fontWeight: 900,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.5)'
+              fontWeight: 900
             }}>
-              GENESIS NFT
+              GENESIS
             </span>
           </div>
 
-          <div style={{ fontSize: '13px', color: '#ffd700', marginBottom: '4px', letterSpacing: '0.5px', fontWeight: 900 }}>
-            {selectedNft?.name || `Vibe Club: #004 Footballer`}
+          <div style={{ fontSize: '14px', color: '#ffd700', marginBottom: '6px', letterSpacing: '0.5px', fontWeight: 900 }}>
+            GENESIS VIBE NFT
           </div>
-          <div style={{ fontSize: '10px', color: '#00f5ff', marginBottom: '6px' }}>
-            ROLE: <strong style={{ color: '#00ff88' }}>{selectedNft?.role || 'Footballer'} {selectedNft?.emoji || '⚽'}</strong>
-          </div>
-          <div style={{ fontSize: '9px', color: '#aaa', marginBottom: '14px' }}>
-            OUTFIT: {selectedNft?.outfit || 'Number 10 Jersey & Cleats'}
-          </div>
-
-          <div style={{ fontSize: '10px', color: '#aaa', marginBottom: '14px' }}>
+          <div style={{ fontSize: '10px', color: '#00f5ff', marginBottom: '16px' }}>
             TOTAL MINTED: <strong style={{ color: '#fff' }}>{totalMinted}</strong> / {maxSupply}
           </div>
 
@@ -131,7 +111,7 @@ export default function NftMintPanel({ player, onUpdatePlayer }) {
               boxShadow: '0 4px 0 #660044, 0 0 20px rgba(255, 68, 170, 0.6)'
             }}
           >
-            {minted ? 'EQUIPPED IN-GAME! ✓' : minting ? 'MINTING ON BASE...' : `MINT & EQUIP FOR ${currentPrice}`}
+            {minted ? 'MINTED! ✓' : minting ? 'MINTING ON BASE...' : `MINT FOR ${currentPrice}`}
           </button>
         </div>
 

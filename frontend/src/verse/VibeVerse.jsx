@@ -894,13 +894,11 @@ export default function VibeVerse() {
               style={{ left: `${posRef.current.x}%`, top: `${posRef.current.y}%` }}
             >
               <div className="vv-character-sprite">
-                <DogSprite walking={isWalking} direction={direction} nftEmoji={player?.nft?.emoji || '👑'} />
+                <DogSprite walking={isWalking} direction={direction} />
               </div>
               {player && (
                 <div className="vv-character__tag">
-                  {player.nft ? `${player.nft.emoji} ` : '👑 '}
-                  {player.name}.vibe
-                  {player.nft?.role ? <span style={{ color: '#ffd700', marginLeft: '4px' }}>[{player.nft.role}]</span> : ''}
+                  👑 {player.name}.vibe
                 </div>
               )}
               <div className="vv-character__shadow" />

@@ -50,7 +50,7 @@ function loadTransparentImage(src) {
  *   up    walk  → vibe-dog-walk-back.jpg (4-frame back walk)
  *   side  walk  → vibe-dog-walk-side.jpg (4-frame side walk; flip for left)
  */
-export default function DogSprite({ walking = false, direction = 'down', nftEmoji = '👑' }) {
+export default function DogSprite({ walking = false, direction = 'down' }) {
   const canvasRef  = useRef(null);
   const spritesRef = useRef({});   // { frontIdle, backIdle, sideIdle, frontWalk, backWalk, sideWalk }
   const frameRef   = useRef(0);
@@ -150,20 +150,6 @@ export default function DogSprite({ walking = false, direction = 'down', nftEmoj
 
   return (
     <div style={{ position: 'relative', display: 'inline-block' }}>
-      {nftEmoji && (
-        <div style={{
-          position: 'absolute',
-          top: '-12px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          fontSize: '16px',
-          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))',
-          animation: 'vv-badge-float 2s ease-in-out infinite',
-          zIndex: 10
-        }}>
-          {nftEmoji}
-        </div>
-      )}
       <canvas
         ref={canvasRef}
         width={72}
