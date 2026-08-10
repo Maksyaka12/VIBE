@@ -13,11 +13,14 @@ const UNLOCKS = [
   { month: 10, d: 'May 23, 2027', a: '100M', status: 'LOCKED' },
 ];
 
-export default function HoldersZonePanel({ player }) {
+export default function HoldersZonePanel({ player, onNavigate }) {
   const [claimedMonth, setClaimedMonth] = useState({});
   const [claiming, setClaiming] = useState(null);
 
-  const isEligible = true; // 100K+ $VIBE holding check
+  // Holding balance & eligibility state
+  const vibeBalance = 1250000; // Simulated $VIBE balance
+  const minRequired = 100000;
+  const isEligible = vibeBalance >= minRequired;
 
   const handleClaim = (m) => {
     setClaiming(m);
@@ -27,93 +30,233 @@ export default function HoldersZonePanel({ player }) {
     }, 1500);
   };
 
+  const handleBuyVibe = () => {
+    if (onNavigate) {
+      onNavigate('defi');
+    } else {
+      window.open('https://launch.o1.exchange', '_blank');
+    }
+  };
+
   return (
     <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px' }}>
-      {/* Eligibility Checker Status Banner */}
+      {/* Top Banner */}
       <div style={{
-        background: 'rgba(255, 215, 0, 0.15)',
-        border: '2px solid #ffd700',
+        background: 'rgba(255, 215, 0, 0.12)',
+        border: '1.5px solid rgba(255, 215, 0, 0.5)',
         borderRadius: '10px',
-        padding: '16px 20px',
-        marginBottom: '20px',
+        padding: '12px 18px',
+        marginBottom: '18px',
         display: 'flex',
-        justifyContent: 'space-between',
         alignItems: 'center',
-        boxShadow: '0 4px 16px rgba(255, 215, 0, 0.2)'
+        justifyContent: 'space-between',
+        boxShadow: '0 4px 16px rgba(255, 215, 0, 0.15)'
       }}>
-        <div>
-          <div style={{ color: '#ffd700', fontSize: '12px', marginBottom: '6px', letterSpacing: '0.5px' }}>
-            👑 ELIGIBILITY CHECKER STATUS
-          </div>
-          <div style={{ fontSize: '10px', color: isEligible ? '#00ff88' : '#ff007f', fontWeight: 900 }}>
-            {isEligible ? `QUALIFIED (HOLDING 100,000 $VIBE)` : `NOT ELIGIBLE (NEEDS 100K $VIBE)`}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '20px' }}>👑</span>
+          <div>
+            <div style={{ color: '#ffd700', fontSize: '11px', fontWeight: 900, letterSpacing: '0.5px' }}>
+              VIBE HOLDERS VAULT
+            </div>
+            <div style={{ fontSize: '9px', color: '#aaa' }}>
+              Exclusive 10-Month Unlock Rewards Program
+            </div>
           </div>
         </div>
-        <div style={{ fontSize: '13px', color: '#00f5ff', fontWeight: 900, letterSpacing: '0.5px' }}>
-          10-MONTH UNLOCKS
+        <div style={{ fontSize: '10px', color: '#00f5ff', fontWeight: 900 }}>
+          MIN HOLDING: <strong style={{ color: '#fff' }}>100,000 $VIBE</strong>
         </div>
       </div>
 
-      {/* 10-Month Unlocks Timeline */}
-      <div style={{ background: 'rgba(2, 11, 26, 0.85)', border: '1.5px solid rgba(0, 245, 255, 0.3)', borderRadius: '10px', padding: '18px' }}>
-        <div style={{ color: '#aaa', fontSize: '10px', marginBottom: '14px', letterSpacing: '0.5px' }}>
-          MONTHLY REWARDS UNLOCK TIMELINE
+      {/* Two-Column Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.15fr', gap: '18px' }}>
+        {/* LEFT COLUMN: Eligibility Checker & Balance */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {/* Eligibility Card */}
+          <div style={{
+            background: 'rgba(4, 20, 48, 0.95)',
+            border: isEligible ? '2px solid #00ff88' : '2px solid #ff4466',
+            borderRadius: '12px',
+            padding: '18px',
+            boxShadow: isEligible ? '0 0 20px rgba(0,255,136,0.2)' : '0 0 20px rgba(255,68,102,0.2)'
+          }}>
+            <div style={{ fontSize: '10px', color: '#aaa', marginBottom: '6px' }}>
+              WALLET BALANCE
+            </div>
+            <div style={{ fontSize: '18px', color: '#ffd700', fontWeight: 900, marginBottom: '14px' }}>
+              {vibeBalance.toLocaleString()} <span style={{ fontSize: '12px', color: '#00f5ff' }}>$VIBE</span>
+            </div>
+
+            {/* Status Badge */}
+            <div style={{
+              background: isEligible ? 'rgba(0, 255, 136, 0.15)' : 'rgba(255, 68, 102, 0.15)',
+              border: isEligible ? '1.5px solid #00ff88' : '1.5px solid #ff4466',
+              borderRadius: '8px',
+              padding: '10px 14px',
+              marginBottom: '14px',
+              textAlign: 'center'
+            }}>
+              <div style={{
+                fontSize: '12px',
+                fontWeight: 900,
+                color: isEligible ? '#00ff88' : '#ff4466',
+                letterSpacing: '0.5px'
+              }}>
+                {isEligible ? 'YOU ARE ELIGIBLE ✓' : 'YOU ARE NOT ELIGIBLE ✕'}
+              </div>
+            </div>
+
+            {/* Dynamic Status Action / Information */}
+            {isEligible ? (
+              <div style={{
+                fontSize: '9px',
+                color: '#00f5ff',
+                lineHeight: 1.6,
+                background: 'rgba(0, 245, 255, 0.08)',
+                padding: '10px 12px',
+                borderRadius: '6px',
+                border: '1px solid rgba(0, 245, 255, 0.2)'
+              }}>
+                ℹ️ <strong>ALLOCATION INFO:</strong> Allocation & share weight will be revealed during token unlock distribution.
+              </div>
+            ) : (
+              <div>
+                <div style={{ fontSize: '9px', color: '#aaa', marginBottom: '12px', lineHeight: 1.5 }}>
+                  You need at least 100,000 $VIBE tokens to qualify for monthly rewards unlocks.
+                </div>
+                <button
+                  onClick={handleBuyVibe}
+                  style={{
+                    width: '100%',
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '10px',
+                    background: 'linear-gradient(135deg, #ff007f, #b44dff)',
+                    border: '2px solid #fff',
+                    borderRadius: '8px',
+                    padding: '12px',
+                    color: '#fff',
+                    fontWeight: 900,
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 0 #660044, 0 0 16px rgba(255, 0, 127, 0.5)'
+                  }}
+                >
+                  BUY $VIBE ON O1 EXCHANGE 🚀
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Perks Summary Card */}
+          <div style={{
+            background: 'rgba(2, 11, 26, 0.85)',
+            border: '1.5px solid rgba(0, 245, 255, 0.25)',
+            borderRadius: '12px',
+            padding: '16px'
+          }}>
+            <div style={{ color: '#ffd700', fontSize: '10px', fontWeight: 900, marginBottom: '10px' }}>
+              👑 HOLDER REWARDS BENEFITS
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '9px', color: '#aaa' }}>
+              <div>• Access to 10-Month Pool Distributions (470M Total $VIBE)</div>
+              <div>• VIP Multipliers in Vibe Bank & o1 Staking Vaults</div>
+              <div>• Exclusive Crown Badge in Vibe Verse World</div>
+            </div>
+          </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-          {UNLOCKS.map((u) => {
-            const isUnlocked = u.status === 'UNLOCKED';
-            const isClaimed = claimedMonth[u.month];
+        {/* RIGHT COLUMN: 10 Unlocks Stacked Vertically */}
+        <div style={{
+          background: 'rgba(2, 11, 26, 0.85)',
+          border: '1.5px solid rgba(0, 245, 255, 0.3)',
+          borderRadius: '12px',
+          padding: '16px',
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
+          <div style={{
+            color: '#ffd700',
+            fontSize: '10px',
+            fontWeight: 900,
+            marginBottom: '12px',
+            letterSpacing: '0.5px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <span>10-MONTH UNLOCKS TIMELINE</span>
+            <span style={{ color: '#00ff88', fontSize: '9px' }}>1/10 UNLOCKED</span>
+          </div>
 
-            return (
-              <div
-                key={u.month}
-                style={{
-                  padding: '14px 16px',
-                  borderRadius: '8px',
-                  background: isUnlocked ? 'rgba(0, 255, 136, 0.1)' : 'rgba(255,255,255,0.03)',
-                  border: isUnlocked ? '1.5px solid #00ff88' : '1px solid rgba(255,255,255,0.08)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}
-              >
-                <div>
-                  <div style={{ color: isUnlocked ? '#00ff88' : '#aaa', fontSize: '10px', marginBottom: '4px' }}>
-                    UNLOCK #{u.month} · {u.d}
+          {/* Vertical Stack List */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            maxHeight: '380px',
+            overflowY: 'auto',
+            paddingRight: '4px'
+          }}>
+            {UNLOCKS.map((u) => {
+              const isUnlocked = u.status === 'UNLOCKED';
+              const isClaimed = claimedMonth[u.month];
+
+              return (
+                <div
+                  key={u.month}
+                  style={{
+                    padding: '10px 14px',
+                    borderRadius: '8px',
+                    background: isUnlocked ? 'rgba(0, 255, 136, 0.12)' : 'rgba(255,255,255,0.03)',
+                    border: isUnlocked ? '1.5px solid #00ff88' : '1px solid rgba(255,255,255,0.08)',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}
+                >
+                  <div>
+                    <div style={{ color: isUnlocked ? '#00ff88' : '#aaa', fontSize: '9px', marginBottom: '2px' }}>
+                      UNLOCK #{u.month} · {u.d}
+                    </div>
+                    <div style={{ color: '#ffd700', fontSize: '11px', fontWeight: 900 }}>
+                      {u.a} $VIBE POOL
+                    </div>
                   </div>
-                  <div style={{ color: '#ffd700', fontSize: '13px', fontWeight: 900 }}>
-                    {u.a} $VIBE POOL
-                  </div>
+
+                  {isUnlocked ? (
+                    <button
+                      onClick={() => handleClaim(u.month)}
+                      disabled={isClaimed || claiming === u.month || !isEligible}
+                      style={{
+                        fontFamily: 'var(--vv-pixel)',
+                        fontSize: '9px',
+                        background: isClaimed ? '#444' : 'linear-gradient(135deg, #ffd700, #ff6b35)',
+                        border: 'none',
+                        borderRadius: '6px',
+                        padding: '6px 14px',
+                        color: isClaimed ? '#aaa' : '#000',
+                        fontWeight: 900,
+                        cursor: isClaimed ? 'default' : 'pointer',
+                        boxShadow: isClaimed ? 'none' : '0 2px 0 #cc8800'
+                      }}
+                    >
+                      {isClaimed ? 'CLAIMED ✓' : claiming === u.month ? 'CLAIMING...' : 'CLAIM'}
+                    </button>
+                  ) : (
+                    <span style={{
+                      fontSize: '8px',
+                      color: '#ff007f',
+                      background: 'rgba(255,0,127,0.15)',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontWeight: 900
+                    }}>
+                      🔒 LOCKED
+                    </span>
+                  )}
                 </div>
-
-                {isUnlocked ? (
-                  <button
-                    onClick={() => handleClaim(u.month)}
-                    disabled={isClaimed || claiming === u.month}
-                    style={{
-                      fontFamily: 'var(--vv-pixel)',
-                      fontSize: '9px',
-                      background: isClaimed ? '#444' : 'linear-gradient(135deg, #ffd700, #ff6b35)',
-                      border: 'none',
-                      borderRadius: '6px',
-                      padding: '8px 14px',
-                      color: isClaimed ? '#aaa' : '#000',
-                      fontWeight: 900,
-                      cursor: isClaimed ? 'default' : 'pointer',
-                      boxShadow: isClaimed ? 'none' : '0 3px 0 #cc8800'
-                    }}
-                  >
-                    {isClaimed ? 'CLAIMED ✓' : claiming === u.month ? 'CLAIMING...' : 'CLAIM SHARE'}
-                  </button>
-                ) : (
-                  <span style={{ fontSize: '9px', color: '#ff007f', background: 'rgba(255,0,127,0.15)', padding: '4px 8px', borderRadius: '4px', fontWeight: 900 }}>
-                    🔒 LOCKED
-                  </span>
-                )}
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
