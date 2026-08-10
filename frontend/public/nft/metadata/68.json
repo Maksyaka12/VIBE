@@ -1,0 +1,27 @@
+{
+  "name": "$VIBE NFT #68",
+  "description": "Genesis Vibe Club NFT #68 on Base",
+  "image": "ipfs://YOUR_CID/68.png",
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Gold"
+    },
+    {
+      "trait_type": "Base",
+      "value": "Original Maltipoo"
+    },
+    {
+      "trait_type": "Hat",
+      "value": "None"
+    },
+    {
+      "trait_type": "Eyewear",
+      "value": "None"
+    },
+    {
+      "trait_type": "Neck",
+      "value": "Bow_Tie"
+    }
+  ]
+}

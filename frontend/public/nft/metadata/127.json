@@ -1,0 +1,27 @@
+{
+  "name": "$VIBE NFT #127",
+  "description": "Genesis Vibe Club NFT #127 on Base",
+  "image": "ipfs://YOUR_CID/127.png",
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Neon"
+    },
+    {
+      "trait_type": "Base",
+      "value": "Original Maltipoo"
+    },
+    {
+      "trait_type": "Hat",
+      "value": "Top_Hat"
+    },
+    {
+      "trait_type": "Eyewear",
+      "value": "Cyber_Visor"
+    },
+    {
+      "trait_type": "Neck",
+      "value": "Gold_Chain"
+    }
+  ]
+}
