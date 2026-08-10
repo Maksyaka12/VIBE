@@ -79,7 +79,9 @@ export default function HoldersZonePanel({ player, onNavigate }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', height: '520px' }}>
           {/* Wallet Balance & Eligibility Card */}
           <div style={{
-            background: 'rgba(4, 20, 48, 0.95)',
+            background: 'rgba(4, 20, 48, 0.6)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
             border: isEligible ? '2px solid #00ff88' : '2px solid #ff4466',
             borderRadius: '12px',
             padding: '18px',
@@ -137,7 +139,9 @@ export default function HoldersZonePanel({ player, onNavigate }) {
 
           {/* Website Rules List with Retro Pixel Custom Scrollbar */}
           <div style={{
-            background: 'rgba(2, 11, 26, 0.85)',
+            background: 'rgba(2, 11, 26, 0.45)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
             border: '1.5px solid rgba(0, 245, 255, 0.25)',
             borderRadius: '12px',
             padding: '16px',
@@ -167,8 +171,8 @@ export default function HoldersZonePanel({ player, onNavigate }) {
                     display: 'flex',
                     alignItems: 'flex-start',
                     gap: '12px',
-                    background: 'rgba(255, 255, 255, 0.03)',
-                    border: '1px solid rgba(255, 255, 255, 0.07)',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
                     borderRadius: '8px',
                     padding: '10px 12px'
                   }}
@@ -190,7 +194,9 @@ export default function HoldersZonePanel({ player, onNavigate }) {
 
         {/* RIGHT COLUMN: Unlock Schedule (Exact Height Matching Left Column) */}
         <div style={{
-          background: 'rgba(2, 11, 26, 0.85)',
+          background: 'rgba(2, 11, 26, 0.45)',
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
           border: '1.5px solid rgba(0, 245, 255, 0.3)',
           borderRadius: '12px',
           padding: '18px',
@@ -235,7 +241,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
                   style={{
                     padding: '12px 18px',
                     borderRadius: '8px',
-                    background: isUnlocked ? 'rgba(0, 255, 136, 0.12)' : 'rgba(255,255,255,0.03)',
+                    background: isUnlocked ? 'rgba(0, 255, 136, 0.15)' : 'rgba(255,255,255,0.04)',
                     border: isUnlocked ? '1.5px solid #00ff88' : '1px solid rgba(255,255,255,0.08)',
                     display: 'flex',
                     justifyContent: 'space-between',
