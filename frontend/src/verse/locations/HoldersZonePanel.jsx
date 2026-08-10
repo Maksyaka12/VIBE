@@ -38,7 +38,7 @@ export default function HoldersZonePanel({ player }) {
         padding: '12px 16px',
         marginBottom: '16px',
         display: 'flex',
-        justify-content: 'space-between',
+        justifyContent: 'space-between',
         alignItems: 'center'
       }}>
         <div>
@@ -74,7 +74,7 @@ export default function HoldersZonePanel({ player }) {
                   background: isUnlocked ? 'rgba(0, 255, 136, 0.08)' : 'rgba(255,255,255,0.02)',
                   border: isUnlocked ? '1px solid #00ff88' : '1px solid rgba(255,255,255,0.08)',
                   display: 'flex',
-                  justify-content: 'space-between',
+                  justifyContent: 'space-between',
                   alignItems: 'center'
                 }}
               >

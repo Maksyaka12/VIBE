@@ -147,7 +147,7 @@ export default function HomePanel({ player, onNavigate }) {
         borderRadius: '8px',
         padding: '12px',
         display: 'flex',
-        justify-content: 'space-around',
+        justifyContent: 'space-around',
         alignItems: 'center'
       }}>
         <div style={{ textAlign: 'center' }}>
