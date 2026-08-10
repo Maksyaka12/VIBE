@@ -30,7 +30,6 @@ export default function HoldersZonePanel({ player, onNavigate }) {
   // Simulated balance & 5M holding threshold check
   const vibeBalance = 6500000; // Simulated $VIBE balance (6.5M)
   const minRequired = 5000000; // 5M+ $VIBE to qualify
-  const maxCap = 500000;       // 500K max allocation cap
   const isEligible = vibeBalance >= minRequired;
 
   const handleClaim = (m) => {
@@ -56,65 +55,59 @@ export default function HoldersZonePanel({ player, onNavigate }) {
         background: 'rgba(255, 215, 0, 0.12)',
         border: '1.5px solid rgba(255, 215, 0, 0.5)',
         borderRadius: '10px',
-        padding: '12px 18px',
-        marginBottom: '16px',
+        padding: '14px 20px',
+        marginBottom: '18px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         boxShadow: '0 4px 16px rgba(255, 215, 0, 0.15)'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ fontSize: '22px' }}>👑</span>
-          <div>
-            <div style={{ color: '#ffd700', fontSize: '12px', fontWeight: 900, letterSpacing: '0.5px' }}>
-              HOLDER REWARDS · 100M $VIBE
-            </div>
-            <div style={{ fontSize: '9px', color: '#00f5ff' }}>
-              10M unlocks monthly · Aug 2026 → May 2027
-            </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{ fontSize: '24px' }}>👑</span>
+          <div style={{ color: '#ffd700', fontSize: '13px', fontWeight: 900, letterSpacing: '0.5px' }}>
+            HOLDER REWARDS · 100M $VIBE
           </div>
         </div>
-        <div style={{ fontSize: '10px', color: '#00ff88', fontWeight: 900 }}>
+        <div style={{ fontSize: '11px', color: '#00ff88', fontWeight: 900 }}>
           QUALIFY THRESHOLD: <strong style={{ color: '#fff' }}>5M+ $VIBE</strong>
         </div>
       </div>
 
       {/* Two-Column Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: '16px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: '20px' }}>
         {/* LEFT COLUMN: Eligibility Checker & Rules */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {/* Wallet Balance & Eligibility Card */}
           <div style={{
             background: 'rgba(4, 20, 48, 0.95)',
             border: isEligible ? '2px solid #00ff88' : '2px solid #ff4466',
             borderRadius: '12px',
-            padding: '16px',
+            padding: '18px',
             boxShadow: isEligible ? '0 0 20px rgba(0,255,136,0.2)' : '0 0 20px rgba(255,68,102,0.2)'
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-              <span style={{ fontSize: '9px', color: '#aaa' }}>YOUR WALLET BALANCE</span>
-              <span style={{ fontSize: '9px', color: '#00f5ff' }}>MAX CAP: 500K</span>
+            <div style={{ fontSize: '10px', color: '#aaa', marginBottom: '6px' }}>
+              YOUR WALLET BALANCE
             </div>
-            <div style={{ fontSize: '18px', color: '#ffd700', fontWeight: 900, marginBottom: '12px' }}>
-              {vibeBalance.toLocaleString()} <span style={{ fontSize: '12px', color: '#00f5ff' }}>$VIBE</span>
+            <div style={{ fontSize: '20px', color: '#ffd700', fontWeight: 900, marginBottom: '14px' }}>
+              {vibeBalance.toLocaleString()} <span style={{ fontSize: '13px', color: '#00f5ff' }}>$VIBE</span>
             </div>
 
-            {/* Status Badge */}
+            {/* Clean Status Badge */}
             <div style={{
               background: isEligible ? 'rgba(0, 255, 136, 0.15)' : 'rgba(255, 68, 102, 0.15)',
               border: isEligible ? '1.5px solid #00ff88' : '1.5px solid #ff4466',
               borderRadius: '8px',
-              padding: '10px 14px',
+              padding: '12px 16px',
               textAlign: 'center',
-              boxShadow: isEligible ? '0 0 12px rgba(0,255,136,0.3)' : 'none'
+              boxShadow: isEligible ? '0 0 14px rgba(0,255,136,0.3)' : 'none'
             }}>
               <div style={{
-                fontSize: '11px',
+                fontSize: '12px',
                 fontWeight: 900,
                 color: isEligible ? '#00ff88' : '#ff4466',
                 letterSpacing: '0.5px'
               }}>
-                {isEligible ? 'YOU ARE ELIGIBLE FOR NEXT DISTRIBUTION ✓' : 'YOU ARE NOT ELIGIBLE (HOLD 5M+ TO QUALIFY) ✕'}
+                {isEligible ? 'YOU ARE ELIGIBLE ✓' : 'YOU ARE NOT ELIGIBLE ✕'}
               </div>
             </div>
 
@@ -123,13 +116,13 @@ export default function HoldersZonePanel({ player, onNavigate }) {
                 onClick={handleBuyVibe}
                 style={{
                   width: '100%',
-                  marginTop: '10px',
+                  marginTop: '12px',
                   fontFamily: 'var(--vv-pixel)',
-                  fontSize: '10px',
+                  fontSize: '11px',
                   background: 'linear-gradient(135deg, #ff007f, #b44dff)',
                   border: '2px solid #fff',
                   borderRadius: '8px',
-                  padding: '10px',
+                  padding: '12px',
                   color: '#fff',
                   fontWeight: 900,
                   cursor: 'pointer',
@@ -141,19 +134,19 @@ export default function HoldersZonePanel({ player, onNavigate }) {
             )}
           </div>
 
-          {/* Website Rule Items List */}
+          {/* Website Rule Items List — Extended Height to match Unlock Schedule */}
           <div style={{
             background: 'rgba(2, 11, 26, 0.85)',
             border: '1.5px solid rgba(0, 245, 255, 0.25)',
             borderRadius: '12px',
-            padding: '14px',
+            padding: '16px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px',
-            maxHeight: '260px',
+            gap: '10px',
+            height: '430px',
             overflowY: 'auto'
           }}>
-            <div style={{ color: '#ffd700', fontSize: '10px', fontWeight: 900, marginBottom: '4px' }}>
+            <div style={{ color: '#ffd700', fontSize: '11px', fontWeight: 900, marginBottom: '4px' }}>
               📋 ELIGIBILITY & DISTRIBUTION RULES
             </div>
             {RULES.map((r) => (
@@ -162,19 +155,19 @@ export default function HoldersZonePanel({ player, onNavigate }) {
                 style={{
                   display: 'flex',
                   alignItems: 'flex-start',
-                  gap: '10px',
+                  gap: '12px',
                   background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.06)',
-                  borderRadius: '6px',
-                  padding: '8px 10px'
+                  border: '1px solid rgba(255, 255, 255, 0.07)',
+                  borderRadius: '8px',
+                  padding: '10px 12px'
                 }}
               >
-                <span style={{ fontSize: '14px', flexShrink: 0 }}>{r.icon}</span>
+                <span style={{ fontSize: '16px', flexShrink: 0 }}>{r.icon}</span>
                 <div>
-                  <div style={{ color: '#00f5ff', fontSize: '9px', fontWeight: 900, marginBottom: '2px' }}>
+                  <div style={{ color: '#00f5ff', fontSize: '10px', fontWeight: 900, marginBottom: '3px' }}>
                     {r.title}
                   </div>
-                  <div style={{ color: '#ccc', fontSize: '8px', lineHeight: 1.4 }}>
+                  <div style={{ color: '#ccc', fontSize: '9px', lineHeight: 1.4 }}>
                     {r.desc}
                   </div>
                 </div>
@@ -190,28 +183,29 @@ export default function HoldersZonePanel({ player, onNavigate }) {
           borderRadius: '12px',
           padding: '16px',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          height: '575px'
         }}>
           <div style={{
             color: '#ffd700',
-            fontSize: '10px',
+            fontSize: '11px',
             fontWeight: 900,
-            marginBottom: '12px',
+            marginBottom: '14px',
             letterSpacing: '0.5px',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center'
           }}>
             <span>UNLOCK SCHEDULE (10 MONTHS)</span>
-            <span style={{ color: '#00ff88', fontSize: '9px' }}>1/10 UNLOCKED</span>
+            <span style={{ color: '#00ff88', fontSize: '10px' }}>1/10 UNLOCKED</span>
           </div>
 
           {/* Vertical Stack List */}
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px',
-            maxHeight: '430px',
+            gap: '10px',
+            flex: 1,
             overflowY: 'auto',
             paddingRight: '4px'
           }}>
@@ -223,7 +217,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
                 <div
                   key={u.month}
                   style={{
-                    padding: '10px 14px',
+                    padding: '12px 16px',
                     borderRadius: '8px',
                     background: isUnlocked ? 'rgba(0, 255, 136, 0.12)' : 'rgba(255,255,255,0.03)',
                     border: isUnlocked ? '1.5px solid #00ff88' : '1px solid rgba(255,255,255,0.08)',
@@ -233,10 +227,10 @@ export default function HoldersZonePanel({ player, onNavigate }) {
                   }}
                 >
                   <div>
-                    <div style={{ color: isUnlocked ? '#00ff88' : '#aaa', fontSize: '9px', marginBottom: '2px' }}>
+                    <div style={{ color: isUnlocked ? '#00ff88' : '#aaa', fontSize: '9px', marginBottom: '3px' }}>
                       UNLOCK #{u.month} · {u.d}
                     </div>
-                    <div style={{ color: '#ffd700', fontSize: '11px', fontWeight: 900 }}>
+                    <div style={{ color: '#ffd700', fontSize: '12px', fontWeight: 900 }}>
                       {u.a} $VIBE POOL
                     </div>
                   </div>
@@ -247,11 +241,11 @@ export default function HoldersZonePanel({ player, onNavigate }) {
                       disabled={isClaimed || claiming === u.month || !isEligible}
                       style={{
                         fontFamily: 'var(--vv-pixel)',
-                        fontSize: '9px',
+                        fontSize: '10px',
                         background: isClaimed ? '#444' : 'linear-gradient(135deg, #ffd700, #ff6b35)',
                         border: 'none',
                         borderRadius: '6px',
-                        padding: '6px 14px',
+                        padding: '8px 16px',
                         color: isClaimed ? '#aaa' : '#000',
                         fontWeight: 900,
                         cursor: isClaimed ? 'default' : 'pointer',
@@ -262,10 +256,10 @@ export default function HoldersZonePanel({ player, onNavigate }) {
                     </button>
                   ) : (
                     <span style={{
-                      fontSize: '8px',
+                      fontSize: '9px',
                       color: '#ff007f',
                       background: 'rgba(255,0,127,0.15)',
-                      padding: '4px 8px',
+                      padding: '5px 10px',
                       borderRadius: '4px',
                       fontWeight: 900
                     }}>
