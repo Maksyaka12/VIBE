@@ -28,6 +28,23 @@ const FACTORY_ABI = [
 
 const SWAP_ROUTER_ABI = [
   {
+    inputs: [{ name: 'value', type: 'uint256' }],
+    name: 'wrapETH',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function'
+  },
+  {
+    inputs: [
+      { name: 'amountMinimum', type: 'uint256' },
+      { name: 'recipient', type: 'address' }
+    ],
+    name: 'unwrapWETH9',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function'
+  },
+  {
     inputs: [
       {
         components: [
@@ -206,7 +223,14 @@ export default function DeFiVibePanel({ player }) {
         // BUY: Pay ETH -> Receive VIBE
         const amountWei = parseEther(fromAmount);
 
-        // Encode inner exactInputSingle call with detected active pool fee tier
+        // 1. Call wrapETH to deposit native msg.value into SwapRouter02 WETH balance
+        const wrapCalldata = encodeFunctionData({
+          abi: SWAP_ROUTER_ABI,
+          functionName: 'wrapETH',
+          args: [amountWei]
+        });
+
+        // 2. Call exactInputSingle using WETH -> VIBE directly to rawAddress
         const exactInputSingleCalldata = encodeFunctionData({
           abi: SWAP_ROUTER_ABI,
           functionName: 'exactInputSingle',
@@ -223,11 +247,11 @@ export default function DeFiVibePanel({ player }) {
           ]
         });
 
-        // Wrap in multicall to allow native ETH msg.value handling on Uniswap V3 SwapRouter02
+        // 3. Combine wrapETH + exactInputSingle inside multicall
         const multicallCalldata = encodeFunctionData({
           abi: MULTICALL_ABI,
           functionName: 'multicall',
-          args: [[exactInputSingleCalldata]]
+          args: [[wrapCalldata, exactInputSingleCalldata]]
         });
 
         // Append Builder Code bc_wsbqqe2u hex suffix
@@ -241,7 +265,7 @@ export default function DeFiVibePanel({ player }) {
           hash: txHash
         });
       } else {
-        // SELL: Pay VIBE -> Receive ETH (Step 1: Approve, Step 2: Swap)
+        // SELL: Pay VIBE -> Receive ETH (Step 1: Approve, Step 2: Swap + Unwrap)
         const amountVibeWei = parseUnits(fromAmount, 18);
 
         setTxStatus({ type: 'info', msg: '⌛ Step 1/2: Approving $VIBE for o1 Router...' });
@@ -264,7 +288,7 @@ export default function DeFiVibePanel({ player }) {
               tokenIn: VIBE_TOKEN_ADDRESS,
               tokenOut: WETH_ADDRESS,
               fee: detectedFee,
-              recipient: rawAddress,
+              recipient: SWAP_ROUTER_ADDRESS,
               amountIn: amountVibeWei,
               amountOutMinimum: 0n,
               sqrtPriceLimitX96: 0n
@@ -272,7 +296,19 @@ export default function DeFiVibePanel({ player }) {
           ]
         });
 
-        const finalSwapCalldata = swapCalldata + BUILDER_CODE_HEX;
+        const unwrapCalldata = encodeFunctionData({
+          abi: SWAP_ROUTER_ABI,
+          functionName: 'unwrapWETH9',
+          args: [0n, rawAddress]
+        });
+
+        const multicallSwapCalldata = encodeFunctionData({
+          abi: MULTICALL_ABI,
+          functionName: 'multicall',
+          args: [[swapCalldata, unwrapCalldata]]
+        });
+
+        const finalSwapCalldata = multicallSwapCalldata + BUILDER_CODE_HEX;
 
         const txHash = await executeWeb3Tx(SWAP_ROUTER_ADDRESS, 0n, finalSwapCalldata);
 
