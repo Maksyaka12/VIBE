@@ -791,6 +791,39 @@ export default function VibeVerse() {
             <div className="vv-menu-btn__icon"><span /><span /><span /></div>
             <span className="vv-menu-btn__title">Vibe Verse</span>
           </button>
+
+          <div className="vv-topbar__socials">
+            <a
+              href="https://x.com/vibe_on_base"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="vv-social-btn"
+              title="Official X / Twitter"
+            >
+              <img src="/x-logo.jpg" alt="X" className="vv-social-btn__icon" />
+              <span>X</span>
+            </a>
+            <a
+              href="https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="vv-social-btn"
+              title="o1 Exchange Launchpad"
+            >
+              <img src="/o1-logo.png" alt="o1" className="vv-social-btn__icon" />
+              <span>O1</span>
+            </a>
+            <a
+              href="https://dexscreener.com/base/0xa1a4159e61ac9fc48aa9e9992c8d4870ef8a496d5749af1d219e8002f74835c5"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="vv-social-btn"
+              title="DexScreener Chart"
+            >
+              <img src="/dexscreener-logo.jpg" alt="DEX" className="vv-social-btn__icon" />
+              <span>DEX</span>
+            </a>
+          </div>
         </div>
         <div className="vv-topbar__right">
           <span className="vv-topbar__season">
