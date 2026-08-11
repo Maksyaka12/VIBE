@@ -1404,7 +1404,7 @@
 }
 
 /* Modal sizes per location — spacious pixel art modals */
-.vv-modal-home        { width: 640px; max-width: 92vw; }
+.vv-modal-home        { width: 840px; max-width: 95vw; }
 .vv-modal-nft_mint   { width: 740px; max-width: 92vw; }
 .vv-modal-bank       { width: 840px; max-width: 92vw; }
 .vv-modal-holders    { width: 1180px; max-width: 96vw; max-height: 94vh; }
