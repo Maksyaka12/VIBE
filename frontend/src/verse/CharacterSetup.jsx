@@ -79,7 +79,7 @@ export default function CharacterSetup({ onComplete }) {
             onClick={handleSubmit}
             disabled={name.trim().length < 3}
           >
-            ENTER VIBE VERSE 🎮
+            ENTER VIBE VERSE
           </button>
         </div>
       </div>
