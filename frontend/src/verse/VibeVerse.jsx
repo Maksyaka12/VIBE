@@ -14,6 +14,7 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { usePrivy } from '@privy-io/react-auth';
 import './VibeVerse.css';
 import CharacterSetup from './CharacterSetup';
 import DogSprite from './DogSprite';
@@ -753,11 +754,38 @@ export default function VibeVerse() {
     return () => window.removeEventListener('keydown', fn);
   }, [activeZone, openLocation]);
 
+  const { authenticated, user, login, logout } = usePrivy();
+
+  /* ── Sync Privy authentication ── */
+  useEffect(() => {
+    if (authenticated) {
+      setConnected(true);
+      const saved = localStorage.getItem('vv_player');
+      if (saved) {
+        setPlayer(JSON.parse(saved));
+      } else {
+        const twitterName = user?.twitter?.username?.toLowerCase()?.replace(/[^a-z0-9_]/g, '');
+        if (twitterName && twitterName.length >= 3) {
+          const autoPlayer = { name: twitterName, xp: 0, level: 1, vibeBalance: '0' };
+          localStorage.setItem('vv_player', JSON.stringify(autoPlayer));
+          setPlayer(autoPlayer);
+        } else {
+          setShowSetup(true);
+        }
+      }
+    } else {
+      setConnected(false);
+    }
+  }, [authenticated, user]);
+
   /* ── Connect / Setup ── */
   const handleConnect = useCallback(() => {
-    setConnected(true);
-    if (!player) setShowSetup(true);
-  }, [player]);
+    if (authenticated) {
+      setOpenLocation('home');
+    } else {
+      login();
+    }
+  }, [authenticated, login]);
 
   const handleSetup = useCallback((data) => {
     const p = { ...data, xp: 0, level: 1, vibeBalance: '0' };
