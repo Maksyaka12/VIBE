@@ -37,11 +37,8 @@ export default function CharacterSetup({ onComplete }) {
             <span className="vv-setup-status-dot"></span>
           </div>
           <div className="vv-setup-title-wrap">
-            <span className="vv-setup-badge">✨ NEW ADVENTURER</span>
+            <span className="vv-setup-badge">NEW ADVENTURER</span>
             <h2 className="vv-setup-title">CREATE CHARACTER</h2>
-            <p className="vv-setup-subtitle">
-              Choose your unique Vibe identity in the on-chain world.
-            </p>
           </div>
         </div>
 
