@@ -942,23 +942,31 @@ function StandaloneLayout({ children }) {
   );
 }
 
+function DomainRouter() {
+  const isGameDomain = typeof window !== 'undefined' && window.location.hostname.toLowerCase().includes('vibeverse');
+
+  return (
+    <Routes>
+      <Route path="/" element={isGameDomain ? <VibeVerse /> : <><Nav /><LandingPage /><Footer /></>} />
+      <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
+      <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
+
+      <Route path="/events" element={<StandaloneLayout><Events /></StandaloneLayout>} />
+      <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} />
+      <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
+      <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
+      <Route path="/checker" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
+      <Route path="/verse" element={<VibeVerse />} />
+    </Routes>
+  );
+}
+
 export default function App() {
   return (
     <PrivyProvider appId="cmrugdvds02q60cl7tegmrnx7" config={{ loginMethods: ['wallet', 'twitter'], appearance: { theme: 'dark', accentColor: '#00f5ff', logo: 'https://vibehome.dog/vibe-logo.png' } }}>
       <BrowserRouter>
         <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<><Nav /><LandingPage /><Footer /></>} />
-          <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
-          <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
-
-          <Route path="/events" element={<StandaloneLayout><Events /></StandaloneLayout>} />
-          <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} />
-          <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
-          <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
-          <Route path="/checker" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
-          <Route path="/verse" element={<VibeVerse />} />
-        </Routes>
+        <DomainRouter />
       </BrowserRouter>
     </PrivyProvider>
   );
