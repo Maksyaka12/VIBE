@@ -794,11 +794,20 @@ export default function VibeVerse() {
 
           <div className="vv-topbar__socials">
             <a
-              href="https://x.com/vibe_on_base"
+              href="https://vibehome.dog"
               target="_blank"
               rel="noopener noreferrer"
               className="vv-social-btn"
-              title="Official X / Twitter"
+              title="Official Website (vibehome.dog)"
+            >
+              <span className="vv-social-btn__emoji">🌐</span>
+            </a>
+            <a
+              href="https://x.com/vibeB20"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="vv-social-btn"
+              title="Official X / Twitter (@vibeB20)"
             >
               <img src="/x-logo.jpg" alt="X" className="vv-social-btn__icon" />
             </a>

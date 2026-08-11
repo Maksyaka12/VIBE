@@ -578,8 +578,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   background: rgba(2, 11, 26, 0.85);
   border: 2px solid rgba(0, 245, 255, 0.4);
   border-radius: 8px;
@@ -608,35 +608,47 @@
   display: block;
 }
 
+.vv-social-btn__emoji {
+  font-size: 28px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .vv-menu-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
+  height: 40px;
   background: rgba(2, 11, 26, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 6px 14px;
+  border: 2px solid rgba(0, 245, 255, 0.4);
+  border-radius: 8px;
+  padding: 0 20px;
   cursor: pointer;
   color: #fff;
-  transition: all 0.2s ease;
+  font-family: var(--vv-pixel);
+  box-shadow: 0 2px 0 #0050ff, 0 0 12px rgba(0, 245, 255, 0.3);
+  transition: all 0.15s ease;
 }
 
 .vv-menu-btn:hover {
-  background: rgba(0, 245, 255, 0.15);
-  border-color: rgba(0, 245, 255, 0.5);
-  box-shadow: 0 0 15px rgba(0, 245, 255, 0.3);
+  background: rgba(0, 245, 255, 0.2);
+  border-color: #00f5ff;
+  box-shadow: 0 4px 0 #0050ff, 0 0 18px rgba(0, 245, 255, 0.8);
+  transform: translateY(-2px);
 }
 
 .vv-menu-btn__icon {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  width: 16px;
+  gap: 4px;
+  width: 20px;
 }
 
 .vv-menu-btn__icon span {
   display: block;
-  height: 2px;
+  height: 3px;
   width: 100%;
   background: #fff;
   border-radius: 1px;
@@ -644,9 +656,11 @@
 
 .vv-menu-btn__title {
   font-family: var(--vv-pixel);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  text-shadow: 1px 1px 0 #000;
 }
 
 /* ── Pixel Art Navigation Menu Overlay ── */
