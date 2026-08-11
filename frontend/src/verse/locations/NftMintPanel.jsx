@@ -16,12 +16,12 @@ export default function NftMintPanel({ player }) {
     }, 1500);
   };
 
-  // Phases 1 to 4 (Phase 0 Whitelist is hidden/internal)
+  // Phases 1 to 4 (Phase 0 Whitelist is internal)
   const phases = [
-    { phase: 'Phase 1', count: '100 NFT', price: '0.005 ETH', active: true },
-    { phase: 'Phase 2', count: '100 NFT', price: '0.015 ETH', active: false },
-    { phase: 'Phase 3', count: '100 NFT', price: '0.05 ETH', active: false },
-    { phase: 'Phase 4', count: '30 NFT', price: '0.1 ETH', active: false },
+    { phase: 'Phase 1', count: '100 NFT', price: '0.005 ETH', active: true, done: false },
+    { phase: 'Phase 2', count: '100 NFT', price: '0.015 ETH', active: false, done: false },
+    { phase: 'Phase 3', count: '100 NFT', price: '0.05 ETH', active: false, done: false },
+    { phase: 'Phase 4', count: '30 NFT', price: '0.1 ETH', active: false, done: false },
   ];
 
   return (
@@ -92,7 +92,7 @@ export default function NftMintPanel({ player }) {
 
         {/* NFT Title & Minted Counter */}
         <div style={{ fontSize: '22px', color: '#ffd700', fontWeight: 900, letterSpacing: '1px', marginBottom: '6px', textShadow: '2px 2px 0 #000, 0 0 14px rgba(255, 215, 0, 0.6)' }}>
-          GENESIS VIBE NFT
+          GENESIS PIXEL DOG #{String(totalMinted + 1).padStart(3, '0')}
         </div>
         <div style={{ fontSize: '12px', color: '#00f5ff', fontWeight: 900, marginBottom: '16px' }}>
           TOTAL MINTED: <strong style={{ color: '#fff', fontSize: '14px' }}>{totalMinted}</strong> / {maxSupply}
@@ -144,7 +144,7 @@ export default function NftMintPanel({ player }) {
               key={p.phase}
               style={{
                 display: 'flex',
-                justify: 'space-between',
+                justifyContent: 'space-between',
                 alignItems: 'center',
                 padding: '12px 20px',
                 borderRadius: '8px',
@@ -153,11 +153,11 @@ export default function NftMintPanel({ player }) {
                 boxShadow: p.active ? '0 0 16px rgba(0, 245, 255, 0.25)' : 'none'
               }}
             >
-              <div style={{ fontSize: '12px', fontWeight: 900, color: p.active ? '#00f5ff' : '#ffffff', letterSpacing: '0.5px' }}>
-                {p.phase} <span style={{ color: '#88aacc', fontSize: '11px', marginLeft: '6px' }}>({p.count})</span>
+              <div style={{ fontSize: '11px', fontWeight: 900, color: p.active ? '#00f5ff' : p.done ? '#00ff88' : '#ffffff', letterSpacing: '0.5px' }}>
+                {p.phase} <span style={{ color: '#88aacc', fontSize: '10px', marginLeft: '6px' }}>({p.count})</span>
               </div>
-              <div style={{ fontSize: '13px', fontWeight: 900, color: p.active ? '#ffd700' : '#88aa88', letterSpacing: '0.5px' }}>
-                {p.price}
+              <div style={{ fontSize: '12px', fontWeight: 900, color: p.done ? '#00ff88' : p.active ? '#ffd700' : '#888888', letterSpacing: '0.5px' }}>
+                {p.done ? 'COMPLETED ✓' : p.price}
               </div>
             </div>
           ))}
