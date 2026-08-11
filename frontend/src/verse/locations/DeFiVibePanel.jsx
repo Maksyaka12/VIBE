@@ -1,94 +1,33 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { usePrivy, useWallets } from '@privy-io/react-auth';
-import { parseEther, encodeFunctionData, parseUnits, createPublicClient, http } from 'viem';
+import { parseUnits, formatUnits, createPublicClient, http, encodeFunctionData } from 'viem';
 import { base } from 'viem/chains';
 import { useUserBalances } from '../hooks/useUserBalances';
 
 const BUILDER_CODE = 'bc_wsbqqe2u';
 const BUILDER_CODE_HEX = '62635f7773627171653275'; // bc_wsbqqe2u hex payload
 
-const SWAP_ROUTER_ADDRESS = '0x2626664c2603336E57B271c5C0b26F421741e481'; // Uniswap V3 SwapRouter02 on Base
-const UNISWAP_V3_FACTORY = '0x33128a8fC17869897dcE68Ed026d694621f6FDfD';
-const WETH_ADDRESS = '0x4200000000000000000000df24ecb8bf51100a01';
+const NATIVE_ETH_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
 const VIBE_TOKEN_ADDRESS = '0xb200000000000000000000df24ecb8bf51100a01';
-
-const FACTORY_ABI = [
-  {
-    inputs: [
-      { name: 'tokenA', type: 'address' },
-      { name: 'tokenB', type: 'address' },
-      { name: 'fee', type: 'uint24' }
-    ],
-    name: 'getPool',
-    outputs: [{ name: 'pool', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function'
-  }
-];
-
-const SWAP_ROUTER_ABI = [
-  {
-    inputs: [{ name: 'value', type: 'uint256' }],
-    name: 'wrapETH',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function'
-  },
-  {
-    inputs: [
-      { name: 'amountMinimum', type: 'uint256' },
-      { name: 'recipient', type: 'address' }
-    ],
-    name: 'unwrapWETH9',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function'
-  },
-  {
-    inputs: [
-      {
-        components: [
-          { name: 'tokenIn', type: 'address' },
-          { name: 'tokenOut', type: 'address' },
-          { name: 'fee', type: 'uint24' },
-          { name: 'recipient', type: 'address' },
-          { name: 'amountIn', type: 'uint256' },
-          { name: 'amountOutMinimum', type: 'uint256' },
-          { name: 'sqrtPriceLimitX96', type: 'uint160' }
-        ],
-        name: 'params',
-        type: 'tuple'
-      }
-    ],
-    name: 'exactInputSingle',
-    outputs: [{ name: 'amountOut', type: 'uint256' }],
-    stateMutability: 'payable',
-    type: 'function'
-  }
-];
-
-const MULTICALL_ABI = [
-  {
-    inputs: [{ name: 'data', type: 'bytes[]' }],
-    name: 'multicall',
-    outputs: [{ name: 'results', type: 'bytes[]' }],
-    stateMutability: 'payable',
-    type: 'function'
-  }
-];
 
 const ERC20_ABI = [
   {
-    inputs: [
-      { name: 'spender', type: 'address' },
-      { name: 'value', type: 'uint256' }
-    ],
+    constant: true,
+    inputs: [{ name: 'owner', type: 'address' }, { name: 'spender', type: 'address' }],
+    name: 'allowance',
+    outputs: [{ name: '', type: 'uint256' }],
+    type: 'function'
+  },
+  {
+    constant: false,
+    inputs: [{ name: 'spender', type: 'address' }, { name: 'amount', type: 'uint256' }],
     name: 'approve',
     outputs: [{ name: '', type: 'bool' }],
-    stateMutability: 'nonpayable',
     type: 'function'
   }
 ];
+
+const publicClient = createPublicClient({ chain: base, transport: http() });
 
 export default function DeFiVibePanel({ player }) {
   const { authenticated, user, sendTransaction, login } = usePrivy();
@@ -98,58 +37,111 @@ export default function DeFiVibePanel({ player }) {
 
   const [mode, setMode] = useState('buy'); // 'buy' (ETH -> VIBE) | 'sell' (VIBE -> ETH)
   const [fromAmount, setFromAmount] = useState('');
+  const [toAmount, setToAmount] = useState('');
   const [slippage, setSlippage] = useState(1.0); // 1%
+  const [quoteData, setQuoteData] = useState(null);
+  const [isFetchingQuote, setIsFetchingQuote] = useState(false);
   const [swapping, setSwapping] = useState(false);
   const [txStatus, setTxStatus] = useState({ type: '', msg: '', hash: '' });
-  const [detectedFee, setDetectedFee] = useState(3000); // 0.3% default
+  const [ethPriceUsd, setEthPriceUsd] = useState(2700); // Live estimated ETH USD price
 
-  // Rate: 1 ETH ~ 238,000,000 $VIBE
-  const vibeRate = 238000000;
-
-  // Detect active Uniswap V3 Pool Fee Tier on Base
+  // Fetch ETH USD price from public API
   useEffect(() => {
-    let isSubscribed = true;
-    async function detectPool() {
+    let active = true;
+    async function fetchEthPrice() {
       try {
-        const client = createPublicClient({ chain: base, transport: http() });
-        const fees = [3000, 10000, 500, 100];
-        for (const f of fees) {
-          const pool = await client.readContract({
-            address: UNISWAP_V3_FACTORY,
-            abi: FACTORY_ABI,
-            functionName: 'getPool',
-            args: [WETH_ADDRESS, VIBE_TOKEN_ADDRESS, f]
-          }).catch(() => null);
+        const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+        const data = await res.json();
+        if (active && data?.ethereum?.usd) {
+          setEthPriceUsd(data.ethereum.usd);
+        }
+      } catch (e) {
+        // Fallback default ~2700 USD
+      }
+    }
+    fetchEthPrice();
+    const interval = setInterval(fetchEthPrice, 30000);
+    return () => { active = false; clearInterval(interval); };
+  }, []);
 
-          if (pool && pool !== '0x0000000000000000000000000000000000000000') {
-            if (isSubscribed) setDetectedFee(f);
-            return;
+  // Debounced Route Quote Fetching via DEX Aggregator Engine (Happy Hour proven setup)
+  useEffect(() => {
+    if (!fromAmount || isNaN(fromAmount) || Number(fromAmount) <= 0) {
+      setQuoteData(null);
+      setToAmount('');
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsFetchingQuote(true);
+      try {
+        const tokenIn = mode === 'buy' ? NATIVE_ETH_ADDRESS : VIBE_TOKEN_ADDRESS;
+        const tokenOut = mode === 'buy' ? VIBE_TOKEN_ADDRESS : NATIVE_ETH_ADDRESS;
+        const decimalsIn = mode === 'buy' ? 18 : 18;
+        const amountInWei = parseUnits(fromAmount, decimalsIn).toString();
+
+        const res = await fetch(`https://aggregator-api.kyberswap.com/base/api/v1/routes?tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountInWei}`);
+        const data = await res.json();
+
+        if (data.code === 0 && data.data?.routeSummary) {
+          setQuoteData(data.data);
+          const outWei = BigInt(data.data.routeSummary.amountOut);
+          const outFormatted = formatUnits(outWei, 18);
+          const outNum = Number(outFormatted);
+          setToAmount(outNum > 1000000
+            ? (outNum / 1000000).toFixed(2) + 'M'
+            : outNum > 1000
+            ? (outNum / 1000).toFixed(2) + 'K'
+            : outNum.toFixed(4)
+          );
+        } else {
+          // Fallback estimated rate (1 ETH ~ 238,000,000 VIBE)
+          const vibeRate = 238000000;
+          if (mode === 'buy') {
+            const out = Number(fromAmount) * vibeRate;
+            setToAmount(out >= 1000000 ? (out / 1000000).toFixed(2) + 'M' : out.toLocaleString());
+          } else {
+            const out = Number(fromAmount) / vibeRate;
+            setToAmount(out.toFixed(6));
           }
         }
       } catch (e) {
-        console.error('Error detecting pool fee:', e);
+        console.error('Quote fetch error:', e);
+      } finally {
+        setIsFetchingQuote(false);
       }
-    }
-    detectPool();
-    return () => { isSubscribed = false; };
-  }, []);
+    }, 400);
 
-  const estimatedOutput = useMemo(() => {
-    if (!fromAmount || isNaN(fromAmount) || Number(fromAmount) <= 0) return '0';
+    return () => clearTimeout(timer);
+  }, [fromAmount, mode]);
+
+  // Calculate ~$ USD Equivalence
+  const fromUsd = useMemo(() => {
+    if (!fromAmount || isNaN(fromAmount) || Number(fromAmount) <= 0) return '$0.00';
     if (mode === 'buy') {
-      const out = Number(fromAmount) * vibeRate;
-      return out >= 1000000
-        ? (out / 1000000).toFixed(2) + 'M'
-        : out >= 1000
-        ? (out / 1000).toFixed(2) + 'K'
-        : out.toLocaleString(undefined, { maximumFractionDigits: 2 });
+      const usd = Number(fromAmount) * ethPriceUsd;
+      return `~$${usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
     } else {
-      const out = Number(fromAmount) / vibeRate;
-      return out.toFixed(6);
+      // 1 ETH = 238M VIBE => 1 VIBE = (ethPrice / 238000000) USD
+      const vibeUsdPrice = ethPriceUsd / 238000000;
+      const usd = Number(fromAmount) * vibeUsdPrice;
+      return `~$${usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
     }
-  }, [fromAmount, mode, vibeRate]);
+  }, [fromAmount, mode, ethPriceUsd]);
 
-  // Universal Web3 transaction helper supporting all wallet types
+  const toUsd = useMemo(() => {
+    if (!fromAmount || isNaN(fromAmount) || Number(fromAmount) <= 0) return '$0.00';
+    if (mode === 'buy') {
+      // Amount receiving in USD equals input ETH in USD
+      const usd = Number(fromAmount) * ethPriceUsd;
+      return `~$${usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
+    } else {
+      const usd = Number(fromAmount) * (ethPriceUsd / 238000000);
+      return `~$${usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
+    }
+  }, [fromAmount, mode, ethPriceUsd]);
+
+  // Universal Web3 transaction executor
   const executeWeb3Tx = async (to, valueBigInt, dataHex) => {
     const connectedWallet = wallets.find(
       (w) => w.address?.toLowerCase() === rawAddress?.toLowerCase()
@@ -202,6 +194,8 @@ export default function DeFiVibePanel({ player }) {
   const handleToggleMode = () => {
     setMode((prev) => (prev === 'buy' ? 'sell' : 'buy'));
     setFromAmount('');
+    setToAmount('');
+    setQuoteData(null);
     setTxStatus({ type: '', msg: '', hash: '' });
   };
 
@@ -219,105 +213,79 @@ export default function DeFiVibePanel({ player }) {
     setTxStatus({ type: 'info', msg: '⌛ Confirming in your Web3 wallet...' });
 
     try {
-      if (mode === 'buy') {
-        // BUY: Pay ETH -> Receive VIBE
-        const amountWei = parseEther(fromAmount);
+      let targetAddress = '0x2626664c2603336E57B271c5C0b26F421741e481';
+      let calldataHex = '';
+      let txValue = 0n;
 
-        // 1. Call wrapETH to deposit native msg.value into SwapRouter02 WETH balance
-        const wrapCalldata = encodeFunctionData({
-          abi: SWAP_ROUTER_ABI,
-          functionName: 'wrapETH',
-          args: [amountWei]
+      if (quoteData && quoteData.routeSummary) {
+        // Build optimal transaction using DEX Aggregator Route (Happy Hour setup)
+        setTxStatus({ type: 'info', msg: '⌛ Building optimal DEX swap route...' });
+
+        const buildRes = await fetch('https://aggregator-api.kyberswap.com/base/api/v1/route/build', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            routeSummary: quoteData.routeSummary,
+            sender: rawAddress,
+            recipient: rawAddress,
+            slippageTolerance: Math.round(slippage * 100), // bps (e.g. 1% = 100 bps)
+            deadline: Math.floor(Date.now() / 1000) + 1200
+          })
         });
 
-        // 2. Call exactInputSingle using WETH -> VIBE directly to rawAddress
-        const exactInputSingleCalldata = encodeFunctionData({
-          abi: SWAP_ROUTER_ABI,
-          functionName: 'exactInputSingle',
-          args: [
-            {
-              tokenIn: WETH_ADDRESS,
-              tokenOut: VIBE_TOKEN_ADDRESS,
-              fee: detectedFee,
-              recipient: rawAddress,
-              amountIn: amountWei,
-              amountOutMinimum: 0n,
-              sqrtPriceLimitX96: 0n
-            }
-          ]
-        });
+        const buildData = await buildRes.json();
+        if (buildData.code === 0 && buildData.data) {
+          targetAddress = buildData.data.routerAddress || quoteData.routerAddress || targetAddress;
+          calldataHex = buildData.data.data;
+          txValue = buildData.data.value ? BigInt(buildData.data.value) : 0n;
 
-        // 3. Combine wrapETH + exactInputSingle inside multicall
-        const multicallCalldata = encodeFunctionData({
-          abi: MULTICALL_ABI,
-          functionName: 'multicall',
-          args: [[wrapCalldata, exactInputSingleCalldata]]
-        });
-
-        // Append Builder Code bc_wsbqqe2u hex suffix
-        const finalCalldata = multicallCalldata + BUILDER_CODE_HEX;
-
-        const txHash = await executeWeb3Tx(SWAP_ROUTER_ADDRESS, amountWei, finalCalldata);
-
-        setTxStatus({
-          type: 'success',
-          msg: '🎉 Swap Submitted to Base Mainnet!',
-          hash: txHash
-        });
-      } else {
-        // SELL: Pay VIBE -> Receive ETH (Step 1: Approve, Step 2: Swap + Unwrap)
-        const amountVibeWei = parseUnits(fromAmount, 18);
-
-        setTxStatus({ type: 'info', msg: '⌛ Step 1/2: Approving $VIBE for o1 Router...' });
-
-        const approveCalldata = encodeFunctionData({
-          abi: ERC20_ABI,
-          functionName: 'approve',
-          args: [SWAP_ROUTER_ADDRESS, amountVibeWei]
-        });
-
-        await executeWeb3Tx(VIBE_TOKEN_ADDRESS, 0n, approveCalldata);
-
-        setTxStatus({ type: 'info', msg: '⌛ Step 2/2: Confirming $VIBE ➔ ETH Swap...' });
-
-        const swapCalldata = encodeFunctionData({
-          abi: SWAP_ROUTER_ABI,
-          functionName: 'exactInputSingle',
-          args: [
-            {
-              tokenIn: VIBE_TOKEN_ADDRESS,
-              tokenOut: WETH_ADDRESS,
-              fee: detectedFee,
-              recipient: SWAP_ROUTER_ADDRESS,
-              amountIn: amountVibeWei,
-              amountOutMinimum: 0n,
-              sqrtPriceLimitX96: 0n
-            }
-          ]
-        });
-
-        const unwrapCalldata = encodeFunctionData({
-          abi: SWAP_ROUTER_ABI,
-          functionName: 'unwrapWETH9',
-          args: [0n, rawAddress]
-        });
-
-        const multicallSwapCalldata = encodeFunctionData({
-          abi: MULTICALL_ABI,
-          functionName: 'multicall',
-          args: [[swapCalldata, unwrapCalldata]]
-        });
-
-        const finalSwapCalldata = multicallSwapCalldata + BUILDER_CODE_HEX;
-
-        const txHash = await executeWeb3Tx(SWAP_ROUTER_ADDRESS, 0n, finalSwapCalldata);
-
-        setTxStatus({
-          type: 'success',
-          msg: '🎉 $VIBE Sale Submitted to Base Mainnet!',
-          hash: txHash
-        });
+          if (mode === 'buy') {
+            txValue = parseUnits(fromAmount, 18);
+          }
+        }
       }
+
+      // If token is ERC20 (SELL mode), check & execute approval first if needed
+      if (mode === 'sell') {
+        const amountVibeWei = parseUnits(fromAmount, 18);
+        setTxStatus({ type: 'info', msg: '⌛ Step 1/2: Approving $VIBE for Swap Router...' });
+
+        const allowance = await publicClient.readContract({
+          address: VIBE_TOKEN_ADDRESS,
+          abi: ERC20_ABI,
+          functionName: 'allowance',
+          args: [rawAddress, targetAddress]
+        }).catch(() => 0n);
+
+        if (allowance < amountVibeWei) {
+          const maxApproval = parseUnits('999999999999999', 18);
+          const approveCalldata = encodeFunctionData({
+            abi: ERC20_ABI,
+            functionName: 'approve',
+            args: [targetAddress, maxApproval]
+          });
+          await executeWeb3Tx(VIBE_TOKEN_ADDRESS, 0n, approveCalldata);
+        }
+
+        setTxStatus({ type: 'info', msg: '⌛ Step 2/2: Confirming $VIBE ➔ ETH Swap in wallet...' });
+      }
+
+      // Fallback calldata if aggregator build was unavailable
+      if (!calldataHex) {
+        calldataHex = '0x';
+        if (mode === 'buy') txValue = parseUnits(fromAmount, 18);
+      }
+
+      // Append Builder Code bc_wsbqqe2u hex suffix
+      const finalCalldata = calldataHex + BUILDER_CODE_HEX;
+
+      const txHash = await executeWeb3Tx(targetAddress, txValue, finalCalldata);
+
+      setTxStatus({
+        type: 'success',
+        msg: '🎉 Swap Submitted to Base Mainnet!',
+        hash: txHash
+      });
     } catch (err) {
       console.error('Swap execution error:', err);
       if (err?.message?.includes('user rejected') || err?.message?.includes('User rejected')) {
@@ -332,7 +300,7 @@ export default function DeFiVibePanel({ player }) {
 
   return (
     <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px', padding: '4px' }}>
-      {/* Top Banner: O1 Exchange API & Builder Code Status */}
+      {/* Top Banner: O1 Exchange DEX Status */}
       <div style={{
         background: 'rgba(0, 245, 255, 0.12)',
         border: '1.5px solid rgba(0, 245, 255, 0.5)',
@@ -351,7 +319,7 @@ export default function DeFiVibePanel({ player }) {
               O1 EXCHANGE IN-GAME DEX ENGINE
             </div>
             <div style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '10px' }}>
-              Native Web3 Swap Powered by o1 Router API & Base Builder Code <code>{BUILDER_CODE}</code>
+              Native Web3 Swap Powered by DEX Aggregator Router & Base Builder Code <code>{BUILDER_CODE}</code>
             </div>
           </div>
         </div>
@@ -469,6 +437,11 @@ export default function DeFiVibePanel({ player }) {
             </span>
           </div>
 
+          {/* Small USD Equivalent Display */}
+          <div style={{ color: 'rgba(255, 255, 255, 0.55)', fontSize: '9px', marginTop: '6px', fontWeight: 700 }}>
+            {fromUsd}
+          </div>
+
           {/* Quick Preset Buttons */}
           <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
             {mode === 'buy' ? (
@@ -565,7 +538,7 @@ export default function DeFiVibePanel({ player }) {
               color: '#00ff88',
               fontWeight: 900
             }}>
-              {estimatedOutput}
+              {isFetchingQuote ? 'CALCULATING...' : (toAmount || '0.00')}
             </div>
             <span style={{
               fontFamily: 'var(--vv-pixel)',
@@ -579,6 +552,11 @@ export default function DeFiVibePanel({ player }) {
             }}>
               {mode === 'buy' ? '$VIBE' : 'ETH'}
             </span>
+          </div>
+
+          {/* Small USD Equivalent Display */}
+          <div style={{ color: 'rgba(255, 255, 255, 0.55)', fontSize: '9px', marginTop: '6px', fontWeight: 700 }}>
+            {toUsd}
           </div>
         </div>
 
@@ -662,7 +640,7 @@ export default function DeFiVibePanel({ player }) {
           color: 'rgba(255, 255, 255, 0.5)',
           fontSize: '9px'
         }}>
-          <span>EXECUTIVE ROUTER: o1 Launchpad / Uniswap V3 (Fee Tier: {detectedFee})</span>
+          <span>EXECUTIVE ROUTER: o1 Launchpad DEX Aggregator Engine</span>
           <span>BUILDER PROGRAM: {BUILDER_CODE}</span>
         </div>
       </div>
