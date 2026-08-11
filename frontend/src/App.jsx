@@ -963,7 +963,15 @@ function DomainRouter() {
 
 export default function App() {
   return (
-    <PrivyProvider appId="cmsoytt8e00pb0cjrjj7k54m5" config={{ loginMethods: ['wallet', 'twitter'], appearance: { theme: 'dark', accentColor: '#00f5ff', logo: 'https://vibeverse.dog/vibe-logo.png' } }}>
+    <PrivyProvider
+      appId="cmsoytt8e00pb0cjrjj7k54m5"
+      config={{
+        loginMethods: ['wallet', 'twitter'],
+        defaultChain: base,
+        supportedChains: [base],
+        appearance: { theme: 'dark', accentColor: '#00f5ff', logo: 'https://vibeverse.dog/vibe-logo.png' }
+      }}
+    >
       <BrowserRouter>
         <ScrollToTop />
         <DomainRouter />
