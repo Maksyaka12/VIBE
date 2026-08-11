@@ -211,11 +211,8 @@ export default function HomePanel({ player, onNavigate }) {
           <div style={{ color: '#88aacc', fontSize: '10px', marginBottom: '10px', letterSpacing: '0.8px', fontWeight: 900 }}>
             CONNECTED WALLET
           </div>
-          <div style={{ fontSize: '15px', color: '#ffd700', marginBottom: '8px', fontWeight: 900 }}>
+          <div style={{ fontSize: '15px', color: '#ffd700', fontWeight: 900 }}>
             {walletAddress}
-          </div>
-          <div style={{ fontSize: '10px', color: '#00ff88', fontWeight: 900 }}>
-            NETWORK: BASE MAINNET
           </div>
         </div>
       </div>
