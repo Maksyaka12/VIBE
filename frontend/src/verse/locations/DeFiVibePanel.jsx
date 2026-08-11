@@ -34,6 +34,16 @@ const SWAP_ROUTER_ABI = [
   }
 ];
 
+const MULTICALL_ABI = [
+  {
+    inputs: [{ name: 'data', type: 'bytes[]' }],
+    name: 'multicall',
+    outputs: [{ name: 'results', type: 'bytes[]' }],
+    stateMutability: 'payable',
+    type: 'function'
+  }
+];
+
 const ERC20_ABI = [
   {
     inputs: [
@@ -154,7 +164,8 @@ export default function DeFiVibePanel({ player }) {
         // BUY: Pay ETH -> Receive VIBE
         const amountWei = parseEther(fromAmount);
 
-        const baseCalldata = encodeFunctionData({
+        // Encode inner exactInputSingle call
+        const exactInputSingleCalldata = encodeFunctionData({
           abi: SWAP_ROUTER_ABI,
           functionName: 'exactInputSingle',
           args: [
@@ -170,8 +181,15 @@ export default function DeFiVibePanel({ player }) {
           ]
         });
 
+        // Wrap in multicall to allow native ETH msg.value handling on Uniswap V3 SwapRouter02
+        const multicallCalldata = encodeFunctionData({
+          abi: MULTICALL_ABI,
+          functionName: 'multicall',
+          args: [[exactInputSingleCalldata]]
+        });
+
         // Append Builder Code bc_wsbqqe2u hex suffix
-        const finalCalldata = baseCalldata + BUILDER_CODE_HEX;
+        const finalCalldata = multicallCalldata + BUILDER_CODE_HEX;
 
         const txHash = await executeWeb3Tx(SWAP_ROUTER_ADDRESS, amountWei, finalCalldata);
 
