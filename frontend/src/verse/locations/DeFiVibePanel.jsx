@@ -6,7 +6,6 @@ import { useUserBalances } from '../hooks/useUserBalances';
 
 const BUILDER_CODE = 'bc_wsbqqe2u';
 // Official ERC-8021 Data Suffix for Base Builder Code bc_wsbqqe2u:
-// Generated via Attribution.toDataSuffix({ codes: ['bc_wsbqqe2u'] })
 const BUILDER_CODE_HEX = '62635f77736271716532750b0080218021802180218021802180218021';
 
 const NATIVE_ETH_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
@@ -40,6 +39,7 @@ export default function DeFiVibePanel({ player }) {
   const [mode, setMode] = useState('buy'); // 'buy' (ETH -> VIBE) | 'sell' (VIBE -> ETH)
   const [fromAmount, setFromAmount] = useState('');
   const [toAmount, setToAmount] = useState('');
+  const [rawEthOutput, setRawEthOutput] = useState(0);
   const [slippage, setSlippage] = useState(1.0); // 1%
   const [quoteData, setQuoteData] = useState(null);
   const [isFetchingQuote, setIsFetchingQuote] = useState(false);
@@ -66,11 +66,12 @@ export default function DeFiVibePanel({ player }) {
     return () => { active = false; clearInterval(interval); };
   }, []);
 
-  // Debounced Route Quote Fetching via DEX Aggregator Engine (Happy Hour proven setup)
+  // Debounced Route Quote Fetching via DEX Aggregator Engine
   useEffect(() => {
     if (!fromAmount || isNaN(fromAmount) || Number(fromAmount) <= 0) {
       setQuoteData(null);
       setToAmount('');
+      setRawEthOutput(0);
       return;
     }
 
@@ -79,8 +80,7 @@ export default function DeFiVibePanel({ player }) {
       try {
         const tokenIn = mode === 'buy' ? NATIVE_ETH_ADDRESS : VIBE_TOKEN_ADDRESS;
         const tokenOut = mode === 'buy' ? VIBE_TOKEN_ADDRESS : NATIVE_ETH_ADDRESS;
-        const decimalsIn = mode === 'buy' ? 18 : 18;
-        const amountInWei = parseUnits(fromAmount, decimalsIn).toString();
+        const amountInWei = parseUnits(fromAmount, 18).toString();
 
         const res = await fetch(`https://aggregator-api.kyberswap.com/base/api/v1/routes?tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountInWei}`);
         const data = await res.json();
@@ -90,21 +90,30 @@ export default function DeFiVibePanel({ player }) {
           const outWei = BigInt(data.data.routeSummary.amountOut);
           const outFormatted = formatUnits(outWei, 18);
           const outNum = Number(outFormatted);
-          setToAmount(outNum > 1000000
-            ? (outNum / 1000000).toFixed(2) + 'M'
-            : outNum > 1000
-            ? (outNum / 1000).toFixed(2) + 'K'
-            : outNum.toFixed(4)
-          );
+
+          if (mode === 'sell') {
+            setRawEthOutput(outNum);
+            setToAmount(outNum.toFixed(6));
+          } else {
+            setRawEthOutput(Number(fromAmount));
+            setToAmount(outNum > 1000000
+              ? (outNum / 1000000).toFixed(2) + 'M'
+              : outNum > 1000
+              ? (outNum / 1000).toFixed(2) + 'K'
+              : outNum.toFixed(2)
+            );
+          }
         } else {
           // Fallback estimated rate (1 ETH ~ 238,000,000 VIBE)
           const vibeRate = 238000000;
           if (mode === 'buy') {
             const out = Number(fromAmount) * vibeRate;
+            setRawEthOutput(Number(fromAmount));
             setToAmount(out >= 1000000 ? (out / 1000000).toFixed(2) + 'M' : out.toLocaleString());
           } else {
-            const out = Number(fromAmount) / vibeRate;
-            setToAmount(out.toFixed(6));
+            const outEth = Number(fromAmount) / vibeRate;
+            setRawEthOutput(outEth);
+            setToAmount(outEth.toFixed(6));
           }
         }
       } catch (e) {
@@ -117,18 +126,19 @@ export default function DeFiVibePanel({ player }) {
     return () => clearTimeout(timer);
   }, [fromAmount, mode]);
 
-  // Calculate ~$ USD Equivalence
+  // Calculate ~$ USD Equivalence (Exact Market USD Price)
   const fromUsd = useMemo(() => {
     if (!fromAmount || isNaN(fromAmount) || Number(fromAmount) <= 0) return '$0.00';
     if (mode === 'buy') {
       const usd = Number(fromAmount) * ethPriceUsd;
       return `~$${usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
     } else {
-      const vibeUsdPrice = ethPriceUsd / 238000000;
-      const usd = Number(fromAmount) * vibeUsdPrice;
+      // In SELL mode, $VIBE value in USD equals the output ETH in USD!
+      const ethVal = rawEthOutput || (Number(fromAmount) / 238000000);
+      const usd = ethVal * ethPriceUsd;
       return `~$${usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
     }
-  }, [fromAmount, mode, ethPriceUsd]);
+  }, [fromAmount, mode, ethPriceUsd, rawEthOutput]);
 
   const toUsd = useMemo(() => {
     if (!fromAmount || isNaN(fromAmount) || Number(fromAmount) <= 0) return '$0.00';
@@ -136,10 +146,41 @@ export default function DeFiVibePanel({ player }) {
       const usd = Number(fromAmount) * ethPriceUsd;
       return `~$${usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
     } else {
-      const usd = Number(fromAmount) * (ethPriceUsd / 238000000);
+      const ethVal = rawEthOutput || (Number(fromAmount) / 238000000);
+      const usd = ethVal * ethPriceUsd;
       return `~$${usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
     }
-  }, [fromAmount, mode, ethPriceUsd]);
+  }, [fromAmount, mode, ethPriceUsd, rawEthOutput]);
+
+  // Percentage Button Handler (25%, 50%, 75%, 100%)
+  const handlePercentage = (percent) => {
+    setTxStatus({ type: '', msg: '', hash: '' });
+    if (mode === 'buy') {
+      const rawEth = parseFloat(balances.ethFormatted || '0');
+      if (isNaN(rawEth) || rawEth <= 0) return;
+      if (percent === 100) {
+        // Reserve 0.0001 ETH for gas when selecting 100% ETH
+        const maxEth = Math.max(0, rawEth - 0.0001);
+        setFromAmount(maxEth > 0 ? maxEth.toFixed(6).replace(/\.?0+$/, '') : '0');
+      } else {
+        const ethVal = rawEth * (percent / 100);
+        setFromAmount(ethVal.toFixed(6).replace(/\.?0+$/, ''));
+      }
+    } else {
+      const rawVibeStr = balances.vibeFormatted || balances.vibe || '0';
+      const rawVibe = parseFloat(rawVibeStr);
+      if (isNaN(rawVibe) || rawVibe <= 0) return;
+
+      const targetVal = percent === 100 ? rawVibeStr : (rawVibe * (percent / 100)).toString();
+      // Strictly TRUNCATE to 2 decimals WITHOUT rounding (e.g. 400000.326745 -> 400000.32)
+      const [intPart, fracPart] = targetVal.split('.');
+      if (!fracPart) {
+        setFromAmount(intPart);
+      } else {
+        setFromAmount(`${intPart}.${fracPart.slice(0, 2)}`);
+      }
+    }
+  };
 
   // Universal Web3 transaction executor
   const executeWeb3Tx = async (to, valueBigInt, dataHex) => {
@@ -186,15 +227,11 @@ export default function DeFiVibePanel({ player }) {
     throw new Error('No active Web3 wallet found');
   };
 
-  const handlePreset = (val) => {
-    setFromAmount(val);
-    setTxStatus({ type: '', msg: '', hash: '' });
-  };
-
   const handleToggleMode = () => {
     setMode((prev) => (prev === 'buy' ? 'sell' : 'buy'));
     setFromAmount('');
     setToAmount('');
+    setRawEthOutput(0);
     setQuoteData(null);
     setTxStatus({ type: '', msg: '', hash: '' });
   };
@@ -296,60 +333,23 @@ export default function DeFiVibePanel({ player }) {
   };
 
   return (
-    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px', padding: '4px' }}>
-      {/* Top Banner: O1 Exchange DEX Status */}
-      <div style={{
-        background: 'rgba(0, 245, 255, 0.12)',
-        border: '1.5px solid rgba(0, 245, 255, 0.5)',
-        borderRadius: '12px',
-        padding: '16px 20px',
-        marginBottom: '20px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        boxShadow: '0 4px 20px rgba(0, 245, 255, 0.2)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <span style={{ fontSize: '26px' }}>⚡</span>
-          <div>
-            <div style={{ color: '#00f5ff', fontSize: '13px', fontWeight: 900, letterSpacing: '0.8px', marginBottom: '2px' }}>
-              O1 EXCHANGE IN-GAME DEX ENGINE
-            </div>
-            <div style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '10px' }}>
-              Native Web3 Swap Powered by DEX Aggregator Router & Base Builder Code <code>{BUILDER_CODE}</code>
-            </div>
-          </div>
-        </div>
-        <div style={{
-          background: 'rgba(0, 255, 136, 0.15)',
-          border: '1px solid #00ff88',
-          borderRadius: '8px',
-          padding: '6px 12px',
-          fontSize: '9px',
-          color: '#00ff88',
-          fontWeight: 900,
-          whiteSpace: 'nowrap'
-        }}>
-          ● BASE MAINNET LIVE
-        </div>
-      </div>
-
+    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px', padding: '4px', maxWidth: '540px', margin: '0 auto' }}>
       {/* Main Pixel Swap Window Card */}
       <div style={{
         background: 'rgba(4, 20, 48, 0.96)',
         border: '3px solid #00f5ff',
         borderRadius: '16px',
-        padding: '24px',
-        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 245, 255, 0.25)'
+        padding: '26px 28px',
+        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 245, 255, 0.28)'
       }}>
         {/* Header & Mode Switcher */}
         <div style={{
           display: 'flex',
           justify: 'space-between',
           alignItems: 'center',
-          marginBottom: '20px'
+          marginBottom: '22px'
         }}>
-          <div style={{ fontSize: '13px', color: '#ffd700', fontWeight: 900, letterSpacing: '0.8px' }}>
+          <div style={{ fontSize: '14px', color: '#ffd700', fontWeight: 900, letterSpacing: '0.8px' }}>
             {mode === 'buy' ? 'BUY $VIBE (PAY ETH)' : 'SELL $VIBE (RECEIVE ETH)'}
           </div>
 
@@ -439,46 +439,28 @@ export default function DeFiVibePanel({ player }) {
             {fromUsd}
           </div>
 
-          {/* Quick Preset Buttons */}
+          {/* Percentage Preset Buttons (25%, 50%, 75%, 100%) */}
           <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-            {mode === 'buy' ? (
-              ['0.001', '0.005', '0.01', '0.05'].map((val) => (
-                <button
-                  key={val}
-                  onClick={() => handlePreset(val)}
-                  style={{
-                    fontFamily: 'var(--vv-pixel)',
-                    fontSize: '9px',
-                    background: 'rgba(0, 245, 255, 0.12)',
-                    border: '1px solid rgba(0, 245, 255, 0.4)',
-                    color: '#00f5ff',
-                    padding: '4px 10px',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    fontWeight: 900
-                  }}
-                >
-                  {val} ETH
-                </button>
-              ))
-            ) : (
+            {[25, 50, 75, 100].map((p) => (
               <button
-                onClick={() => handlePreset(balances.vibe || '0')}
+                key={p}
+                onClick={() => handlePercentage(p)}
                 style={{
+                  flex: 1,
                   fontFamily: 'var(--vv-pixel)',
                   fontSize: '9px',
-                  background: 'rgba(255, 215, 0, 0.12)',
-                  border: '1px solid rgba(255, 215, 0, 0.4)',
-                  color: '#ffd700',
-                  padding: '4px 12px',
+                  background: mode === 'buy' ? 'rgba(0, 245, 255, 0.12)' : 'rgba(255, 215, 0, 0.12)',
+                  border: mode === 'buy' ? '1px solid rgba(0, 245, 255, 0.4)' : '1px solid rgba(255, 215, 0, 0.4)',
+                  color: mode === 'buy' ? '#00f5ff' : '#ffd700',
+                  padding: '6px 0',
                   borderRadius: '6px',
                   cursor: 'pointer',
                   fontWeight: 900
                 }}
               >
-                MAX $VIBE
+                {p === 100 ? 'MAX' : `${p}%`}
               </button>
-            )}
+            ))}
           </div>
         </div>
 
@@ -605,7 +587,7 @@ export default function DeFiVibePanel({ player }) {
           style={{
             width: '100%',
             fontFamily: 'var(--vv-pixel)',
-            fontSize: '13px',
+            fontSize: '14px',
             fontWeight: 900,
             background: mode === 'buy'
               ? 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)'
@@ -625,8 +607,8 @@ export default function DeFiVibePanel({ player }) {
           {swapping
             ? 'CONFIRM IN WALLET...'
             : mode === 'buy'
-            ? 'BUY $VIBE VIA O1 ROUTER 🚀'
-            : 'SELL $VIBE VIA O1 ROUTER ⚡'}
+            ? 'BUY $VIBE'
+            : 'SELL $VIBE'}
         </button>
 
         {/* Footer Info */}
