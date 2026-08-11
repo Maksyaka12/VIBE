@@ -5,7 +5,9 @@ import { base } from 'viem/chains';
 import { useUserBalances } from '../hooks/useUserBalances';
 
 const BUILDER_CODE = 'bc_wsbqqe2u';
-const BUILDER_CODE_HEX = '62635f7773627171653275'; // bc_wsbqqe2u hex payload
+// Official ERC-8021 Data Suffix for Base Builder Code bc_wsbqqe2u:
+// Generated via Attribution.toDataSuffix({ codes: ['bc_wsbqqe2u'] })
+const BUILDER_CODE_HEX = '62635f77736271716532750b0080218021802180218021802180218021';
 
 const NATIVE_ETH_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
 const VIBE_TOKEN_ADDRESS = '0xb200000000000000000000df24ecb8bf51100a01';
@@ -43,7 +45,7 @@ export default function DeFiVibePanel({ player }) {
   const [isFetchingQuote, setIsFetchingQuote] = useState(false);
   const [swapping, setSwapping] = useState(false);
   const [txStatus, setTxStatus] = useState({ type: '', msg: '', hash: '' });
-  const [ethPriceUsd, setEthPriceUsd] = useState(2700); // Live estimated ETH USD price
+  const [ethPriceUsd, setEthPriceUsd] = useState(2700);
 
   // Fetch ETH USD price from public API
   useEffect(() => {
@@ -122,7 +124,6 @@ export default function DeFiVibePanel({ player }) {
       const usd = Number(fromAmount) * ethPriceUsd;
       return `~$${usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
     } else {
-      // 1 ETH = 238M VIBE => 1 VIBE = (ethPrice / 238000000) USD
       const vibeUsdPrice = ethPriceUsd / 238000000;
       const usd = Number(fromAmount) * vibeUsdPrice;
       return `~$${usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
@@ -132,7 +133,6 @@ export default function DeFiVibePanel({ player }) {
   const toUsd = useMemo(() => {
     if (!fromAmount || isNaN(fromAmount) || Number(fromAmount) <= 0) return '$0.00';
     if (mode === 'buy') {
-      // Amount receiving in USD equals input ETH in USD
       const usd = Number(fromAmount) * ethPriceUsd;
       return `~$${usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
     } else {
@@ -218,7 +218,6 @@ export default function DeFiVibePanel({ player }) {
       let txValue = 0n;
 
       if (quoteData && quoteData.routeSummary) {
-        // Build optimal transaction using DEX Aggregator Route (Happy Hour setup)
         setTxStatus({ type: 'info', msg: '⌛ Building optimal DEX swap route...' });
 
         const buildRes = await fetch('https://aggregator-api.kyberswap.com/base/api/v1/route/build', {
@@ -228,7 +227,7 @@ export default function DeFiVibePanel({ player }) {
             routeSummary: quoteData.routeSummary,
             sender: rawAddress,
             recipient: rawAddress,
-            slippageTolerance: Math.round(slippage * 100), // bps (e.g. 1% = 100 bps)
+            slippageTolerance: Math.round(slippage * 100),
             deadline: Math.floor(Date.now() / 1000) + 1200
           })
         });
@@ -245,7 +244,6 @@ export default function DeFiVibePanel({ player }) {
         }
       }
 
-      // If token is ERC20 (SELL mode), check & execute approval first if needed
       if (mode === 'sell') {
         const amountVibeWei = parseUnits(fromAmount, 18);
         setTxStatus({ type: 'info', msg: '⌛ Step 1/2: Approving $VIBE for Swap Router...' });
@@ -270,13 +268,12 @@ export default function DeFiVibePanel({ player }) {
         setTxStatus({ type: 'info', msg: '⌛ Step 2/2: Confirming $VIBE ➔ ETH Swap in wallet...' });
       }
 
-      // Fallback calldata if aggregator build was unavailable
       if (!calldataHex) {
         calldataHex = '0x';
         if (mode === 'buy') txValue = parseUnits(fromAmount, 18);
       }
 
-      // Append Builder Code bc_wsbqqe2u hex suffix
+      // Append Official ERC-8021 Data Suffix for Base Builder Code bc_wsbqqe2u
       const finalCalldata = calldataHex + BUILDER_CODE_HEX;
 
       const txHash = await executeWeb3Tx(targetAddress, txValue, finalCalldata);
