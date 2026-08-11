@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift, Users, ShieldCheck, Calculator, Calendar, RotateCcw } from 'lucide-react';
 import { PrivyProvider } from '@privy-io/react-auth';
+import { WagmiProvider as PrivyWagmiProvider } from '@privy-io/wagmi';
+import { privyWagmiConfig } from './config/privyWagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createPublicClient, http, formatUnits, parseAbiItem } from 'viem';
 import { base } from 'viem/chains';
 import Checker from './Checker';
@@ -961,23 +964,35 @@ function DomainRouter() {
   );
 }
 
+const queryClient = new QueryClient();
+
 export default function App() {
   return (
     <PrivyProvider
       appId="cmsoytt8e00pb0cjrjj7k54m5"
       config={{
-        loginMethods: ['wallet'],
+        loginMethods: ['wallet', 'email', 'twitter', 'telegram'],
+        defaultChain: base,
+        supportedChains: [base],
         appearance: {
           theme: 'dark',
           accentColor: '#00f5ff',
-          logo: 'https://vibeverse.dog/vibe-logo.png'
+          logo: 'https://vibeverse.dog/vibe-logo.png',
+          showWalletLoginFirst: true,
+        },
+        embeddedWallets: {
+          createOnLogin: 'all-users'
         }
       }}
     >
-      <BrowserRouter>
-        <ScrollToTop />
-        <DomainRouter />
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <PrivyWagmiProvider config={privyWagmiConfig}>
+          <BrowserRouter>
+            <ScrollToTop />
+            <DomainRouter />
+          </BrowserRouter>
+        </PrivyWagmiProvider>
+      </QueryClientProvider>
     </PrivyProvider>
   );
 }
