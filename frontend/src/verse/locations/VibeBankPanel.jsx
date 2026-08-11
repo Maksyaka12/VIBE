@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
+import { usePrivy } from '@privy-io/react-auth';
+import { useUserBalances } from '../hooks/useUserBalances';
 
 export default function VibeBankPanel({ player }) {
+  const { user } = usePrivy();
+  const balances = useUserBalances(user?.wallet?.address);
+
   const [stakeAmount, setStakeAmount] = useState('');
-  const [activeStaked, setActiveStaked] = useState(500000);
+  const [activeStaked, setActiveStaked] = useState(0);
   const [staking, setStaking] = useState(false);
 
   const poolTotal = 50000000;
@@ -95,7 +100,7 @@ export default function VibeBankPanel({ player }) {
             }}
           />
           <button
-            onClick={() => setStakeAmount('100000')}
+            onClick={() => setStakeAmount(balances.vibe || '0')}
             style={{
               fontFamily: 'var(--vv-pixel)',
               fontSize: '10px',
@@ -108,7 +113,7 @@ export default function VibeBankPanel({ player }) {
               fontWeight: 900
             }}
           >
-            100K
+            MAX
           </button>
           <button
             onClick={handleStake}
@@ -131,7 +136,7 @@ export default function VibeBankPanel({ player }) {
         </div>
 
         <div style={{ fontSize: '9px', color: '#aaa' }}>
-          AVAILABLE BALANCE: <span style={{ color: '#00f5ff', fontWeight: 900 }}>1,000,000 $VIBE</span>
+          AVAILABLE BALANCE: <span style={{ color: '#00f5ff', fontWeight: 900 }}>{balances.loading ? 'Loading...' : `${balances.vibeFormatted} $VIBE`}</span>
         </div>
       </div>
     </div>

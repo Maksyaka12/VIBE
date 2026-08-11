@@ -1,8 +1,11 @@
 import React from 'react';
 import { usePrivy } from '@privy-io/react-auth';
+import { useUserBalances } from '../hooks/useUserBalances';
 
 export default function HomePanel({ player, onNavigate }) {
   const { authenticated, user, linkTwitter } = usePrivy();
+  const rawAddress = user?.wallet?.address;
+  const balances = useUserBalances(rawAddress);
 
   // Check if player owns an NFT or is a club member
   const isClubMember = Boolean(player?.hasNft || player?.isClubMember);
@@ -142,7 +145,7 @@ export default function HomePanel({ player, onNavigate }) {
             $VIBE BALANCE
           </div>
           <div style={{ fontSize: '20px', color: '#ffd700', fontWeight: 900, textShadow: '0 0 14px rgba(255, 215, 0, 0.5)' }}>
-            100,000 $VIBE
+            {balances.loading ? 'Loading...' : `${balances.vibeFormatted} $VIBE`}
           </div>
         </div>
 
@@ -153,7 +156,7 @@ export default function HomePanel({ player, onNavigate }) {
             ETH BALANCE
           </div>
           <div style={{ fontSize: '20px', color: '#00f5ff', fontWeight: 900, textShadow: '0 0 14px rgba(0, 245, 255, 0.5)' }}>
-            0.42 ETH
+            {balances.loading ? 'Loading...' : `${balances.ethFormatted} ETH`}
           </div>
         </div>
       </div>

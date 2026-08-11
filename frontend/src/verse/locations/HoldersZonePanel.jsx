@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { usePrivy } from '@privy-io/react-auth';
+import { useUserBalances } from '../hooks/useUserBalances';
 
 const UNLOCKS = [
   { month: 1, d: 'Aug 26, 2026', a: '10M $VIBE POOL', status: 'UNLOCKED' },
@@ -24,11 +26,14 @@ const RULES = [
 ];
 
 export default function HoldersZonePanel({ player, onNavigate }) {
+  const { user } = usePrivy();
+  const balances = useUserBalances(user?.wallet?.address);
+
   const [claimedMonth, setClaimedMonth] = useState({});
   const [claiming, setClaiming] = useState(null);
 
-  // Simulated balance & 5M holding threshold check
-  const vibeBalance = 6500000; // Simulated $VIBE balance (6.5M)
+  // Real on-chain balance & 5M holding threshold check
+  const vibeBalance = parseFloat(balances.vibe || '0');
   const minRequired = 5000000; // 5M+ $VIBE to qualify
   const isEligible = vibeBalance >= minRequired;
 
@@ -92,7 +97,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
               YOUR WALLET BALANCE
             </div>
             <div style={{ fontSize: '22px', color: '#ffd700', fontWeight: 900, marginBottom: '14px' }}>
-              {vibeBalance.toLocaleString()} <span style={{ fontSize: '13px', color: '#00f5ff' }}>$VIBE</span>
+              {balances.loading ? 'Loading...' : balances.vibeFormatted} <span style={{ fontSize: '13px', color: '#00f5ff' }}>$VIBE</span>
             </div>
 
             {/* Clean Status Badge */}

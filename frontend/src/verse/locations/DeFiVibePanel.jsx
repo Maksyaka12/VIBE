@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
+import { usePrivy } from '@privy-io/react-auth';
+import { useUserBalances } from '../hooks/useUserBalances';
 
 const BUILDER_CODE = 'bc_wsbqqe2u';
 
 export default function DeFiVibePanel({ player }) {
+  const { user } = usePrivy();
+  const balances = useUserBalances(user?.wallet?.address);
+
   const [fromAmount, setFromAmount] = useState('');
   const [swapping, setSwapping] = useState(false);
 
@@ -57,7 +62,7 @@ export default function DeFiVibePanel({ player }) {
         <div style={{ background: '#020b1a', border: '1.5px solid rgba(0,245,255,0.3)', borderRadius: '8px', padding: '14px', marginBottom: '12px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', color: '#aaa', fontSize: '9px', marginBottom: '8px' }}>
             <span>YOU PAY</span>
-            <span>BALANCE: 0.42 ETH</span>
+            <span>BALANCE: {balances.loading ? 'Loading...' : `${balances.ethFormatted} ETH`}</span>
           </div>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <input
@@ -91,7 +96,7 @@ export default function DeFiVibePanel({ player }) {
         <div style={{ background: '#020b1a', border: '1.5px solid rgba(0,245,255,0.3)', borderRadius: '8px', padding: '14px', marginBottom: '18px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', color: '#aaa', fontSize: '9px', marginBottom: '8px' }}>
             <span>YOU RECEIVE (ESTIMATED)</span>
-            <span>SLIPPAGE: 0.5%</span>
+            <span>CURRENT BALANCE: {balances.loading ? 'Loading...' : `${balances.vibeFormatted} $VIBE`}</span>
           </div>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <div style={{ flex: 1, color: '#00ff88', fontSize: '14px', fontWeight: 900 }}>

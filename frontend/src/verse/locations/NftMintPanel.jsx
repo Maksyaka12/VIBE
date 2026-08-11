@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
+import { usePrivy } from '@privy-io/react-auth';
+import { useUserBalances } from '../hooks/useUserBalances';
 
 export default function NftMintPanel({ player }) {
+  const { user } = usePrivy();
+  const balances = useUserBalances(user?.wallet?.address);
+
   const [minted, setMinted] = useState(false);
   const [minting, setMinting] = useState(false);
 
@@ -138,6 +143,10 @@ export default function NftMintPanel({ player }) {
           >
             {minted ? 'MINTED! ✓' : minting ? 'MINTING ON BASE...' : `MINT FOR ${currentPrice}`}
           </button>
+
+          <div style={{ fontSize: '10px', color: '#88aacc', textAlign: 'center', marginTop: '6px' }}>
+            YOUR BALANCE: <strong style={{ color: '#00f5ff' }}>{balances.loading ? 'Loading...' : `${balances.ethFormatted} ETH`}</strong>
+          </div>
         </div>
       </div>
 
