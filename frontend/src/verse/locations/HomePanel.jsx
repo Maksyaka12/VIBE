@@ -175,29 +175,38 @@ export default function HomePanel({ player, onNavigate }) {
           <div style={{ color: '#88aacc', fontSize: '10px', marginBottom: '10px', letterSpacing: '0.8px', fontWeight: 900 }}>
             LINKED X ACCOUNT
           </div>
-          <div style={{ fontSize: '15px', color: twitterUsername ? '#00f5ff' : '#6688aa', marginBottom: '12px', fontWeight: 900 }}>
-            {twitterUsername || 'Not Linked'}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', minHeight: '32px' }}>
+            <div style={{ fontSize: '15px', color: twitterUsername ? '#00f5ff' : '#6688aa', fontWeight: 900 }}>
+              {twitterUsername || 'Not Linked'}
+            </div>
+            {!twitterUsername && (
+              <button
+                onClick={() => {
+                  if (authenticated && linkTwitter) {
+                    linkTwitter();
+                  } else if (login) {
+                    login();
+                  }
+                }}
+                style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '10px',
+                  fontWeight: 900,
+                  background: 'rgba(0, 245, 255, 0.15)',
+                  border: '1.5px solid #00f5ff',
+                  color: '#00f5ff',
+                  borderRadius: '8px',
+                  padding: '6px 14px',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  boxShadow: '0 0 10px rgba(0, 245, 255, 0.3)',
+                  letterSpacing: '0.8px'
+                }}
+              >
+                + LINK
+              </button>
+            )}
           </div>
-          {authenticated && !twitterUsername && (
-            <button
-              onClick={linkTwitter}
-              style={{
-                fontFamily: 'var(--vv-pixel)',
-                fontSize: '10px',
-                fontWeight: 900,
-                background: 'rgba(0, 245, 255, 0.15)',
-                border: '1.5px solid #00f5ff',
-                color: '#00f5ff',
-                borderRadius: '8px',
-                padding: '8px 14px',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease',
-                boxShadow: '0 0 10px rgba(0, 245, 255, 0.3)'
-              }}
-            >
-              + LINK X ACCOUNT
-            </button>
-          )}
         </div>
 
         {/* Connected Wallet */}
@@ -211,7 +220,7 @@ export default function HomePanel({ player, onNavigate }) {
           <div style={{ color: '#88aacc', fontSize: '10px', marginBottom: '10px', letterSpacing: '0.8px', fontWeight: 900 }}>
             CONNECTED WALLET
           </div>
-          <div style={{ fontSize: '15px', color: '#ffd700', fontWeight: 900 }}>
+          <div style={{ fontSize: '15px', color: '#ffd700', fontWeight: 900, minHeight: '32px', display: 'flex', alignItems: 'center' }}>
             {walletAddress}
           </div>
         </div>
