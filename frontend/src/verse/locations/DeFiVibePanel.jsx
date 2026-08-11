@@ -133,7 +133,6 @@ export default function DeFiVibePanel({ player }) {
       const usd = Number(fromAmount) * ethPriceUsd;
       return `~$${usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
     } else {
-      // In SELL mode, $VIBE value in USD equals the output ETH in USD!
       const ethVal = rawEthOutput || (Number(fromAmount) / 238000000);
       const usd = ethVal * ethPriceUsd;
       return `~$${usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
@@ -152,11 +151,12 @@ export default function DeFiVibePanel({ player }) {
     }
   }, [fromAmount, mode, ethPriceUsd, rawEthOutput]);
 
-  // Percentage Button Handler (25%, 50%, 75%, 100%)
+  // Percentage Button Handler (25%, 50%, 75%, 100%) - Robust Happy Hour proven logic
   const handlePercentage = (percent) => {
     setTxStatus({ type: '', msg: '', hash: '' });
     if (mode === 'buy') {
-      const rawEth = parseFloat(balances.ethFormatted || '0');
+      const ethStr = (balances.ethFormatted || '0').replace(',', '.');
+      const rawEth = parseFloat(ethStr);
       if (isNaN(rawEth) || rawEth <= 0) return;
       if (percent === 100) {
         // Reserve 0.0001 ETH for gas when selecting 100% ETH
@@ -167,17 +167,27 @@ export default function DeFiVibePanel({ player }) {
         setFromAmount(ethVal.toFixed(6).replace(/\.?0+$/, ''));
       }
     } else {
-      const rawVibeStr = balances.vibeFormatted || balances.vibe || '0';
-      const rawVibe = parseFloat(rawVibeStr);
+      // Robust VIBE Balance Extraction
+      const vibeStr = (balances.vibeFormatted || balances.vibe || '0').toString().replace(',', '.');
+      const rawVibe = parseFloat(vibeStr);
       if (isNaN(rawVibe) || rawVibe <= 0) return;
 
-      const targetVal = percent === 100 ? rawVibeStr : (rawVibe * (percent / 100)).toString();
-      // Strictly TRUNCATE to 2 decimals WITHOUT rounding (e.g. 400000.326745 -> 400000.32)
-      const [intPart, fracPart] = targetVal.split('.');
-      if (!fracPart) {
-        setFromAmount(intPart);
+      if (percent === 100) {
+        // Truncate to 2 decimals without rounding (e.g. 400000.326745 -> 400000.32)
+        const [intPart, fracPart] = vibeStr.split('.');
+        if (!fracPart) {
+          setFromAmount(intPart);
+        } else {
+          setFromAmount(`${intPart}.${fracPart.slice(0, 2)}`);
+        }
       } else {
-        setFromAmount(`${intPart}.${fracPart.slice(0, 2)}`);
+        const vibeVal = (rawVibe * (percent / 100)).toString();
+        const [intPart, fracPart] = vibeVal.split('.');
+        if (!fracPart) {
+          setFromAmount(intPart);
+        } else {
+          setFromAmount(`${intPart}.${fracPart.slice(0, 2)}`);
+        }
       }
     }
   };
@@ -333,296 +343,275 @@ export default function DeFiVibePanel({ player }) {
   };
 
   return (
-    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px', padding: '4px', maxWidth: '540px', margin: '0 auto' }}>
-      {/* Main Pixel Swap Window Card */}
+    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px', padding: '4px' }}>
+      {/* Header & Mode Switcher */}
       <div style={{
-        background: 'rgba(4, 20, 48, 0.96)',
-        border: '3px solid #00f5ff',
-        borderRadius: '16px',
-        padding: '26px 28px',
-        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 245, 255, 0.28)'
+        display: 'flex',
+        justify: 'space-between',
+        alignItems: 'center',
+        marginBottom: '20px'
       }}>
-        {/* Header & Mode Switcher */}
-        <div style={{
-          display: 'flex',
-          justify: 'space-between',
-          alignItems: 'center',
-          marginBottom: '22px'
-        }}>
-          <div style={{ fontSize: '14px', color: '#ffd700', fontWeight: 900, letterSpacing: '0.8px' }}>
-            {mode === 'buy' ? 'BUY $VIBE (PAY ETH)' : 'SELL $VIBE (RECEIVE ETH)'}
-          </div>
-
-          {/* Slippage Tolerance Selector */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontSize: '9px', color: '#88aacc', fontWeight: 900 }}>SLIPPAGE:</span>
-            {[0.5, 1.0, 3.0, 5.0].map((s) => (
-              <button
-                key={s}
-                onClick={() => setSlippage(s)}
-                style={{
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '9px',
-                  padding: '4px 8px',
-                  borderRadius: '6px',
-                  border: slippage === s ? '1px solid #00f5ff' : '1px solid rgba(255, 255, 255, 0.15)',
-                  background: slippage === s ? 'rgba(0, 245, 255, 0.25)' : 'rgba(2, 11, 26, 0.6)',
-                  color: slippage === s ? '#00f5ff' : '#aaa',
-                  cursor: 'pointer',
-                  fontWeight: 900
-                }}
-              >
-                {s}%
-              </button>
-            ))}
-          </div>
+        <div style={{ fontSize: '13px', color: '#ffd700', fontWeight: 900, letterSpacing: '0.8px' }}>
+          {mode === 'buy' ? 'BUY $VIBE (PAY ETH)' : 'SELL $VIBE (RECEIVE ETH)'}
         </div>
 
-        {/* INPUT CARD 1: YOU PAY */}
-        <div style={{
-          background: '#020b1a',
-          border: '2px solid rgba(0, 245, 255, 0.4)',
-          borderRadius: '12px',
-          padding: '16px 18px',
-          marginBottom: '10px'
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#aaa', fontSize: '9px', marginBottom: '10px', fontWeight: 900 }}>
-            <span>YOU PAY</span>
-            <span>
-              BALANCE:{' '}
-              <strong style={{ color: mode === 'buy' ? '#00f5ff' : '#ffd700' }}>
-                {balances.loading
-                  ? 'Loading...'
-                  : mode === 'buy'
-                  ? `${balances.ethFormatted} ETH`
-                  : `${balances.vibeFormatted} $VIBE`}
-              </strong>
-            </span>
-          </div>
-
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <input
-              type="number"
-              placeholder="0.00"
-              value={fromAmount}
-              onChange={(e) => {
-                setFromAmount(e.target.value);
-                setTxStatus({ type: '', msg: '', hash: '' });
-              }}
+        {/* Slippage Tolerance Selector */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span style={{ fontSize: '9px', color: '#88aacc', fontWeight: 900 }}>SLIPPAGE:</span>
+          {[0.5, 1.0, 3.0, 5.0].map((s) => (
+            <button
+              key={s}
+              onClick={() => setSlippage(s)}
               style={{
-                flex: 1,
                 fontFamily: 'var(--vv-pixel)',
-                fontSize: '18px',
-                background: 'transparent',
-                border: 'none',
-                color: '#ffffff',
-                outline: 'none',
+                fontSize: '9px',
+                padding: '4px 8px',
+                borderRadius: '6px',
+                border: slippage === s ? '1px solid #00f5ff' : '1px solid rgba(255, 255, 255, 0.15)',
+                background: slippage === s ? 'rgba(0, 245, 255, 0.25)' : 'rgba(2, 11, 26, 0.6)',
+                color: slippage === s ? '#00f5ff' : '#aaa',
+                cursor: 'pointer',
                 fontWeight: 900
               }}
-            />
-            <span style={{
-              fontFamily: 'var(--vv-pixel)',
-              fontSize: '11px',
-              fontWeight: 900,
-              color: mode === 'buy' ? '#00f5ff' : '#ffd700',
-              background: mode === 'buy' ? 'rgba(0, 245, 255, 0.15)' : 'rgba(255, 215, 0, 0.15)',
-              border: mode === 'buy' ? '1px solid #00f5ff' : '1px solid #ffd700',
-              padding: '8px 14px',
-              borderRadius: '8px'
-            }}>
-              {mode === 'buy' ? 'ETH' : '$VIBE'}
-            </span>
-          </div>
+            >
+              {s}%
+            </button>
+          ))}
+        </div>
+      </div>
 
-          {/* Small USD Equivalent Display */}
-          <div style={{ color: 'rgba(255, 255, 255, 0.55)', fontSize: '9px', marginTop: '6px', fontWeight: 700 }}>
-            {fromUsd}
-          </div>
-
-          {/* Percentage Preset Buttons (25%, 50%, 75%, 100%) */}
-          <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-            {[25, 50, 75, 100].map((p) => (
-              <button
-                key={p}
-                onClick={() => handlePercentage(p)}
-                style={{
-                  flex: 1,
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '9px',
-                  background: mode === 'buy' ? 'rgba(0, 245, 255, 0.12)' : 'rgba(255, 215, 0, 0.12)',
-                  border: mode === 'buy' ? '1px solid rgba(0, 245, 255, 0.4)' : '1px solid rgba(255, 215, 0, 0.4)',
-                  color: mode === 'buy' ? '#00f5ff' : '#ffd700',
-                  padding: '6px 0',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                  fontWeight: 900
-                }}
-              >
-                {p === 100 ? 'MAX' : `${p}%`}
-              </button>
-            ))}
-          </div>
+      {/* INPUT CARD 1: YOU PAY */}
+      <div style={{
+        background: '#020b1a',
+        border: '2px solid rgba(0, 245, 255, 0.4)',
+        borderRadius: '12px',
+        padding: '16px 18px',
+        marginBottom: '10px'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', color: '#aaa', fontSize: '9px', marginBottom: '10px', fontWeight: 900 }}>
+          <span>YOU PAY</span>
+          <span>
+            BALANCE:{' '}
+            <strong style={{ color: mode === 'buy' ? '#00f5ff' : '#ffd700' }}>
+              {balances.loading
+                ? 'Loading...'
+                : mode === 'buy'
+                ? `${balances.ethFormatted} ETH`
+                : `${balances.vibeFormatted} $VIBE`}
+            </strong>
+          </span>
         </div>
 
-        {/* FLIP DIRECTION BUTTON ↕ */}
-        <div style={{ textAlign: 'center', margin: '-4px 0 10px 0' }}>
-          <button
-            onClick={handleToggleMode}
-            title="Switch Swap Direction"
-            style={{
-              fontFamily: 'var(--vv-pixel)',
-              fontSize: '14px',
-              background: 'rgba(4, 20, 48, 0.95)',
-              border: '2px solid #00f5ff',
-              color: '#ffd700',
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              cursor: 'pointer',
-              boxShadow: '0 0 14px rgba(0, 245, 255, 0.5)',
-              transition: 'transform 0.2s ease'
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <input
+            type="number"
+            placeholder="0.00"
+            value={fromAmount}
+            onChange={(e) => {
+              setFromAmount(e.target.value);
+              setTxStatus({ type: '', msg: '', hash: '' });
             }}
-          >
-            ↕
-          </button>
-        </div>
-
-        {/* INPUT CARD 2: YOU RECEIVE */}
-        <div style={{
-          background: '#020b1a',
-          border: '2px solid rgba(0, 245, 255, 0.4)',
-          borderRadius: '12px',
-          padding: '16px 18px',
-          marginBottom: '20px'
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', color: '#aaa', fontSize: '9px', marginBottom: '10px', fontWeight: 900 }}>
-            <span>YOU RECEIVE (ESTIMATED)</span>
-            <span>
-              CURRENT BALANCE:{' '}
-              <strong style={{ color: mode === 'buy' ? '#ffd700' : '#00f5ff' }}>
-                {balances.loading
-                  ? 'Loading...'
-                  : mode === 'buy'
-                  ? `${balances.vibeFormatted} $VIBE`
-                  : `${balances.ethFormatted} ETH`}
-              </strong>
-            </span>
-          </div>
-
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <div style={{
+            style={{
               flex: 1,
               fontFamily: 'var(--vv-pixel)',
               fontSize: '18px',
-              color: '#00ff88',
+              background: 'transparent',
+              border: 'none',
+              color: '#ffffff',
+              outline: 'none',
               fontWeight: 900
-            }}>
-              {isFetchingQuote ? 'CALCULATING...' : (toAmount || '0.00')}
-            </div>
-            <span style={{
-              fontFamily: 'var(--vv-pixel)',
-              fontSize: '11px',
-              fontWeight: 900,
-              color: mode === 'buy' ? '#ffd700' : '#00f5ff',
-              background: mode === 'buy' ? 'rgba(255, 215, 0, 0.15)' : 'rgba(0, 245, 255, 0.15)',
-              border: mode === 'buy' ? '1px solid #ffd700' : '1px solid #00f5ff',
-              padding: '8px 14px',
-              borderRadius: '8px'
-            }}>
-              {mode === 'buy' ? '$VIBE' : 'ETH'}
-            </span>
-          </div>
-
-          {/* Small USD Equivalent Display */}
-          <div style={{ color: 'rgba(255, 255, 255, 0.55)', fontSize: '9px', marginTop: '6px', fontWeight: 700 }}>
-            {toUsd}
-          </div>
+            }}
+          />
+          <span style={{
+            fontFamily: 'var(--vv-pixel)',
+            fontSize: '11px',
+            fontWeight: 900,
+            color: mode === 'buy' ? '#00f5ff' : '#ffd700',
+            background: mode === 'buy' ? 'rgba(0, 245, 255, 0.15)' : 'rgba(255, 215, 0, 0.15)',
+            border: mode === 'buy' ? '1px solid #00f5ff' : '1px solid #ffd700',
+            padding: '8px 14px',
+            borderRadius: '8px'
+          }}>
+            {mode === 'buy' ? 'ETH' : '$VIBE'}
+          </span>
         </div>
 
-        {/* Status Toast Message */}
-        {txStatus.msg && (
-          <div style={{
-            marginBottom: '18px',
-            padding: '12px 16px',
-            borderRadius: '10px',
-            background: txStatus.type === 'success'
-              ? 'rgba(0, 255, 136, 0.15)'
-              : txStatus.type === 'error'
-              ? 'rgba(255, 68, 102, 0.15)'
-              : 'rgba(0, 245, 255, 0.15)',
-            border: txStatus.type === 'success'
-              ? '1.5px solid #00ff88'
-              : txStatus.type === 'error'
-              ? '1.5px solid #ff4466'
-              : '1.5px solid #00f5ff',
-            color: txStatus.type === 'success'
-              ? '#00ff88'
-              : txStatus.type === 'error'
-              ? '#ff4466'
-              : '#00f5ff',
-            fontSize: '10px',
-            fontWeight: 900,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}>
-            <span>{txStatus.msg}</span>
-            {txStatus.hash && (
-              <a
-                href={`https://basescan.org/tx/${txStatus.hash}`}
-                target="_blank"
-                rel="noreferrer"
-                style={{ color: '#00f5ff', textDecoration: 'underline' }}
-              >
-                BASESCAN ↗
-              </a>
-            )}
-          </div>
-        )}
+        {/* Small USD Equivalent Display */}
+        <div style={{ color: 'rgba(255, 255, 255, 0.55)', fontSize: '9px', marginTop: '6px', fontWeight: 700 }}>
+          {fromUsd}
+        </div>
 
-        {/* MAIN SWAP ACTION BUTTON */}
-        <button
-          onClick={handleSwap}
-          disabled={swapping || !fromAmount || Number(fromAmount) <= 0}
-          style={{
-            width: '100%',
-            fontFamily: 'var(--vv-pixel)',
-            fontSize: '14px',
-            fontWeight: 900,
-            background: mode === 'buy'
-              ? 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)'
-              : 'linear-gradient(135deg, #ffd700 0%, #ff6b35 100%)',
-            border: '2.5px solid #ffffff',
-            borderRadius: '10px',
-            padding: '16px',
-            color: mode === 'buy' ? '#ffffff' : '#020b1a',
-            cursor: swapping ? 'default' : 'pointer',
-            boxShadow: mode === 'buy'
-              ? '0 4px 0 #0033aa, 0 0 24px rgba(0, 245, 255, 0.5)'
-              : '0 4px 0 #cc5500, 0 0 24px rgba(255, 215, 0, 0.5)',
-            letterSpacing: '1px',
-            transition: 'all 0.15s ease'
-          }}
-        >
-          {swapping
-            ? 'CONFIRM IN WALLET...'
-            : mode === 'buy'
-            ? 'BUY $VIBE'
-            : 'SELL $VIBE'}
-        </button>
-
-        {/* Footer Info */}
-        <div style={{
-          marginTop: '16px',
-          display: 'flex',
-          justify: 'space-between',
-          color: 'rgba(255, 255, 255, 0.5)',
-          fontSize: '9px'
-        }}>
-          <span>EXECUTIVE ROUTER: o1 Launchpad DEX Aggregator Engine</span>
-          <span>BUILDER PROGRAM: {BUILDER_CODE}</span>
+        {/* Percentage Preset Buttons (25%, 50%, 75%, MAX) */}
+        <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+          {[25, 50, 75, 100].map((p) => (
+            <button
+              key={p}
+              onClick={() => handlePercentage(p)}
+              style={{
+                flex: 1,
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '9px',
+                background: mode === 'buy' ? 'rgba(0, 245, 255, 0.12)' : 'rgba(255, 215, 0, 0.12)',
+                border: mode === 'buy' ? '1px solid rgba(0, 245, 255, 0.4)' : '1px solid rgba(255, 215, 0, 0.4)',
+                color: mode === 'buy' ? '#00f5ff' : '#ffd700',
+                padding: '6px 0',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: 900
+              }}
+            >
+              {p === 100 ? 'MAX' : `${p}%`}
+            </button>
+          ))}
         </div>
       </div>
+
+      {/* FLIP DIRECTION BUTTON ↕ */}
+      <div style={{ textAlign: 'center', margin: '-4px 0 10px 0' }}>
+        <button
+          onClick={handleToggleMode}
+          title="Switch Swap Direction"
+          style={{
+            fontFamily: 'var(--vv-pixel)',
+            fontSize: '14px',
+            background: 'rgba(4, 20, 48, 0.95)',
+            border: '2px solid #00f5ff',
+            color: '#ffd700',
+            width: '38px',
+            height: '38px',
+            borderRadius: '50%',
+            cursor: 'pointer',
+            boxShadow: '0 0 14px rgba(0, 245, 255, 0.5)',
+            transition: 'transform 0.2s ease'
+          }}
+        >
+          ↕
+        </button>
+      </div>
+
+      {/* INPUT CARD 2: YOU RECEIVE */}
+      <div style={{
+        background: '#020b1a',
+        border: '2px solid rgba(0, 245, 255, 0.4)',
+        borderRadius: '12px',
+        padding: '16px 18px',
+        marginBottom: '20px'
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', color: '#aaa', fontSize: '9px', marginBottom: '10px', fontWeight: 900 }}>
+          <span>YOU RECEIVE (ESTIMATED)</span>
+          <span>
+            CURRENT BALANCE:{' '}
+            <strong style={{ color: mode === 'buy' ? '#ffd700' : '#00f5ff' }}>
+              {balances.loading
+                ? 'Loading...'
+                : mode === 'buy'
+                ? `${balances.vibeFormatted} $VIBE`
+                : `${balances.ethFormatted} ETH`}
+            </strong>
+          </span>
+        </div>
+
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div style={{
+            flex: 1,
+            fontFamily: 'var(--vv-pixel)',
+            fontSize: '18px',
+            color: '#00ff88',
+            fontWeight: 900
+          }}>
+            {isFetchingQuote ? 'CALCULATING...' : (toAmount || '0.00')}
+          </div>
+          <span style={{
+            fontFamily: 'var(--vv-pixel)',
+            fontSize: '11px',
+            fontWeight: 900,
+            color: mode === 'buy' ? '#ffd700' : '#00f5ff',
+            background: mode === 'buy' ? 'rgba(255, 215, 0, 0.15)' : 'rgba(0, 245, 255, 0.15)',
+            border: mode === 'buy' ? '1px solid #ffd700' : '1px solid #00f5ff',
+            padding: '8px 14px',
+            borderRadius: '8px'
+          }}>
+            {mode === 'buy' ? '$VIBE' : 'ETH'}
+          </span>
+        </div>
+
+        {/* Small USD Equivalent Display */}
+        <div style={{ color: 'rgba(255, 255, 255, 0.55)', fontSize: '9px', marginTop: '6px', fontWeight: 700 }}>
+          {toUsd}
+        </div>
+      </div>
+
+      {/* Status Toast Message */}
+      {txStatus.msg && (
+        <div style={{
+          marginBottom: '18px',
+          padding: '12px 16px',
+          borderRadius: '10px',
+          background: txStatus.type === 'success'
+            ? 'rgba(0, 255, 136, 0.15)'
+            : txStatus.type === 'error'
+            ? 'rgba(255, 68, 102, 0.15)'
+            : 'rgba(0, 245, 255, 0.15)',
+          border: txStatus.type === 'success'
+            ? '1.5px solid #00ff88'
+            : txStatus.type === 'error'
+            ? '1.5px solid #ff4466'
+            : '1.5px solid #00f5ff',
+          color: txStatus.type === 'success'
+            ? '#00ff88'
+            : txStatus.type === 'error'
+            ? '#ff4466'
+            : '#00f5ff',
+          fontSize: '10px',
+          fontWeight: 900,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <span>{txStatus.msg}</span>
+          {txStatus.hash && (
+            <a
+              href={`https://basescan.org/tx/${txStatus.hash}`}
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: '#00f5ff', textDecoration: 'underline' }}
+            >
+              BASESCAN ↗
+            </a>
+          )}
+        </div>
+      )}
+
+      {/* MAIN SWAP ACTION BUTTON */}
+      <button
+        onClick={handleSwap}
+        disabled={swapping || !fromAmount || Number(fromAmount) <= 0}
+        style={{
+          width: '100%',
+          fontFamily: 'var(--vv-pixel)',
+          fontSize: '14px',
+          fontWeight: 900,
+          background: mode === 'buy'
+            ? 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)'
+            : 'linear-gradient(135deg, #ffd700 0%, #ff6b35 100%)',
+          border: '2.5px solid #ffffff',
+          borderRadius: '10px',
+          padding: '16px',
+          color: mode === 'buy' ? '#ffffff' : '#020b1a',
+          cursor: swapping ? 'default' : 'pointer',
+          boxShadow: mode === 'buy'
+            ? '0 4px 0 #0033aa, 0 0 24px rgba(0, 245, 255, 0.5)'
+            : '0 4px 0 #cc5500, 0 0 24px rgba(255, 215, 0, 0.5)',
+          letterSpacing: '1px',
+          transition: 'all 0.15s ease'
+        }}
+      >
+        {swapping
+          ? 'CONFIRM IN WALLET...'
+          : mode === 'buy'
+          ? 'BUY $VIBE'
+          : 'SELL $VIBE'}
+      </button>
     </div>
   );
 }
