@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { usePrivy } from '@privy-io/react-auth';
+import React, { useState } from 'react';
+import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { parseEther, encodeFunctionData, parseUnits } from 'viem';
 import { useUserBalances } from '../hooks/useUserBalances';
 
@@ -49,6 +49,7 @@ const ERC20_ABI = [
 
 export default function DeFiVibePanel({ player }) {
   const { authenticated, user, sendTransaction, login } = usePrivy();
+  const { wallets } = useWallets();
   const rawAddress = user?.wallet?.address;
   const balances = useUserBalances(rawAddress);
 
@@ -76,6 +77,54 @@ export default function DeFiVibePanel({ player }) {
     }
   }, [fromAmount, mode, vibeRate]);
 
+  // Universal Web3 transaction helper supporting all wallet types
+  const executeWeb3Tx = async (to, valueBigInt, dataHex) => {
+    // 1. Find connected Privy wallet provider
+    const connectedWallet = wallets.find(
+      (w) => w.address?.toLowerCase() === rawAddress?.toLowerCase()
+    ) || wallets[0];
+
+    if (connectedWallet) {
+      const provider = await connectedWallet.getEthereumProvider();
+      const hash = await provider.request({
+        method: 'eth_sendTransaction',
+        params: [{
+          from: rawAddress,
+          to,
+          value: valueBigInt ? '0x' + valueBigInt.toString(16) : '0x0',
+          data: dataHex
+        }]
+      });
+      return hash;
+    }
+
+    // 2. Browser window.ethereum fallback
+    if (window.ethereum) {
+      const hash = await window.ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [{
+          from: rawAddress,
+          to,
+          value: valueBigInt ? '0x' + valueBigInt.toString(16) : '0x0',
+          data: dataHex
+        }]
+      });
+      return hash;
+    }
+
+    // 3. Privy sendTransaction fallback
+    if (sendTransaction) {
+      const res = await sendTransaction({
+        to,
+        value: valueBigInt,
+        data: dataHex
+      });
+      return res?.transactionHash || res?.hash || '';
+    }
+
+    throw new Error('No active Web3 wallet found');
+  };
+
   const handlePreset = (val) => {
     setFromAmount(val);
     setTxStatus({ type: '', msg: '', hash: '' });
@@ -98,7 +147,7 @@ export default function DeFiVibePanel({ player }) {
     }
 
     setSwapping(true);
-    setTxStatus({ type: 'info', msg: '⌛ Preparing o1 Exchange transaction...' });
+    setTxStatus({ type: 'info', msg: '⌛ Confirming in your Web3 wallet...' });
 
     try {
       if (mode === 'buy') {
@@ -124,27 +173,7 @@ export default function DeFiVibePanel({ player }) {
         // Append Builder Code bc_wsbqqe2u hex suffix
         const finalCalldata = baseCalldata + BUILDER_CODE_HEX;
 
-        const unsignedTx = {
-          to: SWAP_ROUTER_ADDRESS,
-          value: amountWei,
-          data: finalCalldata
-        };
-
-        let txHash = '';
-        if (sendTransaction) {
-          const res = await sendTransaction(unsignedTx);
-          txHash = res?.transactionHash || res?.hash || '';
-        } else if (window.ethereum) {
-          txHash = await window.ethereum.request({
-            method: 'eth_sendTransaction',
-            params: [{
-              from: rawAddress,
-              to: SWAP_ROUTER_ADDRESS,
-              value: '0x' + amountWei.toString(16),
-              data: finalCalldata
-            }]
-          });
-        }
+        const txHash = await executeWeb3Tx(SWAP_ROUTER_ADDRESS, amountWei, finalCalldata);
 
         setTxStatus({
           type: 'success',
@@ -163,14 +192,9 @@ export default function DeFiVibePanel({ player }) {
           args: [SWAP_ROUTER_ADDRESS, amountVibeWei]
         });
 
-        if (sendTransaction) {
-          await sendTransaction({
-            to: VIBE_TOKEN_ADDRESS,
-            data: approveCalldata
-          });
-        }
+        await executeWeb3Tx(VIBE_TOKEN_ADDRESS, 0n, approveCalldata);
 
-        setTxStatus({ type: 'info', msg: '⌛ Step 2/2: Executing $VIBE ➔ ETH Swap...' });
+        setTxStatus({ type: 'info', msg: '⌛ Step 2/2: Confirming $VIBE ➔ ETH Swap...' });
 
         const swapCalldata = encodeFunctionData({
           abi: SWAP_ROUTER_ABI,
@@ -190,14 +214,7 @@ export default function DeFiVibePanel({ player }) {
 
         const finalSwapCalldata = swapCalldata + BUILDER_CODE_HEX;
 
-        let txHash = '';
-        if (sendTransaction) {
-          const res = await sendTransaction({
-            to: SWAP_ROUTER_ADDRESS,
-            data: finalSwapCalldata
-          });
-          txHash = res?.transactionHash || res?.hash || '';
-        }
+        const txHash = await executeWeb3Tx(SWAP_ROUTER_ADDRESS, 0n, finalSwapCalldata);
 
         setTxStatus({
           type: 'success',
@@ -207,7 +224,7 @@ export default function DeFiVibePanel({ player }) {
       }
     } catch (err) {
       console.error('Swap execution error:', err);
-      if (err?.message?.includes('user rejected')) {
+      if (err?.message?.includes('user rejected') || err?.message?.includes('User rejected')) {
         setTxStatus({ type: 'error', msg: '✕ Transaction rejected in wallet' });
       } else {
         setTxStatus({ type: 'error', msg: `⚠️ Swap failed: ${err?.shortMessage || err?.message || 'Error'}` });
