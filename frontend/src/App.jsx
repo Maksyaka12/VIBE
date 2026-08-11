@@ -964,7 +964,7 @@ function DomainRouter() {
 export default function App() {
   return (
     <PrivyProvider
-      appId="cmrugdvds02q60cl7tegmrnx7"
+      appId="cmsoytt8e00pb0cjrjj7k54m5"
       config={{
         loginMethods: ['wallet'],
         appearance: {
