@@ -578,31 +578,34 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   background: rgba(2, 11, 26, 0.85);
-  border: 1.5px solid rgba(0, 245, 255, 0.35);
+  border: 2px solid rgba(0, 245, 255, 0.4);
   border-radius: 8px;
+  padding: 0;
+  overflow: hidden;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: 0 2px 0 #0050ff, 0 0 10px rgba(0, 245, 255, 0.25);
+  box-shadow: 0 2px 0 #0050ff, 0 0 12px rgba(0, 245, 255, 0.3);
   transition: all 0.15s ease;
 }
 
 .vv-social-btn:hover {
   background: rgba(0, 245, 255, 0.2);
   border-color: #00f5ff;
-  box-shadow: 0 4px 0 #0050ff, 0 0 16px rgba(0, 245, 255, 0.7);
-  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 0 #0050ff, 0 0 18px rgba(0, 245, 255, 0.8);
+  transform: translateY(-2px) scale(1.08);
 }
 
 .vv-social-btn__icon {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
   object-fit: cover;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+  display: block;
 }
 
 .vv-menu-btn {
