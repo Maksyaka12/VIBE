@@ -2852,8 +2852,8 @@
 
 .vv-setup-avatar-wrap {
   position: relative;
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   flex-shrink: 0;
 }
 
@@ -2870,8 +2870,8 @@
   position: absolute;
   bottom: 2px;
   right: 2px;
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   background: #00ff88;
   border: 2px solid #020b1a;
   border-radius: 50%;
@@ -2881,23 +2881,25 @@
 .vv-setup-title-wrap {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .vv-setup-badge {
   font-family: var(--vv-pixel);
-  font-size: 8px;
+  font-size: 11px;
   color: #ffd700;
   letter-spacing: 1px;
-  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+  font-weight: 700;
 }
 
 .vv-setup-title {
   font-family: var(--vv-pixel);
-  font-size: 15px;
+  font-size: 20px;
   color: #ffffff;
   margin: 0;
   letter-spacing: 1px;
+  text-shadow: 0 0 14px rgba(255, 255, 255, 0.4);
 }
 
 .vv-setup-subtitle {
