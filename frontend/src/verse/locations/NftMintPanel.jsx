@@ -141,7 +141,7 @@ export default function NftMintPanel({ player }) {
         </div>
       </div>
 
-      {/* ── 2. MIDDLE SECTION: MINT PRICING PHASES (PHASE LEFT, PRICE RIGHT) ── */}
+      {/* ── 2. MIDDLE SECTION: MINT PRICING PHASES (FAR LEFT PHASE & FAR RIGHT PRICE) ── */}
       <div style={{
         background: 'rgba(2, 11, 26, 0.85)',
         border: '1.5px solid rgba(0, 245, 255, 0.3)',
@@ -186,7 +186,7 @@ export default function NftMintPanel({ player }) {
         gridTemplateColumns: 'repeat(3, 1fr)',
         gap: '16px'
       }}>
-        {/* Card 1: Buyback & Burn */}
+        {/* Card 1: 80% Buyback & Burn + 20% Treasury */}
         <div style={{
           background: 'rgba(2, 11, 26, 0.9)',
           border: '1.5px solid rgba(255, 68, 170, 0.4)',
@@ -195,10 +195,10 @@ export default function NftMintPanel({ player }) {
           boxShadow: '0 4px 16px rgba(255, 68, 170, 0.15)'
         }}>
           <div style={{ fontSize: '12px', color: '#ff44aa', fontWeight: 900, marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>🔥</span> 100% BUYBACK & BURN
+            <span>🔥</span> 80% BURN / 20% REWARDS
           </div>
           <div style={{ fontSize: '10px', color: '#ccc', lineHeight: 1.6 }}>
-            All ETH raised from NFT minting is 100% automatically swapped on-chain for $VIBE tokens and burned forever.
+            80% of ETH raised from minting is automatically swapped for $VIBE & burned, while 20% stays in contract treasury for protocol buybacks & rewards.
           </div>
         </div>
 
