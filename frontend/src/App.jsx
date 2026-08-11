@@ -967,16 +967,10 @@ export default function App() {
       appId="cmsoytt8e00pb0cjrjj7k54m5"
       config={{
         loginMethods: ['wallet'],
-        defaultChain: base,
-        supportedChains: [base],
-        embeddedWallets: {
-          createOnLogin: 'users-without-wallets'
-        },
         appearance: {
           theme: 'dark',
           accentColor: '#00f5ff',
-          logo: 'https://vibeverse.dog/vibe-logo.png',
-          walletList: ['metamask', 'coinbase_wallet', 'wallet_connect', 'phantom', 'detected_wallets']
+          logo: 'https://vibeverse.dog/vibe-logo.png'
         }
       }}
     >
