@@ -577,33 +577,29 @@
 .vv-social-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
   background: rgba(2, 11, 26, 0.85);
-  border: 1.5px solid rgba(0, 245, 255, 0.3);
-  border-radius: 6px;
-  padding: 6px 10px;
-  color: #ffffff;
-  font-family: var(--vv-pixel);
-  font-size: 9px;
-  letter-spacing: 0.5px;
+  border: 1.5px solid rgba(0, 245, 255, 0.35);
+  border-radius: 8px;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: 0 2px 0 #0050ff, 0 0 10px rgba(0, 245, 255, 0.2);
+  box-shadow: 0 2px 0 #0050ff, 0 0 10px rgba(0, 245, 255, 0.25);
   transition: all 0.15s ease;
 }
 
 .vv-social-btn:hover {
-  background: rgba(0, 245, 255, 0.18);
+  background: rgba(0, 245, 255, 0.2);
   border-color: #00f5ff;
-  color: #00f5ff;
-  box-shadow: 0 4px 0 #0050ff, 0 0 16px rgba(0, 245, 255, 0.6);
-  transform: translateY(-1px);
+  box-shadow: 0 4px 0 #0050ff, 0 0 16px rgba(0, 245, 255, 0.7);
+  transform: translateY(-2px) scale(1.05);
 }
 
 .vv-social-btn__icon {
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
   object-fit: cover;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
