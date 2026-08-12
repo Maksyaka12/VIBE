@@ -246,26 +246,34 @@ function LocationOverlay({ zone, zones, player, onClose, onNavigate, onUpdatePla
   if (isFullscreen) {
     return (
       <div className={`vv-overlay arena-fullscreen vv-mobile-page-fullscreen ${closing ? 'closing' : ''}`}>
-        <div className="vv-overlay__bar">
-          <button className="vv-overlay__close" onClick={close}>
-            <span className="vv-overlay__close-key">✕</span>CLOSE
-          </button>
-          <div className="vv-overlay__title">
-            <div
-              className="vv-overlay__title-icon"
-              style={{ background: `${zoneInfo?.color || '#00f5ff'}18`, border: `1px solid ${zoneInfo?.color || '#00f5ff'}40` }}
-            >
-              {zoneInfo?.icon || '🏛️'}
+        {isMobileScreen ? (
+          <div className="vv-mobile-top-floating-header">
+            <button className="vv-mobile-close-btn" onClick={close} title="Close">
+              ✕
+            </button>
+          </div>
+        ) : (
+          <div className="vv-overlay__bar">
+            <button className="vv-overlay__close" onClick={close}>
+              <span className="vv-overlay__close-key">ESC</span>CLOSE
+            </button>
+            <div className="vv-overlay__title">
+              <div
+                className="vv-overlay__title-icon"
+                style={{ background: `${zoneInfo?.color || '#00f5ff'}18`, border: `1px solid ${zoneInfo?.color || '#00f5ff'}40` }}
+              >
+                {zoneInfo?.icon || '🏛️'}
+              </div>
+              <div>
+                <div className="vv-overlay__title-text">{zoneInfo?.label || 'Vibe Verse'}</div>
+                <div className="vv-overlay__title-sub">Vibe Verse</div>
+              </div>
             </div>
-            <div>
-              <div className="vv-overlay__title-text">{zoneInfo?.label || 'Vibe Verse'}</div>
-              <div className="vv-overlay__title-sub">Vibe Verse — Base App</div>
+            <div className="vv-overlay__nav">
+              <span className="vv-overlay__nav-text">vibeverse.dog</span>
             </div>
           </div>
-          <div className="vv-overlay__nav">
-            <span className="vv-overlay__nav-text">vibeverse.dog</span>
-          </div>
-        </div>
+        )}
         <div className="vv-overlay__content">{PANELS[zone]?.(player, { close, onNavigate, onUpdatePlayer })}</div>
       </div>
     );
