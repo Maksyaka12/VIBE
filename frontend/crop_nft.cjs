@@ -2,7 +2,7 @@ const { Jimp } = require('jimp');
 const path = require('path');
 const fs = require('fs');
 
-async function cropNFTs() {
+async function cropNFTsClean() {
   const inputPath = path.join(__dirname, 'public', 'nft9.png');
   const outputDir = path.join(__dirname, 'public', 'nft', 'images');
 
@@ -17,35 +17,37 @@ async function cropNFTs() {
 
   console.log(`Original Image Dimensions: ${width}x${height}`);
 
-  const rows = 3;
-  const cols = 3;
-  const cellW = Math.floor(width / cols);
-  const cellH = Math.floor(height / rows);
+  // Exact coordinates excluding the blue grid separator lines
+  const colRanges = [
+    { x: 0, w: 675 },
+    { x: 688, w: 672 },
+    { x: 1373, w: 675 }
+  ];
 
-  console.log(`Cell size: ${cellW}x${cellH}`);
+  const rowRanges = [
+    { y: 0, h: 676 },
+    { y: 688, h: 673 },
+    { y: 1375, h: 673 }
+  ];
 
   let count = 0;
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
+  for (let r = 0; r < rowRanges.length; r++) {
+    for (let c = 0; c < colRanges.length; c++) {
       count++;
-      const x = c * cellW;
-      const y = r * cellH;
+      const { x, w } = colRanges[c];
+      const { y, h } = rowRanges[r];
 
-      // Crop current cell
-      const cropped = image.clone().crop({ x, y, w: cellW, h: cellH });
+      // Clean crop excluding blue border lines
+      const cropped = image.clone().crop({ x, y, w, h });
       const filename = `${count}.png`;
       const outputPath = path.join(outputDir, filename);
 
       await cropped.write(outputPath);
-      console.log(`Saved NFT #${count} -> ${filename} (${cellW}x${cellH} at x:${x}, y:${y})`);
+      console.log(`Saved Clean NFT #${count} -> ${filename} (${w}x${h} at x:${x}, y:${y})`);
     }
   }
 
-  // Remove test_crop.png if it exists
-  const testFile = path.join(__dirname, 'public', 'test_crop.png');
-  if (fs.existsSync(testFile)) fs.unlinkSync(testFile);
-
-  console.log(`\n🎉 SUCCESS! Extracted ${count} individual NFT images into ${outputDir}`);
+  console.log(`\n🎉 SUCCESS! Extracted ${count} 100% CLEAN NFT images (zero blue lines) to ${outputDir}`);
 }
 
-cropNFTs().catch(console.error);
+cropNFTsClean().catch(console.error);
