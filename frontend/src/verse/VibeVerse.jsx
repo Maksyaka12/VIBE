@@ -226,38 +226,44 @@ function buildRoadSvgPaths(roadNodes, roadEdges) {
 ════════════════════════════════════════════════════════════════ */
 function LocationOverlay({ zone, zones, player, onClose, onNavigate, onUpdatePlayer }) {
   const [closing, setClosing] = useState(false);
+  const [isMobileScreen, setIsMobileScreen] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
   const close = useCallback(() => { setClosing(true); setTimeout(onClose, 200); }, [onClose]);
 
   useEffect(() => {
+    const handleResize = () => setIsMobileScreen(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
     const fn = (e) => { if (e.key === 'Escape') close(); };
     window.addEventListener('keydown', fn);
-    return () => window.removeEventListener('keydown', fn);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('keydown', fn);
+    };
   }, [close]);
 
   const zoneInfo = zones.find((z) => z.id === zone);
-  const isFullscreen = zone === 'arena';
+  const isFullscreen = zone === 'arena' || isMobileScreen;
 
   if (isFullscreen) {
     return (
-      <div className={`vv-overlay arena-fullscreen ${closing ? 'closing' : ''}`}>
+      <div className={`vv-overlay arena-fullscreen vv-mobile-page-fullscreen ${closing ? 'closing' : ''}`}>
         <div className="vv-overlay__bar">
           <button className="vv-overlay__close" onClick={close}>
-            <span className="vv-overlay__close-key">ESC</span>CLOSE
+            <span className="vv-overlay__close-key">✕</span>CLOSE
           </button>
           <div className="vv-overlay__title">
             <div
               className="vv-overlay__title-icon"
-              style={{ background: `${zoneInfo?.color}18`, border: `1px solid ${zoneInfo?.color}40` }}
+              style={{ background: `${zoneInfo?.color || '#00f5ff'}18`, border: `1px solid ${zoneInfo?.color || '#00f5ff'}40` }}
             >
-              {zoneInfo?.icon}
+              {zoneInfo?.icon || '🏛️'}
             </div>
             <div>
-              <div className="vv-overlay__title-text">{zoneInfo?.label}</div>
-              <div className="vv-overlay__title-sub">Vibe Verse Arena</div>
+              <div className="vv-overlay__title-text">{zoneInfo?.label || 'Vibe Verse'}</div>
+              <div className="vv-overlay__title-sub">Vibe Verse — Base App</div>
             </div>
           </div>
           <div className="vv-overlay__nav">
-            <span className="vv-overlay__nav-text">vibehome.dog/verse</span>
+            <span className="vv-overlay__nav-text">vibeverse.dog</span>
           </div>
         </div>
         <div className="vv-overlay__content">{PANELS[zone]?.(player, { close, onNavigate, onUpdatePlayer })}</div>
@@ -265,7 +271,7 @@ function LocationOverlay({ zone, zones, player, onClose, onNavigate, onUpdatePla
     );
   }
 
-  // Centered Modal Dialog for all non-arena locations
+  // Centered Modal Dialog for desktop
   return (
     <div className={`vv-modal-backdrop ${closing ? 'closing' : ''}`} onClick={close}>
       <div

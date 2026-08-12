@@ -384,7 +384,7 @@ export default function DeFiVibePanel({ player }) {
   };
 
   return (
-    <div style={{ fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: '#fff', fontSize: '12px', padding: '4px' }}>
+    <div className="vv-defi-panel-wrap" style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '10px', padding: '4px', width: '100%', boxSizing: 'border-box' }}>
       {/* Header & Mode Switcher */}
       <div className="vv-defi-header" style={{
         display: 'flex',
