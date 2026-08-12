@@ -625,7 +625,7 @@ function Roadmap() {
             <div className="roadmap-items">
               <div className="roadmap-item in-progress">
                 <div className="r-title"><Users size={24} color="var(--blue)"/> Vibe Culture: Vibe Club <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
-                <div className="r-desc">Building a full-fledged Vibe culture that drives global brand awareness, fosters a loyal community, strengthens the power of $VIBE, and introduces the exclusive Vibe Club NFT Collection.</div>
+                <div className="r-desc">Building a full-fledged Vibe culture that drives global brand awareness, fosters a loyal community, and strengthens the power of $VIBE. Introducing the Vibe Club NFT Collection.</div>
               </div>
               <div className="roadmap-item in-progress">
                 <div className="r-title"><Rocket size={24} color="var(--blue)"/> Product Launch: Vibe Verse <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
