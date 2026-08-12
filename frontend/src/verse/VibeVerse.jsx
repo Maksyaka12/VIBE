@@ -556,22 +556,40 @@ export default function VibeVerse() {
   const updateCamera = useCallback((cx, cy) => {
     if (!viewportRef.current || !mapRef.current) return;
     const vp = viewportRef.current.getBoundingClientRect();
-    const mapW = vp.width;
-    const mapH = vp.height;
+    const mapRect = mapRef.current.getBoundingClientRect();
 
+    const vpW = vp.width;
+    const vpH = vp.height;
+
+    // Map container dimensions (including 1.8x mobile scaling)
+    const mapW = mapRef.current.offsetWidth || mapRect.width;
+    const mapH = mapRef.current.offsetHeight || mapRect.height;
+
+    // Character position in pixels relative to map top-left
     const charPxX = (cx / 100) * mapW;
     const charPxY = (cy / 100) * mapH;
 
-    let targetOffsetX = mapW / 2 - charPxX;
-    let targetOffsetY = mapH / 2 - charPxY;
+    // Target camera translation to center character
+    let targetOffsetX = vpW / 2 - charPxX;
+    let targetOffsetY = vpH / 2 - charPxY;
 
+    // Min & Max offsets to prevent scrolling off map edges
+    const minOffsetX = vpW - mapW;
     const maxOffsetX = 0;
-    const minOffsetX = mapW - mapW;
+    const minOffsetY = vpH - mapH;
     const maxOffsetY = 0;
-    const minOffsetY = mapH - mapH;
 
-    targetOffsetX = Math.min(maxOffsetX, Math.max(minOffsetX, targetOffsetX));
-    targetOffsetY = Math.min(maxOffsetY, Math.max(minOffsetY, targetOffsetY));
+    if (mapW <= vpW) {
+      targetOffsetX = (vpW - mapW) / 2;
+    } else {
+      targetOffsetX = Math.min(maxOffsetX, Math.max(minOffsetX, targetOffsetX));
+    }
+
+    if (mapH <= vpH) {
+      targetOffsetY = (vpH - mapH) / 2;
+    } else {
+      targetOffsetY = Math.min(maxOffsetY, Math.max(minOffsetY, targetOffsetY));
+    }
 
     setCameraOffset({ x: targetOffsetX, y: targetOffsetY });
   }, []);
@@ -916,6 +934,50 @@ export default function VibeVerse() {
                   <span className="vv-menu-item-text">{z.label}</span>
                 </button>
               ))}
+
+              <div style={{ margin: '14px 0 6px 0', borderTop: '1px solid rgba(0, 245, 255, 0.2)', paddingTop: '12px', fontSize: '9px', color: '#88aacc', fontWeight: 900 }}>
+                QUICK LINKS
+              </div>
+              <a
+                href="https://vibehome.dog"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="vv-neura-menu-item"
+                style={{ textDecoration: 'none' }}
+              >
+                <span className="vv-menu-item-icon">🌐</span>
+                <span className="vv-menu-item-text">WEBSITE (VIBEHOME.DOG)</span>
+              </a>
+              <a
+                href="https://x.com/vibeB20"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="vv-neura-menu-item"
+                style={{ textDecoration: 'none' }}
+              >
+                <span className="vv-menu-item-icon">𝕏</span>
+                <span className="vv-menu-item-text">OFFICIAL X / TWITTER</span>
+              </a>
+              <a
+                href="https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="vv-neura-menu-item"
+                style={{ textDecoration: 'none' }}
+              >
+                <span className="vv-menu-item-icon">🦅</span>
+                <span className="vv-menu-item-text">O1 EXCHANGE</span>
+              </a>
+              <a
+                href="https://dexscreener.com/base/0xa1a4159e61ac9fc48aa9e9992c8d4870ef8a496d5749af1d219e8002f74835c5"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="vv-neura-menu-item"
+                style={{ textDecoration: 'none' }}
+              >
+                <span className="vv-menu-item-icon">📊</span>
+                <span className="vv-menu-item-text">DEXSCREENER CHART</span>
+              </a>
             </div>
           </div>
         </div>

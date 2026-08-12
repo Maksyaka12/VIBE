@@ -2579,8 +2579,14 @@
    RESPONSIVE
    ================================================================ */
 @media (max-width: 768px) {
-  .vv-topbar { padding: 0 16px; }
+  .vv-topbar { padding: 0 10px; height: 48px; }
   .vv-topbar__season { display: none; }
+  .vv-social-group { display: none !important; }
+  .vv-topbar__right { gap: 6px; }
+  .vv-topbar__logo-text { font-size: 9px; letter-spacing: 1px; }
+  .vv-btn-mint-nav { font-size: 8px; padding: 6px 10px; white-space: nowrap; }
+  .vv-btn-connect { font-size: 8px; padding: 6px 10px; white-space: nowrap; }
+  .vv-overlay__card { width: 94vw !important; max-height: 88vh !important; padding: 14px !important; margin: auto; }
 
   .vv-home {
     grid-template-columns: 1fr;

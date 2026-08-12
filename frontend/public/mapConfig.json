@@ -8,7 +8,7 @@
     "tileUnit": "percent",
     "moveSpeed": 0.14,
     "snapThreshold": 2.5,
-    "snapThresholdMobile": 4.5,
+    "snapThresholdMobile": 12.0,
     "mobileBreakpoint": 768,
     "mobileMapScale": 1.8
   },
