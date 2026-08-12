@@ -15,6 +15,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
+import sdk from '@farcaster/frame-sdk';
 import './VibeVerse.css';
 import CharacterSetup from './CharacterSetup';
 import DogSprite from './DogSprite';
@@ -500,6 +501,18 @@ export default function VibeVerse() {
   const mapRef         = useRef(null);
   const viewportRef    = useRef(null);
   const configRef      = useRef(null);
+
+  /* ── Base App / Frame SDK Initializer ── */
+  useEffect(() => {
+    const initFrame = async () => {
+      try {
+        await sdk.actions.ready();
+      } catch (e) {
+        // Fail gracefully when running outside Base App frame
+      }
+    };
+    initFrame();
+  }, []);
 
   /* ── Load config from JSON ── */
   useEffect(() => {
