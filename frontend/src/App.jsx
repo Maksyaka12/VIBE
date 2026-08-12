@@ -973,6 +973,14 @@ function StandaloneLayout({ children }) {
 function DomainRouter() {
   const isGameDomain = typeof window !== 'undefined' && window.location.hostname.toLowerCase().includes('vibeverse');
 
+  useEffect(() => {
+    if (isGameDomain) {
+      document.title = "Vibe Verse — The Base Dog Web3 World";
+    } else {
+      document.title = "$VIBE — The Base Dog";
+    }
+  }, [isGameDomain]);
+
   return (
     <Routes>
       <Route path="/" element={isGameDomain ? <VibeVerse /> : <><Nav /><LandingPage /><Footer /></>} />
