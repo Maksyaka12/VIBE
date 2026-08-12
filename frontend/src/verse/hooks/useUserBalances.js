@@ -19,6 +19,7 @@ export function useUserBalances(address) {
     vibe: '0',
     ethFormatted: '0.0000',
     vibeFormatted: '0',
+    exactVibeStr: '0',
     loading: false,
     rawEth: 0n,
     rawVibe: 0n
@@ -31,6 +32,7 @@ export function useUserBalances(address) {
         vibe: '0',
         ethFormatted: '0.0000',
         vibeFormatted: '0',
+        exactVibeStr: '0',
         loading: false,
         rawEth: 0n,
         rawVibe: 0n
@@ -57,8 +59,9 @@ export function useUserBalances(address) {
 
         if (!isSubscribed) return;
 
+        const exactVibeStr = formatUnits(vibeBalance, 18);
         const ethNum = parseFloat(formatUnits(ethBalance, 18));
-        const vibeNum = parseFloat(formatUnits(vibeBalance, 18));
+        const vibeNum = parseFloat(exactVibeStr);
 
         const ethFormatted = ethNum.toFixed(4);
         const vibeFormatted = vibeNum >= 1000000
@@ -69,9 +72,10 @@ export function useUserBalances(address) {
 
         setBalances({
           eth: ethNum.toString(),
-          vibe: vibeNum.toString(),
+          vibe: exactVibeStr,
           ethFormatted,
           vibeFormatted,
+          exactVibeStr,
           loading: false,
           rawEth: ethBalance,
           rawVibe: vibeBalance

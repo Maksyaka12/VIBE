@@ -206,8 +206,8 @@ export default function DeFiVibePanel({ player }) {
         setFromAmount(ethVal.toFixed(6).replace(/\.?0+$/, ''));
       }
     } else {
-      // Robust VIBE Balance Extraction
-      const vibeStr = (balances.vibeFormatted || balances.vibe || '0').toString().replace(',', '.');
+      // Robust VIBE Balance Extraction using exact numeric string
+      const vibeStr = (balances.exactVibeStr || balances.vibe || '0').toString().replace(',', '.');
       const rawVibe = parseFloat(vibeStr);
       if (isNaN(rawVibe) || rawVibe <= 0) return;
 
