@@ -8,7 +8,8 @@ const BUILDER_CODE = 'bc_wsbqqe2u';
 // Official ERC-8021 Data Suffix for Base Builder Code bc_wsbqqe2u:
 const BUILDER_CODE_HEX = '62635f77736271716532750b0080218021802180218021802180218021';
 
-const NATIVE_ETH_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
+const ETH_ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+const KYBER_ETH_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
 const VIBE_TOKEN_ADDRESS = '0xb200000000000000000000df24ecb8bf51100a01';
 
 const ERC20_ABI = [
@@ -66,7 +67,7 @@ export default function DeFiVibePanel({ player }) {
     return () => { active = false; clearInterval(interval); };
   }, []);
 
-  // Debounced Route Quote Fetching via DEX Aggregator Engine
+  // Optimized Direct Route Quote Fetching (LI.FI Engine with KyberSwap fallback)
   useEffect(() => {
     if (!fromAmount || isNaN(fromAmount) || Number(fromAmount) <= 0) {
       setQuoteData(null);
@@ -78,16 +79,24 @@ export default function DeFiVibePanel({ player }) {
     const timer = setTimeout(async () => {
       setIsFetchingQuote(true);
       try {
-        const tokenIn = mode === 'buy' ? NATIVE_ETH_ADDRESS : VIBE_TOKEN_ADDRESS;
-        const tokenOut = mode === 'buy' ? VIBE_TOKEN_ADDRESS : NATIVE_ETH_ADDRESS;
+        const tokenIn = mode === 'buy' ? ETH_ZERO_ADDRESS : VIBE_TOKEN_ADDRESS;
+        const tokenOut = mode === 'buy' ? VIBE_TOKEN_ADDRESS : ETH_ZERO_ADDRESS;
         const amountInWei = parseUnits(fromAmount, 18).toString();
+        const userAddr = rawAddress || '0x0000000000000000000000000000000000000001';
+        const slippageDecimal = slippage / 100;
 
-        const res = await fetch(`https://aggregator-api.kyberswap.com/base/api/v1/routes?tokenIn=${tokenIn}&tokenOut=${tokenOut}&amountIn=${amountInWei}`);
+        // Try LI.FI Direct Route Quote API (Optimal Uniswap v4 / Direct Pool Routing)
+        const lifiUrl = `https://li.quest/v1/quote?fromChain=8453&toChain=8453&fromToken=${tokenIn}&toToken=${tokenOut}&fromAmount=${amountInWei}&fromAddress=${userAddr}&slippage=${slippageDecimal}`;
+        const res = await fetch(lifiUrl);
         const data = await res.json();
 
-        if (data.code === 0 && data.data?.routeSummary) {
-          setQuoteData(data.data);
-          const outWei = BigInt(data.data.routeSummary.amountOut);
+        if (res.ok && data && data.estimate && data.transactionRequest) {
+          setQuoteData({
+            engine: 'lifi',
+            txRequest: data.transactionRequest,
+            toAmountWei: data.estimate.toAmount
+          });
+          const outWei = BigInt(data.estimate.toAmount);
           const outFormatted = formatUnits(outWei, 18);
           const outNum = Number(outFormatted);
 
@@ -104,16 +113,46 @@ export default function DeFiVibePanel({ player }) {
             );
           }
         } else {
-          // Fallback estimated rate (1 ETH ~ 238,000,000 VIBE)
-          const vibeRate = 238000000;
-          if (mode === 'buy') {
-            const out = Number(fromAmount) * vibeRate;
-            setRawEthOutput(Number(fromAmount));
-            setToAmount(out >= 1000000 ? (out / 1000000).toFixed(2) + 'M' : out.toLocaleString());
+          // Fallback KyberSwap Route Fetcher
+          const kTokenIn = mode === 'buy' ? KYBER_ETH_ADDRESS : VIBE_TOKEN_ADDRESS;
+          const kTokenOut = mode === 'buy' ? VIBE_TOKEN_ADDRESS : KYBER_ETH_ADDRESS;
+          const kRes = await fetch(`https://aggregator-api.kyberswap.com/base/api/v1/routes?tokenIn=${kTokenIn}&tokenOut=${kTokenOut}&amountIn=${amountInWei}`);
+          const kData = await kRes.json();
+
+          if (kData.code === 0 && kData.data?.routeSummary) {
+            setQuoteData({
+              engine: 'kyberswap',
+              summary: kData.data.routeSummary,
+              routerAddress: kData.data.routerAddress
+            });
+            const outWei = BigInt(kData.data.routeSummary.amountOut);
+            const outFormatted = formatUnits(outWei, 18);
+            const outNum = Number(outFormatted);
+
+            if (mode === 'sell') {
+              setRawEthOutput(outNum);
+              setToAmount(outNum.toFixed(6));
+            } else {
+              setRawEthOutput(Number(fromAmount));
+              setToAmount(outNum > 1000000
+                ? (outNum / 1000000).toFixed(2) + 'M'
+                : outNum > 1000
+                ? (outNum / 1000).toFixed(2) + 'K'
+                : outNum.toFixed(2)
+              );
+            }
           } else {
-            const outEth = Number(fromAmount) / vibeRate;
-            setRawEthOutput(outEth);
-            setToAmount(outEth.toFixed(6));
+            // Estimated rate fallback
+            const vibeRate = 238000000;
+            if (mode === 'buy') {
+              const out = Number(fromAmount) * vibeRate;
+              setRawEthOutput(Number(fromAmount));
+              setToAmount(out >= 1000000 ? (out / 1000000).toFixed(2) + 'M' : out.toLocaleString());
+            } else {
+              const outEth = Number(fromAmount) / vibeRate;
+              setRawEthOutput(outEth);
+              setToAmount(outEth.toFixed(6));
+            }
           }
         }
       } catch (e) {
@@ -124,7 +163,7 @@ export default function DeFiVibePanel({ player }) {
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [fromAmount, mode]);
+  }, [fromAmount, mode, slippage, rawAddress]);
 
   // Calculate ~$ USD Equivalence (Exact Market USD Price)
   const fromUsd = useMemo(() => {
@@ -151,7 +190,7 @@ export default function DeFiVibePanel({ player }) {
     }
   }, [fromAmount, mode, ethPriceUsd, rawEthOutput]);
 
-  // Percentage Button Handler (25%, 50%, 75%, 100%) - Robust Happy Hour proven logic
+  // Percentage Button Handler (25%, 50%, 75%, MAX)
   const handlePercentage = (percent) => {
     setTxStatus({ type: '', msg: '', hash: '' });
     if (mode === 'buy') {
@@ -260,18 +299,23 @@ export default function DeFiVibePanel({ player }) {
     setTxStatus({ type: 'info', msg: '⌛ Confirming in your Web3 wallet...' });
 
     try {
-      let targetAddress = '0x2626664c2603336E57B271c5C0b26F421741e481';
+      let targetAddress = '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE';
       let calldataHex = '';
       let txValue = 0n;
 
-      if (quoteData && quoteData.routeSummary) {
-        setTxStatus({ type: 'info', msg: '⌛ Building optimal DEX swap route...' });
+      if (quoteData && quoteData.engine === 'lifi' && quoteData.txRequest) {
+        setTxStatus({ type: 'info', msg: '⌛ Executing optimal Direct DEX swap...' });
+        targetAddress = quoteData.txRequest.to || targetAddress;
+        calldataHex = quoteData.txRequest.data || '0x';
+        txValue = quoteData.txRequest.value ? BigInt(quoteData.txRequest.value) : 0n;
+      } else if (quoteData && quoteData.engine === 'kyberswap' && quoteData.summary) {
+        setTxStatus({ type: 'info', msg: '⌛ Building KyberSwap route...' });
 
         const buildRes = await fetch('https://aggregator-api.kyberswap.com/base/api/v1/route/build', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            routeSummary: quoteData.routeSummary,
+            routeSummary: quoteData.summary,
             sender: rawAddress,
             recipient: rawAddress,
             slippageTolerance: Math.round(slippage * 100),
@@ -284,10 +328,7 @@ export default function DeFiVibePanel({ player }) {
           targetAddress = buildData.data.routerAddress || quoteData.routerAddress || targetAddress;
           calldataHex = buildData.data.data;
           txValue = buildData.data.value ? BigInt(buildData.data.value) : 0n;
-
-          if (mode === 'buy') {
-            txValue = parseUnits(fromAmount, 18);
-          }
+          if (mode === 'buy') txValue = parseUnits(fromAmount, 18);
         }
       }
 
