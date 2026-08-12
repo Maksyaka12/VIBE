@@ -2,7 +2,20 @@ const { Jimp } = require('jimp');
 const path = require('path');
 const fs = require('fs');
 
-async function cropNFTsClean() {
+// Exact mapping of filenames for each of the 9 NFTs based on their title banner
+const NFT_NAMES = [
+  'Vibe Club #177 Footballer.png',
+  'Vibe Club #178 Ninja.png',
+  'Vibe Club #179 Samurai.png',
+  'Vibe Club #180 Astronaut.png',
+  'Vibe Club #181 Pirate.png',
+  'Vibe Club #182 King.png',
+  'Vibe Club #183 Wizard.png',
+  'Vibe Club #184 Cyberpunk.png',
+  'Vibe Club #185 Detective.png'
+];
+
+async function cropNFTsWithoutBanner() {
   const inputPath = path.join(__dirname, 'public', 'nft9.png');
   const outputDir = path.join(__dirname, 'public', 'nft', 'images');
 
@@ -17,37 +30,44 @@ async function cropNFTsClean() {
 
   console.log(`Original Image Dimensions: ${width}x${height}`);
 
-  // Exact coordinates excluding the blue grid separator lines
+  // Columns excluding blue vertical separator lines
   const colRanges = [
     { x: 0, w: 675 },
     { x: 688, w: 672 },
     { x: 1373, w: 675 }
   ];
 
+  // Rows cropped ABOVE the bottom text banner (height = 605px)
   const rowRanges = [
-    { y: 0, h: 676 },
-    { y: 688, h: 673 },
-    { y: 1375, h: 673 }
+    { y: 0, h: 605 },
+    { y: 688, h: 605 },
+    { y: 1375, h: 605 }
   ];
 
   let count = 0;
   for (let r = 0; r < rowRanges.length; r++) {
     for (let c = 0; c < colRanges.length; c++) {
-      count++;
       const { x, w } = colRanges[c];
       const { y, h } = rowRanges[r];
 
-      // Clean crop excluding blue border lines
+      // Crop current cell without bottom banner and without blue lines
       const cropped = image.clone().crop({ x, y, w, h });
-      const filename = `${count}.png`;
+      const filename = NFT_NAMES[count] || `NFT_${count + 1}.png`;
       const outputPath = path.join(outputDir, filename);
 
       await cropped.write(outputPath);
-      console.log(`Saved Clean NFT #${count} -> ${filename} (${w}x${h} at x:${x}, y:${y})`);
+      console.log(`Saved Clean NFT #${count + 1} -> "${filename}" (${w}x${h} at x:${x}, y:${y})`);
+      
+      // Also save a fallback copy as 1.png, 2.png etc.
+      const numFilename = `${count + 1}.png`;
+      const numOutputPath = path.join(outputDir, numFilename);
+      await cropped.write(numOutputPath);
+
+      count++;
     }
   }
 
-  console.log(`\n🎉 SUCCESS! Extracted ${count} 100% CLEAN NFT images (zero blue lines) to ${outputDir}`);
+  console.log(`\n🎉 SUCCESS! Extracted ${count} 100% CLEAN NFT images (zero text banner & zero blue lines) into ${outputDir}`);
 }
 
-cropNFTsClean().catch(console.error);
+cropNFTsWithoutBanner().catch(console.error);
