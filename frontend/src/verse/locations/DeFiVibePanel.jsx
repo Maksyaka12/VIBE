@@ -347,16 +347,16 @@ export default function DeFiVibePanel({ player }) {
       {/* Header & Mode Switcher */}
       <div style={{
         display: 'flex',
-        justify: 'space-between',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: '20px'
       }}>
         <div style={{ fontSize: '13px', color: '#ffd700', fontWeight: 900, letterSpacing: '0.8px' }}>
-          {mode === 'buy' ? 'BUY $VIBE (PAY ETH)' : 'SELL $VIBE (RECEIVE ETH)'}
+          {mode === 'buy' ? 'BUY $VIBE' : 'SELL $VIBE'}
         </div>
 
         {/* Slippage Tolerance Selector */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto' }}>
           <span style={{ fontSize: '9px', color: '#88aacc', fontWeight: 900 }}>SLIPPAGE:</span>
           {[0.5, 1.0, 3.0, 5.0].map((s) => (
             <button
