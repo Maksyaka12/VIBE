@@ -621,7 +621,26 @@ function Roadmap() {
           
           {/* Phase 3 */}
           <div className="roadmap-phase rv" ref={useRev()}>
-            <div className="roadmap-phase-title">Phase 3: Ecosystem Dominance</div>
+            <div className="roadmap-phase-title">Phase 3: $VIBE Ecosystem</div>
+            <div className="roadmap-items">
+              <div className="roadmap-item in-progress">
+                <div className="r-title"><Users size={24} color="var(--blue)"/> Vibe Club <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
+                <div className="r-desc">Transitioning from a meme token into a full-fledged Vibe culture, driving global brand awareness, holder loyalty, and strengthening the power of $VIBE.</div>
+              </div>
+              <div className="roadmap-item in-progress">
+                <div className="r-title"><Rocket size={24} color="var(--blue)"/> Launch Vibe Verse <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
+                <div className="r-desc">Unveiling Vibe Verse — an interactive Web3 pixel-art gaming world where $VIBE serves as the native in-game utility currency.</div>
+              </div>
+              <div className="roadmap-item in-progress">
+                <div className="r-title"><Flame size={24} color="var(--blue)"/> Vibe Verse Ecosystem <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
+                <div className="r-desc">Expanding the gaming and DeFi ecosystem around $VIBE as the core infrastructural utility token.</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Phase 4 */}
+          <div className="roadmap-phase rv" ref={useRev()}>
+            <div className="roadmap-phase-title">Phase 4: B20 Ecosystem Dominance</div>
             <div className="roadmap-items">
               <div className="roadmap-item">
                 <div className="r-title"><Crown size={24} color="var(--blue)"/> The Face of o1</div>
@@ -634,9 +653,9 @@ function Roadmap() {
             </div>
           </div>
 
-          {/* Phase 4 */}
+          {/* Phase 5 */}
           <div className="roadmap-phase rv" ref={useRev()}>
-            <div className="roadmap-phase-title">Phase 4: The Zenith</div>
+            <div className="roadmap-phase-title">Phase 5: The Zenith</div>
             <div className="roadmap-items">
               <div className="roadmap-item">
                 <div className="r-title"><Rocket size={24} color="var(--blue)"/> The 100M B20 Runner</div>
