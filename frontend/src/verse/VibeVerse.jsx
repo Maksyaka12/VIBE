@@ -501,6 +501,8 @@ export default function VibeVerse() {
   const mapRef         = useRef(null);
   const viewportRef    = useRef(null);
   const configRef      = useRef(null);
+  const cameraOffsetRef = useRef({ x: 0, y: 0 });
+  const touchStateRef  = useRef({ startX: 0, startY: 0, camStartX: 0, camStartY: 0, isDragging: false });
 
   /* ── Base App / Frame SDK Initializer ── */
   useEffect(() => {
@@ -526,6 +528,10 @@ export default function VibeVerse() {
         posRef.current = { x: cfg.character.startX, y: cfg.character.startY };
         currentNodeRef.current = cfg.character.startNode;
         applyPos(cfg.character.startX, cfg.character.startY);
+
+        // Initial camera centering on dog near Doghouse at start
+        setTimeout(() => updateCamera(cfg.character.startX, cfg.character.startY), 100);
+        setTimeout(() => updateCamera(cfg.character.startX, cfg.character.startY), 350);
       })
       .catch(() => console.error('[VibeVerse] Failed to load mapConfig.json'));
   }, []);
@@ -538,7 +544,12 @@ export default function VibeVerse() {
 
   /* ── Mobile detection ── */
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
+    const check = () => {
+      setIsMobile(window.innerWidth < 768);
+      if (posRef.current) {
+        updateCamera(posRef.current.x, posRef.current.y);
+      }
+    };
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
@@ -564,6 +575,8 @@ export default function VibeVerse() {
     // Map container dimensions (including 1.8x mobile scaling)
     const mapW = mapRef.current.offsetWidth || mapRect.width;
     const mapH = mapRef.current.offsetHeight || mapRect.height;
+
+    if (!mapW || !mapH) return;
 
     // Character position in pixels relative to map top-left
     const charPxX = (cx / 100) * mapW;
@@ -594,6 +607,7 @@ export default function VibeVerse() {
     if (mapRef.current) {
       mapRef.current.style.transform = `translate3d(${targetOffsetX}px, ${targetOffsetY}px, 0)`;
     }
+    cameraOffsetRef.current = { x: targetOffsetX, y: targetOffsetY };
     setCameraOffset({ x: targetOffsetX, y: targetOffsetY });
   }, []);
 
@@ -753,8 +767,69 @@ export default function VibeVerse() {
     handleMapInteract(e.clientX, e.clientY);
   }, [handleMapInteract]);
 
+  const handleTouchStart = useCallback((e) => {
+    if (openLocation || menuOpen || !e.touches[0]) return;
+    const t = e.touches[0];
+    touchStateRef.current = {
+      startX: t.clientX,
+      startY: t.clientY,
+      camStartX: cameraOffsetRef.current.x,
+      camStartY: cameraOffsetRef.current.y,
+      isDragging: false,
+    };
+  }, [openLocation, menuOpen]);
+
+  const handleTouchMove = useCallback((e) => {
+    if (openLocation || menuOpen || !e.touches[0] || !viewportRef.current || !mapRef.current) return;
+    const t = e.touches[0];
+    const ts = touchStateRef.current;
+    const dx = t.clientX - ts.startX;
+    const dy = t.clientY - ts.startY;
+
+    if (Math.hypot(dx, dy) > 8) {
+      ts.isDragging = true;
+    }
+
+    if (ts.isDragging) {
+      const vp = viewportRef.current.getBoundingClientRect();
+      const mapRect = mapRef.current.getBoundingClientRect();
+      const vpW = vp.width || window.innerWidth;
+      const vpH = vp.height || window.innerHeight;
+      const mapW = mapRef.current.offsetWidth || mapRect.width;
+      const mapH = mapRef.current.offsetHeight || mapRect.height;
+
+      let targetX = ts.camStartX + dx;
+      let targetY = ts.camStartY + dy;
+
+      const minX = vpW - mapW;
+      const maxX = 0;
+      const minY = vpH - mapH;
+      const maxY = 0;
+
+      if (mapW <= vpW) {
+        targetX = (vpW - mapW) / 2;
+      } else {
+        targetX = Math.min(maxX, Math.max(minX, targetX));
+      }
+
+      if (mapH <= vpH) {
+        targetY = (vpH - mapH) / 2;
+      } else {
+        targetY = Math.min(maxY, Math.max(minY, targetY));
+      }
+
+      mapRef.current.style.transform = `translate3d(${targetX}px, ${targetY}px, 0)`;
+      cameraOffsetRef.current = { x: targetX, y: targetY };
+    }
+  }, [openLocation, menuOpen]);
+
   const handleTouchEnd = useCallback((e) => {
     if (openLocation || menuOpen) return;
+    const ts = touchStateRef.current;
+    if (ts.isDragging) {
+      setCameraOffset({ x: cameraOffsetRef.current.x, y: cameraOffsetRef.current.y });
+      return; // Drag exploration active, do not walk dog
+    }
     const t = e.changedTouches[0];
     if (t) handleMapInteract(t.clientX, t.clientY);
   }, [openLocation, menuOpen, handleMapInteract]);
@@ -1006,6 +1081,8 @@ export default function VibeVerse() {
           }}
           onClick={handleMapClick}
           onMouseMove={handleMouseMove}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
 

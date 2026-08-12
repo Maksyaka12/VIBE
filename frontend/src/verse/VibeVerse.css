@@ -2587,7 +2587,9 @@
   .vv-menu-btn__title { font-size: 10px; }
   .vv-btn-mint-nav { font-size: 8px; padding: 6px 10px; white-space: nowrap; height: 32px; }
   .vv-btn-connect { font-size: 8px; padding: 6px 10px; white-space: nowrap; height: 32px; }
+  .vv-neura-menu-card { min-width: 0 !important; width: 92vw !important; max-width: 360px !important; padding: 16px 14px !important; max-height: 85vh !important; overflow-y: auto !important; }
   .vv-overlay__card { width: 94vw !important; max-height: 88vh !important; padding: 14px !important; margin: auto; }
+  .vv-modal-card { width: 94vw !important; max-height: 88vh !important; padding: 16px 14px !important; overflow-y: auto !important; }
 
   .vv-home {
     grid-template-columns: 1fr;
