@@ -46,7 +46,8 @@ export default function NftMintPanel({ player }) {
         {/* Left Side: Large NFT Image */}
         <div style={{ position: 'relative', flexShrink: 0 }}>
           <img
-            src="/vibe-dog.jpg"
+            src="/nft/images/1.png"
+            onError={(e) => { e.target.src = '/vibe-dog.jpg'; }}
             alt="Genesis NFT"
             className="vv-nft-main-img"
             style={{
