@@ -54,7 +54,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
   };
 
   return (
-    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px' }}>
+    <div style={{ fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: '#fff', fontSize: '12px' }}>
       {/* Top Banner */}
       <div className="vv-holders-top-banner" style={{
         background: 'rgba(255, 215, 0, 0.12)',
@@ -69,7 +69,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <span style={{ fontSize: '24px' }}>👑</span>
-          <div style={{ color: '#ffd700', fontSize: '14px', fontWeight: 900, letterSpacing: '0.5px' }}>
+          <div style={{ fontFamily: 'var(--vv-pixel)', color: '#ffd700', fontSize: '13px', fontWeight: 900, letterSpacing: '0.5px' }}>
             HOLDER REWARDS · 100M $VIBE
           </div>
         </div>
@@ -93,7 +93,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
             boxShadow: isEligible ? '0 0 20px rgba(0,255,136,0.2)' : '0 0 20px rgba(255,68,102,0.2)',
             flexShrink: 0
           }}>
-            <div style={{ fontSize: '10px', color: '#aaa', marginBottom: '6px' }}>
+            <div style={{ fontSize: '11px', color: '#aaa', marginBottom: '6px', fontWeight: 700 }}>
               YOUR WALLET BALANCE
             </div>
             <div style={{ fontSize: '22px', color: '#ffd700', fontWeight: 900, marginBottom: '14px' }}>
@@ -110,7 +110,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
               boxShadow: isEligible ? '0 0 14px rgba(0,255,136,0.3)' : 'none'
             }}>
               <div style={{
-                fontSize: '12px',
+                fontSize: '13px',
                 fontWeight: 900,
                 color: isEligible ? '#00ff88' : '#ff4466',
                 letterSpacing: '0.5px'
@@ -125,16 +125,17 @@ export default function HoldersZonePanel({ player, onNavigate }) {
                 style={{
                   width: '100%',
                   marginTop: '12px',
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '11px',
+                  fontFamily: "'Inter', -apple-system, sans-serif",
+                  fontSize: '12px',
                   background: 'linear-gradient(135deg, #ff007f, #b44dff)',
-                  border: '2px solid #fff',
-                  borderRadius: '8px',
+                  border: '1.5px solid #fff',
+                  borderRadius: '10px',
                   padding: '12px',
                   color: '#fff',
                   fontWeight: 900,
                   cursor: 'pointer',
-                  boxShadow: '0 3px 0 #660044, 0 0 14px rgba(255, 0, 127, 0.5)'
+                  boxShadow: '0 3px 10px rgba(255, 0, 127, 0.4)',
+                  letterSpacing: '0.5px'
                 }}
               >
                 BUY $VIBE ON O1 EXCHANGE 🚀
@@ -155,7 +156,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
             flex: 1,
             overflow: 'hidden'
           }}>
-            <div style={{ color: '#ffd700', fontSize: '11px', fontWeight: 900, marginBottom: '10px', flexShrink: 0 }}>
+            <div style={{ color: '#ffd700', fontSize: '12px', fontWeight: 800, marginBottom: '10px', flexShrink: 0 }}>
               📋 ELIGIBILITY & DISTRIBUTION RULES
             </div>
             <div
@@ -182,12 +183,12 @@ export default function HoldersZonePanel({ player, onNavigate }) {
                     padding: '10px 12px'
                   }}
                 >
-                  <span style={{ fontSize: '16px', flexShrink: 0 }}>{r.icon}</span>
+                  <span style={{ fontSize: '18px', flexShrink: 0 }}>{r.icon}</span>
                   <div>
-                    <div style={{ color: '#00f5ff', fontSize: '10px', fontWeight: 900, marginBottom: '3px' }}>
+                    <div style={{ color: '#00f5ff', fontSize: '12px', fontWeight: 800, marginBottom: '2px' }}>
                       {r.title}
                     </div>
-                    <div style={{ color: '#ccc', fontSize: '9px', lineHeight: 1.4 }}>
+                    <div style={{ color: '#d0dbe5', fontSize: '11px', lineHeight: 1.45, wordBreak: 'break-word' }}>
                       {r.desc}
                     </div>
                   </div>

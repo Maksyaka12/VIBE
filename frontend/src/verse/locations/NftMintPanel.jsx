@@ -30,7 +30,7 @@ export default function NftMintPanel({ player }) {
   ];
 
   return (
-    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px', padding: '4px' }}>
+    <div style={{ fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: '#fff', fontSize: '12px', padding: '4px' }}>
       {/* ── 1. TOP MAIN CARD: LEFT NFT IMAGE + RIGHT DETAILS & MINT BUTTON ── */}
       <div className="vv-nft-top-card" style={{
         background: 'rgba(4, 20, 48, 0.95)',

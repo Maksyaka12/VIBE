@@ -25,7 +25,7 @@ export default function VibeBankPanel({ player }) {
   };
 
   return (
-    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px' }}>
+    <div style={{ fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: '#fff', fontSize: '12px' }}>
       {/* Whale Cap Protection Banner */}
       <div className="vv-bank-top-banner" style={{
         background: 'rgba(0, 245, 255, 0.15)',

@@ -16,7 +16,7 @@ export default function HomePanel({ player, onNavigate }) {
     : 'Not Connected';
 
   return (
-    <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px', padding: '4px' }}>
+    <div style={{ fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", color: '#fff', fontSize: '12px', padding: '4px' }}>
       {/* ── 1. HEADER PROFILE CARD (2X TALLER & ENLARGED AVATAR) ── */}
       <div className="vv-home-profile-card" style={{
         background: 'rgba(4, 20, 48, 0.95)',
