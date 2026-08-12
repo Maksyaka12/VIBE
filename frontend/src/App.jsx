@@ -624,16 +624,16 @@ function Roadmap() {
             <div className="roadmap-phase-title">Phase 3: $VIBE Ecosystem</div>
             <div className="roadmap-items">
               <div className="roadmap-item in-progress">
-                <div className="r-title"><Users size={24} color="var(--blue)"/> Vibe Club <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
-                <div className="r-desc">Transitioning from a meme token into a full-fledged Vibe culture, driving global brand awareness, holder loyalty, and strengthening the power of $VIBE.</div>
+                <div className="r-title"><Users size={24} color="var(--blue)"/> Vibe Culture: Vibe Club <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
+                <div className="r-desc">Building a full-fledged Vibe culture that drives global brand awareness, fosters a loyal community, strengthens the power of $VIBE, and introduces the exclusive Vibe Club NFT Collection.</div>
               </div>
               <div className="roadmap-item in-progress">
-                <div className="r-title"><Rocket size={24} color="var(--blue)"/> Launch Vibe Verse <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
-                <div className="r-desc">Unveiling Vibe Verse — an interactive Web3 pixel-art gaming world where $VIBE serves as the native in-game utility currency.</div>
+                <div className="r-title"><Rocket size={24} color="var(--blue)"/> Product Launch: Vibe Verse <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
+                <div className="r-desc">Launching Vibe Verse — an interactive Web3 pixel-art gaming world where $VIBE serves as the native in-game utility currency.</div>
               </div>
               <div className="roadmap-item in-progress">
                 <div className="r-title"><Flame size={24} color="var(--blue)"/> Vibe Verse Ecosystem <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
-                <div className="r-desc">Expanding the gaming and DeFi ecosystem around $VIBE as the core infrastructural utility token.</div>
+                <div className="r-desc">Expanding the interactive gaming and DeFi ecosystem built around $VIBE as the core infrastructural utility token.</div>
               </div>
             </div>
           </div>
