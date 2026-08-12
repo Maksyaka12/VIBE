@@ -2607,13 +2607,79 @@
     padding: 24px 20px;
   }
 
-  .vv-leaderboard { padding: 24px 20px; }
-  .vv-lb-podium { gap: 10px; }
+  .vv-leaderboard { padding: 16px 12px; }
+  .vv-lb-podium { gap: 6px; }
+  .vv-lb-podium__name { font-size: 8px; }
 
-  .vv-arena { padding: 24px 20px; }
+  .vv-arena { padding: 16px 12px; }
   .vv-arena__grid { grid-template-columns: 1fr; }
 
   .vv-minimap { display: none; }
+
+  /* ── HAPPY HOUR STYLE SINGLE-COLUMN RESPONSIVE MODAL PANELS ── */
+  .vv-home-profile-card,
+  .vv-nft-top-card,
+  .vv-holders-top-banner,
+  .vv-defi-header,
+  .vv-bank-top-banner {
+    flex-direction: column !important;
+    padding: 14px 12px !important;
+    gap: 12px !important;
+    text-align: center !important;
+    align-items: center !important;
+    min-height: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  .vv-home-accounts-grid,
+  .vv-holders-main-grid,
+  .vv-bank-stats-grid,
+  .vv-arena-grid,
+  .vv-nft-phases-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    height: auto !important;
+  }
+
+  .vv-holders-left-col {
+    height: auto !important;
+  }
+
+  .vv-home-avatar {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  .vv-home-username {
+    font-size: 18px !important;
+  }
+
+  .vv-nft-main-img {
+    width: 130px !important;
+    height: 130px !important;
+  }
+
+  .vv-home-balances-card {
+    flex-direction: column !important;
+    padding: 14px 12px !important;
+    gap: 14px !important;
+  }
+
+  .vv-home-balances-divider {
+    width: 80% !important;
+    height: 1px !important;
+  }
+
+  .vv-defi-slippage {
+    margin-left: 0 !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 4px !important;
+  }
+
+  .vv-defi-input-card {
+    padding: 12px 14px !important;
+  }
 }
 
 /* ================================================================

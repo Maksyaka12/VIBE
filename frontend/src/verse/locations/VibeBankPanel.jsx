@@ -27,7 +27,7 @@ export default function VibeBankPanel({ player }) {
   return (
     <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px' }}>
       {/* Whale Cap Protection Banner */}
-      <div style={{
+      <div className="vv-bank-top-banner" style={{
         background: 'rgba(0, 245, 255, 0.15)',
         border: '1.5px solid rgba(0, 245, 255, 0.5)',
         borderRadius: '10px',
@@ -45,7 +45,7 @@ export default function VibeBankPanel({ player }) {
       </div>
 
       {/* Staking Stats Grid */}
-      <div style={{
+      <div className="vv-bank-stats-grid" style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr 1fr',
         gap: '14px',

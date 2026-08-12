@@ -18,7 +18,7 @@ export default function HomePanel({ player, onNavigate }) {
   return (
     <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px', padding: '4px' }}>
       {/* ── 1. HEADER PROFILE CARD (2X TALLER & ENLARGED AVATAR) ── */}
-      <div style={{
+      <div className="vv-home-profile-card" style={{
         background: 'rgba(4, 20, 48, 0.95)',
         border: '2.5px solid rgba(0, 245, 255, 0.45)',
         borderRadius: '16px',
@@ -30,11 +30,12 @@ export default function HomePanel({ player, onNavigate }) {
         minHeight: '200px',
         boxShadow: '0 10px 30px rgba(0, 0, 0, 0.8), 0 0 24px rgba(0, 245, 255, 0.25)'
       }}>
-        {/* Enlarge Avatar Container to 130px x 130px */}
+        {/* Enlarge Avatar Container */}
         <div style={{ position: 'relative', flexShrink: 0 }}>
           <img
             src={player?.nftImage || "/vibe-dog.jpg"}
             alt="Dog Avatar"
+            className="vv-home-avatar"
             style={{
               width: '130px',
               height: '130px',
@@ -66,7 +67,7 @@ export default function HomePanel({ player, onNavigate }) {
 
         {/* User Info & Member Status */}
         <div style={{ flex: 1 }}>
-          <div style={{
+          <div className="vv-home-username" style={{
             fontSize: '26px',
             color: '#00f5ff',
             marginBottom: '10px',
@@ -128,8 +129,8 @@ export default function HomePanel({ player, onNavigate }) {
         )}
       </div>
 
-      {/* ── 2. BALANCES CARD (MOVED ABOVE LINKED ACCOUNTS) ── */}
-      <div style={{
+      {/* ── 2. BALANCES CARD ── */}
+      <div className="vv-home-balances-card" style={{
         background: 'rgba(2, 11, 26, 0.9)',
         border: '2px solid rgba(255, 215, 0, 0.45)',
         borderRadius: '14px',
@@ -149,7 +150,7 @@ export default function HomePanel({ player, onNavigate }) {
           </div>
         </div>
 
-        <div style={{ width: '2px', height: '44px', background: 'rgba(0, 245, 255, 0.25)' }} />
+        <div className="vv-home-balances-divider" style={{ width: '2px', height: '44px', background: 'rgba(0, 245, 255, 0.25)' }} />
 
         <div style={{ textAlign: 'center' }}>
           <div style={{ color: '#88aacc', fontSize: '10px', marginBottom: '8px', letterSpacing: '0.8px', fontWeight: 900 }}>
@@ -161,8 +162,8 @@ export default function HomePanel({ player, onNavigate }) {
         </div>
       </div>
 
-      {/* ── 3. LINKED ACCOUNTS GRID (MOVED BELOW BALANCES) ── */}
-      <div style={{
+      {/* ── 3. LINKED ACCOUNTS GRID ── */}
+      <div className="vv-home-accounts-grid" style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         gap: '20px'

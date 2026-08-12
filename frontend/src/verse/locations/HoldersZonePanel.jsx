@@ -56,7 +56,7 @@ export default function HoldersZonePanel({ player, onNavigate }) {
   return (
     <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px' }}>
       {/* Top Banner */}
-      <div style={{
+      <div className="vv-holders-top-banner" style={{
         background: 'rgba(255, 215, 0, 0.12)',
         border: '1.5px solid rgba(255, 215, 0, 0.5)',
         borderRadius: '10px',
@@ -79,9 +79,9 @@ export default function HoldersZonePanel({ player, onNavigate }) {
       </div>
 
       {/* Two-Column Grid (Left: Balance + Rules, Right: Unlock Schedule equal height) */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.25fr', gap: '20px', alignItems: 'stretch' }}>
+      <div className="vv-holders-main-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.25fr', gap: '20px', alignItems: 'stretch' }}>
         {/* LEFT COLUMN */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', height: '520px' }}>
+        <div className="vv-holders-left-col" style={{ display: 'flex', flexDirection: 'column', gap: '14px', height: '520px' }}>
           {/* Wallet Balance & Eligibility Card */}
           <div style={{
             background: 'rgba(4, 20, 48, 0.6)',

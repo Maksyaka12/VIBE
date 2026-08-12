@@ -386,7 +386,7 @@ export default function DeFiVibePanel({ player }) {
   return (
     <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px', padding: '4px' }}>
       {/* Header & Mode Switcher */}
-      <div style={{
+      <div className="vv-defi-header" style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -397,7 +397,7 @@ export default function DeFiVibePanel({ player }) {
         </div>
 
         {/* Slippage Tolerance Selector */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto' }}>
+        <div className="vv-defi-slippage" style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto' }}>
           <span style={{ fontSize: '9px', color: '#88aacc', fontWeight: 900 }}>SLIPPAGE:</span>
           {[0.5, 1.0, 3.0, 5.0].map((s) => (
             <button
@@ -422,7 +422,7 @@ export default function DeFiVibePanel({ player }) {
       </div>
 
       {/* INPUT CARD 1: YOU PAY */}
-      <div style={{
+      <div className="vv-defi-input-card" style={{
         background: '#020b1a',
         border: '2px solid rgba(0, 245, 255, 0.4)',
         borderRadius: '12px',

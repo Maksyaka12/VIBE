@@ -32,7 +32,7 @@ export default function NftMintPanel({ player }) {
   return (
     <div style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '11px', padding: '4px' }}>
       {/* ── 1. TOP MAIN CARD: LEFT NFT IMAGE + RIGHT DETAILS & MINT BUTTON ── */}
-      <div style={{
+      <div className="vv-nft-top-card" style={{
         background: 'rgba(4, 20, 48, 0.95)',
         border: '2.5px solid #00f5ff',
         borderRadius: '16px',
@@ -48,6 +48,7 @@ export default function NftMintPanel({ player }) {
           <img
             src="/vibe-dog.jpg"
             alt="Genesis NFT"
+            className="vv-nft-main-img"
             style={{
               width: '190px',
               height: '190px',
