@@ -593,8 +593,8 @@ function Roadmap() {
                 <div className="r-title"><Laptop size={24} color="var(--blue)"/> Interactive Web Portal <span className="badge-rm done"><Check size={14} strokeWidth={3}/> DONE</span></div>
                 <div className="r-desc">Launch of a comprehensive dApp featuring an eligibility checker for rewards, integrated seamless swaps, real-time holder analytics, tokenomics, and project details.</div>
               </div>
-              <div className="roadmap-item in-progress">
-                <div className="r-title"><Globe size={24} color="var(--blue)"/> Enhance $VIBE Visibility <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
+              <div className="roadmap-item done">
+                <div className="r-title"><Globe size={24} color="var(--blue)"/> Enhance $VIBE Visibility <span className="badge-rm done"><Check size={14} strokeWidth={3}/> DONE</span></div>
                 <div className="r-desc">Securing top-tier visibility and native support across major platforms including the X Token Card, Base App, OKX Wallet, and the broader Web3 ecosystem.</div>
               </div>
               <div className="roadmap-item in-progress">
@@ -630,9 +630,19 @@ function Roadmap() {
               <div className="roadmap-item in-progress">
                 <div className="r-title"><Rocket size={24} color="var(--blue)"/> Product Launch: Vibe Verse <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
                 <div className="r-desc">Launching Vibe Verse — an interactive Web3 pixel-art gaming world where $VIBE serves as the native in-game utility currency.</div>
+                <div className="r-subnote">
+                  <span className="r-subnote-dot"></span>
+                  <span>Introducing the Vibe Club NFT Collection</span>
+                  <span className="badge-rm prog" style={{marginLeft:'auto',fontSize:'0.65rem',padding:'4px 8px'}}><Loader2 size={11} className="spin"/> IN PROGRESS</span>
+                </div>
+                <div className="r-subnote">
+                  <span className="r-subnote-dot"></span>
+                  <span>Introducing Vibe Verse: B20 $VIBE On-Chain World</span>
+                  <span className="badge-rm prog" style={{marginLeft:'auto',fontSize:'0.65rem',padding:'4px 8px'}}><Loader2 size={11} className="spin"/> IN PROGRESS</span>
+                </div>
               </div>
-              <div className="roadmap-item in-progress">
-                <div className="r-title"><Flame size={24} color="var(--blue)"/> Vibe Verse Ecosystem <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
+              <div className="roadmap-item">
+                <div className="r-title"><Flame size={24} color="var(--blue)"/> Vibe Verse Ecosystem</div>
                 <div className="r-desc">Expanding the interactive gaming and DeFi ecosystem built around $VIBE as the core infrastructural utility token.</div>
               </div>
             </div>
@@ -655,12 +665,8 @@ function Roadmap() {
 
           {/* Phase 5 */}
           <div className="roadmap-phase rv" ref={useRev()}>
-            <div className="roadmap-phase-title">Phase 5: The Zenith</div>
+            <div className="roadmap-phase-title">Phase 5: Global Awareness</div>
             <div className="roadmap-items">
-              <div className="roadmap-item">
-                <div className="r-title"><Rocket size={24} color="var(--blue)"/> The 100M B20 Runner</div>
-                <div className="r-desc">Cementing our legacy as the ultimate B20 token, breaking records and targeting the legendary 100M milestone.</div>
-              </div>
               <div className="roadmap-item">
                 <div className="r-title"><Globe size={24} color="var(--blue)"/> Top Tier Listings</div>
                 <div className="r-desc">Expanding liquidity and accessibility globally through strategic listings on prominent Centralized and Decentralized Exchanges.</div>
