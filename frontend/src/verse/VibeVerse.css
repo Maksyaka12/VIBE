@@ -359,12 +359,12 @@
   cursor: crosshair;
 }
 
-/* Mobile: 1.8× scale, camera-follow via JS transform */
+/* Mobile: Aspect-ratio locked scale (1376 / 768) for 100% exact 1:1 checkpoint & building alignment */
 .vv-map-viewport.mobile .vv-map-wrap {
   position: absolute;
   top: 0; left: 0;
-  width: calc(100% * 1.8);
-  height: calc(100% * 1.8);
+  height: 125vh;
+  width: calc(125vh * (1376 / 768));
   cursor: crosshair;
   will-change: transform;
 }
@@ -2580,12 +2580,13 @@
    ================================================================ */
 @media (max-width: 768px) {
   .vv-topbar { padding: 0 10px; height: 48px; }
-  .vv-topbar__season { display: none; }
-  .vv-social-group { display: none !important; }
+  .vv-topbar__left { gap: 6px; }
+  .vv-topbar__socials { display: none !important; }
+  .vv-topbar__season { display: none !important; }
   .vv-topbar__right { gap: 6px; }
-  .vv-topbar__logo-text { font-size: 9px; letter-spacing: 1px; }
-  .vv-btn-mint-nav { font-size: 8px; padding: 6px 10px; white-space: nowrap; }
-  .vv-btn-connect { font-size: 8px; padding: 6px 10px; white-space: nowrap; }
+  .vv-menu-btn__title { font-size: 10px; }
+  .vv-btn-mint-nav { font-size: 8px; padding: 6px 10px; white-space: nowrap; height: 32px; }
+  .vv-btn-connect { font-size: 8px; padding: 6px 10px; white-space: nowrap; height: 32px; }
   .vv-overlay__card { width: 94vw !important; max-height: 88vh !important; padding: 14px !important; margin: auto; }
 
   .vv-home {
