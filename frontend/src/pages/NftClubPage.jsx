@@ -59,19 +59,17 @@ export default function NftClubPage() {
   // Total $VIBE burned strictly by this NFT mint contract (starts at 0 before mints)
   const totalVibeBurnedByContract = Math.floor(totalMinted * estimatedVibePrice * 0.8);
 
-  // Format large number with K / M suffix for phase cards
-  const formatVibeShort = (amount) => {
-    if (amount >= 1000000) return (amount / 1000000).toFixed(2) + 'M $VIBE';
-    if (amount >= 1000) return (amount / 1000).toFixed(0) + 'K $VIBE';
+  // Format large number with comma separators for clean display
+  const formatVibeFormatted = (amount) => {
     return amount.toLocaleString() + ' $VIBE';
   };
 
   // 4 Mint Phases definition with dynamic live $VIBE prices
   const phases = [
-    { phase: 'PHASE 1', count: '103 NFT', price: '0.005 ETH', vibePrice: formatVibeShort(Math.floor(0.005 * vibePerEthRatio)), active: true, done: false },
-    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', vibePrice: formatVibeShort(Math.floor(0.015 * vibePerEthRatio)), active: false, done: false },
-    { phase: 'PHASE 3', count: '100 NFT', price: '0.05 ETH', vibePrice: formatVibeShort(Math.floor(0.05 * vibePerEthRatio)), active: false, done: false },
-    { phase: 'PHASE 4', count: '30 NFT', price: '0.1 ETH', vibePrice: formatVibeShort(Math.floor(0.1 * vibePerEthRatio)), active: false, done: false },
+    { phase: 'Phase 1', count: '103 NFT', price: '0.005 ETH', vibePrice: formatVibeFormatted(Math.floor(0.005 * vibePerEthRatio)), active: true, done: false },
+    { phase: 'Phase 2', count: '100 NFT', price: '0.015 ETH', vibePrice: formatVibeFormatted(Math.floor(0.015 * vibePerEthRatio)), active: false, done: false },
+    { phase: 'Phase 3', count: '100 NFT', price: '0.05 ETH', vibePrice: formatVibeFormatted(Math.floor(0.05 * vibePerEthRatio)), active: false, done: false },
+    { phase: 'Phase 4', count: '30 NFT', price: '0.1 ETH', vibePrice: formatVibeFormatted(Math.floor(0.1 * vibePerEthRatio)), active: false, done: false },
   ];
 
   // Mint with native ETH
@@ -123,6 +121,23 @@ export default function NftClubPage() {
       paddingBottom: '80px',
       overflowX: 'hidden'
     }}>
+      {/* Inline animation keyframes for pulsing live indicator dot */}
+      <style>{`
+        @keyframes vvPulseDotAnimation {
+          0% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 4px #00ff88; }
+          50% { transform: scale(1.35); opacity: 1; box-shadow: 0 0 12px #00ff88, 0 0 20px #00ff88; }
+          100% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 4px #00ff88; }
+        }
+        .vv-pulse-indicator {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #00ff88;
+          display: inline-block;
+          animation: vvPulseDotAnimation 1.6s infinite ease-in-out;
+        }
+      `}</style>
+
       {/* ── TOP HEADER / NAV ── */}
       <header style={{
         padding: '16px 20px',
@@ -266,7 +281,7 @@ export default function NftClubPage() {
               <img
                 src={`/nft/images/${selectedPreview}.png`}
                 onError={(e) => { e.target.src = '/vibe-dog.jpg'; }}
-                alt={`Genesis NFT #${selectedPreview}`}
+                alt="VIBE CLUB"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
               <div style={{
@@ -281,7 +296,7 @@ export default function NftClubPage() {
                 fontSize: '9px',
                 color: '#ffd700'
               }}>
-                GENESIS #{selectedPreview}
+                VIBE CLUB
               </div>
             </div>
 
@@ -453,7 +468,7 @@ export default function NftClubPage() {
             </div>
           </div>
 
-          {/* BOTTOM SECTION: 4 MINT PHASES GRID (ACROSS FULL WIDTH) */}
+          {/* BOTTOM SECTION: 4 MINT PHASES STACKED VERTICALLY (1 ROW PER PHASE) */}
           <div style={{
             borderTop: '1px solid rgba(0, 245, 255, 0.2)',
             paddingTop: '20px'
@@ -462,78 +477,49 @@ export default function NftClubPage() {
               fontSize: '9px',
               color: '#88aacc',
               marginBottom: '14px',
-              letterSpacing: '0.5px',
-              display: 'flex',
-              justify: 'space-between',
-              alignItems: 'center'
+              letterSpacing: '0.5px'
             }}>
-              <span>MINT PHASES SCHEDULE:</span>
-              <span style={{ color: '#ffd700' }}>TOTAL: 333 GENESIS NFT</span>
+              MINT PHASES SCHEDULE:
             </div>
 
             <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: '12px'
-            }} className="vv-nft-phases-grid">
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
               {phases.map((p, idx) => (
                 <div
                   key={idx}
                   style={{
-                    position: 'relative',
-                    background: p.active ? 'rgba(0, 245, 255, 0.12)' : 'rgba(2, 11, 26, 0.6)',
+                    display: 'flex',
+                    justify: 'space-between',
+                    alignItems: 'center',
+                    background: p.active ? 'rgba(0, 245, 255, 0.12)' : 'rgba(2, 11, 26, 0.5)',
                     border: p.active ? '1.5px solid #00f5ff' : '1px solid rgba(255, 255, 255, 0.12)',
                     borderRadius: '12px',
-                    padding: '14px 12px',
-                    textAlign: 'center',
-                    boxShadow: p.active ? '0 0 16px rgba(0, 245, 255, 0.2)' : 'none'
+                    padding: '14px 18px',
+                    boxShadow: p.active ? '0 0 18px rgba(0, 245, 255, 0.25)' : 'none',
+                    opacity: p.active ? 1 : 0.65,
+                    transition: 'all 0.2s ease'
                   }}
                 >
-                  {p.active && (
-                    <div style={{
-                      position: 'absolute',
-                      top: '-9px',
-                      right: '10px',
-                      background: 'linear-gradient(135deg, #00ff88, #00b359)',
-                      color: '#020b1a',
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    {p.active && <span className="vv-pulse-indicator" />}
+                    <span style={{
                       fontFamily: 'var(--vv-pixel)',
-                      fontSize: '7px',
-                      padding: '3px 8px',
-                      borderRadius: '6px',
-                      fontWeight: 900,
-                      boxShadow: '0 0 10px rgba(0, 255, 136, 0.6)',
-                      border: '1px solid #ffffff',
-                      zIndex: 10
+                      fontSize: '9px',
+                      color: p.active ? '#00f5ff' : '#ffffff'
                     }}>
-                      LIVE NOW
-                    </div>
-                  )}
+                      {p.phase} ({p.count})
+                    </span>
+                  </div>
 
                   <div style={{
                     fontFamily: 'var(--vv-pixel)',
                     fontSize: '9px',
-                    color: p.active ? '#00f5ff' : '#aaa',
-                    marginBottom: '6px'
+                    color: p.active ? '#ffd700' : '#88aacc'
                   }}>
-                    {p.phase}
-                  </div>
-                  <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '6px' }}>
-                    {p.count}
-                  </div>
-                  <div style={{
-                    fontFamily: 'var(--vv-pixel)',
-                    fontSize: '9px',
-                    color: '#ffd700',
-                    marginBottom: '2px'
-                  }}>
-                    {p.price}
-                  </div>
-                  <div style={{
-                    fontFamily: 'var(--vv-pixel)',
-                    fontSize: '7px',
-                    color: '#00ff88'
-                  }}>
-                    ({p.vibePrice})
+                    {p.price} / {p.vibePrice}
                   </div>
                 </div>
               ))}
