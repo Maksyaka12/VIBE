@@ -263,7 +263,7 @@ export default function NftClubPage() {
                   border: '1px solid rgba(0, 245, 255, 0.25)',
                   borderRadius: '12px',
                   padding: '14px 16px',
-                  marginBottom: '12px'
+                  marginBottom: '14px'
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                     <span style={{ fontSize: '9px', color: '#aaa' }}>TOTAL MINTED</span>
@@ -275,22 +275,22 @@ export default function NftClubPage() {
                   </div>
                 </div>
 
-                {/* CARD 3: USER WALLET BALANCES (ETH & VIBE) */}
+                {/* USER WALLET BALANCES (CLEAN TEXT BLOCK) */}
                 <div style={{
-                  background: 'rgba(2, 11, 26, 0.5)',
-                  border: '1px solid rgba(255, 215, 0, 0.25)',
-                  borderRadius: '12px',
-                  padding: '12px 16px',
+                  padding: '2px 4px',
                   marginBottom: '14px'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                    <span style={{ fontSize: '8px', color: '#aaa' }}>ETH BALANCE:</span>
+                  <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '6px', letterSpacing: '0.4px' }}>
+                    YOUR WALLET BALANCES:
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>• ETH Balance:</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>
                       {authenticated ? `${Number(balances?.eth || 0).toFixed(4)} ETH` : 'CONNECT WALLET'}
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '8px', color: '#aaa' }}>$VIBE BALANCE:</span>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>• $VIBE Balance:</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffd700' }}>
                       {authenticated ? `${Math.floor(Number(balances?.vibe || 0)).toLocaleString()} $VIBE` : 'CONNECT WALLET'}
                     </span>
@@ -355,6 +355,7 @@ export default function NftClubPage() {
                 <div
                   key={idx}
                   style={{
+                    position: 'relative',
                     background: p.active ? 'rgba(0, 245, 255, 0.12)' : 'rgba(2, 11, 26, 0.6)',
                     border: p.active ? '1.5px solid #00f5ff' : '1px solid rgba(255, 255, 255, 0.12)',
                     borderRadius: '12px',
@@ -363,6 +364,27 @@ export default function NftClubPage() {
                     boxShadow: p.active ? '0 0 16px rgba(0, 245, 255, 0.2)' : 'none'
                   }}
                 >
+                  {p.active && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '-10px',
+                      right: '-10px',
+                      transform: 'rotate(12deg)',
+                      background: 'linear-gradient(135deg, #00ff88, #00b359)',
+                      color: '#020b1a',
+                      fontFamily: 'var(--vv-pixel)',
+                      fontSize: '7px',
+                      padding: '3px 8px',
+                      borderRadius: '6px',
+                      fontWeight: 900,
+                      boxShadow: '0 0 12px rgba(0, 255, 136, 0.8), 0 2px 4px rgba(0,0,0,0.5)',
+                      border: '1px solid #ffffff',
+                      zIndex: 10
+                    }}>
+                      LIVE NOW
+                    </div>
+                  )}
+
                   <div style={{
                     fontFamily: 'var(--vv-pixel)',
                     fontSize: '9px',
@@ -381,20 +403,6 @@ export default function NftClubPage() {
                   }}>
                     {p.price}
                   </div>
-                  {p.active && (
-                    <div style={{
-                      display: 'inline-block',
-                      marginTop: '6px',
-                      background: '#00ff88',
-                      color: '#020b1a',
-                      fontSize: '7px',
-                      padding: '2px 6px',
-                      borderRadius: '4px',
-                      fontWeight: 900
-                    }}>
-                      LIVE NOW
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
