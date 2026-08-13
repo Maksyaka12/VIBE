@@ -157,17 +157,9 @@ export default function NftClubPage() {
             white-space: nowrap !important;
             font-size: 7px !important;
           }
-          .vv-nft-club-hero-title {
-            font-size: 15px !important;
-            line-height: 1.4 !important;
-            white-space: nowrap !important;
-          }
-          .vv-nft-club-hero-desc {
-            display: none !important;
-          }
           .vv-nft-club-container {
             padding: 0 12px !important;
-            margin-top: 18px !important;
+            margin-top: 16px !important;
           }
           .vv-nft-club-main-card {
             padding: 16px 14px !important;
@@ -241,7 +233,7 @@ export default function NftClubPage() {
               VIBE CLUB
             </div>
             <div className="vv-nft-club-header-subtext" style={{ fontSize: '8px', color: '#88aacc', marginTop: '2px', letterSpacing: '0.3px' }}>
-              GENESIS 333 NFT COLLECTION
+              333 CLUB NFT - MINT PAGE
             </div>
           </div>
         </div>
@@ -355,25 +347,13 @@ export default function NftClubPage() {
         </div>
       </header>
 
-      {/* ── HERO SECTION ── */}
+      {/* ── MAIN CONTAINER ── */}
       <div className="vv-nft-club-container" style={{
         maxWidth: '1050px',
-        margin: '36px auto 0 auto',
+        margin: '24px auto 0 auto',
         padding: '0 20px',
         textAlign: 'center'
       }}>
-        {/* HERO TITLE: VIBE CLUB MINT PAGE IN 1 LINE */}
-        <h1 className="vv-nft-club-hero-title" style={{
-          fontFamily: 'var(--vv-pixel)',
-          fontSize: '22px',
-          color: '#ffffff',
-          textShadow: '0 0 20px rgba(0, 245, 255, 0.5)',
-          marginBottom: '20px',
-          lineHeight: 1.4,
-          whiteSpace: 'nowrap'
-        }}>
-          VIBE CLUB MINT PAGE
-        </h1>
 
         {/* ── MAIN CARD CONTAINER (OPENSEA MOBILE STYLE: FULL WIDTH STACKED) ── */}
         <div className="vv-nft-club-main-card" style={{
@@ -759,7 +739,7 @@ export default function NftClubPage() {
               }}>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
                   <span style={{ color: '#ff4466', fontSize: '9px' }}>•</span>
-                  <span>80% OF ALL NFT MINT REVENUE AUTOMATICALLY BUYS & BURNS $VIBE TOKENS ON CONTRACT LEVEL.</span>
+                  <span>80% OF ALL NFT MINT REVENUE AUTO BUYS & BURNS $VIBE TOKENS ON CONTRACT LEVEL.</span>
                 </div>
 
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
