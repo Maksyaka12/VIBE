@@ -56,6 +56,10 @@ export default function NftClubPage() {
   const estimatedVibePrice = Math.floor(ethPriceNumber * vibePerEthRatio);
   const [lockedVibePrice, setLockedVibePrice] = useState(null);
 
+  // Calculate total $VIBE burned strictly by the NFT mint contract (80% of all mints)
+  // For 12 minted NFTs in Phase 1: 12 * 273,000 * 0.8 = ~2,620,800 $VIBE burned
+  const totalVibeBurnedByContract = Math.floor(totalMinted * estimatedVibePrice * 0.8);
+
   // Format large number with K / M suffix for phase cards
   const formatVibeShort = (amount) => {
     if (amount >= 1000000) return (amount / 1000000).toFixed(2) + 'M $VIBE';
@@ -299,7 +303,7 @@ export default function NftClubPage() {
                   borderRadius: '8px',
                   padding: '6px 12px',
                   fontSize: '8px',
-                  marginBottom: '12px',
+                  marginBottom: '10px',
                   letterSpacing: '0.5px'
                 }}>
                   ● Phase 1 — Whitelist & Public
@@ -310,18 +314,18 @@ export default function NftClubPage() {
                   background: 'rgba(2, 11, 26, 0.7)',
                   border: '1px solid rgba(0, 245, 255, 0.25)',
                   borderRadius: '12px',
-                  padding: '12px 16px',
-                  marginBottom: '10px'
+                  padding: '10px 14px',
+                  marginBottom: '8px'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                    <span style={{ fontSize: '9px', color: '#aaa' }}>PRICE (ETH / VIBE)</span>
-                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '10px', color: '#ffd700' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>PRICE (ETH / VIBE)</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffd700' }}>
                       {pricePerNft} / {estimatedVibePrice.toLocaleString()} $VIBE
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '9px', color: '#aaa' }}>LIMIT</span>
-                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00ff88' }}>1 NFT PER WALLET</span>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>LIMIT</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '8px', color: '#00ff88' }}>1 NFT PER WALLET</span>
                   </div>
                 </div>
 
@@ -330,16 +334,37 @@ export default function NftClubPage() {
                   background: 'rgba(2, 11, 26, 0.7)',
                   border: '1px solid rgba(0, 245, 255, 0.25)',
                   borderRadius: '12px',
-                  padding: '12px 16px',
-                  marginBottom: '10px'
+                  padding: '10px 14px',
+                  marginBottom: '8px'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <span style={{ fontSize: '9px', color: '#aaa' }}>TOTAL MINTED</span>
-                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '10px', color: '#00f5ff' }}>{totalMinted} / {maxSupply}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>TOTAL MINTED</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>{totalMinted} / {maxSupply}</span>
                   </div>
                   {/* Progress Bar */}
-                  <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
                     <div style={{ width: `${(totalMinted / maxSupply) * 100}%`, height: '100%', background: 'linear-gradient(90deg, #00f5ff, #00ff88)' }} />
+                  </div>
+                </div>
+
+                {/* CARD 3: TOTAL BURNED ($VIBE BURNED BY NFT MINT CONTRACT) */}
+                <div style={{
+                  background: 'rgba(255, 68, 102, 0.1)',
+                  border: '1px solid rgba(255, 68, 102, 0.35)',
+                  borderRadius: '12px',
+                  padding: '10px 14px',
+                  marginBottom: '10px'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: '8px', color: '#ff4466', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      🔥 TOTAL BURNED ($VIBE):
+                    </span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '10px', color: '#ffffff' }}>
+                      {totalVibeBurnedByContract.toLocaleString()} $VIBE
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '7px', color: '#aaa', marginTop: '4px', letterSpacing: '0.2px' }}>
+                    80% of all mint revenue (ETH & VIBE) auto-burned by contract
                   </div>
                 </div>
 
@@ -367,16 +392,16 @@ export default function NftClubPage() {
               </div>
 
               {/* DUAL MINT ACTION BUTTONS: ETH (CYAN) + VIBE (WARM ORANGE/GOLD) */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {/* 1. MINT FOR ETH BUTTON */}
                 <button
                   onClick={handleMintEth}
                   disabled={isMintingEth || isMintingVibe}
                   style={{
                     width: '100%',
-                    height: '46px',
+                    height: '44px',
                     fontFamily: 'var(--vv-pixel)',
-                    fontSize: '11px',
+                    fontSize: '10px',
                     fontWeight: 900,
                     background: authenticated
                       ? 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)'
@@ -402,9 +427,9 @@ export default function NftClubPage() {
                   disabled={isMintingEth || isMintingVibe}
                   style={{
                     width: '100%',
-                    height: '46px',
+                    height: '44px',
                     fontFamily: 'var(--vv-pixel)',
-                    fontSize: '11px',
+                    fontSize: '10px',
                     fontWeight: 900,
                     background: authenticated
                       ? 'linear-gradient(135deg, #ffd700 0%, #ff6b35 100%)'
