@@ -76,7 +76,7 @@ export default function NftClubPage() {
   // 4 Mint Phases definition with dynamic live $VIBE prices formatted with commas
   const phases = [
     { phase: 'PHASE 1', count: '103 NFT', price: '0.005 ETH', vibePrice: formatVibeComma(Math.floor(0.005 * vibePerEthRatio)), active: true, done: false },
-    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', vibePrice: formatVibeComma(Math.floor(0.015 * vibePerEthRatio)), active: false, done: false },
+    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', vibePrice: formatVibeComma(Math.floor(0.15 * vibePerEthRatio)), active: false, done: false },
     { phase: 'PHASE 3', count: '100 NFT', price: '0.05 ETH', vibePrice: formatVibeComma(Math.floor(0.05 * vibePerEthRatio)), active: false, done: false },
     { phase: 'PHASE 4', count: '30 NFT', price: '0.1 ETH', vibePrice: formatVibeComma(Math.floor(0.1 * vibePerEthRatio)), active: false, done: false },
   ];
@@ -365,7 +365,7 @@ export default function NftClubPage() {
           backdropFilter: 'blur(16px)',
           textAlign: 'left'
         }}>
-          {/* ACTIVE PHASE BADGE (PLACED ABOVE NFT IMAGE) */}
+          {/* ACTIVE PHASE BADGE: ● PHASE 1 MINT IS LIVE */}
           <div style={{ marginBottom: '16px' }}>
             <div style={{
               display: 'inline-block',
@@ -379,7 +379,7 @@ export default function NftClubPage() {
               textTransform: 'uppercase',
               whiteSpace: 'nowrap'
             }}>
-              ● PHASE 1 — WHITELIST & PUBLIC
+              ● PHASE 1 MINT IS LIVE
             </div>
           </div>
 
