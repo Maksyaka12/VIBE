@@ -66,10 +66,10 @@ export default function NftClubPage() {
 
   // 4 Mint Phases definition with dynamic live $VIBE prices formatted with commas
   const phases = [
-    { phase: 'Phase 1', count: '103 NFT', price: '0.005 ETH', vibePrice: formatVibeComma(Math.floor(0.005 * vibePerEthRatio)), active: true, done: false },
-    { phase: 'Phase 2', count: '100 NFT', price: '0.015 ETH', vibePrice: formatVibeComma(Math.floor(0.015 * vibePerEthRatio)), active: false, done: false },
-    { phase: 'Phase 3', count: '100 NFT', price: '0.05 ETH', vibePrice: formatVibeComma(Math.floor(0.05 * vibePerEthRatio)), active: false, done: false },
-    { phase: 'Phase 4', count: '30 NFT', price: '0.1 ETH', vibePrice: formatVibeComma(Math.floor(0.1 * vibePerEthRatio)), active: false, done: false },
+    { phase: 'PHASE 1', count: '103 NFT', price: '0.005 ETH', vibePrice: formatVibeComma(Math.floor(0.005 * vibePerEthRatio)), active: true, done: false },
+    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', vibePrice: formatVibeComma(Math.floor(0.015 * vibePerEthRatio)), active: false, done: false },
+    { phase: 'PHASE 3', count: '100 NFT', price: '0.05 ETH', vibePrice: formatVibeComma(Math.floor(0.05 * vibePerEthRatio)), active: false, done: false },
+    { phase: 'PHASE 4', count: '30 NFT', price: '0.1 ETH', vibePrice: formatVibeComma(Math.floor(0.1 * vibePerEthRatio)), active: false, done: false },
   ];
 
   // Mint with native ETH
@@ -119,7 +119,8 @@ export default function NftClubPage() {
       color: '#fff',
       fontFamily: 'var(--vv-pixel)',
       paddingBottom: '80px',
-      overflowX: 'hidden'
+      overflowX: 'hidden',
+      textTransform: 'uppercase'
     }}>
       {/* Inline animation keyframes for pulsing live indicator dot */}
       <style>{`
@@ -159,7 +160,7 @@ export default function NftClubPage() {
               VIBE CLUB
             </div>
             <div style={{ fontSize: '8px', color: '#88aacc', marginTop: '2px', letterSpacing: '0.3px' }}>
-              Genesis 333 NFT Collection
+              GENESIS 333 NFT COLLECTION
             </div>
           </div>
         </div>
@@ -188,10 +189,11 @@ export default function NftClubPage() {
                   padding: '6px 12px',
                   borderRadius: '20px',
                   fontSize: '8px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  textTransform: 'uppercase'
                 }}
               >
-                Logout
+                LOGOUT
               </button>
             </div>
           ) : (
@@ -207,7 +209,8 @@ export default function NftClubPage() {
                 borderRadius: '10px',
                 cursor: 'pointer',
                 boxShadow: '0 0 14px rgba(0, 245, 255, 0.4)',
-                fontWeight: 900
+                fontWeight: 900,
+                textTransform: 'uppercase'
               }}
             >
               CONNECT WALLET
@@ -241,9 +244,10 @@ export default function NftClubPage() {
           maxWidth: '750px',
           margin: '0 auto 32px auto',
           lineHeight: 1.8,
-          letterSpacing: '0.4px'
+          letterSpacing: '0.4px',
+          textTransform: 'uppercase'
         }}>
-          Vibe Club is the early dogs who proved their loyalty building the vibe culture on B20 and across the Base Ecosystem. Joining Vibe Club unlocks exclusive perks in VibeVerse and a lifetime passive weekly income.
+          VIBE CLUB IS THE EARLY DOGS WHO PROVED THEIR LOYALTY BUILDING THE VIBE CULTURE ON B20 AND ACROSS THE BASE ECOSYSTEM. JOINING VIBE CLUB UNLOCKS EXCLUSIVE PERKS IN VIBEVERSE AND A LIFETIME PASSIVE WEEKLY INCOME.
         </p>
 
         {/* ── MAIN CARD CONTAINER ── */}
@@ -294,7 +298,8 @@ export default function NftClubPage() {
                 borderRadius: '8px',
                 fontFamily: 'var(--vv-pixel)',
                 fontSize: '9px',
-                color: '#ffd700'
+                color: '#ffd700',
+                textTransform: 'uppercase'
               }}>
                 VIBE CLUB
               </div>
@@ -318,9 +323,10 @@ export default function NftClubPage() {
                     borderRadius: '8px',
                     padding: '6px 12px',
                     fontSize: '8px',
-                    letterSpacing: '0.5px'
+                    letterSpacing: '0.5px',
+                    textTransform: 'uppercase'
                   }}>
-                    ● Phase 1 — Whitelist & Public
+                    ● PHASE 1 — WHITELIST & PUBLIC
                   </div>
                 </div>
 
@@ -385,13 +391,13 @@ export default function NftClubPage() {
                     YOUR WALLET BALANCES:
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
-                    <span style={{ fontSize: '8px', color: '#aaa' }}>• ETH Balance:</span>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>• ETH BALANCE:</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>
                       {authenticated ? `${Number(balances?.eth || 0).toFixed(4)} ETH` : 'CONNECT WALLET'}
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '8px', color: '#aaa' }}>• $VIBE Balance:</span>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>• $VIBE BALANCE:</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffd700' }}>
                       {authenticated ? formatVibeComma(Math.floor(Number(balances?.vibe || 0))) : 'CONNECT WALLET'}
                     </span>
@@ -419,7 +425,8 @@ export default function NftClubPage() {
                     color: '#ffffff',
                     cursor: 'pointer',
                     boxShadow: '0 4px 16px rgba(0, 245, 255, 0.4)',
-                    letterSpacing: '0.5px'
+                    letterSpacing: '0.5px',
+                    textTransform: 'uppercase'
                   }}
                 >
                   {isMintingEth
@@ -458,7 +465,8 @@ export default function NftClubPage() {
                     color: '#ffffff',
                     cursor: 'pointer',
                     boxShadow: '0 4px 16px rgba(255, 215, 0, 0.4)',
-                    letterSpacing: '0.5px'
+                    letterSpacing: '0.5px',
+                    textTransform: 'uppercase'
                   }}
                 >
                   {isMintingVibe
@@ -586,9 +594,10 @@ export default function NftClubPage() {
                 color: '#a0b5d0',
                 lineHeight: 1.8,
                 letterSpacing: '0.3px',
-                margin: 0
+                margin: 0,
+                textTransform: 'uppercase'
               }}>
-                80% of all NFT mint revenue automatically buys & burns $VIBE tokens on contract level. The remaining 20% goes directly into the Vibe Verse Rewards Pool.
+                80% OF ALL NFT MINT REVENUE AUTOMATICALLY BUYS & BURNS $VIBE TOKENS ON CONTRACT LEVEL. THE REMAINING 20% GOES DIRECTLY INTO THE VIBE VERSE REWARDS POOL.
               </p>
             </div>
 
@@ -621,21 +630,22 @@ export default function NftClubPage() {
                 fontSize: '8px',
                 color: '#a0b5d0',
                 lineHeight: 1.8,
-                letterSpacing: '0.3px'
+                letterSpacing: '0.3px',
+                textTransform: 'uppercase'
               }}>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                   <span style={{ color: '#00ff88', fontSize: '9px' }}>•</span>
-                  <span>unlocks exclusive perks in Vibe Verse</span>
+                  <span>UNLOCKS EXCLUSIVE PERKS IN VIBE VERSE</span>
                 </div>
 
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                   <span style={{ color: '#ffd700', fontSize: '9px' }}>•</span>
-                  <span>lifetime $VIBE passive income</span>
+                  <span>LIFETIME $VIBE PASSIVE INCOME</span>
                 </div>
 
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                   <span style={{ color: '#00f5ff', fontSize: '9px' }}>•</span>
-                  <span>DAO access and more coming soon</span>
+                  <span>DAO ACCESS AND MORE COMING SOON</span>
                 </div>
               </div>
             </div>
