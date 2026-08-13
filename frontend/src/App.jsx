@@ -9,6 +9,8 @@ import { createPublicClient, http, formatUnits, parseAbiItem } from 'viem';
 import { base } from 'viem/chains';
 import Checker from './Checker';
 import VibeVerse from './verse/VibeVerse';
+import VibeVerseLockScreen from './verse/VibeVerseLockScreen';
+import NftClubPage from './pages/NftClubPage';
 import './index.css';
 
 const CA      = '0xb200000000000000000000df24ecb8bf51100a01';
@@ -971,11 +973,13 @@ function StandaloneLayout({ children }) {
 }
 
 function DomainRouter() {
+  const location = useLocation();
   const isGameDomain = typeof window !== 'undefined' && window.location.hostname.toLowerCase().includes('vibeverse');
+  const isDevPreview = new URLSearchParams(location.search).get('preview') === 'true';
 
   useEffect(() => {
     if (isGameDomain) {
-      document.title = "Vibe Verse — The Base Dog Web3 World";
+      document.title = "Vibe Club NFT Mint & VibeVerse — The Base Dog";
     } else {
       document.title = "$VIBE — The Base Dog";
     }
@@ -983,7 +987,20 @@ function DomainRouter() {
 
   return (
     <Routes>
-      <Route path="/" element={isGameDomain ? <VibeVerse /> : <><Nav /><LandingPage /><Footer /></>} />
+      {/* ── Standalone VIBE Club NFT Mint Page ── */}
+      <Route path="/nft-club" element={<NftClubPage />} />
+      <Route path="/nft" element={<NftClubPage />} />
+      <Route path="/mint" element={<NftClubPage />} />
+
+      {/* ── Main Routing ── */}
+      <Route
+        path="/"
+        element={
+          isGameDomain
+            ? (isDevPreview ? <VibeVerse /> : <VibeVerseLockScreen />)
+            : <><Nav /><LandingPage /><Footer /></>
+        }
+      />
       <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
       <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
 
@@ -992,7 +1009,11 @@ function DomainRouter() {
       <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
       <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
       <Route path="/checker" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
-      <Route path="/verse" element={<VibeVerse />} />
+      <Route
+        path="/verse"
+        element={isDevPreview ? <VibeVerse /> : <VibeVerseLockScreen />}
+      />
+      <Route path="/verse-dev" element={<VibeVerse />} />
     </Routes>
   );
 }
