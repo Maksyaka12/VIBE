@@ -18,7 +18,14 @@ export default function NftClubPage() {
   const pricePerNft = '0.005 ETH';
   const totalMinted = 12;
   const maxSupply = 333;
-  const currentPhase = 'Phase 1 — Whitelist & Public';
+
+  // 4 Mint Phases definition (Total: 103 + 100 + 100 + 30 = 333 NFT)
+  const phases = [
+    { phase: 'PHASE 1', count: '103 NFT', price: '0.005 ETH', active: true, done: false },
+    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', active: false, done: false },
+    { phase: 'PHASE 3', count: '100 NFT', price: '0.05 ETH', active: false, done: false },
+    { phase: 'PHASE 4', count: '30 NFT', price: '0.1 ETH', active: false, done: false },
+  ];
 
   const handleMint = async () => {
     if (!authenticated) {
@@ -37,8 +44,6 @@ export default function NftClubPage() {
       setIsMinting(false);
     }
   };
-
-  const sampleNfts = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   return (
     <div style={{
@@ -150,18 +155,15 @@ export default function NftClubPage() {
           fontSize: '9px',
           color: '#a0b5d0',
           maxWidth: '750px',
-          margin: '0 auto 36px auto',
+          margin: '0 auto 32px auto',
           lineHeight: 1.8,
           letterSpacing: '0.4px'
         }}>
           Vibe Club is the early dogs who proved their loyalty building the vibe culture on B20 and across the Base Ecosystem. Joining Vibe Club unlocks exclusive perks in VibeVerse and a lifetime passive weekly income.
         </p>
 
-        {/* ── MAIN MINT CONTAINER ── */}
+        {/* ── MAIN CARD CONTAINER (TOP: 2 COLUMNS, BOTTOM: 4 PHASES GRID) ── */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1.1fr',
-          gap: '32px',
           background: 'rgba(4, 20, 48, 0.85)',
           border: '2px solid #00f5ff',
           borderRadius: '20px',
@@ -169,19 +171,28 @@ export default function NftClubPage() {
           boxShadow: '0 12px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 245, 255, 0.25)',
           backdropFilter: 'blur(16px)',
           textAlign: 'left'
-        }} className="vv-nft-club-main-grid">
+        }}>
+          {/* TOP SECTION: LEFT NFT IMAGE + RIGHT CONTROLS */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1.1fr',
+            gap: '28px',
+            alignItems: 'stretch',
+            marginBottom: '32px'
+          }} className="vv-nft-club-main-grid">
 
-          {/* LEFT COLUMN: NFT PREVIEW & THUMBNAILS */}
-          <div>
+            {/* LEFT COLUMN: LARGE NFT IMAGE (SQUARE) */}
             <div style={{
               position: 'relative',
               borderRadius: '16px',
               overflow: 'hidden',
               border: '3px solid #ffd700',
               boxShadow: '0 0 28px rgba(255, 215, 0, 0.4)',
-              marginBottom: '16px',
               background: '#020b1a',
-              aspectRatio: '1/1'
+              aspectRatio: '1/1',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
             }}>
               <img
                 src={`/nft/images/${selectedPreview}.png`}
@@ -205,119 +216,194 @@ export default function NftClubPage() {
               </div>
             </div>
 
-            {/* Gallery Thumbnails */}
-            <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '8px', letterSpacing: '0.4px' }}>
-              PREVIEW COLLECTION:
-            </div>
+            {/* RIGHT COLUMN: CONTROLS (EXACTLY MATCHING HEIGHT OF LEFT IMAGE) */}
             <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(5, 1fr)',
-              gap: '8px'
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              height: '100%'
             }}>
-              {sampleNfts.map((num) => (
-                <div
-                  key={num}
-                  onClick={() => setSelectedPreview(num)}
-                  style={{
-                    borderRadius: '8px',
-                    overflow: 'hidden',
-                    border: selectedPreview === num ? '2px solid #00f5ff' : '1px solid rgba(255, 255, 255, 0.15)',
-                    cursor: 'pointer',
-                    opacity: selectedPreview === num ? 1 : 0.6,
-                    transition: 'all 0.2s ease',
-                    aspectRatio: '1/1'
-                  }}
-                >
-                  <img
-                    src={`/nft/images/${num}.png`}
-                    onError={(e) => { e.target.src = '/vibe-dog.jpg'; }}
-                    alt={`NFT #${num}`}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
+              <div>
+                {/* Active Phase Badge */}
+                <div style={{
+                  display: 'inline-block',
+                  background: 'rgba(0, 255, 136, 0.15)',
+                  border: '1.5px solid #00ff88',
+                  color: '#00ff88',
+                  borderRadius: '8px',
+                  padding: '6px 12px',
+                  fontSize: '8px',
+                  marginBottom: '14px',
+                  letterSpacing: '0.5px'
+                }}>
+                  ● Phase 1 — Whitelist & Public
                 </div>
-              ))}
+
+                {/* CARD 1: PRICE & LIMIT */}
+                <div style={{
+                  background: 'rgba(2, 11, 26, 0.7)',
+                  border: '1px solid rgba(0, 245, 255, 0.25)',
+                  borderRadius: '12px',
+                  padding: '14px 16px',
+                  marginBottom: '12px'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <span style={{ fontSize: '9px', color: '#aaa' }}>PRICE</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '11px', color: '#ffd700' }}>{pricePerNft}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '9px', color: '#aaa' }}>LIMIT</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00ff88' }}>1 NFT PER WALLET</span>
+                  </div>
+                </div>
+
+                {/* CARD 2: TOTAL MINTED & PROGRESS BAR */}
+                <div style={{
+                  background: 'rgba(2, 11, 26, 0.7)',
+                  border: '1px solid rgba(0, 245, 255, 0.25)',
+                  borderRadius: '12px',
+                  padding: '14px 16px',
+                  marginBottom: '12px'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                    <span style={{ fontSize: '9px', color: '#aaa' }}>TOTAL MINTED</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '10px', color: '#00f5ff' }}>{totalMinted} / {maxSupply}</span>
+                  </div>
+                  {/* Progress Bar */}
+                  <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div style={{ width: `${(totalMinted / maxSupply) * 100}%`, height: '100%', background: 'linear-gradient(90deg, #00f5ff, #00ff88)' }} />
+                  </div>
+                </div>
+
+                {/* CARD 3: USER WALLET BALANCES (ETH & VIBE) */}
+                <div style={{
+                  background: 'rgba(2, 11, 26, 0.5)',
+                  border: '1px solid rgba(255, 215, 0, 0.25)',
+                  borderRadius: '12px',
+                  padding: '12px 16px',
+                  marginBottom: '14px'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>ETH BALANCE:</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>
+                      {authenticated ? `${Number(balances?.eth || 0).toFixed(4)} ETH` : 'CONNECT WALLET'}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>$VIBE BALANCE:</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffd700' }}>
+                      {authenticated ? `${Math.floor(Number(balances?.vibe || 0)).toLocaleString()} $VIBE` : 'CONNECT WALLET'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* MINT ACTION BUTTON (ALIGNED EXACTLY WITH BOTTOM OF LEFT NFT IMAGE) */}
+              <button
+                onClick={handleMint}
+                disabled={isMinting}
+                style={{
+                  width: '100%',
+                  height: '52px',
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '12px',
+                  fontWeight: 900,
+                  background: authenticated
+                    ? 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)'
+                    : 'linear-gradient(135deg, #ffd700 0%, #ff6b35 100%)',
+                  border: '2.5px solid #ffffff',
+                  borderRadius: '12px',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 24px rgba(0, 245, 255, 0.4), 0 0 14px rgba(255, 255, 255, 0.5)',
+                  letterSpacing: '0.8px'
+                }}
+              >
+                {isMinting
+                  ? 'MINTING IN PROGRESS...'
+                  : authenticated
+                  ? `MINT FOR ${pricePerNft}`
+                  : 'CONNECT WALLET TO MINT'}
+              </button>
             </div>
           </div>
 
-          {/* RIGHT COLUMN: MINT DETAILS & ACTION BUTTON */}
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-            <div>
-              {/* Phase Badge */}
-              <div style={{
-                display: 'inline-block',
-                background: 'rgba(0, 255, 136, 0.15)',
-                border: '1.5px solid #00ff88',
-                color: '#00ff88',
-                borderRadius: '8px',
-                padding: '6px 12px',
-                fontSize: '8px',
-                marginBottom: '20px',
-                letterSpacing: '0.5px'
-              }}>
-                ● {currentPhase}
-              </div>
-
-              {/* Price & Supply Box */}
-              <div style={{
-                background: 'rgba(2, 11, 26, 0.6)',
-                border: '1px solid rgba(0, 245, 255, 0.25)',
-                borderRadius: '12px',
-                padding: '16px',
-                marginBottom: '20px'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                  <span style={{ fontSize: '9px', color: '#aaa' }}>PRICE</span>
-                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '11px', color: '#ffd700' }}>{pricePerNft}</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                  <span style={{ fontSize: '9px', color: '#aaa' }}>TOTAL MINTED</span>
-                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '10px', color: '#00f5ff' }}>{totalMinted} / {maxSupply}</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                  <span style={{ fontSize: '9px', color: '#aaa' }}>LIMIT</span>
-                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00ff88' }}>1 NFT PER WALLET</span>
-                </div>
-
-                {/* Progress Bar */}
-                <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ width: `${(totalMinted / maxSupply) * 100}%`, height: '100%', background: 'linear-gradient(90deg, #00f5ff, #00ff88)' }} />
-                </div>
-              </div>
+          {/* BOTTOM SECTION: 4 MINT PHASES GRID (ACROSS FULL WIDTH) */}
+          <div style={{
+            borderTop: '1px solid rgba(0, 245, 255, 0.2)',
+            paddingTop: '20px'
+          }}>
+            <div style={{
+              fontSize: '9px',
+              color: '#88aacc',
+              marginBottom: '14px',
+              letterSpacing: '0.5px',
+              display: 'flex',
+              justify: 'space-between',
+              alignItems: 'center'
+            }}>
+              <span>MINT PHASES SCHEDULE:</span>
+              <span style={{ color: '#ffd700' }}>TOTAL: 333 GENESIS NFT</span>
             </div>
 
-            {/* Mint Action Button */}
-            <button
-              onClick={handleMint}
-              disabled={isMinting}
-              style={{
-                width: '100%',
-                height: '56px',
-                fontFamily: 'var(--vv-pixel)',
-                fontSize: '12px',
-                fontWeight: 900,
-                background: authenticated
-                  ? 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)'
-                  : 'linear-gradient(135deg, #ffd700 0%, #ff6b35 100%)',
-                border: '2.5px solid #ffffff',
-                borderRadius: '12px',
-                color: '#ffffff',
-                cursor: 'pointer',
-                boxShadow: '0 4px 24px rgba(0, 245, 255, 0.4), 0 0 14px rgba(255, 255, 255, 0.5)',
-                letterSpacing: '0.8px'
-              }}
-            >
-              {isMinting
-                ? 'MINTING IN PROGRESS...'
-                : authenticated
-                ? `MINT FOR ${pricePerNft}`
-                : 'CONNECT WALLET TO MINT'}
-            </button>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              gap: '12px'
+            }} className="vv-nft-phases-grid">
+              {phases.map((p, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    background: p.active ? 'rgba(0, 245, 255, 0.12)' : 'rgba(2, 11, 26, 0.6)',
+                    border: p.active ? '1.5px solid #00f5ff' : '1px solid rgba(255, 255, 255, 0.12)',
+                    borderRadius: '12px',
+                    padding: '14px 12px',
+                    textAlign: 'center',
+                    boxShadow: p.active ? '0 0 16px rgba(0, 245, 255, 0.2)' : 'none'
+                  }}
+                >
+                  <div style={{
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '9px',
+                    color: p.active ? '#00f5ff' : '#aaa',
+                    marginBottom: '6px'
+                  }}>
+                    {p.phase}
+                  </div>
+                  <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '8px' }}>
+                    {p.count}
+                  </div>
+                  <div style={{
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '10px',
+                    color: '#ffd700'
+                  }}>
+                    {p.price}
+                  </div>
+                  {p.active && (
+                    <div style={{
+                      display: 'inline-block',
+                      marginTop: '6px',
+                      background: '#00ff88',
+                      color: '#020b1a',
+                      fontSize: '7px',
+                      padding: '2px 6px',
+                      borderRadius: '4px',
+                      fontWeight: 900
+                    }}>
+                      LIVE NOW
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* ── HOLDER UTILITY CARDS ── */}
         <div style={{
-          marginTop: '40px',
+          marginTop: '36px',
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '20px'
