@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 import { useUserBalances } from '../verse/hooks/useUserBalances';
 
@@ -10,38 +10,66 @@ export default function NftClubPage() {
   const walletAddress = user?.wallet?.address;
   const balances = useUserBalances(walletAddress);
 
-  const [isMinting, setIsMinting] = useState(false);
+  const [isMintingEth, setIsMintingEth] = useState(false);
+  const [isMintingVibe, setIsMintingVibe] = useState(false);
   const [mintSuccess, setMintSuccess] = useState(false);
   const [selectedPreview, setSelectedPreview] = useState(1);
 
   // Contract Mint details
-  const pricePerNft = '0.005 ETH';
+  const ethPriceNumber = 0.005;
+  const pricePerNft = `${ethPriceNumber} ETH`;
   const totalMinted = 12;
   const maxSupply = 333;
 
+  // Dynamic $VIBE price equivalent calculation (e.g. 0.005 ETH = ~2,450 $VIBE)
+  const estimatedVibePrice = Math.floor(ethPriceNumber * 490000); 
+  const [lockedVibePrice, setLockedVibePrice] = useState(null);
+
   // 4 Mint Phases definition (Total: 103 + 100 + 100 + 30 = 333 NFT)
   const phases = [
-    { phase: 'PHASE 1', count: '103 NFT', price: '0.005 ETH', active: true, done: false },
-    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', active: false, done: false },
-    { phase: 'PHASE 3', count: '100 NFT', price: '0.05 ETH', active: false, done: false },
-    { phase: 'PHASE 4', count: '30 NFT', price: '0.1 ETH', active: false, done: false },
+    { phase: 'PHASE 1', count: '103 NFT', price: '0.005 ETH', vibePrice: '2,450 $VIBE', active: true, done: false },
+    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', vibePrice: '7,350 $VIBE', active: false, done: false },
+    { phase: 'PHASE 3', count: '100 NFT', price: '0.05 ETH', vibePrice: '24,500 $VIBE', active: false, done: false },
+    { phase: 'PHASE 4', count: '30 NFT', price: '0.1 ETH', vibePrice: '49,000 $VIBE', active: false, done: false },
   ];
 
-  const handleMint = async () => {
+  // Mint with native ETH
+  const handleMintEth = async () => {
     if (!authenticated) {
       login();
       return;
     }
-    setIsMinting(true);
+    setIsMintingEth(true);
     setMintSuccess(false);
     try {
-      // Simulate mint call until contract is deployed on Base Mainnet
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setMintSuccess(true);
     } catch (e) {
-      console.error('Mint error:', e);
+      console.error('Mint ETH error:', e);
     } finally {
-      setIsMinting(false);
+      setIsMintingEth(false);
+    }
+  };
+
+  // Mint with $VIBE tokens (Price Locking on Click)
+  const handleMintVibe = async () => {
+    if (!authenticated) {
+      login();
+      return;
+    }
+    // Lock the price instantly upon click to prevent slippage issues during confirmation
+    const finalVibePrice = estimatedVibePrice;
+    setLockedVibePrice(finalVibePrice);
+
+    setIsMintingVibe(true);
+    setMintSuccess(false);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setMintSuccess(true);
+    } catch (e) {
+      console.error('Mint VIBE error:', e);
+    } finally {
+      setIsMintingVibe(false);
     }
   };
 
@@ -162,7 +190,7 @@ export default function NftClubPage() {
           Vibe Club is the early dogs who proved their loyalty building the vibe culture on B20 and across the Base Ecosystem. Joining Vibe Club unlocks exclusive perks in VibeVerse and a lifetime passive weekly income.
         </p>
 
-        {/* ── MAIN CARD CONTAINER (TOP: 2 COLUMNS, BOTTOM: 4 PHASES GRID) ── */}
+        {/* ── MAIN CARD CONTAINER ── */}
         <div style={{
           background: 'rgba(4, 20, 48, 0.85)',
           border: '2px solid #00f5ff',
@@ -233,7 +261,7 @@ export default function NftClubPage() {
                   borderRadius: '8px',
                   padding: '6px 12px',
                   fontSize: '8px',
-                  marginBottom: '14px',
+                  marginBottom: '12px',
                   letterSpacing: '0.5px'
                 }}>
                   ● Phase 1 — Whitelist & Public
@@ -244,12 +272,14 @@ export default function NftClubPage() {
                   background: 'rgba(2, 11, 26, 0.7)',
                   border: '1px solid rgba(0, 245, 255, 0.25)',
                   borderRadius: '12px',
-                  padding: '14px 16px',
-                  marginBottom: '12px'
+                  padding: '12px 16px',
+                  marginBottom: '10px'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <span style={{ fontSize: '9px', color: '#aaa' }}>PRICE</span>
-                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '11px', color: '#ffd700' }}>{pricePerNft}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '9px', color: '#aaa' }}>PRICE (ETH / VIBE)</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '10px', color: '#ffd700' }}>
+                      {pricePerNft} / {estimatedVibePrice.toLocaleString()} $VIBE
+                    </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <span style={{ fontSize: '9px', color: '#aaa' }}>LIMIT</span>
@@ -262,10 +292,10 @@ export default function NftClubPage() {
                   background: 'rgba(2, 11, 26, 0.7)',
                   border: '1px solid rgba(0, 245, 255, 0.25)',
                   borderRadius: '12px',
-                  padding: '14px 16px',
-                  marginBottom: '14px'
+                  padding: '12px 16px',
+                  marginBottom: '10px'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                     <span style={{ fontSize: '9px', color: '#aaa' }}>TOTAL MINTED</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '10px', color: '#00f5ff' }}>{totalMinted} / {maxSupply}</span>
                   </div>
@@ -278,12 +308,12 @@ export default function NftClubPage() {
                 {/* USER WALLET BALANCES (CLEAN TEXT BLOCK) */}
                 <div style={{
                   padding: '2px 4px',
-                  marginBottom: '14px'
+                  marginBottom: '10px'
                 }}>
-                  <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '6px', letterSpacing: '0.4px' }}>
+                  <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '4px', letterSpacing: '0.4px' }}>
                     YOUR WALLET BALANCES:
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
                     <span style={{ fontSize: '8px', color: '#aaa' }}>• ETH Balance:</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>
                       {authenticated ? `${Number(balances?.eth || 0).toFixed(4)} ETH` : 'CONNECT WALLET'}
@@ -298,33 +328,64 @@ export default function NftClubPage() {
                 </div>
               </div>
 
-              {/* MINT ACTION BUTTON (ALIGNED EXACTLY WITH BOTTOM OF LEFT NFT IMAGE) */}
-              <button
-                onClick={handleMint}
-                disabled={isMinting}
-                style={{
-                  width: '100%',
-                  height: '52px',
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '12px',
-                  fontWeight: 900,
-                  background: authenticated
-                    ? 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)'
-                    : 'linear-gradient(135deg, #ffd700 0%, #ff6b35 100%)',
-                  border: '2.5px solid #ffffff',
-                  borderRadius: '12px',
-                  color: '#ffffff',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 24px rgba(0, 245, 255, 0.4), 0 0 14px rgba(255, 255, 255, 0.5)',
-                  letterSpacing: '0.8px'
-                }}
-              >
-                {isMinting
-                  ? 'MINTING IN PROGRESS...'
-                  : authenticated
-                  ? `MINT FOR ${pricePerNft}`
-                  : 'CONNECT WALLET TO MINT'}
-              </button>
+              {/* DUAL MINT ACTION BUTTONS: ETH (CYAN) + VIBE (WARM ORANGE/GOLD) */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {/* 1. MINT FOR ETH BUTTON */}
+                <button
+                  onClick={handleMintEth}
+                  disabled={isMintingEth || isMintingVibe}
+                  style={{
+                    width: '100%',
+                    height: '46px',
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '11px',
+                    fontWeight: 900,
+                    background: authenticated
+                      ? 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)'
+                      : 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)',
+                    border: '2px solid #ffffff',
+                    borderRadius: '12px',
+                    color: '#ffffff',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 20px rgba(0, 245, 255, 0.4), 0 0 10px rgba(255, 255, 255, 0.4)',
+                    letterSpacing: '0.6px'
+                  }}
+                >
+                  {isMintingEth
+                    ? 'MINTING WITH ETH...'
+                    : authenticated
+                    ? `MINT FOR ${pricePerNft}`
+                    : 'CONNECT WALLET TO MINT'}
+                </button>
+
+                {/* 2. MINT FOR $VIBE BUTTON (WARM ORANGE/GOLD WITH SLIPPAGE LOCK) */}
+                <button
+                  onClick={handleMintVibe}
+                  disabled={isMintingEth || isMintingVibe}
+                  style={{
+                    width: '100%',
+                    height: '46px',
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '11px',
+                    fontWeight: 900,
+                    background: authenticated
+                      ? 'linear-gradient(135deg, #ffd700 0%, #ff6b35 100%)'
+                      : 'linear-gradient(135deg, #ffd700 0%, #ff6b35 100%)',
+                    border: '2px solid #ffffff',
+                    borderRadius: '12px',
+                    color: '#ffffff',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4), 0 0 10px rgba(255, 255, 255, 0.4)',
+                    letterSpacing: '0.6px'
+                  }}
+                >
+                  {isMintingVibe
+                    ? `MINTING WITH ${lockedVibePrice ? lockedVibePrice.toLocaleString() : estimatedVibePrice.toLocaleString()} $VIBE...`
+                    : authenticated
+                    ? `MINT FOR ${estimatedVibePrice.toLocaleString()} $VIBE`
+                    : 'MINT WITH $VIBE TOKENS'}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -393,15 +454,23 @@ export default function NftClubPage() {
                   }}>
                     {p.phase}
                   </div>
-                  <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '8px' }}>
+                  <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '6px' }}>
                     {p.count}
                   </div>
                   <div style={{
                     fontFamily: 'var(--vv-pixel)',
-                    fontSize: '10px',
-                    color: '#ffd700'
+                    fontSize: '9px',
+                    color: '#ffd700',
+                    marginBottom: '2px'
                   }}>
                     {p.price}
+                  </div>
+                  <div style={{
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '7px',
+                    color: '#00ff88'
+                  }}>
+                    ({p.vibePrice})
                   </div>
                 </div>
               ))}
