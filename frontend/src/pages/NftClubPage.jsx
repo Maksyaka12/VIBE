@@ -59,17 +59,17 @@ export default function NftClubPage() {
   // Total $VIBE burned strictly by this NFT mint contract (starts at 0 before mints)
   const totalVibeBurnedByContract = Math.floor(totalMinted * estimatedVibePrice * 0.8);
 
-  // Format large number with comma separators for clean display
-  const formatVibeFormatted = (amount) => {
-    return amount.toLocaleString() + ' $VIBE';
+  // Format number with English comma separators (e.g. 273,074 $VIBE or 5,461,496 $VIBE)
+  const formatVibeComma = (amount) => {
+    return Number(amount).toLocaleString('en-US') + ' $VIBE';
   };
 
-  // 4 Mint Phases definition with dynamic live $VIBE prices
+  // 4 Mint Phases definition with dynamic live $VIBE prices formatted with commas
   const phases = [
-    { phase: 'Phase 1', count: '103 NFT', price: '0.005 ETH', vibePrice: formatVibeFormatted(Math.floor(0.005 * vibePerEthRatio)), active: true, done: false },
-    { phase: 'Phase 2', count: '100 NFT', price: '0.015 ETH', vibePrice: formatVibeFormatted(Math.floor(0.015 * vibePerEthRatio)), active: false, done: false },
-    { phase: 'Phase 3', count: '100 NFT', price: '0.05 ETH', vibePrice: formatVibeFormatted(Math.floor(0.05 * vibePerEthRatio)), active: false, done: false },
-    { phase: 'Phase 4', count: '30 NFT', price: '0.1 ETH', vibePrice: formatVibeFormatted(Math.floor(0.1 * vibePerEthRatio)), active: false, done: false },
+    { phase: 'Phase 1', count: '103 NFT', price: '0.005 ETH', vibePrice: formatVibeComma(Math.floor(0.005 * vibePerEthRatio)), active: true, done: false },
+    { phase: 'Phase 2', count: '100 NFT', price: '0.015 ETH', vibePrice: formatVibeComma(Math.floor(0.015 * vibePerEthRatio)), active: false, done: false },
+    { phase: 'Phase 3', count: '100 NFT', price: '0.05 ETH', vibePrice: formatVibeComma(Math.floor(0.05 * vibePerEthRatio)), active: false, done: false },
+    { phase: 'Phase 4', count: '30 NFT', price: '0.1 ETH', vibePrice: formatVibeComma(Math.floor(0.1 * vibePerEthRatio)), active: false, done: false },
   ];
 
   // Mint with native ETH
@@ -261,7 +261,7 @@ export default function NftClubPage() {
             display: 'grid',
             gridTemplateColumns: '1fr 1.1fr',
             gap: '28px',
-            alignItems: 'start',
+            alignItems: 'stretch',
             marginBottom: '32px'
           }} className="vv-nft-club-main-grid">
 
@@ -300,111 +300,114 @@ export default function NftClubPage() {
               </div>
             </div>
 
-            {/* RIGHT COLUMN: CONTROLS (COMPACT & FLOWING NATURALLY) */}
+            {/* RIGHT COLUMN: CONTROLS (EXACTLY ALIGNED WITH HEIGHT & BOTTOM OF LEFT NFT IMAGE) */}
             <div style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '10px'
+              justifyContent: 'space-between',
+              height: '100%'
             }}>
-              {/* Active Phase Badge */}
-              <div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {/* Active Phase Badge */}
+                <div>
+                  <div style={{
+                    display: 'inline-block',
+                    background: 'rgba(0, 255, 136, 0.15)',
+                    border: '1.5px solid #00ff88',
+                    color: '#00ff88',
+                    borderRadius: '8px',
+                    padding: '6px 12px',
+                    fontSize: '8px',
+                    letterSpacing: '0.5px'
+                  }}>
+                    ● Phase 1 — Whitelist & Public
+                  </div>
+                </div>
+
+                {/* CARD 1: PRICE ETH & PRICE VIBE (STACKED) + LIMIT */}
                 <div style={{
-                  display: 'inline-block',
-                  background: 'rgba(0, 255, 136, 0.15)',
-                  border: '1.5px solid #00ff88',
-                  color: '#00ff88',
-                  borderRadius: '8px',
-                  padding: '6px 12px',
-                  fontSize: '8px',
-                  letterSpacing: '0.5px'
+                  background: 'rgba(2, 11, 26, 0.7)',
+                  border: '1px solid rgba(0, 245, 255, 0.25)',
+                  borderRadius: '12px',
+                  padding: '10px 14px'
                 }}>
-                  ● Phase 1 — Whitelist & Public
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>PRICE ETH</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>{pricePerNft}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>PRICE VIBE</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffd700' }}>
+                      {formatVibeComma(estimatedVibePrice)}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>LIMIT</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '8px', color: '#00ff88' }}>1 NFT PER WALLET</span>
+                  </div>
+                </div>
+
+                {/* CARD 2: TOTAL MINTED & PROGRESS BAR */}
+                <div style={{
+                  background: 'rgba(2, 11, 26, 0.7)',
+                  border: '1px solid rgba(0, 245, 255, 0.25)',
+                  borderRadius: '12px',
+                  padding: '10px 14px'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>TOTAL MINTED</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>{totalMinted} / {maxSupply}</span>
+                  </div>
+                  {/* Progress Bar */}
+                  <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div style={{ width: `${(totalMinted / maxSupply) * 100}%`, height: '100%', background: 'linear-gradient(90deg, #00f5ff, #00ff88)' }} />
+                  </div>
+                </div>
+
+                {/* CARD 3: TOTAL BURNED (CLEAN SINGLE-LINE CARD WITHOUT FIRE EMOJI) */}
+                <div style={{
+                  background: 'rgba(2, 11, 26, 0.7)',
+                  border: '1px solid rgba(255, 68, 102, 0.35)',
+                  borderRadius: '12px',
+                  padding: '10px 14px'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: '8px', color: '#ff4466', fontWeight: 900 }}>TOTAL BURNED</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffffff' }}>
+                      {formatVibeComma(totalVibeBurnedByContract)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* USER WALLET BALANCES (CLEAN TEXT BLOCK) */}
+                <div style={{ padding: '2px 4px' }}>
+                  <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '4px', letterSpacing: '0.4px' }}>
+                    YOUR WALLET BALANCES:
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>• ETH Balance:</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>
+                      {authenticated ? `${Number(balances?.eth || 0).toFixed(4)} ETH` : 'CONNECT WALLET'}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>• $VIBE Balance:</span>
+                    <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffd700' }}>
+                      {authenticated ? formatVibeComma(Math.floor(Number(balances?.vibe || 0))) : 'CONNECT WALLET'}
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              {/* CARD 1: PRICE ETH & PRICE VIBE (STACKED) + LIMIT */}
-              <div style={{
-                background: 'rgba(2, 11, 26, 0.7)',
-                border: '1px solid rgba(0, 245, 255, 0.25)',
-                borderRadius: '12px',
-                padding: '10px 14px'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                  <span style={{ fontSize: '8px', color: '#aaa' }}>PRICE ETH</span>
-                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>{pricePerNft}</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-                  <span style={{ fontSize: '8px', color: '#aaa' }}>PRICE VIBE</span>
-                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffd700' }}>
-                    {estimatedVibePrice.toLocaleString()} $VIBE
-                  </span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '8px', color: '#aaa' }}>LIMIT</span>
-                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '8px', color: '#00ff88' }}>1 NFT PER WALLET</span>
-                </div>
-              </div>
-
-              {/* CARD 2: TOTAL MINTED & PROGRESS BAR */}
-              <div style={{
-                background: 'rgba(2, 11, 26, 0.7)',
-                border: '1px solid rgba(0, 245, 255, 0.25)',
-                borderRadius: '12px',
-                padding: '10px 14px'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '8px', color: '#aaa' }}>TOTAL MINTED</span>
-                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>{totalMinted} / {maxSupply}</span>
-                </div>
-                {/* Progress Bar */}
-                <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ width: `${(totalMinted / maxSupply) * 100}%`, height: '100%', background: 'linear-gradient(90deg, #00f5ff, #00ff88)' }} />
-                </div>
-              </div>
-
-              {/* CARD 3: TOTAL BURNED (CLEAN MINIMAL SINGLE-LINE CARD) */}
-              <div style={{
-                background: 'rgba(2, 11, 26, 0.7)',
-                border: '1px solid rgba(255, 68, 102, 0.35)',
-                borderRadius: '12px',
-                padding: '10px 14px'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '8px', color: '#ff4466', fontWeight: 900 }}>TOTAL BURNED</span>
-                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffffff' }}>
-                    {totalVibeBurnedByContract.toLocaleString()} $VIBE 🔥
-                  </span>
-                </div>
-              </div>
-
-              {/* USER WALLET BALANCES (CLEAN TEXT BLOCK) */}
-              <div style={{ padding: '2px 4px' }}>
-                <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '4px', letterSpacing: '0.4px' }}>
-                  YOUR WALLET BALANCES:
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
-                  <span style={{ fontSize: '8px', color: '#aaa' }}>• ETH Balance:</span>
-                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>
-                    {authenticated ? `${Number(balances?.eth || 0).toFixed(4)} ETH` : 'CONNECT WALLET'}
-                  </span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '8px', color: '#aaa' }}>• $VIBE Balance:</span>
-                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffd700' }}>
-                    {authenticated ? `${Math.floor(Number(balances?.vibe || 0)).toLocaleString()} $VIBE` : 'CONNECT WALLET'}
-                  </span>
-                </div>
-              </div>
-
-              {/* DUAL MINT ACTION BUTTONS WITH CLEAR "- OR -" DIVIDER */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '4px' }}>
+              {/* DUAL MINT ACTION BUTTONS WITH CLEAR "- OR -" DIVIDER (BOTTOM-ALIGNED WITH NFT IMAGE) */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: 'auto', paddingTop: '6px' }}>
                 {/* 1. MINT FOR ETH BUTTON */}
                 <button
                   onClick={handleMintEth}
                   disabled={isMintingEth || isMintingVibe}
                   style={{
                     width: '100%',
-                    height: '42px',
+                    height: '44px',
                     fontFamily: 'var(--vv-pixel)',
                     fontSize: '10px',
                     fontWeight: 900,
@@ -432,7 +435,7 @@ export default function NftClubPage() {
                   fontSize: '8px',
                   color: '#88aacc',
                   letterSpacing: '1px',
-                  margin: '2px 0'
+                  margin: '1px 0'
                 }}>
                   — OR —
                 </div>
@@ -443,7 +446,7 @@ export default function NftClubPage() {
                   disabled={isMintingEth || isMintingVibe}
                   style={{
                     width: '100%',
-                    height: '42px',
+                    height: '44px',
                     fontFamily: 'var(--vv-pixel)',
                     fontSize: '10px',
                     fontWeight: 900,
@@ -459,9 +462,9 @@ export default function NftClubPage() {
                   }}
                 >
                   {isMintingVibe
-                    ? `MINTING WITH ${lockedVibePrice ? lockedVibePrice.toLocaleString() : estimatedVibePrice.toLocaleString()} $VIBE...`
+                    ? `MINTING WITH ${formatVibeComma(lockedVibePrice || estimatedVibePrice)}...`
                     : authenticated
-                    ? `MINT FOR ${estimatedVibePrice.toLocaleString()} $VIBE`
+                    ? `MINT FOR ${formatVibeComma(estimatedVibePrice)}`
                     : 'MINT WITH $VIBE TOKENS'}
                 </button>
               </div>
@@ -508,7 +511,7 @@ export default function NftClubPage() {
                     <span style={{
                       fontFamily: 'var(--vv-pixel)',
                       fontSize: '9px',
-                      color: p.active ? '#00f5ff' : '#ffffff'
+                      color: p.active ? '#00ff88' : '#ffffff'
                     }}>
                       {p.phase} ({p.count})
                     </span>
@@ -517,9 +520,13 @@ export default function NftClubPage() {
                   <div style={{
                     fontFamily: 'var(--vv-pixel)',
                     fontSize: '9px',
-                    color: p.active ? '#ffd700' : '#88aacc'
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
                   }}>
-                    {p.price} / {p.vibePrice}
+                    <span style={{ color: '#00f5ff' }}>{p.price}</span>
+                    <span style={{ color: '#88aacc' }}>/</span>
+                    <span style={{ color: '#ffd700' }}>{p.vibePrice}</span>
                   </div>
                 </div>
               ))}
