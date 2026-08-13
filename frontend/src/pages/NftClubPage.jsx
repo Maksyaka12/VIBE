@@ -15,22 +15,60 @@ export default function NftClubPage() {
   const [mintSuccess, setMintSuccess] = useState(false);
   const [selectedPreview, setSelectedPreview] = useState(1);
 
+  // Live DEX price ratio: 1 ETH = X VIBE
+  const [vibePerEthRatio, setVibePerEthRatio] = useState(54600000); // Default fallback: 1 ETH = ~54.6M VIBE
+
   // Contract Mint details
   const ethPriceNumber = 0.005;
   const pricePerNft = `${ethPriceNumber} ETH`;
   const totalMinted = 12;
   const maxSupply = 333;
 
-  // Dynamic $VIBE price equivalent calculation (e.g. 0.005 ETH = ~2,450 $VIBE)
-  const estimatedVibePrice = Math.floor(ethPriceNumber * 490000); 
+  // Fetch live $VIBE pool price from DEX Screener on Base
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchLiveVibePrice() {
+      try {
+        const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/0xb200000000000000000000df24ecb8bf51100a01');
+        const data = await res.json();
+        const pair = data?.pairs?.[0];
+        if (pair && pair.priceNative && isMounted) {
+          const priceNativeFloat = parseFloat(pair.priceNative);
+          if (priceNativeFloat > 0) {
+            const calculatedRatio = Math.floor(1 / priceNativeFloat);
+            setVibePerEthRatio(calculatedRatio);
+          }
+        }
+      } catch (e) {
+        console.error('Error fetching DEX VIBE price:', e);
+      }
+    }
+
+    fetchLiveVibePrice();
+    const interval = setInterval(fetchLiveVibePrice, 30000); // Refresh every 30s
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Calculate live $VIBE required for Phase 1 (0.005 ETH * ratio)
+  const estimatedVibePrice = Math.floor(ethPriceNumber * vibePerEthRatio);
   const [lockedVibePrice, setLockedVibePrice] = useState(null);
 
-  // 4 Mint Phases definition (Total: 103 + 100 + 100 + 30 = 333 NFT)
+  // Format large number with K / M suffix for phase cards
+  const formatVibeShort = (amount) => {
+    if (amount >= 1000000) return (amount / 1000000).toFixed(2) + 'M $VIBE';
+    if (amount >= 1000) return (amount / 1000).toFixed(0) + 'K $VIBE';
+    return amount.toLocaleString() + ' $VIBE';
+  };
+
+  // 4 Mint Phases definition with dynamic live $VIBE prices
   const phases = [
-    { phase: 'PHASE 1', count: '103 NFT', price: '0.005 ETH', vibePrice: '2,450 $VIBE', active: true, done: false },
-    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', vibePrice: '7,350 $VIBE', active: false, done: false },
-    { phase: 'PHASE 3', count: '100 NFT', price: '0.05 ETH', vibePrice: '24,500 $VIBE', active: false, done: false },
-    { phase: 'PHASE 4', count: '30 NFT', price: '0.1 ETH', vibePrice: '49,000 $VIBE', active: false, done: false },
+    { phase: 'PHASE 1', count: '103 NFT', price: '0.005 ETH', vibePrice: formatVibeShort(Math.floor(0.005 * vibePerEthRatio)), active: true, done: false },
+    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', vibePrice: formatVibeShort(Math.floor(0.015 * vibePerEthRatio)), active: false, done: false },
+    { phase: 'PHASE 3', count: '100 NFT', price: '0.05 ETH', vibePrice: formatVibeShort(Math.floor(0.05 * vibePerEthRatio)), active: false, done: false },
+    { phase: 'PHASE 4', count: '30 NFT', price: '0.1 ETH', vibePrice: formatVibeShort(Math.floor(0.1 * vibePerEthRatio)), active: false, done: false },
   ];
 
   // Mint with native ETH
@@ -57,7 +95,7 @@ export default function NftClubPage() {
       login();
       return;
     }
-    // Lock the price instantly upon click to prevent slippage issues during confirmation
+    // Lock the live price instantly upon click to prevent slippage during confirmation
     const finalVibePrice = estimatedVibePrice;
     setLockedVibePrice(finalVibePrice);
 
@@ -358,7 +396,7 @@ export default function NftClubPage() {
                     : 'CONNECT WALLET TO MINT'}
                 </button>
 
-                {/* 2. MINT FOR $VIBE BUTTON (WARM ORANGE/GOLD WITH SLIPPAGE LOCK) */}
+                {/* 2. MINT FOR $VIBE BUTTON (LIVE DEX RATIO WITH SLIPPAGE LOCK) */}
                 <button
                   onClick={handleMintVibe}
                   disabled={isMintingEth || isMintingVibe}
