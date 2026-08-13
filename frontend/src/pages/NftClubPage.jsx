@@ -538,58 +538,138 @@ export default function NftClubPage() {
           </div>
         </div>
 
-        {/* ── HOLDER UTILITY CARDS ── */}
+        {/* ── FAQ & VIBE CLUB BENEFITS SECTION ── */}
         <div style={{
-          marginTop: '36px',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '20px'
-        }} className="vv-nft-club-utility-grid">
-          <div style={{
-            background: 'rgba(4, 20, 48, 0.6)',
-            border: '1.5px solid rgba(0, 245, 255, 0.3)',
-            borderRadius: '14px',
-            padding: '20px',
-            textAlign: 'left'
+          marginTop: '48px',
+          textAlign: 'left'
+        }}>
+          <h2 style={{
+            fontFamily: 'var(--vv-pixel)',
+            fontSize: '14px',
+            color: '#00f5ff',
+            textShadow: '0 0 16px rgba(0, 245, 255, 0.4)',
+            marginBottom: '24px',
+            letterSpacing: '0.6px',
+            textAlign: 'center'
           }}>
-            <div style={{ fontSize: '22px', marginBottom: '10px' }}>💰</div>
-            <div style={{ fontFamily: 'var(--vv-pixel)', fontSize: '10px', color: '#ffd700', marginBottom: '8px' }}>
-              100M $VIBE VAULT
-            </div>
-            <div style={{ fontSize: '8px', color: '#a0b5d0', lineHeight: 1.6, letterSpacing: '0.3px' }}>
-              Genesis NFT stakers qualify for exclusive allocations from the 100M $VIBE Holder Vault pool.
-            </div>
-          </div>
+            FREQUENTLY ASKED QUESTIONS & CLUB BENEFITS
+          </h2>
 
           <div style={{
-            background: 'rgba(4, 20, 48, 0.6)',
-            border: '1.5px solid rgba(0, 245, 255, 0.3)',
-            borderRadius: '14px',
-            padding: '20px',
-            textAlign: 'left'
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
           }}>
-            <div style={{ fontSize: '22px', marginBottom: '10px' }}>🔥</div>
-            <div style={{ fontFamily: 'var(--vv-pixel)', fontSize: '10px', color: '#ff4466', marginBottom: '8px' }}>
-              80% ETH AUTO-BURN
+            {/* FAQ 1: 80% AUTO-BURN & REWARDS */}
+            <div style={{
+              background: 'rgba(4, 20, 48, 0.75)',
+              border: '1.5px solid rgba(255, 68, 102, 0.35)',
+              borderRadius: '16px',
+              padding: '22px 24px',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(12px)'
+            }}>
+              <div style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '11px',
+                color: '#ff4466',
+                marginBottom: '10px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                🔥 80% MINT AUTO-BURN & REWARDS POOL
+              </div>
+              <p style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '8px',
+                color: '#a0b5d0',
+                lineHeight: 1.8,
+                letterSpacing: '0.3px',
+                margin: 0
+              }}>
+                80% of all NFT mint revenue (ETH & $VIBE) automatically buys & burns $VIBE tokens directly on Base DEXs. The remaining 20% goes directly into the VibeVerse Rewards Pool for weekly distribution to active players and stakers.
+              </p>
             </div>
-            <div style={{ fontSize: '8px', color: '#a0b5d0', lineHeight: 1.6, letterSpacing: '0.3px' }}>
-              80% of all mint ETH revenue automatically buys & burns $VIBE tokens directly on Base DEXs!
-            </div>
-          </div>
 
-          <div style={{
-            background: 'rgba(4, 20, 48, 0.6)',
-            border: '1.5px solid rgba(0, 245, 255, 0.3)',
-            borderRadius: '14px',
-            padding: '20px',
-            textAlign: 'left'
-          }}>
-            <div style={{ fontSize: '22px', marginBottom: '10px' }}>🎮</div>
-            <div style={{ fontFamily: 'var(--vv-pixel)', fontSize: '10px', color: '#00ff88', marginBottom: '8px' }}>
-              VIP VIBEVERSE ACCESS
+            {/* FAQ 2: 100M $VIBE HOLDER VAULT */}
+            <div style={{
+              background: 'rgba(4, 20, 48, 0.75)',
+              border: '1.5px solid rgba(255, 215, 0, 0.35)',
+              borderRadius: '16px',
+              padding: '22px 24px',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(12px)'
+            }}>
+              <div style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '11px',
+                color: '#ffd700',
+                marginBottom: '10px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                💰 100M $VIBE HOLDER VAULT
+              </div>
+              <p style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '8px',
+                color: '#a0b5d0',
+                lineHeight: 1.8,
+                letterSpacing: '0.3px',
+                margin: 0
+              }}>
+                Genesis NFT holders qualify for exclusive allocations from the dedicated 100M $VIBE Holder Vault pool. Stake your Genesis NFT to earn weekly yield and unlocked ecosystem bonuses.
+              </p>
             </div>
-            <div style={{ fontSize: '8px', color: '#a0b5d0', lineHeight: 1.6, letterSpacing: '0.3px' }}>
-              Genesis NFT holders gain instant access to Phase 2 VibeVerse virtual world and exclusive Doghouse perks.
+
+            {/* FAQ 3: VIBE CLUB EXCLUSIVE PERKS */}
+            <div style={{
+              background: 'rgba(4, 20, 48, 0.75)',
+              border: '1.5px solid rgba(0, 245, 255, 0.35)',
+              borderRadius: '16px',
+              padding: '22px 24px',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(12px)'
+            }}>
+              <div style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '11px',
+                color: '#00f5ff',
+                marginBottom: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                💎 VIBE CLUB EXCLUSIVE PERKS
+              </div>
+
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '8px',
+                color: '#a0b5d0',
+                lineHeight: 1.8,
+                letterSpacing: '0.3px'
+              }}>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                  <span style={{ color: '#00ff88', fontSize: '10px' }}>•</span>
+                  <span><strong style={{ color: '#00ff88' }}>VIP VibeVerse Access:</strong> Unlocks instant access to Phase 2 VibeVerse virtual world and exclusive Doghouse perks.</span>
+                </div>
+
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                  <span style={{ color: '#ffd700', fontSize: '10px' }}>•</span>
+                  <span><strong style={{ color: '#ffd700' }}>Lifetime $VIBE Passive Income:</strong> Earn weekly $VIBE passive revenue share generated by ecosystem protocols and marketplace fees.</span>
+                </div>
+
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                  <span style={{ color: '#00f5ff', fontSize: '10px' }}>•</span>
+                  <span><strong style={{ color: '#00f5ff' }}>DAO Governance & Voting:</strong> Direct voting power in Vibe Club DAO for future game expansions, treasury allocations, and community initiatives.</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
