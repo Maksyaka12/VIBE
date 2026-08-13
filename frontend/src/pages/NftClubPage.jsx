@@ -120,9 +120,10 @@ export default function NftClubPage() {
       fontFamily: 'var(--vv-pixel)',
       paddingBottom: '80px',
       overflowX: 'hidden',
-      textTransform: 'uppercase'
+      textTransform: 'uppercase',
+      width: '100vw'
     }}>
-      {/* Inline animation keyframes for pulsing live indicator dot */}
+      {/* Inline animation & Mobile CSS Override */}
       <style>{`
         @keyframes vvPulseDotAnimation {
           0% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 4px #00ff88; }
@@ -137,10 +138,76 @@ export default function NftClubPage() {
           display: inline-block;
           animation: vvPulseDotAnimation 1.6s infinite ease-in-out;
         }
+
+        /* ── MOBILE SPECIFIC STYLES (< 768px) ── */
+        @media (max-width: 768px) {
+          .vv-nft-club-header {
+            padding: 12px 14px !important;
+          }
+          .vv-nft-club-header-subtext {
+            white-space: nowrap !important;
+            font-size: 7px !important;
+          }
+          .vv-nft-club-hero-title {
+            font-size: 16px !important;
+            line-height: 1.5 !important;
+          }
+          .vv-nft-club-hero-title span {
+            display: block !important;
+          }
+          .vv-nft-club-hero-desc {
+            display: none !important;
+          }
+          .vv-nft-club-container {
+            padding: 0 12px !important;
+            margin-top: 18px !important;
+          }
+          .vv-nft-club-main-card {
+            padding: 16px 14px !important;
+            border-radius: 16px !important;
+          }
+          .vv-nft-club-main-grid {
+            grid-template-columns: 1fr !important;
+            gap: 18px !important;
+            margin-bottom: 24px !important;
+          }
+          .vv-nft-phase-row {
+            padding: 12px 14px !important;
+          }
+          .vv-nft-phase-text {
+            font-size: 7.5px !important;
+            white-space: nowrap !important;
+          }
+          .vv-nft-phase-prices {
+            font-size: 7.5px !important;
+            white-space: nowrap !important;
+          }
+          .vv-faq-card {
+            padding: 16px 18px !important;
+          }
+          .vv-faq-title {
+            font-size: 9px !important;
+          }
+          .vv-faq-text {
+            font-size: 7.5px !important;
+          }
+          .vv-desktop-wallet-btn {
+            display: none !important;
+          }
+          .vv-mobile-wallet-btn {
+            display: flex !important;
+          }
+        }
+
+        @media (min-width: 769px) {
+          .vv-mobile-wallet-btn {
+            display: none !important;
+          }
+        }
       `}</style>
 
       {/* ── TOP HEADER / NAV ── */}
-      <header style={{
+      <header className="vv-nft-club-header" style={{
         padding: '16px 20px',
         borderBottom: '1px solid rgba(0, 245, 255, 0.15)',
         background: 'rgba(2, 11, 26, 0.85)',
@@ -153,91 +220,140 @@ export default function NftClubPage() {
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <img src="/vibe-logo.png" alt="VIBE" style={{ width: '36px', height: '36px', borderRadius: '8px' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src="/vibe-logo.png" alt="VIBE" style={{ width: '34px', height: '34px', borderRadius: '8px' }} />
           <div>
-            <div style={{ fontFamily: 'var(--vv-pixel)', fontSize: '12px', color: '#00f5ff', letterSpacing: '0.5px' }}>
+            <div style={{ fontFamily: 'var(--vv-pixel)', fontSize: '11px', color: '#00f5ff', letterSpacing: '0.5px' }}>
               VIBE CLUB
             </div>
-            <div style={{ fontSize: '8px', color: '#88aacc', marginTop: '2px', letterSpacing: '0.3px' }}>
+            <div className="vv-nft-club-header-subtext" style={{ fontSize: '8px', color: '#88aacc', marginTop: '2px', letterSpacing: '0.3px' }}>
               GENESIS 333 NFT COLLECTION
             </div>
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {authenticated ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{
-                background: 'rgba(0, 245, 255, 0.1)',
-                border: '1px solid rgba(0, 245, 255, 0.3)',
-                padding: '6px 12px',
-                borderRadius: '20px',
-                fontSize: '9px',
-                color: '#00ff88',
-                fontFamily: 'var(--vv-pixel)'
-              }}>
-                {walletAddress?.slice(0, 6)}...{walletAddress?.slice(-4)}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {/* DESKTOP WALLET CONNECT */}
+          <div className="vv-desktop-wallet-btn">
+            {authenticated ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{
+                  background: 'rgba(0, 245, 255, 0.1)',
+                  border: '1px solid rgba(0, 245, 255, 0.3)',
+                  padding: '6px 12px',
+                  borderRadius: '20px',
+                  fontSize: '9px',
+                  color: '#00ff88',
+                  fontFamily: 'var(--vv-pixel)'
+                }}>
+                  {walletAddress?.slice(0, 6)}...{walletAddress?.slice(-4)}
+                </div>
+                <button
+                  onClick={logout}
+                  style={{
+                    fontFamily: 'var(--vv-pixel)',
+                    background: 'transparent',
+                    border: '1px solid rgba(255, 68, 102, 0.4)',
+                    color: '#ff4466',
+                    padding: '6px 12px',
+                    borderRadius: '20px',
+                    fontSize: '8px',
+                    cursor: 'pointer',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  LOGOUT
+                </button>
               </div>
+            ) : (
+              <button
+                onClick={login}
+                style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '9px',
+                  background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
+                  color: '#fff',
+                  border: '1.5px solid #fff',
+                  padding: '10px 16px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  boxShadow: '0 0 14px rgba(0, 245, 255, 0.4)',
+                  fontWeight: 900,
+                  textTransform: 'uppercase'
+                }}
+              >
+                CONNECT WALLET
+              </button>
+            )}
+          </div>
+
+          {/* MOBILE COMPACT WALLET BADGE / BUTTON */}
+          <div className="vv-mobile-wallet-btn" style={{ alignItems: 'center' }}>
+            {authenticated ? (
               <button
                 onClick={logout}
                 style={{
                   fontFamily: 'var(--vv-pixel)',
-                  background: 'transparent',
-                  border: '1px solid rgba(255, 68, 102, 0.4)',
-                  color: '#ff4466',
-                  padding: '6px 12px',
-                  borderRadius: '20px',
                   fontSize: '8px',
+                  background: 'rgba(0, 245, 255, 0.12)',
+                  border: '1.5px solid #00f5ff',
+                  color: '#00ff88',
+                  padding: '8px 12px',
+                  borderRadius: '10px',
                   cursor: 'pointer',
-                  textTransform: 'uppercase'
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 0 10px rgba(0, 245, 255, 0.3)'
                 }}
               >
-                LOGOUT
+                <span>👛</span> {walletAddress?.slice(0, 4)}...{walletAddress?.slice(-3)}
               </button>
-            </div>
-          ) : (
-            <button
-              onClick={login}
-              style={{
-                fontFamily: 'var(--vv-pixel)',
-                fontSize: '9px',
-                background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
-                color: '#fff',
-                border: '1.5px solid #fff',
-                padding: '10px 16px',
-                borderRadius: '10px',
-                cursor: 'pointer',
-                boxShadow: '0 0 14px rgba(0, 245, 255, 0.4)',
-                fontWeight: 900,
-                textTransform: 'uppercase'
-              }}
-            >
-              CONNECT WALLET
-            </button>
-          )}
+            ) : (
+              <button
+                onClick={login}
+                style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8px',
+                  background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
+                  color: '#fff',
+                  border: '1.5px solid #ffffff',
+                  padding: '8px 12px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 0 12px rgba(0, 245, 255, 0.4)',
+                  fontWeight: 900
+                }}
+              >
+                <span>👛</span> CONNECT
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
       {/* ── HERO SECTION ── */}
-      <div style={{
+      <div className="vv-nft-club-container" style={{
         maxWidth: '1050px',
         margin: '36px auto 0 auto',
         padding: '0 20px',
         textAlign: 'center'
       }}>
-        <h1 style={{
+        <h1 className="vv-nft-club-hero-title" style={{
           fontFamily: 'var(--vv-pixel)',
-          fontSize: '24px',
+          fontSize: '22px',
           color: '#ffffff',
           textShadow: '0 0 20px rgba(0, 245, 255, 0.5)',
           marginBottom: '16px',
           lineHeight: 1.4
         }}>
-          VIBE CLUB — GENESIS 333 NFT
+          VIBE CLUB <span>— GENESIS 333 NFT</span>
         </h1>
 
-        <p style={{
+        <p className="vv-nft-club-hero-desc" style={{
           fontFamily: 'var(--vv-pixel)',
           fontSize: '9px',
           color: '#a0b5d0',
@@ -250,8 +366,8 @@ export default function NftClubPage() {
           VIBE CLUB IS THE EARLY DOGS WHO PROVED THEIR LOYALTY BUILDING THE VIBE CULTURE ON B20 AND ACROSS THE BASE ECOSYSTEM. JOINING VIBE CLUB UNLOCKS EXCLUSIVE PERKS IN VIBEVERSE AND A LIFETIME PASSIVE WEEKLY INCOME.
         </p>
 
-        {/* ── MAIN CARD CONTAINER ── */}
-        <div style={{
+        {/* ── MAIN CARD CONTAINER (OPENSEA MOBILE STYLE: FULL WIDTH STACKED) ── */}
+        <div className="vv-nft-club-main-card" style={{
           background: 'rgba(4, 20, 48, 0.85)',
           border: '2px solid #00f5ff',
           borderRadius: '20px',
@@ -280,7 +396,8 @@ export default function NftClubPage() {
               aspectRatio: '1/1',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              width: '100%'
             }}>
               <img
                 src={`/nft/images/${selectedPreview}.png`}
@@ -324,7 +441,8 @@ export default function NftClubPage() {
                     padding: '6px 12px',
                     fontSize: '8px',
                     letterSpacing: '0.5px',
-                    textTransform: 'uppercase'
+                    textTransform: 'uppercase',
+                    whiteSpace: 'nowrap'
                   }}>
                     ● PHASE 1 — WHITELIST & PUBLIC
                   </div>
@@ -337,17 +455,17 @@ export default function NftClubPage() {
                   borderRadius: '12px',
                   padding: '10px 14px'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', whiteSpace: 'nowrap' }}>
                     <span style={{ fontSize: '8px', color: '#aaa' }}>PRICE ETH</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>{pricePerNft}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', whiteSpace: 'nowrap' }}>
                     <span style={{ fontSize: '8px', color: '#aaa' }}>PRICE VIBE</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffd700' }}>
                       {formatVibeComma(estimatedVibePrice)}
                     </span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', whiteSpace: 'nowrap' }}>
                     <span style={{ fontSize: '8px', color: '#aaa' }}>LIMIT</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '8px', color: '#00ff88' }}>1 NFT PER WALLET</span>
                   </div>
@@ -360,7 +478,7 @@ export default function NftClubPage() {
                   borderRadius: '12px',
                   padding: '10px 14px'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', whiteSpace: 'nowrap' }}>
                     <span style={{ fontSize: '8px', color: '#aaa' }}>TOTAL MINTED</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>{totalMinted} / {maxSupply}</span>
                   </div>
@@ -377,7 +495,7 @@ export default function NftClubPage() {
                   borderRadius: '12px',
                   padding: '10px 14px'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', whiteSpace: 'nowrap' }}>
                     <span style={{ fontSize: '8px', color: '#ff4466', fontWeight: 900 }}>TOTAL BURNED</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffffff' }}>
                       {formatVibeComma(totalVibeBurnedByContract)}
@@ -387,16 +505,16 @@ export default function NftClubPage() {
 
                 {/* USER WALLET BALANCES (CLEAN TEXT BLOCK) */}
                 <div style={{ padding: '2px 4px' }}>
-                  <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '4px', letterSpacing: '0.4px' }}>
+                  <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '4px', letterSpacing: '0.4px', whiteSpace: 'nowrap' }}>
                     YOUR WALLET BALANCES:
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px', whiteSpace: 'nowrap' }}>
                     <span style={{ fontSize: '8px', color: '#aaa' }}>• ETH BALANCE:</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>
                       {authenticated ? `${Number(balances?.eth || 0).toFixed(4)} ETH` : 'CONNECT WALLET'}
                     </span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', whiteSpace: 'nowrap' }}>
                     <span style={{ fontSize: '8px', color: '#aaa' }}>• $VIBE BALANCE:</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffd700' }}>
                       {authenticated ? formatVibeComma(Math.floor(Number(balances?.vibe || 0))) : 'CONNECT WALLET'}
@@ -426,7 +544,8 @@ export default function NftClubPage() {
                     cursor: 'pointer',
                     boxShadow: '0 4px 16px rgba(0, 245, 255, 0.4)',
                     letterSpacing: '0.5px',
-                    textTransform: 'uppercase'
+                    textTransform: 'uppercase',
+                    whiteSpace: 'nowrap'
                   }}
                 >
                   {isMintingEth
@@ -466,7 +585,8 @@ export default function NftClubPage() {
                     cursor: 'pointer',
                     boxShadow: '0 4px 16px rgba(255, 215, 0, 0.4)',
                     letterSpacing: '0.5px',
-                    textTransform: 'uppercase'
+                    textTransform: 'uppercase',
+                    whiteSpace: 'nowrap'
                   }}
                 >
                   {isMintingVibe
@@ -488,7 +608,8 @@ export default function NftClubPage() {
               fontSize: '9px',
               color: '#88aacc',
               marginBottom: '14px',
-              letterSpacing: '0.5px'
+              letterSpacing: '0.5px',
+              whiteSpace: 'nowrap'
             }}>
               MINT PHASES SCHEDULE:
             </div>
@@ -501,6 +622,7 @@ export default function NftClubPage() {
               {phases.map((p, idx) => (
                 <div
                   key={idx}
+                  className="vv-nft-phase-row"
                   style={{
                     display: 'flex',
                     justify: 'space-between',
@@ -516,25 +638,28 @@ export default function NftClubPage() {
                   }}
                 >
                   {/* LEFT: PHASE TITLE & PULSE DOT */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
                     {p.active && <span className="vv-pulse-indicator" />}
-                    <span style={{
+                    <span className="vv-nft-phase-text" style={{
                       fontFamily: 'var(--vv-pixel)',
                       fontSize: '9px',
-                      color: p.active ? '#00ff88' : '#ffffff'
+                      color: p.active ? '#00ff88' : '#ffffff',
+                      whiteSpace: 'nowrap'
                     }}>
                       {p.phase} ({p.count})
                     </span>
                   </div>
 
                   {/* RIGHT: COLORED PRICES (RIGHT ALIGNED TO FAR EDGE) */}
-                  <div style={{
+                  <div className="vv-nft-phase-prices" style={{
                     fontFamily: 'var(--vv-pixel)',
                     fontSize: '9px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '6px',
-                    marginLeft: 'auto'
+                    gap: '5px',
+                    marginLeft: 'auto',
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0
                   }}>
                     <span style={{ color: '#00f5ff' }}>{p.price}</span>
                     <span style={{ color: '#88aacc' }}>/</span>
@@ -569,7 +694,7 @@ export default function NftClubPage() {
             gap: '16px'
           }}>
             {/* FAQ 1: 80% AUTO-BURN & 20% REWARDS POOL */}
-            <div style={{
+            <div className="vv-faq-card" style={{
               background: 'rgba(4, 20, 48, 0.75)',
               border: '1.5px solid rgba(255, 68, 102, 0.35)',
               borderRadius: '16px',
@@ -577,7 +702,7 @@ export default function NftClubPage() {
               boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
               backdropFilter: 'blur(12px)'
             }}>
-              <div style={{
+              <div className="vv-faq-title" style={{
                 fontFamily: 'var(--vv-pixel)',
                 fontSize: '11px',
                 color: '#ff4466',
@@ -586,9 +711,9 @@ export default function NftClubPage() {
                 alignItems: 'center',
                 gap: '10px'
               }}>
-                <span style={{ fontSize: '14px' }}>🔥</span> 80% MINT AUTO-BURN & 20% REWARDS POOL
+                <span style={{ fontSize: '13px' }}>🔥</span> 80% MINT AUTO-BURN & 20% REWARDS POOL
               </div>
-              <p style={{
+              <p className="vv-faq-text" style={{
                 fontFamily: 'var(--vv-pixel)',
                 fontSize: '8px',
                 color: '#a0b5d0',
@@ -602,7 +727,7 @@ export default function NftClubPage() {
             </div>
 
             {/* FAQ 2: VIBE CLUB EXCLUSIVE PERKS */}
-            <div style={{
+            <div className="vv-faq-card" style={{
               background: 'rgba(4, 20, 48, 0.75)',
               border: '1.5px solid rgba(0, 245, 255, 0.35)',
               borderRadius: '16px',
@@ -610,7 +735,7 @@ export default function NftClubPage() {
               boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
               backdropFilter: 'blur(12px)'
             }}>
-              <div style={{
+              <div className="vv-faq-title" style={{
                 fontFamily: 'var(--vv-pixel)',
                 fontSize: '11px',
                 color: '#00f5ff',
@@ -619,10 +744,10 @@ export default function NftClubPage() {
                 alignItems: 'center',
                 gap: '10px'
               }}>
-                <span style={{ fontSize: '14px' }}>💎</span> VIBE CLUB EXCLUSIVE PERKS
+                <span style={{ fontSize: '13px' }}>💎</span> VIBE CLUB EXCLUSIVE PERKS
               </div>
 
-              <div style={{
+              <div className="vv-faq-text" style={{
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '10px',
