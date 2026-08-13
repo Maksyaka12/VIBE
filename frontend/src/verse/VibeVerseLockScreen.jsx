@@ -96,7 +96,7 @@ export default function VibeVerseLockScreen() {
         lineHeight: 1.4,
         letterSpacing: '0.5px'
       }}>
-        VIBEVERSE B20 WORLD IS COOKING
+        VIBEVERSE IS COOKING
       </h1>
 
       {/* Green Pulsing Badge Below Title */}
@@ -137,10 +137,15 @@ export default function VibeVerseLockScreen() {
           fontWeight: 900,
           letterSpacing: '0.8px',
           transition: 'all 0.2s ease',
-          textTransform: 'uppercase'
+          textTransform: 'uppercase',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '10px'
         }}
       >
-        GO TO VIBE CLUB NFT MINT
+        <span>MINT VIBE CLUB NFT</span>
+        <span style={{ fontSize: '14px' }}>→</span>
       </button>
     </div>
   );
