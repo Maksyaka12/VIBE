@@ -471,7 +471,7 @@ export default function NftClubPage() {
             </div>
           </div>
 
-          {/* BOTTOM SECTION: 4 MINT PHASES STACKED VERTICALLY (1 ROW PER PHASE) */}
+          {/* BOTTOM SECTION: 4 MINT PHASES STACKED VERTICALLY (PRICES RIGTH ALIGNED) */}
           <div style={{
             borderTop: '1px solid rgba(0, 245, 255, 0.2)',
             paddingTop: '20px'
@@ -497,6 +497,7 @@ export default function NftClubPage() {
                     display: 'flex',
                     justify: 'space-between',
                     alignItems: 'center',
+                    width: '100%',
                     background: p.active ? 'rgba(0, 245, 255, 0.12)' : 'rgba(2, 11, 26, 0.5)',
                     border: p.active ? '1.5px solid #00f5ff' : '1px solid rgba(255, 255, 255, 0.12)',
                     borderRadius: '12px',
@@ -506,6 +507,7 @@ export default function NftClubPage() {
                     transition: 'all 0.2s ease'
                   }}
                 >
+                  {/* LEFT: PHASE TITLE & PULSE DOT */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     {p.active && <span className="vv-pulse-indicator" />}
                     <span style={{
@@ -517,12 +519,14 @@ export default function NftClubPage() {
                     </span>
                   </div>
 
+                  {/* RIGHT: COLORED PRICES (RIGHT ALIGNED TO FAR EDGE) */}
                   <div style={{
                     fontFamily: 'var(--vv-pixel)',
                     fontSize: '9px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '6px'
+                    gap: '6px',
+                    marginLeft: 'auto'
                   }}>
                     <span style={{ color: '#00f5ff' }}>{p.price}</span>
                     <span style={{ color: '#88aacc' }}>/</span>
