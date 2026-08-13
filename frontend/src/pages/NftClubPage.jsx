@@ -233,13 +233,13 @@ export default function NftClubPage() {
               VIBE CLUB
             </div>
             <div className="vv-nft-club-header-subtext" style={{ fontSize: '8px', color: '#88aacc', marginTop: '2px', letterSpacing: '0.3px' }}>
-              333 CLUB NFT - MINT PAGE
+              VIBE VERSE: GENESIS
             </div>
           </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* DESKTOP WALLET CONNECT */}
+          {/* DESKTOP WALLET CONNECT WITH PIXEL SVG WALLET ICON */}
           <div className="vv-desktop-wallet-btn">
             {authenticated ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -355,7 +355,7 @@ export default function NftClubPage() {
         textAlign: 'center'
       }}>
 
-        {/* ── MAIN CARD CONTAINER (OPENSEA MOBILE STYLE: FULL WIDTH STACKED) ── */}
+        {/* ── MAIN CARD CONTAINER ── */}
         <div className="vv-nft-club-main-card" style={{
           background: 'rgba(4, 20, 48, 0.85)',
           border: '2px solid #00f5ff',
@@ -492,7 +492,7 @@ export default function NftClubPage() {
                   </div>
                 </div>
 
-                {/* USER WALLET BALANCES (SHOWS NOT CONNECTED WHEN UNLEAUTHENTICATED) */}
+                {/* USER WALLET BALANCES (SHOWS NOT CONNECTED WHEN UNLEAUTHENTICATED ON WEB & MOBILE) */}
                 <div style={{ padding: '2px 4px' }}>
                   <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '4px', letterSpacing: '0.4px', whiteSpace: 'nowrap' }}>
                     YOUR WALLET BALANCES:
@@ -512,7 +512,7 @@ export default function NftClubPage() {
                 </div>
               </div>
 
-              {/* DUAL MINT ACTION BUTTONS OR SINGLE CONNECT BUTTON WITH MARGIN TOP */}
+              {/* DUAL MINT ACTION BUTTONS OR SINGLE CONNECT BUTTON WITH MARGIN TOP (ON WEB & MOBILE) */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '16px', paddingTop: '6px' }}>
                 {!authenticated ? (
                   /* SINGLE BUTTON WHEN UNAUTHENTICATED */
@@ -705,7 +705,7 @@ export default function NftClubPage() {
             flexDirection: 'column',
             gap: '16px'
           }}>
-            {/* FAQ 1: 80% AUTO-BURN & 20% REWARDS POOL (WITH 2 BULLET POINTS) */}
+            {/* FAQ 1: 80% AUTO-BURN & 20% REWARDS POOL (BULLETED ON WEB & MOBILE) */}
             <div className="vv-faq-card" style={{
               background: 'rgba(4, 20, 48, 0.75)',
               border: '1.5px solid rgba(255, 68, 102, 0.35)',
