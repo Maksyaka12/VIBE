@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
+import { parseEther } from 'viem';
 import { useUserBalances } from '../verse/hooks/useUserBalances';
-import { useVibeNftContract, NFT_CONTRACT_ADDRESS, BUILDER_CODE } from '../hooks/useVibeNftContract';
+import { useVibeNftContract, NFT_CONTRACT_ADDRESS } from '../hooks/useVibeNftContract';
 
 // Pixel SVG Wallet Icon
 const WalletSvgIcon = ({ size = 14 }) => (
@@ -21,8 +22,8 @@ export default function NftClubPage() {
     totalMinted,
     remainingTokens,
     maxSupply,
+    currentPhase,
     ethPriceFormatted,
-    vibePriceFormatted,
     hasMinted,
     isMintingEth,
     isMintingVibe,
@@ -35,6 +36,39 @@ export default function NftClubPage() {
   } = useVibeNftContract();
 
   const [selectedPreview, setSelectedPreview] = useState(1);
+  const [vibePerEthRatio, setVibePerEthRatio] = useState(50000000); // 1 ETH = ~50M VIBE fallback
+
+  // Fetch live $VIBE pool price from DEX Screener on Base
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchLiveVibePrice() {
+      try {
+        const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/0xb200000000000000000000df24ecb8bf51100a01');
+        const data = await res.json();
+        const pair = data?.pairs?.[0];
+        if (pair && pair.priceNative && isMounted) {
+          const priceNativeFloat = parseFloat(pair.priceNative);
+          if (priceNativeFloat > 0) {
+            const calculatedRatio = Math.floor(1 / priceNativeFloat);
+            setVibePerEthRatio(calculatedRatio);
+          }
+        }
+      } catch (e) {
+        console.error('Error fetching DEX VIBE price:', e);
+      }
+    }
+
+    fetchLiveVibePrice();
+    const interval = setInterval(fetchLiveVibePrice, 15000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Current dynamic $VIBE price based on active phase
+  const ethPriceNum = parseFloat(ethPriceFormatted) || 0.005;
+  const currentDynamicVibeAmount = Math.floor(ethPriceNum * vibePerEthRatio);
 
   // Rotate preview images every 4s
   useEffect(() => {
@@ -44,20 +78,26 @@ export default function NftClubPage() {
     return () => clearInterval(timer);
   }, []);
 
-  // Total $VIBE burned strictly by this NFT mint contract
-  const totalVibeBurnedByContract = Math.floor(totalMinted * 1000000 * 0.8);
-
   const formatVibeComma = (amount) => {
     return Number(amount).toLocaleString('en-US') + ' $VIBE';
   };
 
+  // Total $VIBE burned strictly by this NFT mint contract
+  const totalVibeBurnedByContract = Math.floor(totalMinted * currentDynamicVibeAmount * 0.8);
+
   // 4 Mint Phases definition
   const phases = [
-    { phase: 'PHASE 1', count: '103 NFT', price: '0.005 ETH', vibePrice: '1,000,000 $VIBE', active: true, done: false },
-    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', vibePrice: '3,000,000 $VIBE', active: false, done: false },
-    { phase: 'PHASE 3', count: '100 NFT', price: '0.05 ETH', vibePrice: '10,000,000 $VIBE', active: false, done: false },
-    { phase: 'PHASE 4', count: '30 NFT', price: '0.1 ETH', vibePrice: '20,000,000 $VIBE', active: false, done: false },
+    { phase: 'PHASE 1', count: '103 NFT', price: '0.005 ETH', vibePrice: formatVibeComma(Math.floor(0.005 * vibePerEthRatio)), active: currentPhase === 1, done: currentPhase > 1 },
+    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', vibePrice: formatVibeComma(Math.floor(0.015 * vibePerEthRatio)), active: currentPhase === 2, done: currentPhase > 2 },
+    { phase: 'PHASE 3', count: '100 NFT', price: '0.05 ETH', vibePrice: formatVibeComma(Math.floor(0.05 * vibePerEthRatio)), active: currentPhase === 3, done: currentPhase > 3 },
+    { phase: 'PHASE 4', count: '30 NFT', price: '0.1 ETH', vibePrice: formatVibeComma(Math.floor(0.1 * vibePerEthRatio)), active: currentPhase === 4, done: false },
   ];
+
+  const handleMintWithVibeClick = () => {
+    // Pass dynamic calculated $VIBE amount in Wei
+    const vibeWei = parseEther(currentDynamicVibeAmount.toString());
+    mintWithVIBE(vibeWei);
+  };
 
   return (
     <div style={{
@@ -199,7 +239,7 @@ export default function NftClubPage() {
             OPENSEA ↗
           </a>
 
-          {/* DESKTOP WALLET CONNECT WITH PIXEL SVG WALLET ICON */}
+          {/* DESKTOP WALLET CONNECT */}
           <div className="vv-desktop-wallet-btn">
             {authenticated ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -259,7 +299,7 @@ export default function NftClubPage() {
             )}
           </div>
 
-          {/* MOBILE COMPACT WALLET BADGE / BUTTON WITH PIXEL SVG WALLET */}
+          {/* MOBILE WALLET CONNECT */}
           <div className="vv-mobile-wallet-btn" style={{ alignItems: 'center' }}>
             {authenticated ? (
               <button
@@ -325,7 +365,7 @@ export default function NftClubPage() {
           backdropFilter: 'blur(16px)',
           textAlign: 'left'
         }}>
-          {/* ACTIVE PHASE BADGE: ● PHASE 1 MINT IS LIVE */}
+          {/* ACTIVE PHASE BADGE */}
           <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{
               display: 'inline-block',
@@ -339,7 +379,7 @@ export default function NftClubPage() {
               textTransform: 'uppercase',
               whiteSpace: 'nowrap'
             }}>
-              ● PHASE 1 MINT IS LIVE
+              ● PHASE {currentPhase} MINT IS LIVE
             </div>
 
             <a
@@ -421,15 +461,15 @@ export default function NftClubPage() {
                   padding: '10px 14px'
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', whiteSpace: 'nowrap' }}>
-                    <span style={{ fontSize: '8px', color: '#aaa' }}>PRICE ETH</span>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>PHASE {currentPhase} ETH PRICE</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>
                       {ethPriceFormatted} ETH
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', whiteSpace: 'nowrap' }}>
-                    <span style={{ fontSize: '8px', color: '#aaa' }}>PRICE VIBE</span>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>LIVE $VIBE PRICE</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffd700' }}>
-                      {vibePriceFormatted} $VIBE
+                      {formatVibeComma(currentDynamicVibeAmount)}
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', whiteSpace: 'nowrap' }}>
@@ -567,7 +607,7 @@ export default function NftClubPage() {
                     <WalletSvgIcon size={14} /> CONNECT WALLET TO MINT
                   </button>
                 ) : hasMinted ? (
-                  /* ALREADY MINTED (1/1 LIMIT REACHED) */
+                  /* ALREADY MINTED */
                   <div style={{
                     width: '100%',
                     padding: '14px',
@@ -593,7 +633,7 @@ export default function NftClubPage() {
                     </div>
                   </div>
                 ) : (
-                  /* DUAL MINT BUTTONS WHEN AUTHENTICATED */
+                  /* DUAL MINT BUTTONS */
                   <>
                     {/* 1. MINT FOR ETH BUTTON */}
                     <button
@@ -631,9 +671,9 @@ export default function NftClubPage() {
                       — OR —
                     </div>
 
-                    {/* 2. MINT FOR $VIBE BUTTON */}
+                    {/* 2. MINT FOR $VIBE BUTTON (PASSES DYNAMIC AMOUNT) */}
                     <button
-                      onClick={mintWithVIBE}
+                      onClick={handleMintWithVibeClick}
                       disabled={isMintingEth || isMintingVibe || isApprovingVibe}
                       style={{
                         width: '100%',
@@ -657,7 +697,7 @@ export default function NftClubPage() {
                         ? 'APPROVING $VIBE...'
                         : isMintingVibe
                         ? 'MINTING WITH $VIBE...'
-                        : `MINT FOR ${vibePriceFormatted} $VIBE`}
+                        : `MINT FOR ${formatVibeComma(currentDynamicVibeAmount)}`}
                     </button>
                   </>
                 )}
@@ -709,10 +749,10 @@ export default function NftClubPage() {
                     <span className="vv-nft-phase-text" style={{
                       fontFamily: 'var(--vv-pixel)',
                       fontSize: '9px',
-                      color: p.active ? '#00ff88' : '#ffffff',
+                      color: p.active ? '#00ff88' : p.done ? '#ffd700' : '#ffffff',
                       whiteSpace: 'nowrap'
                     }}>
-                      {p.phase} ({p.count})
+                      {p.phase} ({p.count}) {p.done ? '✓' : ''}
                     </span>
                   </div>
 

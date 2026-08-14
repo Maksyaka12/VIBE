@@ -3,13 +3,14 @@ import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { createPublicClient, http, parseEther, formatEther, encodeFunctionData, parseAbi } from 'viem';
 import { base } from 'viem/chains';
 
+// Contract address will be updated with the newly deployed VibeClub contract
 export const NFT_CONTRACT_ADDRESS = '0xcB0311b8B94494625F86Ef0359C36F55f8A9C67F';
 export const VIBE_TOKEN_ADDRESS = '0xb200000000000000000000df24ecb8bf51100a01';
 export const BUILDER_CODE = 'bc_wsbqqe2u';
 
 const publicClient = createPublicClient({
   chain: base,
-  transport: http('https://mainnet.base.org')
+  transport: http('https://base-mainnet.public.blastapi.io')
 });
 
 const NFT_ABI = parseAbi([
@@ -17,6 +18,8 @@ const NFT_ABI = parseAbi([
   'function symbol() view returns (string)',
   'function MAX_SUPPLY() view returns (uint256)',
   'function MAX_PER_WALLET() view returns (uint256)',
+  'function getCurrentPhase() view returns (uint8)',
+  'function getCurrentEthPrice() view returns (uint256)',
   'function ethPrice() view returns (uint256)',
   'function vibePrice() view returns (uint256)',
   'function mintLive() view returns (bool)',
@@ -24,6 +27,7 @@ const NFT_ABI = parseAbi([
   'function walletMintCount(address) view returns (uint256)',
   'function getRemainingTokens() view returns (uint256)',
   'function mintWithETH() payable',
+  'function mintWithVIBE(uint256 vibeAmount) external',
   'function mintWithVIBE() external'
 ]);
 
@@ -40,8 +44,9 @@ export function useVibeNftContract() {
   const [totalMinted, setTotalMinted] = useState(0);
   const [remainingTokens, setRemainingTokens] = useState(333);
   const [maxSupply, setMaxSupply] = useState(333);
+  const [currentPhase, setCurrentPhase] = useState(1);
   const [ethPriceWei, setEthPriceWei] = useState(parseEther('0.005'));
-  const [vibePriceWei, setVibePriceWei] = useState(BigInt('1000000000000000000000000')); // 1,000,000 * 10^18
+  const [vibePriceWei, setVibePriceWei] = useState(BigInt('1000000000000000000000000'));
   const [hasMinted, setHasMinted] = useState(false);
   const [mintCount, setMintCount] = useState(0);
   const [mintLive, setMintLive] = useState(true);
@@ -57,21 +62,37 @@ export function useVibeNftContract() {
   // Fetch On-Chain State
   const fetchContractState = useCallback(async () => {
     try {
-      const [minted, remaining, supply, ethP, vibeP, live] = await Promise.all([
-        publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'totalMintedCount' }),
-        publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'getRemainingTokens' }),
-        publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'MAX_SUPPLY' }),
-        publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'ethPrice' }),
-        publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'vibePrice' }),
-        publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'mintLive' })
+      const [minted, remaining, supply, live] = await Promise.all([
+        publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'totalMintedCount' }).catch(() => 0),
+        publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'getRemainingTokens' }).catch(() => 333),
+        publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'MAX_SUPPLY' }).catch(() => 333),
+        publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'mintLive' }).catch(() => true)
       ]);
 
-      setTotalMinted(Number(minted));
+      const mintedNum = Number(minted);
+      setTotalMinted(mintedNum);
       setRemainingTokens(Number(remaining));
       setMaxSupply(Number(supply));
-      setEthPriceWei(ethP);
-      setVibePriceWei(vibeP);
       setMintLive(live);
+
+      // Automated phase calculation
+      let phase = 1;
+      let price = parseEther('0.005');
+      if (mintedNum < 103) {
+        phase = 1;
+        price = parseEther('0.005');
+      } else if (mintedNum < 203) {
+        phase = 2;
+        price = parseEther('0.015');
+      } else if (mintedNum < 303) {
+        phase = 3;
+        price = parseEther('0.05');
+      } else {
+        phase = 4;
+        price = parseEther('0.1');
+      }
+      setCurrentPhase(phase);
+      setEthPriceWei(price);
 
       if (walletAddress) {
         const userCount = await publicClient.readContract({
@@ -79,7 +100,7 @@ export function useVibeNftContract() {
           abi: NFT_ABI,
           functionName: 'walletMintCount',
           args: [walletAddress]
-        });
+        }).catch(() => 0);
         setMintCount(Number(userCount));
         setHasMinted(Number(userCount) >= 1);
       }
@@ -90,7 +111,7 @@ export function useVibeNftContract() {
 
   useEffect(() => {
     fetchContractState();
-    const interval = setInterval(fetchContractState, 15000);
+    const interval = setInterval(fetchContractState, 12000);
     return () => clearInterval(interval);
   }, [fetchContractState]);
 
@@ -149,7 +170,6 @@ export function useVibeNftContract() {
       const hash = await sendWeb3Transaction(NFT_CONTRACT_ADDRESS, ethPriceWei, dataHex);
       setTxHash(hash);
 
-      // Wait for receipt
       const receipt = await publicClient.waitForTransactionReceipt({ hash });
       if (receipt.status === 'success') {
         setMintSuccess(true);
@@ -166,7 +186,7 @@ export function useVibeNftContract() {
   };
 
   // 2. Mint with $VIBE
-  const mintWithVIBE = async () => {
+  const mintWithVIBE = async (customVibeAmountWei) => {
     if (!authenticated || !walletAddress) {
       login();
       return;
@@ -174,6 +194,8 @@ export function useVibeNftContract() {
     setErrorMessage('');
     setMintSuccess(false);
     setIsMintingVibe(true);
+
+    const amountToSend = customVibeAmountWei || vibePriceWei;
 
     try {
       // Check ERC20 allowance
@@ -184,12 +206,12 @@ export function useVibeNftContract() {
         args: [walletAddress, NFT_CONTRACT_ADDRESS]
       });
 
-      if (currentAllowance < vibePriceWei) {
+      if (currentAllowance < amountToSend) {
         setIsApprovingVibe(true);
         const approveData = encodeFunctionData({
           abi: ERC20_ABI,
           functionName: 'approve',
-          args: [NFT_CONTRACT_ADDRESS, BigInt('115792089237316195423570985008687907853269984665640564039457584007913129639935')] // MaxUint256
+          args: [NFT_CONTRACT_ADDRESS, BigInt('115792089237316195423570985008687907853269984665640564039457584007913129639935')]
         });
 
         const approveHash = await sendWeb3Transaction(VIBE_TOKEN_ADDRESS, BigInt(0), approveData);
@@ -200,7 +222,8 @@ export function useVibeNftContract() {
       // Execute Mint with VIBE
       const mintData = encodeFunctionData({
         abi: NFT_ABI,
-        functionName: 'mintWithVIBE'
+        functionName: 'mintWithVIBE',
+        args: [amountToSend]
       });
 
       const hash = await sendWeb3Transaction(NFT_CONTRACT_ADDRESS, BigInt(0), mintData);
@@ -227,6 +250,7 @@ export function useVibeNftContract() {
     totalMinted,
     remainingTokens,
     maxSupply,
+    currentPhase,
     ethPriceFormatted: formatEther(ethPriceWei),
     vibePriceFormatted: Number(formatEther(vibePriceWei)).toLocaleString('en-US'),
     hasMinted,
