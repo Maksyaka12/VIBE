@@ -108,6 +108,15 @@ export default function NftClubPage() {
     mintWithVIBE(vibeWei);
   };
 
+  // 100% Reliable Image Fallback Handler for Mobile & Web
+  const handleImageError = (e, id) => {
+    if (!e.target.src.includes('pinata.cloud')) {
+      e.target.src = `https://gateway.pinata.cloud/ipfs/bafybeifoc434thlscysnqvy45idxfjn7g7qjtedntek3rckn3vukffczxe/${id}.png`;
+    } else if (!e.target.src.includes('ipfs.io')) {
+      e.target.src = `https://ipfs.io/ipfs/bafybeifoc434thlscysnqvy45idxfjn7g7qjtedntek3rckn3vukffczxe/${id}.png`;
+    }
+  };
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -137,6 +146,9 @@ export default function NftClubPage() {
 
         /* ── MOBILE SPECIFIC STYLES (< 768px) ── */
         @media (max-width: 768px) {
+          .vv-opensea-btn {
+            display: none !important;
+          }
           .vv-nft-club-header {
             padding: 12px 14px !important;
           }
@@ -146,7 +158,7 @@ export default function NftClubPage() {
           }
           .vv-nft-club-container {
             padding: 0 12px !important;
-            margin-top: 16px !important;
+            margin-top: 14px !important;
           }
           .vv-nft-club-main-card {
             padding: 16px 14px !important;
@@ -154,8 +166,14 @@ export default function NftClubPage() {
           }
           .vv-nft-club-main-grid {
             grid-template-columns: 1fr !important;
-            gap: 18px !important;
-            margin-bottom: 24px !important;
+            gap: 16px !important;
+            margin-bottom: 20px !important;
+          }
+          .vv-nft-phase-badge-row {
+            margin-bottom: 12px !important;
+          }
+          .vv-contract-text-link {
+            font-size: 7px !important;
           }
           .vv-nft-phase-row {
             padding: 12px 14px !important;
@@ -226,11 +244,12 @@ export default function NftClubPage() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* OpenSea Link */}
+          {/* OpenSea Link (Hidden on mobile) */}
           <a
             href={`https://opensea.io/assets/base/${NFT_CONTRACT_ADDRESS}`}
             target="_blank"
             rel="noopener noreferrer"
+            className="vv-opensea-btn"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -374,39 +393,6 @@ export default function NftClubPage() {
           backdropFilter: 'blur(16px)',
           textAlign: 'left'
         }}>
-          {/* ACTIVE PHASE BADGE */}
-          <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{
-              display: 'inline-block',
-              background: 'rgba(0, 255, 136, 0.15)',
-              border: '1.5px solid #00ff88',
-              color: '#00ff88',
-              borderRadius: '8px',
-              padding: '6px 12px',
-              fontSize: '8px',
-              letterSpacing: '0.5px',
-              textTransform: 'uppercase',
-              whiteSpace: 'nowrap'
-            }}>
-              ● PHASE {currentPhase} MINT IS LIVE
-            </div>
-
-            <a
-              href={`https://basescan.org/address/${NFT_CONTRACT_ADDRESS}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontSize: '8px',
-                color: '#88aacc',
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px'
-              }}
-            >
-              CONTRACT: {NFT_CONTRACT_ADDRESS.slice(0, 6)}...{NFT_CONTRACT_ADDRESS.slice(-4)} ↗
-            </a>
-          </div>
 
           {/* TOP SECTION: LEFT HORIZONTAL SLIDER + RIGHT CONTROLS */}
           <div style={{
@@ -417,7 +403,7 @@ export default function NftClubPage() {
             marginBottom: '32px'
           }} className="vv-nft-club-main-grid">
 
-            {/* LEFT COLUMN: SILKY-SMOOTH HORIZONTAL SLIDING CAROUSEL */}
+            {/* LEFT COLUMN: PURE NFT HORIZONTAL SLIDER CARD */}
             <div style={{
               position: 'relative',
               borderRadius: '16px',
@@ -426,7 +412,10 @@ export default function NftClubPage() {
               boxShadow: '0 0 28px rgba(0, 245, 255, 0.4), 0 12px 30px rgba(0,0,0,0.8)',
               background: '#020b1a',
               aspectRatio: '1/1',
-              width: '100%'
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
             }}>
               {/* HARDWARE ACCELERATED HORIZONTAL SLIDING TRACK */}
               <div style={{
@@ -451,12 +440,9 @@ export default function NftClubPage() {
                   >
                     <img
                       src={`/nft/images/${id}.png`}
-                      onError={(e) => {
-                        if (!e.target.src.includes('/nft/ipfs_images/')) {
-                          e.target.src = `/nft/ipfs_images/${id}.png`;
-                        }
-                      }}
+                      onError={(e) => handleImageError(e, id)}
                       alt={`Vibe Club #${id}`}
+                      loading="eager"
                       style={{
                         width: '100%',
                         height: '100%',
@@ -495,15 +481,59 @@ export default function NftClubPage() {
               </div>
             </div>
 
-            {/* RIGHT COLUMN: CONTROLS */}
+            {/* RIGHT COLUMN: PHASE BADGE + CONTRACT + ALL CONTROLS */}
             <div style={{
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
               height: '100%'
             }}>
+              {/* TOP HEADER ROW OF DETAILS: ACTIVE PHASE + CONTRACT (RIGHT-ALIGNED) */}
+              <div className="vv-nft-phase-badge-row" style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '12px',
+                width: '100%'
+              }}>
+                <div style={{
+                  display: 'inline-block',
+                  background: 'rgba(0, 255, 136, 0.15)',
+                  border: '1.5px solid #00ff88',
+                  color: '#00ff88',
+                  borderRadius: '8px',
+                  padding: '6px 10px',
+                  fontSize: '8px',
+                  letterSpacing: '0.4px',
+                  textTransform: 'uppercase',
+                  whiteSpace: 'nowrap'
+                }}>
+                  ● PHASE {currentPhase} MINT IS LIVE
+                </div>
+
+                <a
+                  href={`https://basescan.org/address/${NFT_CONTRACT_ADDRESS}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="vv-contract-text-link"
+                  style={{
+                    fontSize: '8px',
+                    color: '#88aacc',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    marginLeft: 'auto',
+                    textAlign: 'right',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  CONTRACT: {NFT_CONTRACT_ADDRESS.slice(0, 6)}...{NFT_CONTRACT_ADDRESS.slice(-4)} ↗
+                </a>
+              </div>
+
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {/* CARD 1: PRICE ETH & PRICE VIBE + LIMIT */}
+                {/* CARD 1: ETH PRICE & LIVE $VIBE PRICE + LIMIT */}
                 <div style={{
                   background: 'rgba(2, 11, 26, 0.7)',
                   border: '1px solid rgba(0, 245, 255, 0.25)',
@@ -511,7 +541,7 @@ export default function NftClubPage() {
                   padding: '10px 14px'
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', whiteSpace: 'nowrap' }}>
-                    <span style={{ fontSize: '8px', color: '#aaa' }}>PHASE {currentPhase} ETH PRICE</span>
+                    <span style={{ fontSize: '8px', color: '#aaa' }}>ETH PRICE</span>
                     <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>
                       {ethPriceFormatted} ETH
                     </span>
@@ -585,7 +615,7 @@ export default function NftClubPage() {
               </div>
 
               {/* DUAL MINT ACTION BUTTONS */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '16px', paddingTop: '6px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '14px' }}>
                 {errorMessage && (
                   <div style={{
                     background: 'rgba(255, 68, 102, 0.15)',
