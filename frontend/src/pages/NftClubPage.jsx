@@ -14,6 +14,9 @@ const WalletSvgIcon = ({ size = 14 }) => (
   </svg>
 );
 
+// NFT Deck strictly from #5 to #35 (31 NFTs)
+const NFT_DECK = Array.from({ length: 31 }, (_, i) => i + 5);
+
 export default function NftClubPage() {
   const { login, logout, authenticated, user } = usePrivy();
   const walletAddress = user?.wallet?.address;
@@ -36,8 +39,7 @@ export default function NftClubPage() {
     mintWithVIBE
   } = useVibeNftContract();
 
-  const [selectedPreview, setSelectedPreview] = useState(1);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [deckIndex, setDeckIndex] = useState(0);
   const [vibePerEthRatio, setVibePerEthRatio] = useState(50000000); // 1 ETH = ~50M VIBE fallback
 
   // Fetch live $VIBE pool price from DEX Screener on Base
@@ -68,50 +70,21 @@ export default function NftClubPage() {
     };
   }, []);
 
+  // Card deck shuffle loop: shifts card every 1.0 second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDeckIndex((prev) => (prev + 1) % NFT_DECK.length);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   // Current dynamic $VIBE price based on active phase
   const ethPriceNum = parseFloat(ethPriceFormatted) || 0.005;
   const currentDynamicVibeAmount = Math.floor(ethPriceNum * vibePerEthRatio);
 
-  // Curated showcase list cycling through iconic characters + randoms
-  const featuredIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 50, 69, 310, 316, 320, 325, 330, 331, 332, 333];
-
-  // Auto-play carousel every 2.8s
-  useEffect(() => {
-    if (!isAutoPlaying) return;
-    const timer = setInterval(() => {
-      setSelectedPreview((prev) => {
-        const currentIdx = featuredIds.indexOf(prev);
-        if (currentIdx !== -1 && currentIdx < featuredIds.length - 1) {
-          return featuredIds[currentIdx + 1];
-        }
-        return featuredIds[0];
-      });
-    }, 2800);
-    return () => clearInterval(timer);
-  }, [isAutoPlaying]);
-
-  const handleNext = () => {
-    setSelectedPreview((prev) => {
-      const idx = featuredIds.indexOf(prev);
-      if (idx !== -1 && idx < featuredIds.length - 1) return featuredIds[idx + 1];
-      if (idx === -1) return (prev % 333) + 1;
-      return featuredIds[0];
-    });
-  };
-
-  const handlePrev = () => {
-    setSelectedPreview((prev) => {
-      const idx = featuredIds.indexOf(prev);
-      if (idx > 0) return featuredIds[idx - 1];
-      if (idx === -1) return prev > 1 ? prev - 1 : 333;
-      return featuredIds[featuredIds.length - 1];
-    });
-  };
-
-  const handleRandom = () => {
-    const randomId = Math.floor(Math.random() * 333) + 1;
-    setSelectedPreview(randomId);
-  };
+  const currentNftId = NFT_DECK[deckIndex];
+  const nextNftId = NFT_DECK[(deckIndex + 1) % NFT_DECK.length];
+  const currentCharacterName = nftNames[currentNftId] || `Maltipoo #${currentNftId}`;
 
   const formatVibeComma = (amount) => {
     return Number(amount).toLocaleString('en-US') + ' $VIBE';
@@ -133,9 +106,6 @@ export default function NftClubPage() {
     mintWithVIBE(vibeWei);
   };
 
-  const currentCharacterName = nftNames[selectedPreview] || `Character #${selectedPreview}`;
-  const isSpecialLegend = selectedPreview <= 4 || selectedPreview >= 330;
-
   return (
     <div style={{
       minHeight: '100vh',
@@ -154,14 +124,23 @@ export default function NftClubPage() {
           50% { transform: scale(1.35); opacity: 1; box-shadow: 0 0 12px #00ff88, 0 0 20px #00ff88; }
           100% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 4px #00ff88; }
         }
-        @keyframes vvCardGlow {
-          0% { box-shadow: 0 0 24px rgba(0, 245, 255, 0.4), 0 0 40px rgba(0, 0, 0, 0.8); }
-          50% { box-shadow: 0 0 36px rgba(255, 215, 0, 0.5), 0 0 45px rgba(0, 0, 0, 0.8); }
-          100% { box-shadow: 0 0 24px rgba(0, 245, 255, 0.4), 0 0 40px rgba(0, 0, 0, 0.8); }
-        }
-        @keyframes vvImgPop {
-          0% { transform: scale(0.95); opacity: 0.8; }
-          100% { transform: scale(1); opacity: 1; }
+        @keyframes vvDeckCardShuffle {
+          0% {
+            transform: translateY(-20px) scale(0.94);
+            opacity: 0;
+          }
+          18% {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+          }
+          82% {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(20px) scale(0.96);
+            opacity: 0;
+          }
         }
         .vv-pulse-indicator {
           width: 8px;
@@ -171,8 +150,8 @@ export default function NftClubPage() {
           display: inline-block;
           animation: vvPulseDotAnimation 1.6s infinite ease-in-out;
         }
-        .vv-nft-img-animated {
-          animation: vvImgPop 0.35s ease-out forwards;
+        .vv-deck-card-active {
+          animation: vvDeckCardShuffle 1.0s cubic-bezier(0.25, 1, 0.5, 1) infinite;
         }
 
         /* ── MOBILE SPECIFIC STYLES (< 768px) ── */
@@ -457,204 +436,81 @@ export default function NftClubPage() {
             marginBottom: '32px'
           }} className="vv-nft-club-main-grid">
 
-            {/* LEFT COLUMN: ANIMATED NFT CAROUSEL CARD */}
-            <div
-              onMouseEnter={() => setIsAutoPlaying(false)}
-              onMouseLeave={() => setIsAutoPlaying(true)}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px',
-                width: '100%'
-              }}
-            >
-              <div style={{
-                position: 'relative',
-                borderRadius: '16px',
-                overflow: 'hidden',
-                border: isSpecialLegend ? '3px solid #ffd700' : '3px solid #00f5ff',
-                boxShadow: isSpecialLegend ? '0 0 32px rgba(255, 215, 0, 0.5)' : '0 0 28px rgba(0, 245, 255, 0.4)',
-                background: '#020b1a',
-                aspectRatio: '1/1',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%',
-                animation: 'vvCardGlow 4s infinite ease-in-out'
-              }}>
-                {/* REAL NFT IMAGE */}
-                <img
-                  key={selectedPreview}
-                  src={`/nft/images/${selectedPreview}.png`}
-                  onError={(e) => {
-                    if (!e.target.src.includes('/nft/ipfs_images/')) {
-                      e.target.src = `/nft/ipfs_images/${selectedPreview}.png`;
-                    }
-                  }}
-                  alt={currentCharacterName}
-                  className="vv-nft-img-animated"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
-                />
-
-                {/* TOP LEFT BADGE: RARITY / EDITION */}
-                <div style={{
+            {/* LEFT COLUMN: ANIMATED CARD DECK SHUFFLE */}
+            <div style={{
+              position: 'relative',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              border: '3px solid #00f5ff',
+              boxShadow: '0 0 28px rgba(0, 245, 255, 0.4), 0 12px 30px rgba(0,0,0,0.8)',
+              background: '#020b1a',
+              aspectRatio: '1/1',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%'
+            }}>
+              {/* BACKGROUND DECK LAYER (Shows next card in advance for smooth seamless shuffle) */}
+              <img
+                src={`/nft/images/${nextNftId}.png`}
+                onError={(e) => {
+                  if (!e.target.src.includes('/nft/ipfs_images/')) {
+                    e.target.src = `/nft/ipfs_images/${nextNftId}.png`;
+                  }
+                }}
+                alt=""
+                style={{
                   position: 'absolute',
-                  top: '12px',
-                  left: '12px',
-                  background: isSpecialLegend
-                    ? 'linear-gradient(135deg, #ffd700 0%, #ff8800 100%)'
-                    : 'rgba(2, 11, 26, 0.85)',
-                  border: isSpecialLegend ? '1.5px solid #ffffff' : '1px solid #00f5ff',
-                  padding: '5px 10px',
-                  borderRadius: '8px',
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '8px',
-                  color: isSpecialLegend ? '#020b1a' : '#00f5ff',
-                  fontWeight: 900,
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.6)'
-                }}>
-                  {isSpecialLegend ? '★ ULTRA RARE' : 'GENESIS 1 OF 333'}
-                </div>
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  opacity: 0.35,
+                  transform: 'scale(0.97)',
+                  filter: 'blur(1px)'
+                }}
+              />
 
-                {/* TOP RIGHT SHUFFLE BUTTON */}
-                <button
-                  onClick={handleRandom}
-                  title="Random preview"
-                  style={{
-                    position: 'absolute',
-                    top: '12px',
-                    right: '12px',
-                    background: 'rgba(2, 11, 26, 0.85)',
-                    border: '1px solid #ffd700',
-                    color: '#ffd700',
-                    padding: '5px 8px',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    fontSize: '8px',
-                    fontFamily: 'var(--vv-pixel)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px'
-                  }}
-                >
-                  🎲 SHUFFLE
-                </button>
+              {/* ACTIVE FRONT CARD (Smooth 1.0s top-to-bottom card shuffle) */}
+              <img
+                key={currentNftId}
+                src={`/nft/images/${currentNftId}.png`}
+                onError={(e) => {
+                  if (!e.target.src.includes('/nft/ipfs_images/')) {
+                    e.target.src = `/nft/ipfs_images/${currentNftId}.png`;
+                  }
+                }}
+                alt={currentCharacterName}
+                className="vv-deck-card-active"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  zIndex: 2
+                }}
+              />
 
-                {/* LEFT / RIGHT INTERACTIVE ARROWS */}
-                <button
-                  onClick={handlePrev}
-                  style={{
-                    position: 'absolute',
-                    left: '8px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'rgba(2, 11, 26, 0.75)',
-                    border: '1.5px solid #00f5ff',
-                    color: '#00f5ff',
-                    borderRadius: '50%',
-                    width: '32px',
-                    height: '32px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    fontSize: '11px',
-                    fontWeight: 900,
-                    boxShadow: '0 0 12px rgba(0, 245, 255, 0.4)'
-                  }}
-                >
-                  ◀
-                </button>
-
-                <button
-                  onClick={handleNext}
-                  style={{
-                    position: 'absolute',
-                    right: '8px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'rgba(2, 11, 26, 0.75)',
-                    border: '1.5px solid #00f5ff',
-                    color: '#00f5ff',
-                    borderRadius: '50%',
-                    width: '32px',
-                    height: '32px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    fontSize: '11px',
-                    fontWeight: 900,
-                    boxShadow: '0 0 12px rgba(0, 245, 255, 0.4)'
-                  }}
-                >
-                  ▶
-                </button>
-
-                {/* BOTTOM CHARACTER NAME BADGE */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: '12px',
-                  left: '12px',
-                  right: '12px',
-                  background: 'rgba(2, 11, 26, 0.9)',
-                  border: isSpecialLegend ? '1.5px solid #ffd700' : '1px solid #00f5ff',
-                  padding: '8px 12px',
-                  borderRadius: '10px',
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '9px',
-                  color: isSpecialLegend ? '#ffd700' : '#ffffff',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  boxShadow: '0 4px 16px rgba(0,0,0,0.8)'
-                }}>
-                  <span style={{ color: isSpecialLegend ? '#ffd700' : '#00f5ff' }}>
-                    {currentCharacterName}
-                  </span>
-                  <span style={{ fontSize: '8px', color: '#88aacc' }}>
-                    #{selectedPreview}
-                  </span>
-                </div>
-              </div>
-
-              {/* MINI THUMBNAILS CAROUSEL STRIP */}
+              {/* BOTTOM CHARACTER NAME BADGE (ALWAYS BRAND CYAN #00F5FF) */}
               <div style={{
+                position: 'absolute',
+                bottom: '12px',
+                left: '12px',
+                right: '12px',
+                background: 'rgba(2, 11, 26, 0.92)',
+                border: '1.5px solid #00f5ff',
+                padding: '8px 12px',
+                borderRadius: '10px',
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '9px',
+                color: '#00f5ff',
                 display: 'flex',
-                gap: '8px',
-                justifyContent: 'center',
+                justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: '4px 0'
+                boxShadow: '0 4px 16px rgba(0,0,0,0.85)',
+                zIndex: 10
               }}>
-                {featuredIds.slice(0, 7).map((id) => (
-                  <div
-                    key={id}
-                    onClick={() => setSelectedPreview(id)}
-                    style={{
-                      width: '42px',
-                      height: '42px',
-                      borderRadius: '8px',
-                      overflow: 'hidden',
-                      cursor: 'pointer',
-                      border: selectedPreview === id ? '2px solid #ffd700' : '1px solid rgba(0, 245, 255, 0.3)',
-                      boxShadow: selectedPreview === id ? '0 0 12px #ffd700' : 'none',
-                      transform: selectedPreview === id ? 'scale(1.1)' : 'scale(1)',
-                      transition: 'all 0.2s ease',
-                      background: '#020b1a'
-                    }}
-                  >
-                    <img
-                      src={`/nft/images/${id}.png`}
-                      onError={(e) => { e.target.src = `/nft/ipfs_images/${id}.png`; }}
-                      alt={`#${id}`}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                  </div>
-                ))}
+                <span style={{ color: '#00f5ff' }}>
+                  VIBE CLUB #{currentNftId} {currentCharacterName.toUpperCase()}
+                </span>
               </div>
             </div>
 
