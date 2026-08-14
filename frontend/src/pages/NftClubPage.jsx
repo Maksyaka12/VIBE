@@ -70,11 +70,11 @@ export default function NftClubPage() {
     };
   }, []);
 
-  // Card deck shuffle loop: shifts card every 1.0 second
+  // Card deck shuffle loop: shifts card every 1.6s smoothly
   useEffect(() => {
     const timer = setInterval(() => {
       setDeckIndex((prev) => (prev + 1) % NFT_DECK.length);
-    }, 1000);
+    }, 1600);
     return () => clearInterval(timer);
   }, []);
 
@@ -84,7 +84,10 @@ export default function NftClubPage() {
 
   const currentNftId = NFT_DECK[deckIndex];
   const nextNftId = NFT_DECK[(deckIndex + 1) % NFT_DECK.length];
-  const currentCharacterName = nftNames[currentNftId] || `Maltipoo #${currentNftId}`;
+
+  // Clean character name without duplicate numbers
+  const rawCharacterName = nftNames[currentNftId] || 'Maltipoo';
+  const cleanCharacterName = rawCharacterName.replace(/^#\d+\s*/, '').replace(/#\d+/, '').trim() || 'VIBE';
 
   const formatVibeComma = (amount) => {
     return Number(amount).toLocaleString('en-US') + ' $VIBE';
@@ -126,7 +129,7 @@ export default function NftClubPage() {
         }
         @keyframes vvDeckCardShuffle {
           0% {
-            transform: translateY(-20px) scale(0.94);
+            transform: translateY(-24px) scale(0.95);
             opacity: 0;
           }
           18% {
@@ -138,7 +141,7 @@ export default function NftClubPage() {
             opacity: 1;
           }
           100% {
-            transform: translateY(20px) scale(0.96);
+            transform: translateY(24px) scale(0.97);
             opacity: 0;
           }
         }
@@ -151,7 +154,7 @@ export default function NftClubPage() {
           animation: vvPulseDotAnimation 1.6s infinite ease-in-out;
         }
         .vv-deck-card-active {
-          animation: vvDeckCardShuffle 1.0s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+          animation: vvDeckCardShuffle 1.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
         }
 
         /* ── MOBILE SPECIFIC STYLES (< 768px) ── */
@@ -450,7 +453,7 @@ export default function NftClubPage() {
               justifyContent: 'center',
               width: '100%'
             }}>
-              {/* BACKGROUND DECK LAYER (Shows next card in advance for smooth seamless shuffle) */}
+              {/* BACKGROUND DECK LAYER */}
               <img
                 src={`/nft/images/${nextNftId}.png`}
                 onError={(e) => {
@@ -464,13 +467,13 @@ export default function NftClubPage() {
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
-                  opacity: 0.35,
-                  transform: 'scale(0.97)',
+                  opacity: 0.3,
+                  transform: 'scale(0.96)',
                   filter: 'blur(1px)'
                 }}
               />
 
-              {/* ACTIVE FRONT CARD (Smooth 1.0s top-to-bottom card shuffle) */}
+              {/* ACTIVE FRONT CARD (Smooth 1.6s top-to-bottom card shuffle) */}
               <img
                 key={currentNftId}
                 src={`/nft/images/${currentNftId}.png`}
@@ -479,7 +482,7 @@ export default function NftClubPage() {
                     e.target.src = `/nft/ipfs_images/${currentNftId}.png`;
                   }
                 }}
-                alt={currentCharacterName}
+                alt={cleanCharacterName}
                 className="vv-deck-card-active"
                 style={{
                   width: '100%',
@@ -489,7 +492,7 @@ export default function NftClubPage() {
                 }}
               />
 
-              {/* BOTTOM CHARACTER NAME BADGE (ALWAYS BRAND CYAN #00F5FF) */}
+              {/* BOTTOM CHARACTER NAME BADGE (CLEAN SINGLE NUMBER & BRAND CYAN #00F5FF) */}
               <div style={{
                 position: 'absolute',
                 bottom: '12px',
@@ -503,13 +506,15 @@ export default function NftClubPage() {
                 fontSize: '9px',
                 color: '#00f5ff',
                 display: 'flex',
-                justifyContent: 'space-between',
+                justifyContent: 'center',
                 alignItems: 'center',
                 boxShadow: '0 4px 16px rgba(0,0,0,0.85)',
-                zIndex: 10
+                zIndex: 10,
+                textAlign: 'center',
+                letterSpacing: '0.4px'
               }}>
-                <span style={{ color: '#00f5ff' }}>
-                  VIBE CLUB #{currentNftId} {currentCharacterName.toUpperCase()}
+                <span>
+                  VIBE CLUB #{currentNftId} {cleanCharacterName.toUpperCase()}
                 </span>
               </div>
             </div>
