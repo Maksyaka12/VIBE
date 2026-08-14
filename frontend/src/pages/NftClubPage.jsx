@@ -1025,7 +1025,7 @@ export default function NftClubPage() {
 
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
                   <span style={{ color: '#ffd700', fontSize: '9px', flexShrink: 0 }}>•</span>
-                  <span>LIFETIME $VIBE DIVIDENDS FOR CLUB MEMBERS</span>
+                  <span>LIFETIME $VIBE DIVIDENDS FOR CLUB MEMBERS (LOCKED IN $VIBE TOKENOMICS)</span>
                 </div>
 
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
