@@ -3,8 +3,7 @@ import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { createPublicClient, http, parseEther, formatEther, encodeFunctionData, parseAbi } from 'viem';
 import { base } from 'viem/chains';
 
-// Contract address will be updated with the newly deployed VibeClub contract
-export const NFT_CONTRACT_ADDRESS = '0xcB0311b8B94494625F86Ef0359C36F55f8A9C67F';
+export const NFT_CONTRACT_ADDRESS = '0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886';
 export const VIBE_TOKEN_ADDRESS = '0xb200000000000000000000df24ecb8bf51100a01';
 export const BUILDER_CODE = 'bc_wsbqqe2u';
 
