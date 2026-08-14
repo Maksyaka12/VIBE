@@ -942,7 +942,118 @@ export default function NftClubPage() {
             flexDirection: 'column',
             gap: '16px'
           }}>
-            {/* FAQ 1: 80% AUTO-BURN & 20% REWARDS POOL */}
+            {/* FAQ 1: FCFS & 4-PHASE PROGRESSION */}
+            <div className="vv-faq-card" style={{
+              background: 'rgba(4, 20, 48, 0.75)',
+              border: '1.5px solid rgba(255, 215, 0, 0.35)',
+              borderRadius: '16px',
+              padding: '22px 24px',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(12px)'
+            }}>
+              <div className="vv-faq-title" style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '11px',
+                color: '#ffd700',
+                marginBottom: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}>
+                <span style={{ fontSize: '13px' }}>⚡</span> FCFS MINT & 4-PHASE PROGRESSION
+              </div>
+
+              <div className="vv-faq-text" style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '8px',
+                color: '#a0b5d0',
+                lineHeight: 1.8,
+                letterSpacing: '0.3px',
+                textTransform: 'uppercase'
+              }}>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                  <span style={{ color: '#ffd700', fontSize: '9px' }}>•</span>
+                  <span>MINT OPERATES ON A STRICT FIRST-COME, FIRST-SERVED (FCFS) BASIS FOR ALL PARTICIPANTS.</span>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                  <span style={{ color: '#00ff88', fontSize: '9px' }}>•</span>
+                  <span>THE MINT IS DIVIDED INTO 4 PHASES (103 / 100 / 100 / 30 NFTS) WITH INCREASING PRICES.</span>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                  <span style={{ color: '#00f5ff', fontSize: '9px' }}>•</span>
+                  <span>AS SOON AS THE SPECIFIED NFT COUNT IN A PHASE IS MINTED OUT, THE NEXT PHASE AUTOMATICALLY BEGINS.</span>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ 2: PRIMARY MINT & OPENSEA TRADING */}
+            <div className="vv-faq-card" style={{
+              background: 'rgba(4, 20, 48, 0.75)',
+              border: '1.5px solid rgba(32, 129, 226, 0.45)',
+              borderRadius: '16px',
+              padding: '22px 24px',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(12px)'
+            }}>
+              <div className="vv-faq-title" style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '11px',
+                color: '#2081e2',
+                marginBottom: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}>
+                <span style={{ fontSize: '13px' }}>🛡️</span> OFFICIAL MINT & SECONDARY MARKET
+              </div>
+
+              <div className="vv-faq-text" style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '8px',
+                color: '#a0b5d0',
+                lineHeight: 1.8,
+                letterSpacing: '0.3px',
+                textTransform: 'uppercase'
+              }}>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                  <span style={{ color: '#00ff88', fontSize: '9px' }}>•</span>
+                  <span>PRIMARY MINT IS EXCLUSIVELY AVAILABLE ONLY ON THIS OFFICIAL VIBE LAUNCHPAD PAGE.</span>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                  <span style={{ color: '#2081e2', fontSize: '9px' }}>•</span>
+                  <span>
+                    THE COLLECTION IS FULLY VERIFIED & TRADEABLE ON{' '}
+                    <a
+                      href={`https://opensea.io/assets/base/${NFT_CONTRACT_ADDRESS}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        color: '#00f5ff',
+                        textDecoration: 'underline',
+                        fontWeight: 900,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        letterSpacing: '0.5px'
+                      }}
+                    >
+                      OPENSEA ↗
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ 3: 80% AUTO-BURN & 20% REWARDS POOL */}
             <div className="vv-faq-card" style={{
               background: 'rgba(4, 20, 48, 0.75)',
               border: '1.5px solid rgba(255, 68, 102, 0.35)',
@@ -986,7 +1097,7 @@ export default function NftClubPage() {
               </div>
             </div>
 
-            {/* FAQ 2: VIBE CLUB EXCLUSIVE PERKS */}
+            {/* FAQ 4: VIBE CLUB EXCLUSIVE PERKS */}
             <div className="vv-faq-card" style={{
               background: 'rgba(4, 20, 48, 0.75)',
               border: '1.5px solid rgba(0, 245, 255, 0.35)',
