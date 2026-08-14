@@ -1,0 +1,1042 @@
+import React, { useState, useEffect } from 'react';
+import { usePrivy } from '@privy-io/react-auth';
+import { parseEther } from 'viem';
+import { useUserBalances } from '../verse/hooks/useUserBalances';
+import { useVibeNftContract, NFT_CONTRACT_ADDRESS } from '../hooks/useVibeNftContract';
+import nftNames from '../data/nftNames.json';
+
+// Pixel SVG Wallet Icon
+const WalletSvgIcon = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+    <rect x="2" y="6" width="20" height="13" rx="2" />
+    <path d="M16 12.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0z" fill="currentColor" />
+    <path d="M6 6V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2" />
+  </svg>
+);
+
+// NFT Deck strictly from #5 to #35 (31 NFTs)
+const NFT_DECK = Array.from({ length: 31 }, (_, i) => i + 5);
+
+export default function NftClubPage() {
+  const { login, logout, authenticated, user } = usePrivy();
+  const walletAddress = user?.wallet?.address;
+  const balances = useUserBalances(walletAddress);
+
+  const {
+    totalMinted,
+    remainingTokens,
+    maxSupply,
+    currentPhase,
+    ethPriceFormatted,
+    hasMinted,
+    isMintingEth,
+    isMintingVibe,
+    isApprovingVibe,
+    txHash,
+    errorMessage,
+    mintSuccess,
+    mintWithETH,
+    mintWithVIBE
+  } = useVibeNftContract();
+
+  const [deckIndex, setDeckIndex] = useState(0);
+  const [vibePerEthRatio, setVibePerEthRatio] = useState(50000000); // 1 ETH = ~50M VIBE fallback
+
+  // Fetch live $VIBE pool price from DEX Screener on Base
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchLiveVibePrice() {
+      try {
+        const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/0xb200000000000000000000df24ecb8bf51100a01');
+        const data = await res.json();
+        const pair = data?.pairs?.[0];
+        if (pair && pair.priceNative && isMounted) {
+          const priceNativeFloat = parseFloat(pair.priceNative);
+          if (priceNativeFloat > 0) {
+            const calculatedRatio = Math.floor(1 / priceNativeFloat);
+            setVibePerEthRatio(calculatedRatio);
+          }
+        }
+      } catch (e) {
+        console.error('Error fetching DEX VIBE price:', e);
+      }
+    }
+
+    fetchLiveVibePrice();
+    const interval = setInterval(fetchLiveVibePrice, 15000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Smooth horizontal slide loop: slides to next card every 2.0s
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDeckIndex((prev) => (prev + 1) % NFT_DECK.length);
+    }, 2000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Current dynamic $VIBE price based on active phase
+  const ethPriceNum = parseFloat(ethPriceFormatted) || 0.005;
+  const currentDynamicVibeAmount = Math.floor(ethPriceNum * vibePerEthRatio);
+
+  const currentNftId = NFT_DECK[deckIndex];
+
+  // Clean character name without duplicate numbers
+  const rawCharacterName = nftNames[currentNftId] || 'Maltipoo';
+  const cleanCharacterName = rawCharacterName.replace(/^#\d+\s*/, '').replace(/#\d+/, '').trim() || 'VIBE';
+
+  const formatVibeComma = (amount) => {
+    return Number(amount).toLocaleString('en-US') + ' $VIBE';
+  };
+
+  // Total $VIBE burned strictly by this NFT mint contract
+  const totalVibeBurnedByContract = Math.floor(totalMinted * currentDynamicVibeAmount * 0.8);
+
+  // 4 Mint Phases definition
+  const phases = [
+    { phase: 'PHASE 1', count: '103 NFT', price: '0.005 ETH', vibePrice: formatVibeComma(Math.floor(0.005 * vibePerEthRatio)), active: currentPhase === 1, done: currentPhase > 1 },
+    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', vibePrice: formatVibeComma(Math.floor(0.015 * vibePerEthRatio)), active: currentPhase === 2, done: currentPhase > 2 },
+    { phase: 'PHASE 3', count: '100 NFT', price: '0.05 ETH', vibePrice: formatVibeComma(Math.floor(0.05 * vibePerEthRatio)), active: currentPhase === 3, done: currentPhase > 3 },
+    { phase: 'PHASE 4', count: '30 NFT', price: '0.1 ETH', vibePrice: formatVibeComma(Math.floor(0.1 * vibePerEthRatio)), active: currentPhase === 4, done: false },
+  ];
+
+  const handleMintWithVibeClick = () => {
+    const vibeWei = parseEther(currentDynamicVibeAmount.toString());
+    mintWithVIBE(vibeWei);
+  };
+
+  // 100% Reliable Image Fallback Handler for Mobile & Web
+  const handleImageError = (e, id) => {
+    if (!e.target.src.includes('pinata.cloud')) {
+      e.target.src = `https://gateway.pinata.cloud/ipfs/bafybeifoc434thlscysnqvy45idxfjn7g7qjtedntek3rckn3vukffczxe/${id}.png`;
+    } else if (!e.target.src.includes('ipfs.io')) {
+      e.target.src = `https://ipfs.io/ipfs/bafybeifoc434thlscysnqvy45idxfjn7g7qjtedntek3rckn3vukffczxe/${id}.png`;
+    }
+  };
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: 'radial-gradient(circle at 50% 10%, #041430 0%, #020b1a 70%, #000511 100%)',
+      color: '#fff',
+      fontFamily: 'var(--vv-pixel)',
+      paddingBottom: '80px',
+      overflowX: 'hidden',
+      textTransform: 'uppercase',
+      width: '100vw'
+    }}>
+      {/* Inline animation & Mobile CSS Override */}
+      <style>{`
+        @keyframes vvPulseDotAnimation {
+          0% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 4px #00ff88; }
+          50% { transform: scale(1.35); opacity: 1; box-shadow: 0 0 12px #00ff88, 0 0 20px #00ff88; }
+          100% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 4px #00ff88; }
+        }
+        .vv-pulse-indicator {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #00ff88;
+          display: inline-block;
+          animation: vvPulseDotAnimation 1.6s infinite ease-in-out;
+        }
+
+        /* ── MOBILE SPECIFIC STYLES (< 768px) ── */
+        @media (max-width: 768px) {
+          .vv-opensea-btn {
+            display: none !important;
+          }
+          .vv-desktop-phase-row {
+            display: none !important;
+          }
+          .vv-mobile-phase-row {
+            display: flex !important;
+          }
+          .vv-nft-club-header {
+            padding: 12px 14px !important;
+          }
+          .vv-nft-club-header-subtext {
+            white-space: nowrap !important;
+            font-size: 7px !important;
+          }
+          .vv-nft-club-container {
+            padding: 0 12px !important;
+            margin-top: 14px !important;
+          }
+          .vv-nft-club-main-card {
+            padding: 16px 14px !important;
+            border-radius: 16px !important;
+          }
+          .vv-nft-club-main-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+            margin-bottom: 20px !important;
+          }
+          .vv-nft-card-frame {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+            overflow: hidden !important;
+          }
+          .vv-nft-phase-row {
+            padding: 12px 14px !important;
+          }
+          .vv-nft-phase-text {
+            font-size: 8px !important;
+            white-space: nowrap !important;
+          }
+          .vv-nft-phase-prices {
+            font-size: 8px !important;
+            white-space: nowrap !important;
+          }
+          .vv-phase-vibe-part {
+            display: none !important;
+          }
+          .vv-faq-section-title {
+            font-size: 12px !important;
+            white-space: nowrap !important;
+          }
+          .vv-faq-card {
+            padding: 16px 18px !important;
+          }
+          .vv-faq-title {
+            font-size: 9px !important;
+          }
+          .vv-faq-text {
+            font-size: 7.5px !important;
+          }
+          .vv-desktop-wallet-btn {
+            display: none !important;
+          }
+          .vv-mobile-wallet-btn {
+            display: flex !important;
+          }
+        }
+
+        @media (min-width: 769px) {
+          .vv-mobile-phase-row {
+            display: none !important;
+          }
+          .vv-desktop-phase-row {
+            display: flex !important;
+          }
+          .vv-mobile-wallet-btn {
+            display: none !important;
+          }
+        }
+      `}</style>
+
+      {/* ── TOP HEADER / NAV ── */}
+      <header className="vv-nft-club-header" style={{
+        padding: '16px 20px',
+        borderBottom: '1px solid rgba(0, 245, 255, 0.15)',
+        background: 'rgba(2, 11, 26, 0.85)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src="/vibe-logo.png" alt="VIBE" style={{ width: '34px', height: '34px', borderRadius: '8px' }} />
+          <div>
+            <div style={{ fontFamily: 'var(--vv-pixel)', fontSize: '11px', color: '#00f5ff', letterSpacing: '0.5px' }}>
+              VIBE CLUB
+            </div>
+            <div className="vv-nft-club-header-subtext" style={{ fontSize: '8px', color: '#88aacc', marginTop: '2px', letterSpacing: '0.3px' }}>
+              VIBE VERSE: GENESIS
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {/* OpenSea Link (Hidden on mobile) */}
+          <a
+            href={`https://opensea.io/assets/base/${NFT_CONTRACT_ADDRESS}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="vv-opensea-btn"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 12px',
+              borderRadius: '20px',
+              background: 'rgba(32, 129, 226, 0.15)',
+              border: '1px solid #2081e2',
+              color: '#2081e2',
+              fontSize: '8px',
+              textDecoration: 'none',
+              fontWeight: 900
+            }}
+          >
+            OPENSEA ↗
+          </a>
+
+          {/* DESKTOP WALLET CONNECT */}
+          <div className="vv-desktop-wallet-btn">
+            {authenticated ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{
+                  background: 'rgba(0, 245, 255, 0.1)',
+                  border: '1px solid rgba(0, 245, 255, 0.3)',
+                  padding: '6px 12px',
+                  borderRadius: '20px',
+                  fontSize: '9px',
+                  color: '#00ff88',
+                  fontFamily: 'var(--vv-pixel)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}>
+                  <WalletSvgIcon size={12} /> {walletAddress?.slice(0, 6)}...{walletAddress?.slice(-4)}
+                </div>
+                <button
+                  onClick={logout}
+                  style={{
+                    fontFamily: 'var(--vv-pixel)',
+                    background: 'transparent',
+                    border: '1px solid rgba(255, 68, 102, 0.4)',
+                    color: '#ff4466',
+                    padding: '6px 12px',
+                    borderRadius: '20px',
+                    fontSize: '8px',
+                    cursor: 'pointer',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  LOGOUT
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={login}
+                style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '9px',
+                  background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
+                  color: '#fff',
+                  border: '1.5px solid #fff',
+                  padding: '10px 16px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  boxShadow: '0 0 14px rgba(0, 245, 255, 0.4)',
+                  fontWeight: 900,
+                  textTransform: 'uppercase',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <WalletSvgIcon size={13} /> CONNECT WALLET
+              </button>
+            )}
+          </div>
+
+          {/* MOBILE WALLET CONNECT */}
+          <div className="vv-mobile-wallet-btn" style={{ alignItems: 'center' }}>
+            {authenticated ? (
+              <button
+                onClick={logout}
+                style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8px',
+                  background: 'rgba(0, 245, 255, 0.12)',
+                  border: '1.5px solid #00f5ff',
+                  color: '#00ff88',
+                  padding: '8px 12px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 0 10px rgba(0, 245, 255, 0.3)'
+                }}
+              >
+                <WalletSvgIcon size={12} /> {walletAddress?.slice(0, 4)}...{walletAddress?.slice(-3)}
+              </button>
+            ) : (
+              <button
+                onClick={login}
+                style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8px',
+                  background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
+                  color: '#fff',
+                  border: '1.5px solid #ffffff',
+                  padding: '8px 12px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 0 12px rgba(0, 245, 255, 0.4)',
+                  fontWeight: 900
+                }}
+              >
+                <WalletSvgIcon size={12} /> CONNECT
+              </button>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* ── MAIN CONTAINER ── */}
+      <div className="vv-nft-club-container" style={{
+        maxWidth: '1050px',
+        margin: '24px auto 0 auto',
+        padding: '0 20px',
+        textAlign: 'center'
+      }}>
+
+        {/* ── MAIN CARD CONTAINER ── */}
+        <div className="vv-nft-club-main-card" style={{
+          background: 'rgba(4, 20, 48, 0.85)',
+          border: '2px solid #00f5ff',
+          borderRadius: '20px',
+          padding: '28px',
+          boxShadow: '0 12px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 245, 255, 0.25)',
+          backdropFilter: 'blur(16px)',
+          textAlign: 'left'
+        }}>
+
+          {/* MOBILE ONLY TOP ROW: PHASE BADGE + 2-LINE CONTRACT (ABOVE NFT CARD) */}
+          <div className="vv-mobile-phase-row" style={{
+            display: 'none',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '14px',
+            width: '100%'
+          }}>
+            <div style={{
+              display: 'inline-block',
+              background: 'rgba(0, 255, 136, 0.15)',
+              border: '1.5px solid #00ff88',
+              color: '#00ff88',
+              borderRadius: '8px',
+              padding: '6px 10px',
+              fontSize: '8px',
+              letterSpacing: '0.4px',
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap'
+            }}>
+              ● PHASE {currentPhase} MINT IS LIVE
+            </div>
+
+            <a
+              href={`https://basescan.org/address/${NFT_CONTRACT_ADDRESS}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: '#88aacc',
+                textDecoration: 'none',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-end',
+                textAlign: 'right',
+                marginLeft: 'auto',
+                lineHeight: 1.3
+              }}
+            >
+              <span style={{ fontSize: '7px', color: '#88aacc', letterSpacing: '0.3px' }}>CONTRACT:</span>
+              <span style={{ fontSize: '7.5px', color: '#00f5ff', letterSpacing: '0.3px' }}>
+                {NFT_CONTRACT_ADDRESS.slice(0, 6)}...{NFT_CONTRACT_ADDRESS.slice(-4)} ↗
+              </span>
+            </a>
+          </div>
+
+          {/* TOP SECTION: LEFT HORIZONTAL SLIDER + RIGHT CONTROLS */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1.1fr',
+            gap: '28px',
+            alignItems: 'stretch',
+            marginBottom: '32px'
+          }} className="vv-nft-club-main-grid">
+
+            {/* LEFT COLUMN: PURE NFT HORIZONTAL SLIDER CARD */}
+            <div className="vv-nft-card-frame" style={{
+              position: 'relative',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              border: '3px solid #00f5ff',
+              boxShadow: '0 0 28px rgba(0, 245, 255, 0.4), 0 12px 30px rgba(0,0,0,0.8)',
+              background: '#020b1a',
+              aspectRatio: '1/1',
+              width: '100%',
+              maxWidth: '100%',
+              boxSizing: 'border-box',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minWidth: 0
+            }}>
+              {/* HARDWARE ACCELERATED HORIZONTAL SLIDING TRACK */}
+              <div style={{
+                display: 'flex',
+                width: '100%',
+                height: '100%',
+                transform: `translateX(-${deckIndex * 100}%)`,
+                transition: 'transform 0.65s cubic-bezier(0.25, 1, 0.5, 1)',
+                willChange: 'transform'
+              }}>
+                {NFT_DECK.map((id) => (
+                  <div
+                    key={id}
+                    style={{
+                      flex: '0 0 100%',
+                      minWidth: '100%',
+                      maxWidth: '100%',
+                      width: '100%',
+                      height: '100%',
+                      position: 'relative',
+                      background: '#020b1a',
+                      boxSizing: 'border-box',
+                      overflow: 'hidden'
+                    }}
+                  >
+                    <img
+                      src={`/nft/images/${id}.png`}
+                      onError={(e) => handleImageError(e, id)}
+                      alt={`Vibe Club #${id}`}
+                      loading="eager"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block'
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* BOTTOM CHARACTER NAME BADGE (ALWAYS BRAND CYAN #00F5FF & SINGLE NUMBER) */}
+              <div style={{
+                position: 'absolute',
+                bottom: '12px',
+                left: '12px',
+                right: '12px',
+                background: 'rgba(2, 11, 26, 0.92)',
+                border: '1.5px solid #00f5ff',
+                padding: '8px 12px',
+                borderRadius: '10px',
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '9px',
+                color: '#00f5ff',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.85)',
+                zIndex: 10,
+                textAlign: 'center',
+                letterSpacing: '0.4px',
+                backdropFilter: 'blur(8px)'
+              }}>
+                <span>
+                  VIBE CLUB #{currentNftId} {cleanCharacterName.toUpperCase()}
+                </span>
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN: CONTROLS WITH COMPACT GAPS (NO JUMP ON LOAD) */}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              gap: '10px',
+              height: '100%'
+            }}>
+              {/* DESKTOP ONLY TOP ROW: ACTIVE PHASE + CONTRACT */}
+              <div className="vv-desktop-phase-row" style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '4px',
+                width: '100%'
+              }}>
+                <div style={{
+                  display: 'inline-block',
+                  background: 'rgba(0, 255, 136, 0.15)',
+                  border: '1.5px solid #00ff88',
+                  color: '#00ff88',
+                  borderRadius: '8px',
+                  padding: '6px 10px',
+                  fontSize: '8px',
+                  letterSpacing: '0.4px',
+                  textTransform: 'uppercase',
+                  whiteSpace: 'nowrap'
+                }}>
+                  ● PHASE {currentPhase} MINT IS LIVE
+                </div>
+
+                <a
+                  href={`https://basescan.org/address/${NFT_CONTRACT_ADDRESS}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontSize: '8px',
+                    color: '#88aacc',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    marginLeft: 'auto',
+                    textAlign: 'right',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  CONTRACT: {NFT_CONTRACT_ADDRESS.slice(0, 6)}...{NFT_CONTRACT_ADDRESS.slice(-4)} ↗
+                </a>
+              </div>
+
+              {/* CARD 1: ETH PRICE & LIVE $VIBE PRICE + LIMIT */}
+              <div style={{
+                background: 'rgba(2, 11, 26, 0.7)',
+                border: '1px solid rgba(0, 245, 255, 0.25)',
+                borderRadius: '12px',
+                padding: '10px 14px'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontSize: '8px', color: '#aaa' }}>ETH PRICE</span>
+                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>
+                    {ethPriceFormatted} ETH
+                  </span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontSize: '8px', color: '#aaa' }}>LIVE $VIBE PRICE</span>
+                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffd700' }}>
+                    {formatVibeComma(currentDynamicVibeAmount)}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontSize: '8px', color: '#aaa' }}>LIMIT</span>
+                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '8px', color: '#00ff88' }}>
+                    1 NFT PER WALLET
+                  </span>
+                </div>
+              </div>
+
+              {/* CARD 2: TOTAL MINTED & PROGRESS BAR */}
+              <div style={{
+                background: 'rgba(2, 11, 26, 0.7)',
+                border: '1px solid rgba(0, 245, 255, 0.25)',
+                borderRadius: '12px',
+                padding: '10px 14px'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontSize: '8px', color: '#aaa' }}>TOTAL MINTED</span>
+                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#00f5ff' }}>
+                    {totalMinted} / {maxSupply}
+                  </span>
+                </div>
+                {/* Progress Bar */}
+                <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ width: `${Math.max(1, (totalMinted / maxSupply) * 100)}%`, height: '100%', background: 'linear-gradient(90deg, #00f5ff, #00ff88)' }} />
+                </div>
+              </div>
+
+              {/* CARD 3: TOTAL BURNED */}
+              <div style={{
+                background: 'rgba(2, 11, 26, 0.7)',
+                border: '1px solid rgba(255, 68, 102, 0.35)',
+                borderRadius: '12px',
+                padding: '10px 14px'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontSize: '8px', color: '#ff4466', fontWeight: 900 }}>TOTAL BURNED BY MINT</span>
+                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffffff' }}>
+                    {formatVibeComma(totalVibeBurnedByContract)}
+                  </span>
+                </div>
+              </div>
+
+              {/* USER WALLET BALANCES */}
+              <div style={{ padding: '2px 4px' }}>
+                <div style={{ fontSize: '8px', color: '#88aacc', marginBottom: '4px', letterSpacing: '0.4px', whiteSpace: 'nowrap' }}>
+                  YOUR WALLET BALANCES:
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontSize: '8px', color: '#aaa' }}>• ETH BALANCE:</span>
+                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: authenticated ? '#00f5ff' : '#ff4466' }}>
+                    {authenticated ? `${Number(balances?.eth || 0).toFixed(4)} ETH` : 'NOT CONNECTED'}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontSize: '8px', color: '#aaa' }}>• $VIBE BALANCE:</span>
+                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: authenticated ? '#ffd700' : '#ff4466' }}>
+                    {authenticated ? formatVibeComma(Math.floor(Number(balances?.vibe || 0))) : 'NOT CONNECTED'}
+                  </span>
+                </div>
+              </div>
+
+              {/* DUAL MINT ACTION BUTTONS (PINNED TO BOTTOM VIA MARGIN-TOP AUTO) */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: 'auto', paddingTop: '4px' }}>
+                {errorMessage && (
+                  <div style={{
+                    background: 'rgba(255, 68, 102, 0.15)',
+                    border: '1px solid #ff4466',
+                    borderRadius: '8px',
+                    padding: '8px 12px',
+                    fontSize: '8px',
+                    color: '#ff6688',
+                    textAlign: 'center',
+                    marginBottom: '4px'
+                  }}>
+                    ⚠️ {errorMessage}
+                  </div>
+                )}
+
+                {mintSuccess && (
+                  <div style={{
+                    background: 'rgba(0, 255, 136, 0.15)',
+                    border: '1.5px solid #00ff88',
+                    borderRadius: '10px',
+                    padding: '12px',
+                    fontSize: '9px',
+                    color: '#00ff88',
+                    textAlign: 'center',
+                    marginBottom: '6px',
+                    boxShadow: '0 0 16px rgba(0, 255, 136, 0.3)'
+                  }}>
+                    🎉 MINT SUCCESSFUL! WELCOME TO VIBE CLUB!
+                    {txHash && (
+                      <div style={{ marginTop: '6px' }}>
+                        <a
+                          href={`https://basescan.org/tx/${txHash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: '#00f5ff', textDecoration: 'underline', fontSize: '8px' }}
+                        >
+                          VIEW ON BASESCAN ↗
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {!authenticated ? (
+                  /* SINGLE BUTTON WHEN UNAUTHENTICATED */
+                  <button
+                    onClick={login}
+                    style={{
+                      width: '100%',
+                      height: '46px',
+                      fontFamily: 'var(--vv-pixel)',
+                      fontSize: '10px',
+                      fontWeight: 900,
+                      background: 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)',
+                      border: '2px solid #ffffff',
+                      borderRadius: '10px',
+                      color: '#ffffff',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 16px rgba(0, 245, 255, 0.4)',
+                      letterSpacing: '0.5px',
+                      textTransform: 'uppercase',
+                      whiteSpace: 'nowrap',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px'
+                    }}
+                  >
+                    <WalletSvgIcon size={14} /> CONNECT WALLET TO MINT
+                  </button>
+                ) : hasMinted ? (
+                  /* ALREADY MINTED */
+                  <div style={{
+                    width: '100%',
+                    padding: '14px',
+                    background: 'rgba(0, 255, 136, 0.12)',
+                    border: '2px solid #00ff88',
+                    borderRadius: '10px',
+                    textAlign: 'center',
+                    color: '#00ff88',
+                    fontSize: '10px',
+                    fontWeight: 900,
+                    boxShadow: '0 0 16px rgba(0, 255, 136, 0.3)'
+                  }}>
+                    ✓ YOU HAVE MINTED (1/1 MAX)
+                    <div style={{ marginTop: '6px' }}>
+                      <a
+                        href={`https://opensea.io/assets/base/${NFT_CONTRACT_ADDRESS}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: '#00f5ff', textDecoration: 'underline', fontSize: '8px' }}
+                      >
+                        VIEW YOUR NFT ON OPENSEA ↗
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  /* DUAL MINT BUTTONS */
+                  <>
+                    {/* 1. MINT FOR ETH BUTTON */}
+                    <button
+                      onClick={mintWithETH}
+                      disabled={isMintingEth || isMintingVibe || isApprovingVibe}
+                      style={{
+                        width: '100%',
+                        height: '44px',
+                        fontFamily: 'var(--vv-pixel)',
+                        fontSize: '10px',
+                        fontWeight: 900,
+                        background: 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)',
+                        border: '2px solid #ffffff',
+                        borderRadius: '10px',
+                        color: '#ffffff',
+                        cursor: (isMintingEth || isMintingVibe || isApprovingVibe) ? 'not-allowed' : 'pointer',
+                        boxShadow: '0 4px 16px rgba(0, 245, 255, 0.4)',
+                        letterSpacing: '0.5px',
+                        textTransform: 'uppercase',
+                        whiteSpace: 'nowrap',
+                        opacity: (isMintingEth || isMintingVibe || isApprovingVibe) ? 0.7 : 1
+                      }}
+                    >
+                      {isMintingEth ? 'MINTING ON BASE...' : `MINT FOR ${ethPriceFormatted} ETH`}
+                    </button>
+
+                    {/* ELEGANT "- OR -" DIVIDER */}
+                    <div style={{
+                      textAlign: 'center',
+                      fontSize: '8px',
+                      color: '#88aacc',
+                      letterSpacing: '1px',
+                      margin: '1px 0'
+                    }}>
+                      — OR —
+                    </div>
+
+                    {/* 2. MINT FOR $VIBE BUTTON */}
+                    <button
+                      onClick={handleMintWithVibeClick}
+                      disabled={isMintingEth || isMintingVibe || isApprovingVibe}
+                      style={{
+                        width: '100%',
+                        height: '44px',
+                        fontFamily: 'var(--vv-pixel)',
+                        fontSize: '10px',
+                        fontWeight: 900,
+                        background: 'linear-gradient(135deg, #ffd700 0%, #ff6b35 100%)',
+                        border: '2px solid #ffffff',
+                        borderRadius: '10px',
+                        color: '#ffffff',
+                        cursor: (isMintingEth || isMintingVibe || isApprovingVibe) ? 'not-allowed' : 'pointer',
+                        boxShadow: '0 4px 16px rgba(255, 215, 0, 0.4)',
+                        letterSpacing: '0.5px',
+                        textTransform: 'uppercase',
+                        whiteSpace: 'nowrap',
+                        opacity: (isMintingEth || isMintingVibe || isApprovingVibe) ? 0.7 : 1
+                      }}
+                    >
+                      {isApprovingVibe
+                        ? 'APPROVING $VIBE...'
+                        : isMintingVibe
+                        ? 'MINTING WITH $VIBE...'
+                        : `MINT FOR ${formatVibeComma(currentDynamicVibeAmount)}`}
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* BOTTOM SECTION: 4 MINT PHASES STACKED VERTICALLY */}
+          <div style={{
+            borderTop: '1px solid rgba(0, 245, 255, 0.2)',
+            paddingTop: '20px'
+          }}>
+            <div style={{
+              fontSize: '9px',
+              color: '#88aacc',
+              marginBottom: '14px',
+              letterSpacing: '0.5px',
+              whiteSpace: 'nowrap'
+            }}>
+              MINT PHASES SCHEDULE:
+            </div>
+
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
+              {phases.map((p, idx) => (
+                <div
+                  key={idx}
+                  className="vv-nft-phase-row"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    width: '100%',
+                    background: p.active ? 'rgba(0, 245, 255, 0.12)' : 'rgba(2, 11, 26, 0.5)',
+                    border: p.active ? '1.5px solid #00f5ff' : '1px solid rgba(255, 255, 255, 0.12)',
+                    borderRadius: '12px',
+                    padding: '14px 18px',
+                    boxShadow: p.active ? '0 0 18px rgba(0, 245, 255, 0.25)' : 'none',
+                    opacity: p.active ? 1 : 0.65,
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  {/* LEFT: PHASE TITLE & PULSE DOT */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                    {p.active && <span className="vv-pulse-indicator" />}
+                    <span className="vv-nft-phase-text" style={{
+                      fontFamily: 'var(--vv-pixel)',
+                      fontSize: '9px',
+                      color: p.active ? '#00ff88' : p.done ? '#ffd700' : '#ffffff',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      {p.phase} ({p.count}) {p.done ? '✓' : ''}
+                    </span>
+                  </div>
+
+                  {/* RIGHT: COLORED PRICES */}
+                  <div className="vv-nft-phase-prices" style={{
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '9px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    marginLeft: 'auto',
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0
+                  }}>
+                    <span style={{ color: '#00f5ff' }}>{p.price}</span>
+                    <span className="vv-phase-vibe-part" style={{ color: '#88aacc' }}>/</span>
+                    <span className="vv-phase-vibe-part" style={{ color: '#ffd700' }}>{p.vibePrice}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── FAQ & VIBE CLUB BENEFITS SECTION ── */}
+        <div style={{
+          marginTop: '48px',
+          textAlign: 'left'
+        }}>
+          <h2 className="vv-faq-section-title" style={{
+            fontFamily: 'var(--vv-pixel)',
+            fontSize: '14px',
+            color: '#00f5ff',
+            textShadow: '0 0 16px rgba(0, 245, 255, 0.4)',
+            marginBottom: '24px',
+            letterSpacing: '0.6px',
+            textAlign: 'center',
+            whiteSpace: 'nowrap'
+          }}>
+            FAQ & CLUB BENEFITS
+          </h2>
+
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
+          }}>
+            {/* FAQ 1: 80% AUTO-BURN & 20% REWARDS POOL */}
+            <div className="vv-faq-card" style={{
+              background: 'rgba(4, 20, 48, 0.75)',
+              border: '1.5px solid rgba(255, 68, 102, 0.35)',
+              borderRadius: '16px',
+              padding: '22px 24px',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(12px)'
+            }}>
+              <div className="vv-faq-title" style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '11px',
+                color: '#ff4466',
+                marginBottom: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}>
+                <span style={{ fontSize: '13px' }}>🔥</span> 80% AUTO-BURN & 20% REWARDS POOL
+              </div>
+
+              <div className="vv-faq-text" style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '8px',
+                color: '#a0b5d0',
+                lineHeight: 1.8,
+                letterSpacing: '0.3px',
+                textTransform: 'uppercase'
+              }}>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                  <span style={{ color: '#ff4466', fontSize: '9px' }}>•</span>
+                  <span>80% OF ALL NFT MINT REVENUE AUTO BUYS & BURNS $VIBE TOKENS ON CONTRACT LEVEL.</span>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                  <span style={{ color: '#00ff88', fontSize: '9px' }}>•</span>
+                  <span>THE REMAINING 20% GOES DIRECTLY INTO THE VIBE VERSE REWARDS POOL.</span>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ 2: VIBE CLUB EXCLUSIVE PERKS */}
+            <div className="vv-faq-card" style={{
+              background: 'rgba(4, 20, 48, 0.75)',
+              border: '1.5px solid rgba(0, 245, 255, 0.35)',
+              borderRadius: '16px',
+              padding: '22px 24px',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(12px)'
+            }}>
+              <div className="vv-faq-title" style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '11px',
+                color: '#00f5ff',
+                marginBottom: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}>
+                <span style={{ fontSize: '13px' }}>💎</span> VIBE CLUB EXCLUSIVE PERKS
+              </div>
+
+              <div className="vv-faq-text" style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '8px',
+                color: '#a0b5d0',
+                lineHeight: 1.8,
+                letterSpacing: '0.3px',
+                textTransform: 'uppercase'
+              }}>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <span style={{ color: '#00ff88', fontSize: '9px' }}>•</span>
+                  <span>UNLOCKS EXCLUSIVE PERKS IN VIBE VERSE</span>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <span style={{ color: '#ffd700', fontSize: '9px' }}>•</span>
+                  <span>LIFETIME $VIBE DIVIDENDS FOR CLUB MEMBERS</span>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <span style={{ color: '#00f5ff', fontSize: '9px' }}>•</span>
+                  <span>DAO ACCESS AND MORE COMING SOON</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

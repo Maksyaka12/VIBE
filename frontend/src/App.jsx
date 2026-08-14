@@ -2,9 +2,15 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift, Users, ShieldCheck, Calculator, Calendar, RotateCcw } from 'lucide-react';
 import { PrivyProvider } from '@privy-io/react-auth';
+import { WagmiProvider as PrivyWagmiProvider } from '@privy-io/wagmi';
+import { privyWagmiConfig } from './config/privyWagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createPublicClient, http, formatUnits, parseAbiItem } from 'viem';
 import { base } from 'viem/chains';
 import Checker from './Checker';
+import VibeVerse from './verse/VibeVerse';
+import VibeVerseLockScreen from './verse/VibeVerseLockScreen';
+import NftClubPage from './pages/NftClubPage';
 import './index.css';
 
 const CA      = '0xb200000000000000000000df24ecb8bf51100a01';
@@ -589,8 +595,8 @@ function Roadmap() {
                 <div className="r-title"><Laptop size={24} color="var(--blue)"/> Interactive Web Portal <span className="badge-rm done"><Check size={14} strokeWidth={3}/> DONE</span></div>
                 <div className="r-desc">Launch of a comprehensive dApp featuring an eligibility checker for rewards, integrated seamless swaps, real-time holder analytics, tokenomics, and project details.</div>
               </div>
-              <div className="roadmap-item in-progress">
-                <div className="r-title"><Globe size={24} color="var(--blue)"/> Enhance $VIBE Visibility <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
+              <div className="roadmap-item done">
+                <div className="r-title"><Globe size={24} color="var(--blue)"/> Enhance $VIBE Visibility <span className="badge-rm done"><Check size={14} strokeWidth={3}/> DONE</span></div>
                 <div className="r-desc">Securing top-tier visibility and native support across major platforms including the X Token Card, Base App, OKX Wallet, and the broader Web3 ecosystem.</div>
               </div>
               <div className="roadmap-item in-progress">
@@ -617,7 +623,36 @@ function Roadmap() {
           
           {/* Phase 3 */}
           <div className="roadmap-phase rv" ref={useRev()}>
-            <div className="roadmap-phase-title">Phase 3: Ecosystem Dominance</div>
+            <div className="roadmap-phase-title">Phase 3: $VIBE Ecosystem</div>
+            <div className="roadmap-items">
+              <div className="roadmap-item in-progress">
+                <div className="r-title"><Users size={24} color="var(--blue)"/> Vibe Culture: Vibe Club <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
+                <div className="r-desc">Building a full-fledged Vibe culture that drives global brand awareness, fosters a loyal community, and strengthens the power of $VIBE. Introducing the Vibe Club NFT Collection.</div>
+              </div>
+              <div className="roadmap-item in-progress">
+                <div className="r-title"><Rocket size={24} color="var(--blue)"/> Product Launch: Vibe Verse <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
+                <div className="r-desc">Launching Vibe Verse — an interactive Web3 pixel-art gaming world where $VIBE serves as the native in-game utility currency.</div>
+                <div className="r-subnote">
+                  <span className="r-subnote-dot"></span>
+                  <span>Introducing the Vibe Club NFT Collection</span>
+                  <span className="badge-rm prog" style={{marginLeft:'auto',fontSize:'0.65rem',padding:'4px 8px'}}><Loader2 size={11} className="spin"/> IN PROGRESS</span>
+                </div>
+                <div className="r-subnote">
+                  <span className="r-subnote-dot"></span>
+                  <span>Introducing Vibe Verse: B20 $VIBE On-Chain World</span>
+                  <span className="badge-rm prog" style={{marginLeft:'auto',fontSize:'0.65rem',padding:'4px 8px'}}><Loader2 size={11} className="spin"/> IN PROGRESS</span>
+                </div>
+              </div>
+              <div className="roadmap-item">
+                <div className="r-title"><Flame size={24} color="var(--blue)"/> Vibe Verse Ecosystem</div>
+                <div className="r-desc">Expanding the interactive gaming and DeFi ecosystem built around $VIBE as the core infrastructural utility token.</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Phase 4 */}
+          <div className="roadmap-phase rv" ref={useRev()}>
+            <div className="roadmap-phase-title">Phase 4: B20 Ecosystem Dominance</div>
             <div className="roadmap-items">
               <div className="roadmap-item">
                 <div className="r-title"><Crown size={24} color="var(--blue)"/> The Face of o1</div>
@@ -630,14 +665,10 @@ function Roadmap() {
             </div>
           </div>
 
-          {/* Phase 4 */}
+          {/* Phase 5 */}
           <div className="roadmap-phase rv" ref={useRev()}>
-            <div className="roadmap-phase-title">Phase 4: The Zenith</div>
+            <div className="roadmap-phase-title">Phase 5: Global Awareness</div>
             <div className="roadmap-items">
-              <div className="roadmap-item">
-                <div className="r-title"><Rocket size={24} color="var(--blue)"/> The 100M B20 Runner</div>
-                <div className="r-desc">Cementing our legacy as the ultimate B20 token, breaking records and targeting the legendary 100M milestone.</div>
-              </div>
               <div className="roadmap-item">
                 <div className="r-title"><Globe size={24} color="var(--blue)"/> Top Tier Listings</div>
                 <div className="r-desc">Expanding liquidity and accessibility globally through strategic listings on prominent Centralized and Decentralized Exchanges.</div>
@@ -941,23 +972,81 @@ function StandaloneLayout({ children }) {
   );
 }
 
+function DomainRouter() {
+  const location = useLocation();
+  const isGameDomain = typeof window !== 'undefined' && window.location.hostname.toLowerCase().includes('vibeverse');
+  const isDevPreview = new URLSearchParams(location.search).get('preview') === 'true';
+
+  useEffect(() => {
+    if (isGameDomain) {
+      document.title = "Vibe Club NFT Mint & VibeVerse — The Base Dog";
+    } else {
+      document.title = "$VIBE — The Base Dog";
+    }
+  }, [isGameDomain]);
+
+  return (
+    <Routes>
+      {/* ── Standalone VIBE Club NFT Mint Page ── */}
+      <Route path="/nft-club" element={<NftClubPage />} />
+      <Route path="/nft" element={<NftClubPage />} />
+      <Route path="/mint" element={<NftClubPage />} />
+
+      {/* ── Main Routing ── */}
+      <Route
+        path="/"
+        element={
+          isGameDomain
+            ? (isDevPreview ? <VibeVerse /> : <VibeVerseLockScreen />)
+            : <><Nav /><LandingPage /><Footer /></>
+        }
+      />
+      <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
+      <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
+
+      <Route path="/events" element={<StandaloneLayout><Events /></StandaloneLayout>} />
+      <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} />
+      <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
+      <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
+      <Route path="/checker" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
+      <Route
+        path="/verse"
+        element={isDevPreview ? <VibeVerse /> : <VibeVerseLockScreen />}
+      />
+      <Route path="/verse-dev" element={<VibeVerse />} />
+    </Routes>
+  );
+}
+
+const queryClient = new QueryClient();
+
 export default function App() {
   return (
-    <PrivyProvider appId="cmrugdvds02q60cl7tegmrnx7" config={{ loginMethods: ['wallet'], appearance: { theme: 'light', accentColor: '#0052ff', logo: 'https://vibehome.dog/vibe-logo.png' } }}>
-      <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<><Nav /><LandingPage /><Footer /></>} />
-          <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
-          <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
-
-          <Route path="/events" element={<StandaloneLayout><Events /></StandaloneLayout>} />
-          <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} />
-          <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
-          <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
-          <Route path="/checker" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
-        </Routes>
-      </BrowserRouter>
+    <PrivyProvider
+      appId="cmsoytt8e00pb0cjrjj7k54m5"
+      config={{
+        loginMethods: ['wallet', 'email', 'twitter', 'telegram'],
+        defaultChain: base,
+        supportedChains: [base],
+        appearance: {
+          theme: 'dark',
+          accentColor: '#00f5ff',
+          logo: 'https://vibeverse.dog/vibe-logo.png',
+          showWalletLoginFirst: true,
+        },
+        embeddedWallets: {
+          createOnLogin: 'all-users'
+        }
+      }}
+    >
+      <QueryClientProvider client={queryClient}>
+        <PrivyWagmiProvider config={privyWagmiConfig}>
+          <BrowserRouter>
+            <ScrollToTop />
+            <DomainRouter />
+          </BrowserRouter>
+        </PrivyWagmiProvider>
+      </QueryClientProvider>
     </PrivyProvider>
   );
 }
