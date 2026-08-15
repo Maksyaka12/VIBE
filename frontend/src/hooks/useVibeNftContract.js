@@ -33,10 +33,13 @@ const NFT_ABI = parseAbi([
   'function totalMintedCount() view returns (uint256)',
   'function walletMintCount(address) view returns (uint256)',
   'function getRemainingTokens() view returns (uint256)',
+  'function aggregatorRouter() view returns (address)',
   'function mintWithETH() payable',
+  'function mintWithETHAndSwap(bytes swapData) payable',
   'function mintWithVIBE(uint256 vibeAmount) external',
   'function mintWithVIBE() external',
   'function adminSwapAndBurn(uint256 ethAmount, bytes customSwapCalldata) external',
+  'function setAggregatorRouter(address _newAggregator) external',
   'function withdrawETH() external',
   'function executeManualBurn(uint256 vibeAmount) external'
 ]);
@@ -62,6 +65,7 @@ export function useVibeNftContract() {
   const [mintLive, setMintLive] = useState(true);
   const [contractEthBalance, setContractEthBalance] = useState('0');
   const [totalOnChainVibeBurned, setTotalOnChainVibeBurned] = useState(0);
+  const [aggregatorRouterAddress, setAggregatorRouterAddress] = useState('');
 
   const [isMintingEth, setIsMintingEth] = useState(false);
   const [isMintingVibe, setIsMintingVibe] = useState(false);
@@ -69,15 +73,48 @@ export function useVibeNftContract() {
   const [isAdminSwapping, setIsAdminSwapping] = useState(false);
   const [adminSwapSuccess, setAdminSwapSuccess] = useState(false);
   const [adminTxHash, setAdminTxHash] = useState('');
+  const [isSettingRouter, setIsSettingRouter] = useState(false);
+  const [setRouterSuccess, setSetRouterSuccess] = useState(false);
   const [txHash, setTxHash] = useState('');
   const [lastMintedId, setLastMintedId] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [mintSuccess, setMintSuccess] = useState(false);
 
+  // Dynamic DEX Swap Calldata fetcher (same engine as O1 Exchange on VibeVerse)
+  const getKyberSwapCalldata = async (ethAmountWei) => {
+    try {
+      const amountStr = ethAmountWei.toString();
+      const routeRes = await fetch(
+        `https://aggregator-api.kyberswap.com/base/api/v1/routes?tokenIn=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&tokenOut=${VIBE_TOKEN_ADDRESS}&amountIn=${amountStr}`
+      );
+      const routeData = await routeRes.json();
+      if (routeData.code === 0 && routeData.data) {
+        const buildRes = await fetch('https://aggregator-api.kyberswap.com/base/api/v1/route/build', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            routeSummary: routeData.data.routeSummary,
+            sender: NFT_CONTRACT_ADDRESS,
+            recipient: NFT_CONTRACT_ADDRESS,
+            slippageTolerance: 300, // 3%
+            deadline: Math.floor(Date.now() / 1000) + 1200
+          })
+        });
+        const buildData = await buildRes.json();
+        if (buildData.code === 0 && buildData.data?.data) {
+          return buildData.data.data;
+        }
+      }
+    } catch (e) {
+      console.error('Failed to fetch dynamic swap calldata:', e);
+    }
+    return '0x';
+  };
+
   // Fetch On-Chain State
   const fetchContractState = useCallback(async () => {
     try {
-      const [minted, remaining, supply, live, ethBal, burnLogs] = await Promise.all([
+      const [minted, remaining, supply, live, ethBal, burnLogs, aggRouter] = await Promise.all([
         publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'totalMintedCount' }).catch(() => 0),
         publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'getRemainingTokens' }).catch(() => 333),
         publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'MAX_SUPPLY' }).catch(() => 333),
@@ -87,7 +124,8 @@ export function useVibeNftContract() {
           address: NFT_CONTRACT_ADDRESS,
           event: parseAbi([ 'event VibeBurned(uint256 amount)' ])[0],
           fromBlock: 50000000n
-        }).catch(() => [])
+        }).catch(() => []),
+        publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'aggregatorRouter' }).catch(() => '')
       ]);
 
       const mintedNum = Number(minted);
@@ -96,6 +134,7 @@ export function useVibeNftContract() {
       setMaxSupply(Number(supply));
       setMintLive(live);
       setContractEthBalance(formatEther(ethBal));
+      setAggregatorRouterAddress(aggRouter);
 
       // Calculate total on-chain burned $VIBE from actual events
       let totalBurnedWei = 0n;
@@ -186,7 +225,7 @@ export function useVibeNftContract() {
     throw new Error('No compatible Web3 wallet found');
   };
 
-  // 1. Mint with ETH
+  // 1. Mint with ETH & Automatic DEX Swap + 80% Burn
   const mintWithETH = async () => {
     if (!authenticated || !walletAddress) {
       login();
@@ -197,12 +236,24 @@ export function useVibeNftContract() {
     setIsMintingEth(true);
 
     try {
-      const dataHex = encodeFunctionData({
-        abi: NFT_ABI,
-        functionName: 'mintWithETH'
-      });
+      // 1. Fetch optimal dynamic DEX swap route (exact same engine as O1 Exchange on VibeVerse)
+      const swapData = await getKyberSwapCalldata(ethPriceWei);
+      let dataHex;
 
-      const hash = await sendWeb3Transaction(NFT_CONTRACT_ADDRESS, ethPriceWei, withBuilderCode(dataHex));
+      if (swapData && swapData !== '0x' && swapData.length > 20) {
+        dataHex = encodeFunctionData({
+          abi: NFT_ABI,
+          functionName: 'mintWithETHAndSwap',
+          args: [swapData]
+        });
+      } else {
+        dataHex = encodeFunctionData({
+          abi: NFT_ABI,
+          functionName: 'mintWithETH'
+        });
+      }
+
+      const hash = await sendWeb3Transaction(NFT_CONTRACT_ADDRESS, ethPriceWei, withBuilderCode(dataHex), '0x7A120');
       setTxHash(hash);
 
       const receipt = await publicClient.waitForTransactionReceipt({ hash });
@@ -310,7 +361,7 @@ export function useVibeNftContract() {
     }
   };
 
-  // 3. Admin Swap & Auto-Burn
+  // 3. Admin Swap & Auto-Burn with Dynamic KyberSwap Route
   const executeAdminSwapAndBurn = async (ethAmountStr) => {
     if (!authenticated || !walletAddress) {
       login();
@@ -323,10 +374,12 @@ export function useVibeNftContract() {
 
     try {
       const ethAmountWei = parseEther(ethAmountStr.toString());
+      const swapData = await getKyberSwapCalldata(ethAmountWei);
+
       const dataHex = encodeFunctionData({
         abi: NFT_ABI,
         functionName: 'adminSwapAndBurn',
-        args: [ethAmountWei, '0x']
+        args: [ethAmountWei, swapData]
       });
 
       const hash = await sendWeb3Transaction(NFT_CONTRACT_ADDRESS, BigInt(0), withBuilderCode(dataHex), '0x7A120');
@@ -347,7 +400,44 @@ export function useVibeNftContract() {
     }
   };
 
-  // 4. Admin Withdraw ETH from contract
+  // 4. Admin Set Active Kyber Router on Contract (One-click update)
+  const executeSetAggregatorRouter = async () => {
+    if (!authenticated || !walletAddress) {
+      login();
+      return;
+    }
+    setErrorMessage('');
+    setSetRouterSuccess(false);
+    setIsSettingRouter(true);
+    setAdminTxHash('');
+
+    try {
+      const ACTIVE_KYBER_ROUTER = '0x6131B5fae19EA4f9D964eAc0408E4408b66337b5';
+      const dataHex = encodeFunctionData({
+        abi: NFT_ABI,
+        functionName: 'setAggregatorRouter',
+        args: [ACTIVE_KYBER_ROUTER]
+      });
+
+      const hash = await sendWeb3Transaction(NFT_CONTRACT_ADDRESS, BigInt(0), withBuilderCode(dataHex), '0x7A120');
+      setAdminTxHash(hash);
+
+      const receipt = await publicClient.waitForTransactionReceipt({ hash });
+      if (receipt.status === 'success') {
+        setSetRouterSuccess(true);
+        await fetchContractState();
+      } else {
+        throw new Error('Set Aggregator Router reverted on Base');
+      }
+    } catch (e) {
+      console.error('Set Router failed:', e);
+      setErrorMessage(e?.shortMessage || e?.message || 'Set Router failed');
+    } finally {
+      setIsSettingRouter(false);
+    }
+  };
+
+  // 5. Admin Withdraw ETH from contract
   const [isWithdrawingEth, setIsWithdrawingEth] = useState(false);
   const [withdrawSuccess, setWithdrawSuccess] = useState(false);
 
@@ -395,6 +485,7 @@ export function useVibeNftContract() {
     vibePriceFormatted: Number(formatEther(vibePriceWei)).toLocaleString('en-US'),
     contractEthBalance,
     totalOnChainVibeBurned,
+    aggregatorRouterAddress,
     hasMinted,
     mintCount,
     mintLive,
@@ -404,6 +495,8 @@ export function useVibeNftContract() {
     isAdminSwapping,
     adminSwapSuccess,
     adminTxHash,
+    isSettingRouter,
+    setRouterSuccess,
     isWithdrawingEth,
     withdrawSuccess,
     txHash,
@@ -413,6 +506,7 @@ export function useVibeNftContract() {
     mintWithETH,
     mintWithVIBE,
     executeAdminSwapAndBurn,
+    executeSetAggregatorRouter,
     executeWithdrawEth,
     refetch: fetchContractState
   };

@@ -37,6 +37,9 @@ export default function NftClubPage() {
     isAdminSwapping,
     adminSwapSuccess,
     adminTxHash,
+    aggregatorRouterAddress,
+    isSettingRouter,
+    setRouterSuccess,
     isWithdrawingEth,
     withdrawSuccess,
     txHash,
@@ -46,6 +49,7 @@ export default function NftClubPage() {
     mintWithETH,
     mintWithVIBE,
     executeAdminSwapAndBurn,
+    executeSetAggregatorRouter,
     executeWithdrawEth
   } = useVibeNftContract();
 
@@ -1082,6 +1086,65 @@ export default function NftClubPage() {
                 </div>
               </div>
 
+              {/* DEX Router Setup Warning / 1-Click Fix */}
+              {aggregatorRouterAddress?.toLowerCase() !== '0x6131b5fae19ea4f9d964eac0408e4408b66337b5'.toLowerCase() ? (
+                <div style={{
+                  marginBottom: '16px',
+                  padding: '12px',
+                  background: 'rgba(255, 68, 102, 0.15)',
+                  border: '1.5px solid #ff4466',
+                  borderRadius: '10px'
+                }}>
+                  <div style={{
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '8px',
+                    color: '#ff6688',
+                    marginBottom: '8px',
+                    lineHeight: 1.5
+                  }}>
+                    ⚠️ CONTRACT REQUIRES 1-CLICK ROUTER SYNC (O1 / KYBERSWAP DEX META-ROUTER):
+                  </div>
+                  <button
+                    onClick={executeSetAggregatorRouter}
+                    disabled={isSettingRouter}
+                    style={{
+                      width: '100%',
+                      padding: '10px',
+                      fontFamily: 'var(--vv-pixel)',
+                      fontSize: '8.5px',
+                      fontWeight: 900,
+                      background: 'linear-gradient(135deg, #00f5ff 0%, #00ff88 100%)',
+                      border: '2px solid #ffffff',
+                      borderRadius: '8px',
+                      color: '#020b1a',
+                      cursor: isSettingRouter ? 'not-allowed' : 'pointer',
+                      boxShadow: '0 0 16px rgba(0, 255, 136, 0.4)',
+                      textTransform: 'uppercase'
+                    }}
+                  >
+                    {isSettingRouter ? '⏳ CONNECTING ROUTER ON BASE...' : '⚡ 1-CLICK: CONNECT ON-CHAIN DEX SWAP ROUTER'}
+                  </button>
+                  {setRouterSuccess && (
+                    <div style={{ marginTop: '6px', color: '#00ff88', fontSize: '7.5px', fontFamily: 'var(--vv-pixel)' }}>
+                      ✓ DEX ROUTER CONNECTED SUCCESSFULLY!
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div style={{
+                  marginBottom: '14px',
+                  padding: '6px 10px',
+                  background: 'rgba(0, 255, 136, 0.1)',
+                  border: '1px solid #00ff88',
+                  borderRadius: '8px',
+                  color: '#00ff88',
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '7.5px'
+                }}>
+                  ✓ ON-CHAIN DEX ROUTER CONNECTED (0x6131...37b5)
+                </div>
+              )}
+
               <p style={{
                 fontFamily: 'var(--vv-pixel)',
                 fontSize: '7.5px',
@@ -1090,7 +1153,7 @@ export default function NftClubPage() {
                 marginBottom: '14px',
                 textTransform: 'uppercase'
               }}>
-                Trigger on-chain `adminSwapAndBurn` to swap contract ETH into $VIBE via O1 router & burn 80% to Dead Address.
+                Execute `adminSwapAndBurn` with live DEX router calldata to swap contract ETH into $VIBE & burn 80% to Dead Address.
               </p>
 
               <div style={{
