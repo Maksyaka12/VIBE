@@ -123,7 +123,7 @@ export function useVibeNftContract() {
   }, [fetchContractState]);
 
   // Web3 Transaction Dispatcher
-  const sendWeb3Transaction = async (to, valueBigInt, dataHex) => {
+  const sendWeb3Transaction = async (to, valueBigInt, dataHex, customGas = '0x7A120') => {
     const connectedWallet = wallets.find(
       (w) => w.address?.toLowerCase() === walletAddress?.toLowerCase()
     ) || wallets[0];
@@ -136,7 +136,8 @@ export function useVibeNftContract() {
           from: walletAddress,
           to,
           value: valueBigInt ? '0x' + valueBigInt.toString(16) : '0x0',
-          data: dataHex
+          data: dataHex,
+          gas: customGas
         }]
       });
       return hash;
@@ -149,7 +150,8 @@ export function useVibeNftContract() {
           from: walletAddress,
           to,
           value: valueBigInt ? '0x' + valueBigInt.toString(16) : '0x0',
-          data: dataHex
+          data: dataHex,
+          gas: customGas
         }]
       });
       return hash;
