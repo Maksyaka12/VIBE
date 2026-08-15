@@ -37,13 +37,16 @@ export default function NftClubPage() {
     isAdminSwapping,
     adminSwapSuccess,
     adminTxHash,
+    isWithdrawingEth,
+    withdrawSuccess,
     txHash,
     lastMintedId,
     errorMessage,
     mintSuccess,
     mintWithETH,
     mintWithVIBE,
-    executeAdminSwapAndBurn
+    executeAdminSwapAndBurn,
+    executeWithdrawEth
   } = useVibeNftContract();
 
   const [deckIndex, setDeckIndex] = useState(0);
@@ -1155,34 +1158,90 @@ export default function NftClubPage() {
                 </div>
               </div>
 
-              {/* Execute Button */}
-              <button
-                onClick={() => executeAdminSwapAndBurn(adminEthInput)}
-                disabled={isAdminSwapping || parseFloat(adminEthInput || '0') <= 0}
-                style={{
-                  width: '100%',
-                  height: '44px',
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '9.5px',
-                  fontWeight: 900,
-                  background: 'linear-gradient(135deg, #ffd700 0%, #ff4466 100%)',
-                  border: '2px solid #ffffff',
-                  borderRadius: '10px',
-                  color: '#ffffff',
-                  cursor: isAdminSwapping ? 'not-allowed' : 'pointer',
-                  boxShadow: '0 4px 16px rgba(255, 68, 102, 0.4)',
-                  letterSpacing: '0.5px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  textTransform: 'uppercase'
-                }}
-              >
-                {isAdminSwapping ? '⏳ SWAPPING & BURNING...' : `🔥 EXECUTE SWAP & BURN (${adminEthInput} ETH)`}
-              </button>
+              {/* Action Buttons Grid */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {/* Execute Swap Button */}
+                <button
+                  onClick={() => executeAdminSwapAndBurn(adminEthInput)}
+                  disabled={isAdminSwapping || isWithdrawingEth || parseFloat(adminEthInput || '0') <= 0}
+                  style={{
+                    width: '100%',
+                    height: '44px',
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '9.5px',
+                    fontWeight: 900,
+                    background: 'linear-gradient(135deg, #ffd700 0%, #ff4466 100%)',
+                    border: '2px solid #ffffff',
+                    borderRadius: '10px',
+                    color: '#ffffff',
+                    cursor: (isAdminSwapping || isWithdrawingEth) ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 4px 16px rgba(255, 68, 102, 0.4)',
+                    letterSpacing: '0.5px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  {isAdminSwapping ? '⏳ SWAPPING & BURNING...' : `🔥 EXECUTE SWAP & BURN (${adminEthInput} ETH)`}
+                </button>
+
+                {/* Withdraw Contract ETH to Admin Wallet Button */}
+                <button
+                  onClick={executeWithdrawEth}
+                  disabled={isWithdrawingEth || isAdminSwapping || parseFloat(contractEthBalance || '0') <= 0}
+                  style={{
+                    width: '100%',
+                    height: '38px',
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '8.5px',
+                    fontWeight: 900,
+                    background: 'rgba(0, 245, 255, 0.12)',
+                    border: '1.5px solid #00f5ff',
+                    borderRadius: '10px',
+                    color: '#00f5ff',
+                    cursor: (isWithdrawingEth || isAdminSwapping) ? 'not-allowed' : 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    textTransform: 'uppercase',
+                    boxShadow: '0 0 12px rgba(0, 245, 255, 0.2)'
+                  }}
+                >
+                  {isWithdrawingEth ? '⏳ WITHDRAWING ETH...' : `💸 WITHDRAW ALL ETH TO ADMIN WALLET (${parseFloat(contractEthBalance || '0').toFixed(4)} ETH)`}
+                </button>
+              </div>
 
               {/* Status messages */}
+              {withdrawSuccess && (
+                <div style={{
+                  marginTop: '12px',
+                  padding: '10px',
+                  background: 'rgba(0, 255, 136, 0.15)',
+                  border: '1px solid #00ff88',
+                  borderRadius: '8px',
+                  color: '#00ff88',
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8px',
+                  lineHeight: 1.6
+                }}>
+                  ✓ ETH WITHDRAWN TO ADMIN WALLET SUCCESSFULLY!
+                  {adminTxHash && (
+                    <div style={{ marginTop: '4px' }}>
+                      <a
+                        href={`https://basescan.org/tx/${adminTxHash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: '#00f5ff', textDecoration: 'underline' }}
+                      >
+                        VIEW TRANSACTION ON BASESCAN ↗
+                      </a>
+                    </div>
+                  )}
+                </div>
+              )}
               {adminSwapSuccess && (
                 <div style={{
                   marginTop: '12px',
