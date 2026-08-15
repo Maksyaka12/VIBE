@@ -125,7 +125,7 @@ export default function NftClubPage() {
   const modalCleanName = modalRawName.replace(/^#\d+\s*/, '').replace(/#\d+/, '').trim() || 'VIBE';
 
   const formatVibeComma = (amount) => {
-    return Number(amount).toLocaleString('en-US') + ' $VIBE';
+    return Math.floor(Number(amount || 0)).toLocaleString('en-US') + ' $VIBE';
   };
 
   // Download / Save NFT Image to device gallery
@@ -939,36 +939,6 @@ export default function NftClubPage() {
                     </button>
                   </>
                 )}
-
-                {/* ADMIN / TEST PREVIEW BUTTON FOR #3 MKS VIBE */}
-                <div style={{ marginTop: '8px', textAlign: 'center' }}>
-                  <button
-                    onClick={() => {
-                      setTestMintedId(3);
-                      setShowSuccessModal(true);
-                    }}
-                    style={{
-                      fontFamily: 'var(--vv-pixel)',
-                      background: 'rgba(255, 215, 0, 0.12)',
-                      border: '1.5px dashed #ffd700',
-                      color: '#ffd700',
-                      padding: '8px 14px',
-                      borderRadius: '8px',
-                      fontSize: '8px',
-                      cursor: 'pointer',
-                      fontWeight: 900,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      textTransform: 'uppercase',
-                      boxShadow: '0 0 12px rgba(255, 215, 0, 0.25)',
-                      width: '100%',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    🧪 TEST: PREVIEW #03 MKS VIBE MODAL & SHARE
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -1043,297 +1013,6 @@ export default function NftClubPage() {
               ))}
             </div>
           </div>
-
-          {/* ── 👑 ADMIN-ONLY CONTROLS: SWAP & AUTO-BURN ── */}
-          {isAdmin && (
-            <div style={{
-              marginTop: '22px',
-              background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(4, 20, 48, 0.95))',
-              border: '2px dashed #ffd700',
-              borderRadius: '16px',
-              padding: '20px',
-              boxShadow: '0 0 30px rgba(255, 215, 0, 0.2)',
-              textAlign: 'left'
-            }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: '12px',
-                flexWrap: 'wrap',
-                gap: '8px'
-              }}>
-                <div style={{
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '10px',
-                  color: '#ffd700',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}>
-                  <span>👑</span> ADMIN PANEL: SWAP & AUTO-BURN
-                </div>
-                <div style={{
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '8px',
-                  color: '#00f5ff',
-                  background: 'rgba(0, 245, 255, 0.12)',
-                  padding: '4px 10px',
-                  borderRadius: '8px',
-                  border: '1px solid #00f5ff'
-                }}>
-                  CONTRACT ETH: {parseFloat(contractEthBalance || '0').toFixed(4)} ETH
-                </div>
-              </div>
-
-              {/* DEX Router Setup Warning / 1-Click Fix */}
-              {aggregatorRouterAddress?.toLowerCase() !== '0x6131b5fae19ea4f9d964eac0408e4408b66337b5'.toLowerCase() ? (
-                <div style={{
-                  marginBottom: '16px',
-                  padding: '12px',
-                  background: 'rgba(255, 68, 102, 0.15)',
-                  border: '1.5px solid #ff4466',
-                  borderRadius: '10px'
-                }}>
-                  <div style={{
-                    fontFamily: 'var(--vv-pixel)',
-                    fontSize: '8px',
-                    color: '#ff6688',
-                    marginBottom: '8px',
-                    lineHeight: 1.5
-                  }}>
-                    ⚠️ CONTRACT REQUIRES 1-CLICK ROUTER SYNC (O1 / KYBERSWAP DEX META-ROUTER):
-                  </div>
-                  <button
-                    onClick={executeSetAggregatorRouter}
-                    disabled={isSettingRouter}
-                    style={{
-                      width: '100%',
-                      padding: '10px',
-                      fontFamily: 'var(--vv-pixel)',
-                      fontSize: '8.5px',
-                      fontWeight: 900,
-                      background: 'linear-gradient(135deg, #00f5ff 0%, #00ff88 100%)',
-                      border: '2px solid #ffffff',
-                      borderRadius: '8px',
-                      color: '#020b1a',
-                      cursor: isSettingRouter ? 'not-allowed' : 'pointer',
-                      boxShadow: '0 0 16px rgba(0, 255, 136, 0.4)',
-                      textTransform: 'uppercase'
-                    }}
-                  >
-                    {isSettingRouter ? '⏳ CONNECTING ROUTER ON BASE...' : '⚡ 1-CLICK: CONNECT ON-CHAIN DEX SWAP ROUTER'}
-                  </button>
-                  {setRouterSuccess && (
-                    <div style={{ marginTop: '6px', color: '#00ff88', fontSize: '7.5px', fontFamily: 'var(--vv-pixel)' }}>
-                      ✓ DEX ROUTER CONNECTED SUCCESSFULLY!
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div style={{
-                  marginBottom: '14px',
-                  padding: '6px 10px',
-                  background: 'rgba(0, 255, 136, 0.1)',
-                  border: '1px solid #00ff88',
-                  borderRadius: '8px',
-                  color: '#00ff88',
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '7.5px'
-                }}>
-                  ✓ ON-CHAIN DEX ROUTER CONNECTED (0x6131...37b5)
-                </div>
-              )}
-
-              <p style={{
-                fontFamily: 'var(--vv-pixel)',
-                fontSize: '7.5px',
-                color: '#a0b5d0',
-                lineHeight: 1.6,
-                marginBottom: '14px',
-                textTransform: 'uppercase'
-              }}>
-                Execute `adminSwapAndBurn` with live DEX router calldata to swap contract ETH into $VIBE & burn 80% to Dead Address.
-              </p>
-
-              <div style={{
-                display: 'flex',
-                gap: '10px',
-                alignItems: 'center',
-                marginBottom: '12px',
-                flexWrap: 'wrap'
-              }}>
-                <div style={{ flex: 1, minWidth: '140px', position: 'relative' }}>
-                  <input
-                    type="number"
-                    step="0.001"
-                    min="0.0001"
-                    value={adminEthInput}
-                    onChange={(e) => setAdminEthInput(e.target.value)}
-                    placeholder="0.005"
-                    style={{
-                      width: '100%',
-                      background: 'rgba(2, 11, 26, 0.9)',
-                      border: '1.5px solid #ffd700',
-                      borderRadius: '10px',
-                      color: '#ffd700',
-                      fontFamily: 'var(--vv-pixel)',
-                      fontSize: '11px',
-                      padding: '10px 14px',
-                      outline: 'none',
-                      boxSizing: 'border-box'
-                    }}
-                  />
-                  <span style={{
-                    position: 'absolute',
-                    right: '12px',
-                    top: '11px',
-                    fontFamily: 'var(--vv-pixel)',
-                    fontSize: '9px',
-                    color: '#88aacc'
-                  }}>
-                    ETH
-                  </span>
-                </div>
-
-                {/* Quick Amount Buttons */}
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  {['0.001', '0.005', contractEthBalance || '0.005'].map((preset, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setAdminEthInput(Number(preset).toFixed(4))}
-                      style={{
-                        fontFamily: 'var(--vv-pixel)',
-                        fontSize: '8px',
-                        background: 'rgba(255, 215, 0, 0.15)',
-                        border: '1px solid rgba(255, 215, 0, 0.5)',
-                        color: '#ffd700',
-                        padding: '8px 10px',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontWeight: 900
-                      }}
-                    >
-                      {idx === 2 ? 'MAX' : `${preset}`}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Action Buttons Grid */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {/* Execute Swap Button */}
-                <button
-                  onClick={() => executeAdminSwapAndBurn(adminEthInput)}
-                  disabled={isAdminSwapping || isWithdrawingEth || parseFloat(adminEthInput || '0') <= 0}
-                  style={{
-                    width: '100%',
-                    height: '44px',
-                    fontFamily: 'var(--vv-pixel)',
-                    fontSize: '9.5px',
-                    fontWeight: 900,
-                    background: 'linear-gradient(135deg, #ffd700 0%, #ff4466 100%)',
-                    border: '2px solid #ffffff',
-                    borderRadius: '10px',
-                    color: '#ffffff',
-                    cursor: (isAdminSwapping || isWithdrawingEth) ? 'not-allowed' : 'pointer',
-                    boxShadow: '0 4px 16px rgba(255, 68, 102, 0.4)',
-                    letterSpacing: '0.5px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    textTransform: 'uppercase'
-                  }}
-                >
-                  {isAdminSwapping ? '⏳ SWAPPING & BURNING...' : `🔥 EXECUTE SWAP & BURN (${adminEthInput} ETH)`}
-                </button>
-
-                {/* Withdraw Contract ETH to Admin Wallet Button */}
-                <button
-                  onClick={executeWithdrawEth}
-                  disabled={isWithdrawingEth || isAdminSwapping || parseFloat(contractEthBalance || '0') <= 0}
-                  style={{
-                    width: '100%',
-                    height: '38px',
-                    fontFamily: 'var(--vv-pixel)',
-                    fontSize: '8.5px',
-                    fontWeight: 900,
-                    background: 'rgba(0, 245, 255, 0.12)',
-                    border: '1.5px solid #00f5ff',
-                    borderRadius: '10px',
-                    color: '#00f5ff',
-                    cursor: (isWithdrawingEth || isAdminSwapping) ? 'not-allowed' : 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '6px',
-                    textTransform: 'uppercase',
-                    boxShadow: '0 0 12px rgba(0, 245, 255, 0.2)'
-                  }}
-                >
-                  {isWithdrawingEth ? '⏳ WITHDRAWING ETH...' : `💸 WITHDRAW ALL ETH TO ADMIN WALLET (${parseFloat(contractEthBalance || '0').toFixed(4)} ETH)`}
-                </button>
-              </div>
-
-              {/* Status messages */}
-              {withdrawSuccess && (
-                <div style={{
-                  marginTop: '12px',
-                  padding: '10px',
-                  background: 'rgba(0, 255, 136, 0.15)',
-                  border: '1px solid #00ff88',
-                  borderRadius: '8px',
-                  color: '#00ff88',
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '8px',
-                  lineHeight: 1.6
-                }}>
-                  ✓ ETH WITHDRAWN TO ADMIN WALLET SUCCESSFULLY!
-                  {adminTxHash && (
-                    <div style={{ marginTop: '4px' }}>
-                      <a
-                        href={`https://basescan.org/tx/${adminTxHash}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: '#00f5ff', textDecoration: 'underline' }}
-                      >
-                        VIEW TRANSACTION ON BASESCAN ↗
-                      </a>
-                    </div>
-                  )}
-                </div>
-              )}
-              {adminSwapSuccess && (
-                <div style={{
-                  marginTop: '12px',
-                  padding: '10px',
-                  background: 'rgba(0, 255, 136, 0.15)',
-                  border: '1px solid #00ff88',
-                  borderRadius: '8px',
-                  color: '#00ff88',
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '8px',
-                  lineHeight: 1.6
-                }}>
-                  ✓ SWAP & AUTO-BURN EXECUTED ON BASE! 80% $VIBE BURNED!
-                  {adminTxHash && (
-                    <div style={{ marginTop: '4px' }}>
-                      <a
-                        href={`https://basescan.org/tx/${adminTxHash}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: '#00f5ff', textDecoration: 'underline' }}
-                      >
-                        VIEW TRANSACTION ON BASESCAN ↗
-                      </a>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
         {/* ── FAQ & VIBE CLUB BENEFITS SECTION ── */}
@@ -1564,6 +1243,297 @@ export default function NftClubPage() {
             </div>
           </div>
         </div>
+
+        {/* ── 👑 ADMIN-ONLY CONTROLS: SWAP & AUTO-BURN (AT THE VERY BOTTOM) ── */}
+        {isAdmin && (
+          <div style={{
+            marginTop: '36px',
+            background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(4, 20, 48, 0.95))',
+            border: '2px dashed #ffd700',
+            borderRadius: '16px',
+            padding: '24px',
+            boxShadow: '0 0 30px rgba(255, 215, 0, 0.2)',
+            textAlign: 'left'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '12px',
+              flexWrap: 'wrap',
+              gap: '8px'
+            }}>
+              <div style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '10px',
+                color: '#ffd700',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                <span>👑</span> ADMIN PANEL: SWAP & AUTO-BURN
+              </div>
+              <div style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '8px',
+                color: '#00f5ff',
+                background: 'rgba(0, 245, 255, 0.12)',
+                padding: '4px 10px',
+                borderRadius: '8px',
+                border: '1px solid #00f5ff'
+              }}>
+                CONTRACT ETH: {parseFloat(contractEthBalance || '0').toFixed(4)} ETH
+              </div>
+            </div>
+
+            {/* DEX Router Setup Warning / 1-Click Fix */}
+            {aggregatorRouterAddress?.toLowerCase() !== '0x6131b5fae19ea4f9d964eac0408e4408b66337b5'.toLowerCase() ? (
+              <div style={{
+                marginBottom: '16px',
+                padding: '12px',
+                background: 'rgba(255, 68, 102, 0.15)',
+                border: '1.5px solid #ff4466',
+                borderRadius: '10px'
+              }}>
+                <div style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8px',
+                  color: '#ff6688',
+                  marginBottom: '8px',
+                  lineHeight: 1.5
+                }}>
+                  ⚠️ CONTRACT REQUIRES 1-CLICK ROUTER SYNC (O1 / KYBERSWAP DEX META-ROUTER):
+                </div>
+                <button
+                  onClick={executeSetAggregatorRouter}
+                  disabled={isSettingRouter}
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '8.5px',
+                    fontWeight: 900,
+                    background: 'linear-gradient(135deg, #00f5ff 0%, #00ff88 100%)',
+                    border: '2px solid #ffffff',
+                    borderRadius: '8px',
+                    color: '#020b1a',
+                    cursor: isSettingRouter ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 0 16px rgba(0, 255, 136, 0.4)',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  {isSettingRouter ? '⏳ CONNECTING ROUTER ON BASE...' : '⚡ 1-CLICK: CONNECT ON-CHAIN DEX SWAP ROUTER'}
+                </button>
+                {setRouterSuccess && (
+                  <div style={{ marginTop: '6px', color: '#00ff88', fontSize: '7.5px', fontFamily: 'var(--vv-pixel)' }}>
+                    ✓ DEX ROUTER CONNECTED SUCCESSFULLY!
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div style={{
+                marginBottom: '14px',
+                padding: '6px 10px',
+                background: 'rgba(0, 255, 136, 0.1)',
+                border: '1px solid #00ff88',
+                borderRadius: '8px',
+                color: '#00ff88',
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '7.5px'
+              }}>
+                ✓ ON-CHAIN DEX ROUTER CONNECTED (0x6131...37b5)
+              </div>
+            )}
+
+            <p style={{
+              fontFamily: 'var(--vv-pixel)',
+              fontSize: '7.5px',
+              color: '#a0b5d0',
+              lineHeight: 1.6,
+              marginBottom: '14px',
+              textTransform: 'uppercase'
+            }}>
+              Execute `adminSwapAndBurn` with live DEX router calldata to swap contract ETH into $VIBE & burn 80% to Dead Address.
+            </p>
+
+            <div style={{
+              display: 'flex',
+              gap: '10px',
+              alignItems: 'center',
+              marginBottom: '12px',
+              flexWrap: 'wrap'
+            }}>
+              <div style={{ flex: 1, minWidth: '140px', position: 'relative' }}>
+                <input
+                  type="number"
+                  step="0.001"
+                  min="0.0001"
+                  value={adminEthInput}
+                  onChange={(e) => setAdminEthInput(e.target.value)}
+                  placeholder="0.005"
+                  style={{
+                    width: '100%',
+                    background: 'rgba(2, 11, 26, 0.9)',
+                    border: '1.5px solid #ffd700',
+                    borderRadius: '10px',
+                    color: '#ffd700',
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '11px',
+                    padding: '10px 14px',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+                <span style={{
+                  position: 'absolute',
+                  right: '12px',
+                  top: '11px',
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '9px',
+                  color: '#88aacc'
+                }}>
+                  ETH
+                </span>
+              </div>
+
+              {/* Quick Amount Buttons */}
+              <div style={{ display: 'flex', gap: '6px' }}>
+                {['0.001', '0.005', contractEthBalance || '0.005'].map((preset, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setAdminEthInput(Number(preset).toFixed(4))}
+                    style={{
+                      fontFamily: 'var(--vv-pixel)',
+                      fontSize: '8px',
+                      background: 'rgba(255, 215, 0, 0.15)',
+                      border: '1px solid rgba(255, 215, 0, 0.5)',
+                      color: '#ffd700',
+                      padding: '8px 10px',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      fontWeight: 900
+                    }}
+                  >
+                    {idx === 2 ? 'MAX' : `${preset}`}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Action Buttons Grid */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {/* Execute Swap Button */}
+              <button
+                onClick={() => executeAdminSwapAndBurn(adminEthInput)}
+                disabled={isAdminSwapping || isWithdrawingEth || parseFloat(adminEthInput || '0') <= 0}
+                style={{
+                  width: '100%',
+                  height: '44px',
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '9.5px',
+                  fontWeight: 900,
+                  background: 'linear-gradient(135deg, #ffd700 0%, #ff4466 100%)',
+                  border: '2px solid #ffffff',
+                  borderRadius: '10px',
+                  color: '#ffffff',
+                  cursor: (isAdminSwapping || isWithdrawingEth) ? 'not-allowed' : 'pointer',
+                  boxShadow: '0 4px 16px rgba(255, 68, 102, 0.4)',
+                  letterSpacing: '0.5px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  textTransform: 'uppercase'
+                }}
+              >
+                {isAdminSwapping ? '⏳ SWAPPING & BURNING...' : `🔥 EXECUTE SWAP & BURN (${adminEthInput} ETH)`}
+              </button>
+
+              {/* Withdraw Contract ETH to Admin Wallet Button */}
+              <button
+                onClick={executeWithdrawEth}
+                disabled={isWithdrawingEth || isAdminSwapping || parseFloat(contractEthBalance || '0') <= 0}
+                style={{
+                  width: '100%',
+                  height: '38px',
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8.5px',
+                  fontWeight: 900,
+                  background: 'rgba(0, 245, 255, 0.12)',
+                  border: '1.5px solid #00f5ff',
+                  borderRadius: '10px',
+                  color: '#00f5ff',
+                  cursor: (isWithdrawingEth || isAdminSwapping) ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  textTransform: 'uppercase',
+                  boxShadow: '0 0 12px rgba(0, 245, 255, 0.2)'
+                }}
+              >
+                {isWithdrawingEth ? '⏳ WITHDRAWING ETH...' : `💸 WITHDRAW ALL ETH TO ADMIN WALLET (${parseFloat(contractEthBalance || '0').toFixed(4)} ETH)`}
+              </button>
+            </div>
+
+            {/* Status messages */}
+            {withdrawSuccess && (
+              <div style={{
+                marginTop: '12px',
+                padding: '10px',
+                background: 'rgba(0, 255, 136, 0.15)',
+                border: '1px solid #00ff88',
+                borderRadius: '8px',
+                color: '#00ff88',
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '8px',
+                lineHeight: 1.6
+              }}>
+                ✓ ETH WITHDRAWN TO ADMIN WALLET SUCCESSFULLY!
+                {adminTxHash && (
+                  <div style={{ marginTop: '4px' }}>
+                    <a
+                      href={`https://basescan.org/tx/${adminTxHash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#00f5ff', textDecoration: 'underline' }}
+                    >
+                      VIEW TRANSACTION ON BASESCAN ↗
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
+            {adminSwapSuccess && (
+              <div style={{
+                marginTop: '12px',
+                padding: '10px',
+                background: 'rgba(0, 255, 136, 0.15)',
+                border: '1px solid #00ff88',
+                borderRadius: '8px',
+                color: '#00ff88',
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '8px',
+                lineHeight: 1.6
+              }}>
+                ✓ SWAP & AUTO-BURN EXECUTED ON BASE! 80% $VIBE BURNED!
+                {adminTxHash && (
+                  <div style={{ marginTop: '4px' }}>
+                    <a
+                      href={`https://basescan.org/tx/${adminTxHash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#00f5ff', textDecoration: 'underline' }}
+                    >
+                      VIEW TRANSACTION ON BASESCAN ↗
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* ── SUCCESS MINT MODAL POPUP ── */}
