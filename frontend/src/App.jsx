@@ -988,6 +988,7 @@ function DomainRouter() {
   return (
     <Routes>
       {/* ── Standalone VIBE Club NFT Mint Page ── */}
+      <Route path="/vibeclub" element={<NftClubPage />} />
       <Route path="/vibe-club" element={<NftClubPage />} />
       <Route path="/nft-club" element={<NftClubPage />} />
       <Route path="/nft" element={<NftClubPage />} />
