@@ -97,8 +97,10 @@ export default function NftClubPage() {
   const rawCharacterName = nftNames[currentNftId] || 'Maltipoo';
   const cleanCharacterName = rawCharacterName.replace(/^#\d+\s*/, '').replace(/#\d+/, '').trim() || 'VIBE';
 
+  const [testMintedId, setTestMintedId] = useState(null);
+
   // Details for Minted NFT Modal
-  const modalNftId = lastMintedId || 5;
+  const modalNftId = testMintedId || lastMintedId || 3;
   const modalRawName = nftNames[modalNftId] || 'Maltipoo';
   const modalCleanName = modalRawName.replace(/^#\d+\s*/, '').replace(/#\d+/, '').trim() || 'VIBE';
 
@@ -903,6 +905,36 @@ export default function NftClubPage() {
                     </button>
                   </>
                 )}
+
+                {/* ADMIN / TEST PREVIEW BUTTON FOR #3 MKS VIBE */}
+                <div style={{ marginTop: '8px', textAlign: 'center' }}>
+                  <button
+                    onClick={() => {
+                      setTestMintedId(3);
+                      setShowSuccessModal(true);
+                    }}
+                    style={{
+                      fontFamily: 'var(--vv-pixel)',
+                      background: 'rgba(255, 215, 0, 0.12)',
+                      border: '1.5px dashed #ffd700',
+                      color: '#ffd700',
+                      padding: '8px 14px',
+                      borderRadius: '8px',
+                      fontSize: '8px',
+                      cursor: 'pointer',
+                      fontWeight: 900,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      textTransform: 'uppercase',
+                      boxShadow: '0 0 12px rgba(255, 215, 0, 0.25)',
+                      width: '100%',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    🧪 TEST: PREVIEW #03 MKS VIBE MODAL & SHARE
+                  </button>
+                </div>
               </div>
             </div>
           </div>
