@@ -171,6 +171,20 @@ export function useVibeNftContract() {
 
       const receipt = await publicClient.waitForTransactionReceipt({ hash });
       if (receipt.status === 'success') {
+        let mintedId = null;
+        if (receipt.logs) {
+          const transferLog = receipt.logs.find((log) =>
+            log.address?.toLowerCase() === NFT_CONTRACT_ADDRESS.toLowerCase() &&
+            log.topics && log.topics[0] === '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
+          );
+          if (transferLog && transferLog.topics && transferLog.topics[3]) {
+            mintedId = Number(BigInt(transferLog.topics[3]));
+          }
+        }
+        if (!mintedId) {
+          mintedId = (totalMinted || 0) + 1;
+        }
+        setLastMintedId(mintedId);
         setMintSuccess(true);
         await fetchContractState();
       } else {
@@ -192,7 +206,7 @@ export function useVibeNftContract() {
     }
     setErrorMessage('');
     setMintSuccess(false);
-    setIsMintingVibe(true);
+    setIsMintingVibe(false);
 
     const amountToSend = customVibeAmountWei || vibePriceWei;
 
@@ -218,6 +232,8 @@ export function useVibeNftContract() {
         setIsApprovingVibe(false);
       }
 
+      setIsMintingVibe(true);
+
       // Execute Mint with VIBE
       const mintData = encodeFunctionData({
         abi: NFT_ABI,
@@ -230,6 +246,20 @@ export function useVibeNftContract() {
 
       const receipt = await publicClient.waitForTransactionReceipt({ hash });
       if (receipt.status === 'success') {
+        let mintedId = null;
+        if (receipt.logs) {
+          const transferLog = receipt.logs.find((log) =>
+            log.address?.toLowerCase() === NFT_CONTRACT_ADDRESS.toLowerCase() &&
+            log.topics && log.topics[0] === '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
+          );
+          if (transferLog && transferLog.topics && transferLog.topics[3]) {
+            mintedId = Number(BigInt(transferLog.topics[3]));
+          }
+        }
+        if (!mintedId) {
+          mintedId = (totalMinted || 0) + 1;
+        }
+        setLastMintedId(mintedId);
         setMintSuccess(true);
         await fetchContractState();
       } else {
