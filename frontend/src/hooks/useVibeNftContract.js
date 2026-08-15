@@ -36,7 +36,9 @@ const NFT_ABI = parseAbi([
   'function mintWithETH() payable',
   'function mintWithVIBE(uint256 vibeAmount) external',
   'function mintWithVIBE() external',
-  'function adminSwapAndBurn(uint256 ethAmount, bytes customSwapCalldata) external'
+  'function adminSwapAndBurn(uint256 ethAmount, bytes customSwapCalldata) external',
+  'function withdrawETH() external',
+  'function executeManualBurn(uint256 vibeAmount) external'
 ]);
 
 const ERC20_ABI = parseAbi([
@@ -345,6 +347,44 @@ export function useVibeNftContract() {
     }
   };
 
+  // 4. Admin Withdraw ETH from contract
+  const [isWithdrawingEth, setIsWithdrawingEth] = useState(false);
+  const [withdrawSuccess, setWithdrawSuccess] = useState(false);
+
+  const executeWithdrawEth = async () => {
+    if (!authenticated || !walletAddress) {
+      login();
+      return;
+    }
+    setErrorMessage('');
+    setWithdrawSuccess(false);
+    setIsWithdrawingEth(true);
+    setAdminTxHash('');
+
+    try {
+      const dataHex = encodeFunctionData({
+        abi: NFT_ABI,
+        functionName: 'withdrawETH'
+      });
+
+      const hash = await sendWeb3Transaction(NFT_CONTRACT_ADDRESS, BigInt(0), withBuilderCode(dataHex), '0x7A120');
+      setAdminTxHash(hash);
+
+      const receipt = await publicClient.waitForTransactionReceipt({ hash });
+      if (receipt.status === 'success') {
+        setWithdrawSuccess(true);
+        await fetchContractState();
+      } else {
+        throw new Error('Withdraw ETH reverted on Base');
+      }
+    } catch (e) {
+      console.error('Withdraw ETH failed:', e);
+      setErrorMessage(e?.shortMessage || e?.message || 'Withdraw ETH failed');
+    } finally {
+      setIsWithdrawingEth(false);
+    }
+  };
+
   return {
     contractAddress: NFT_CONTRACT_ADDRESS,
     totalMinted,
@@ -364,6 +404,8 @@ export function useVibeNftContract() {
     isAdminSwapping,
     adminSwapSuccess,
     adminTxHash,
+    isWithdrawingEth,
+    withdrawSuccess,
     txHash,
     lastMintedId,
     errorMessage,
@@ -371,6 +413,7 @@ export function useVibeNftContract() {
     mintWithETH,
     mintWithVIBE,
     executeAdminSwapAndBurn,
+    executeWithdrawEth,
     refetch: fetchContractState
   };
 }
