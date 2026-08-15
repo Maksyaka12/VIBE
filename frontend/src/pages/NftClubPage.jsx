@@ -1327,15 +1327,21 @@ export default function NftClubPage() {
               🎉 MINT SUCCESSFUL!
             </div>
 
-            {/* HEADER TITLE (CLEAN NO DUPLICATE) */}
+            {/* HEADER TITLE (100% CENTERED & RESPONSIVE FOR LONG NAMES) */}
             <h2 style={{
               fontFamily: 'var(--vv-pixel)',
-              fontSize: '12px',
+              fontSize: '11px',
               color: '#00f5ff',
               textShadow: '0 0 14px rgba(0, 245, 255, 0.5)',
-              margin: '6px 0 14px 0',
-              lineHeight: 1.4,
-              letterSpacing: '0.4px'
+              margin: '8px auto 14px auto',
+              lineHeight: 1.5,
+              letterSpacing: '0.4px',
+              textAlign: 'center',
+              width: '100%',
+              wordBreak: 'break-word',
+              overflowWrap: 'break-word',
+              padding: '0 16px',
+              boxSizing: 'border-box'
             }}>
               VIBE CLUB #{modalNftId} {modalCleanName.toUpperCase()}
             </h2>
