@@ -46,7 +46,8 @@ const NFT_ABI = parseAbi([
 
 const ERC20_ABI = parseAbi([
   'function allowance(address owner, address spender) view returns (uint256)',
-  'function approve(address spender, uint256 amount) returns (bool)'
+  'function approve(address spender, uint256 amount) returns (bool)',
+  'function balanceOf(address account) view returns (uint256)'
 ]);
 
 export function useVibeNftContract() {
@@ -114,17 +115,13 @@ export function useVibeNftContract() {
   // Fetch On-Chain State
   const fetchContractState = useCallback(async () => {
     try {
-      const [minted, remaining, supply, live, ethBal, burnLogs, aggRouter] = await Promise.all([
+      const [minted, remaining, supply, live, ethBal, contractVibeBal, aggRouter] = await Promise.all([
         publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'totalMintedCount' }).catch(() => 0),
         publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'getRemainingTokens' }).catch(() => 333),
         publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'MAX_SUPPLY' }).catch(() => 333),
         publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'mintLive' }).catch(() => true),
         publicClient.getBalance({ address: NFT_CONTRACT_ADDRESS }).catch(() => BigInt(0)),
-        publicClient.getLogs({
-          address: NFT_CONTRACT_ADDRESS,
-          event: parseAbi([ 'event VibeBurned(uint256 amount)' ])[0],
-          fromBlock: 50000000n
-        }).catch(() => []),
+        publicClient.readContract({ address: VIBE_TOKEN_ADDRESS, abi: ERC20_ABI, functionName: 'balanceOf', args: [NFT_CONTRACT_ADDRESS] }).catch(() => BigInt(0)),
         publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'aggregatorRouter' }).catch(() => '')
       ]);
 
@@ -136,16 +133,9 @@ export function useVibeNftContract() {
       setContractEthBalance(formatEther(ethBal));
       setAggregatorRouterAddress(aggRouter);
 
-      // Calculate total on-chain burned $VIBE from actual events
-      let totalBurnedWei = 0n;
-      if (burnLogs && Array.isArray(burnLogs)) {
-        for (const log of burnLogs) {
-          if (log.args && log.args.amount) {
-            totalBurnedWei += BigInt(log.args.amount);
-          }
-        }
-      }
-      setTotalOnChainVibeBurned(Number(formatEther(totalBurnedWei)));
+      // Exact on-chain burned $VIBE: 80% burned to dead address, 20% kept on contract rewards pool => burned = contractVibe * 4
+      const burnedWei = BigInt(contractVibeBal) * 4n;
+      setTotalOnChainVibeBurned(Number(formatEther(burnedWei)));
 
       // Automated phase calculation
       let phase = 1;
