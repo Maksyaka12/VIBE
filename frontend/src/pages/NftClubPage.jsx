@@ -29,6 +29,7 @@ export default function NftClubPage() {
     currentPhase,
     ethPriceFormatted,
     contractEthBalance,
+    totalOnChainVibeBurned,
     hasMinted,
     isMintingEth,
     isMintingVibe,
@@ -66,16 +67,17 @@ export default function NftClubPage() {
       try {
         const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/0xb200000000000000000000df24ecb8bf51100a01');
         const data = await res.json();
-        const pair = data?.pairs?.[0];
-        if (pair && pair.priceNative && isMounted) {
-          const priceNativeFloat = parseFloat(pair.priceNative);
-          if (priceNativeFloat > 0) {
-            const calculatedRatio = Math.floor(1 / priceNativeFloat);
+        if (data?.pairs && data.pairs.length > 0) {
+          const mainPair = data.pairs[0];
+          const ethPriceInUsd = parseFloat(mainPair.priceNative) ? (parseFloat(mainPair.priceUsd) / parseFloat(mainPair.priceNative)) : 2700;
+          const vibePriceInUsd = parseFloat(mainPair.priceUsd) || 0.00005;
+          if (vibePriceInUsd > 0 && isMounted) {
+            const calculatedRatio = Math.round(ethPriceInUsd / vibePriceInUsd);
             setVibePerEthRatio(calculatedRatio);
           }
         }
       } catch (e) {
-        console.error('Error fetching DEX VIBE price:', e);
+        console.error('Error fetching VIBE live price:', e);
       }
     }
 
@@ -98,6 +100,9 @@ export default function NftClubPage() {
   // Current dynamic $VIBE price based on active phase
   const ethPriceNum = parseFloat(ethPriceFormatted) || 0.005;
   const currentDynamicVibeAmount = Math.floor(ethPriceNum * vibePerEthRatio);
+
+  // Exact on-chain burned $VIBE (0 if swap hasn't executed yet)
+  const totalVibeBurnedByContract = totalOnChainVibeBurned;
 
   const currentNftId = NFT_DECK[deckIndex];
 
@@ -159,9 +164,6 @@ export default function NftClubPage() {
     const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
     window.open(shareUrl, '_blank', 'noopener,noreferrer');
   };
-
-  // Total $VIBE burned strictly by this NFT mint contract
-  const totalVibeBurnedByContract = Math.floor(totalMinted * currentDynamicVibeAmount * 0.8);
 
   // 4 Mint Phases definition
   const phases = [
