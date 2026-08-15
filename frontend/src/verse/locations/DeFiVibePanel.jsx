@@ -237,43 +237,85 @@ export default function DeFiVibePanel({ player }) {
       (w) => w.address?.toLowerCase() === rawAddress?.toLowerCase()
     ) || wallets[0];
 
-    if (connectedWallet) {
-      const provider = await connectedWallet.getEthereumProvider();
-      const hash = await provider.request({
-        method: 'eth_sendTransaction',
-        params: [{
-          from: rawAddress,
+    const provider = connectedWallet ? await connectedWallet.getEthereumProvider() : window.ethereum;
+
+    if (!provider) {
+      if (sendTransaction) {
+        const res = await sendTransaction({
           to,
-          value: valueBigInt ? '0x' + valueBigInt.toString(16) : '0x0',
+          value: valueBigInt,
           data: dataHex
-        }]
-      });
-      return hash;
+        });
+        return res?.transactionHash || res?.hash || '';
+      }
+      throw new Error('No active Web3 wallet found');
     }
 
-    if (window.ethereum) {
-      const hash = await window.ethereum.request({
-        method: 'eth_sendTransaction',
+    const valueHex = valueBigInt ? '0x' + valueBigInt.toString(16) : '0x0';
+    const calldataWithSuffix = dataHex.includes(BUILDER_CODE_HEX) ? dataHex : dataHex + BUILDER_CODE_HEX;
+
+    // 1. Try EIP-5792 wallet_sendCalls for Base Smart Wallet / Coinbase Smart Wallet / Base App / Mobile
+    try {
+      const callsResponse = await provider.request({
+        method: 'wallet_sendCalls',
         params: [{
+          version: '1.0',
+          chainId: '0x2105', // Base Mainnet (8453)
           from: rawAddress,
-          to,
-          value: valueBigInt ? '0x' + valueBigInt.toString(16) : '0x0',
-          data: dataHex
+          calls: [{
+            to,
+            value: valueHex,
+            data: calldataWithSuffix
+          }],
+          capabilities: {
+            dataSuffix: {
+              value: '0x' + BUILDER_CODE_HEX,
+              optional: true
+            }
+          }
         }]
       });
-      return hash;
+
+      if (callsResponse) {
+        if (typeof callsResponse === 'string' && callsResponse.startsWith('0x') && callsResponse.length === 66) {
+          return callsResponse;
+        }
+        const callId = typeof callsResponse === 'object' ? (callsResponse.id || callsResponse) : callsResponse;
+        for (let i = 0; i < 30; i++) {
+          await new Promise((r) => setTimeout(r, 1000));
+          try {
+            const status = await provider.request({
+              method: 'wallet_getCallsStatus',
+              params: [callId]
+            });
+            if (status?.receipts?.[0]?.transactionHash) {
+              return status.receipts[0].transactionHash;
+            }
+            if (status?.status === 'CONFIRMED' || status?.status === 'SUCCESS') {
+              if (status.receipts?.[0]?.transactionHash) return status.receipts[0].transactionHash;
+              return callId;
+            }
+          } catch (err) {
+            // Ignore polling errors
+          }
+        }
+        return callId;
+      }
+    } catch (e) {
+      console.log('wallet_sendCalls not supported, falling back to eth_sendTransaction:', e?.message || e);
     }
 
-    if (sendTransaction) {
-      const res = await sendTransaction({
+    // 2. Fallback to standard eth_sendTransaction with data suffix for EOA (MetaMask, Rabby, etc.)
+    const hash = await provider.request({
+      method: 'eth_sendTransaction',
+      params: [{
+        from: rawAddress,
         to,
-        value: valueBigInt,
-        data: dataHex
-      });
-      return res?.transactionHash || res?.hash || '';
-    }
-
-    throw new Error('No active Web3 wallet found');
+        value: valueHex,
+        data: calldataWithSuffix
+      }]
+    });
+    return hash;
   };
 
   const handleToggleMode = () => {
