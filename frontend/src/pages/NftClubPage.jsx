@@ -167,7 +167,7 @@ export default function NftClubPage() {
 
   // Share on X (Twitter Intent with rich formatting)
   const handleShareOnX = () => {
-    const tweetText = `I JOINED 333 VIBE CLUB 🐶🔥\n\nVibe Club – the first NFT collection officially integrated into @o1_exchange B20 ecosystem & directly related to $VIBE B20 economy 💎\n\nI grabbed Vibe Club #${modalNftId} ${modalCleanName.toUpperCase()} 🐶\n\nMint yours (FCFS) → https://vibeverse.dog/vibe-club`;
+    const tweetText = `I JOINED 333 VIBE CLUB 🐶🔥\n\nVibe Club – the first NFT collection officially integrated into @o1_exchange B20 ecosystem & directly related to $VIBE B20 economy\n\nI grabbed Vibe Club #${modalNftId} ${modalCleanName.toUpperCase()} 🐶\n\nMint yours (FCFS) → https://vibeverse.dog/vibeclub`;
     const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
     window.open(shareUrl, '_blank', 'noopener,noreferrer');
   };
