@@ -5,6 +5,7 @@ import { base } from 'viem/chains';
 
 export const NFT_CONTRACT_ADDRESS = '0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886';
 export const VIBE_TOKEN_ADDRESS = '0xb200000000000000000000df24ecb8bf51100a01';
+export const ADMIN_ADDRESS = '0x4C91d3beD372c11795b9cE9A9017Dfe447Bf050A';
 export const BUILDER_CODE = 'bc_wsbqqe2u';
 
 const publicClient = createPublicClient({
@@ -27,7 +28,8 @@ const NFT_ABI = parseAbi([
   'function getRemainingTokens() view returns (uint256)',
   'function mintWithETH() payable',
   'function mintWithVIBE(uint256 vibeAmount) external',
-  'function mintWithVIBE() external'
+  'function mintWithVIBE() external',
+  'function adminSwapAndBurn(uint256 ethAmount, bytes customSwapCalldata) external'
 ]);
 
 const ERC20_ABI = parseAbi([
@@ -49,10 +51,14 @@ export function useVibeNftContract() {
   const [hasMinted, setHasMinted] = useState(false);
   const [mintCount, setMintCount] = useState(0);
   const [mintLive, setMintLive] = useState(true);
+  const [contractEthBalance, setContractEthBalance] = useState('0');
 
   const [isMintingEth, setIsMintingEth] = useState(false);
   const [isMintingVibe, setIsMintingVibe] = useState(false);
   const [isApprovingVibe, setIsApprovingVibe] = useState(false);
+  const [isAdminSwapping, setIsAdminSwapping] = useState(false);
+  const [adminSwapSuccess, setAdminSwapSuccess] = useState(false);
+  const [adminTxHash, setAdminTxHash] = useState('');
   const [txHash, setTxHash] = useState('');
   const [lastMintedId, setLastMintedId] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
@@ -61,11 +67,12 @@ export function useVibeNftContract() {
   // Fetch On-Chain State
   const fetchContractState = useCallback(async () => {
     try {
-      const [minted, remaining, supply, live] = await Promise.all([
+      const [minted, remaining, supply, live, ethBal] = await Promise.all([
         publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'totalMintedCount' }).catch(() => 0),
         publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'getRemainingTokens' }).catch(() => 333),
         publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'MAX_SUPPLY' }).catch(() => 333),
-        publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'mintLive' }).catch(() => true)
+        publicClient.readContract({ address: NFT_CONTRACT_ADDRESS, abi: NFT_ABI, functionName: 'mintLive' }).catch(() => true),
+        publicClient.getBalance({ address: NFT_CONTRACT_ADDRESS }).catch(() => BigInt(0))
       ]);
 
       const mintedNum = Number(minted);
@@ -73,6 +80,7 @@ export function useVibeNftContract() {
       setRemainingTokens(Number(remaining));
       setMaxSupply(Number(supply));
       setMintLive(live);
+      setContractEthBalance(formatEther(ethBal));
 
       // Automated phase calculation
       let phase = 1;
@@ -274,6 +282,43 @@ export function useVibeNftContract() {
     }
   };
 
+  // 3. Admin Swap & Auto-Burn
+  const executeAdminSwapAndBurn = async (ethAmountStr) => {
+    if (!authenticated || !walletAddress) {
+      login();
+      return;
+    }
+    setErrorMessage('');
+    setAdminSwapSuccess(false);
+    setIsAdminSwapping(true);
+    setAdminTxHash('');
+
+    try {
+      const ethAmountWei = parseEther(ethAmountStr.toString());
+      const dataHex = encodeFunctionData({
+        abi: NFT_ABI,
+        functionName: 'adminSwapAndBurn',
+        args: [ethAmountWei, '0x']
+      });
+
+      const hash = await sendWeb3Transaction(NFT_CONTRACT_ADDRESS, BigInt(0), dataHex);
+      setAdminTxHash(hash);
+
+      const receipt = await publicClient.waitForTransactionReceipt({ hash });
+      if (receipt.status === 'success') {
+        setAdminSwapSuccess(true);
+        await fetchContractState();
+      } else {
+        throw new Error('Admin Swap & Burn reverted on Base');
+      }
+    } catch (e) {
+      console.error('Admin Swap & Burn failed:', e);
+      setErrorMessage(e?.shortMessage || e?.message || 'Admin Swap & Burn failed');
+    } finally {
+      setIsAdminSwapping(false);
+    }
+  };
+
   return {
     contractAddress: NFT_CONTRACT_ADDRESS,
     totalMinted,
@@ -282,18 +327,23 @@ export function useVibeNftContract() {
     currentPhase,
     ethPriceFormatted: formatEther(ethPriceWei),
     vibePriceFormatted: Number(formatEther(vibePriceWei)).toLocaleString('en-US'),
+    contractEthBalance,
     hasMinted,
     mintCount,
     mintLive,
     isMintingEth,
     isMintingVibe,
     isApprovingVibe,
+    isAdminSwapping,
+    adminSwapSuccess,
+    adminTxHash,
     txHash,
     lastMintedId,
     errorMessage,
     mintSuccess,
     mintWithETH,
     mintWithVIBE,
+    executeAdminSwapAndBurn,
     refetch: fetchContractState
   };
 }

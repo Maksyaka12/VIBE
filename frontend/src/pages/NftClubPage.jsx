@@ -28,21 +28,29 @@ export default function NftClubPage() {
     maxSupply,
     currentPhase,
     ethPriceFormatted,
+    contractEthBalance,
     hasMinted,
     isMintingEth,
     isMintingVibe,
     isApprovingVibe,
+    isAdminSwapping,
+    adminSwapSuccess,
+    adminTxHash,
     txHash,
     lastMintedId,
     errorMessage,
     mintSuccess,
     mintWithETH,
-    mintWithVIBE
+    mintWithVIBE,
+    executeAdminSwapAndBurn
   } = useVibeNftContract();
 
   const [deckIndex, setDeckIndex] = useState(0);
   const [vibePerEthRatio, setVibePerEthRatio] = useState(50000000); // 1 ETH = ~50M VIBE fallback
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [adminEthInput, setAdminEthInput] = useState('0.005');
+
+  const isAdmin = walletAddress?.toLowerCase() === '0x4c91d3bed372c11795b9ce9a9017dfe447bf050a';
 
   // Auto show success modal when mint completes
   useEffect(() => {
@@ -1026,6 +1034,182 @@ export default function NftClubPage() {
               ))}
             </div>
           </div>
+
+          {/* ── 👑 ADMIN-ONLY CONTROLS: SWAP & AUTO-BURN ── */}
+          {isAdmin && (
+            <div style={{
+              marginTop: '22px',
+              background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(4, 20, 48, 0.95))',
+              border: '2px dashed #ffd700',
+              borderRadius: '16px',
+              padding: '20px',
+              boxShadow: '0 0 30px rgba(255, 215, 0, 0.2)',
+              textAlign: 'left'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '12px',
+                flexWrap: 'wrap',
+                gap: '8px'
+              }}>
+                <div style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '10px',
+                  color: '#ffd700',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <span>👑</span> ADMIN PANEL: SWAP & AUTO-BURN
+                </div>
+                <div style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8px',
+                  color: '#00f5ff',
+                  background: 'rgba(0, 245, 255, 0.12)',
+                  padding: '4px 10px',
+                  borderRadius: '8px',
+                  border: '1px solid #00f5ff'
+                }}>
+                  CONTRACT ETH: {parseFloat(contractEthBalance || '0').toFixed(4)} ETH
+                </div>
+              </div>
+
+              <p style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '7.5px',
+                color: '#a0b5d0',
+                lineHeight: 1.6,
+                marginBottom: '14px',
+                textTransform: 'uppercase'
+              }}>
+                Trigger on-chain `adminSwapAndBurn` to swap contract ETH into $VIBE via O1 router & burn 80% to Dead Address.
+              </p>
+
+              <div style={{
+                display: 'flex',
+                gap: '10px',
+                alignItems: 'center',
+                marginBottom: '12px',
+                flexWrap: 'wrap'
+              }}>
+                <div style={{ flex: 1, minWidth: '140px', position: 'relative' }}>
+                  <input
+                    type="number"
+                    step="0.001"
+                    min="0.0001"
+                    value={adminEthInput}
+                    onChange={(e) => setAdminEthInput(e.target.value)}
+                    placeholder="0.005"
+                    style={{
+                      width: '100%',
+                      background: 'rgba(2, 11, 26, 0.9)',
+                      border: '1.5px solid #ffd700',
+                      borderRadius: '10px',
+                      color: '#ffd700',
+                      fontFamily: 'var(--vv-pixel)',
+                      fontSize: '11px',
+                      padding: '10px 14px',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                  <span style={{
+                    position: 'absolute',
+                    right: '12px',
+                    top: '11px',
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '9px',
+                    color: '#88aacc'
+                  }}>
+                    ETH
+                  </span>
+                </div>
+
+                {/* Quick Amount Buttons */}
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  {['0.001', '0.005', contractEthBalance || '0.005'].map((preset, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setAdminEthInput(Number(preset).toFixed(4))}
+                      style={{
+                        fontFamily: 'var(--vv-pixel)',
+                        fontSize: '8px',
+                        background: 'rgba(255, 215, 0, 0.15)',
+                        border: '1px solid rgba(255, 215, 0, 0.5)',
+                        color: '#ffd700',
+                        padding: '8px 10px',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 900
+                      }}
+                    >
+                      {idx === 2 ? 'MAX' : `${preset}`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Execute Button */}
+              <button
+                onClick={() => executeAdminSwapAndBurn(adminEthInput)}
+                disabled={isAdminSwapping || parseFloat(adminEthInput || '0') <= 0}
+                style={{
+                  width: '100%',
+                  height: '44px',
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '9.5px',
+                  fontWeight: 900,
+                  background: 'linear-gradient(135deg, #ffd700 0%, #ff4466 100%)',
+                  border: '2px solid #ffffff',
+                  borderRadius: '10px',
+                  color: '#ffffff',
+                  cursor: isAdminSwapping ? 'not-allowed' : 'pointer',
+                  boxShadow: '0 4px 16px rgba(255, 68, 102, 0.4)',
+                  letterSpacing: '0.5px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  textTransform: 'uppercase'
+                }}
+              >
+                {isAdminSwapping ? '⏳ SWAPPING & BURNING...' : `🔥 EXECUTE SWAP & BURN (${adminEthInput} ETH)`}
+              </button>
+
+              {/* Status messages */}
+              {adminSwapSuccess && (
+                <div style={{
+                  marginTop: '12px',
+                  padding: '10px',
+                  background: 'rgba(0, 255, 136, 0.15)',
+                  border: '1px solid #00ff88',
+                  borderRadius: '8px',
+                  color: '#00ff88',
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8px',
+                  lineHeight: 1.6
+                }}>
+                  ✓ SWAP & AUTO-BURN EXECUTED ON BASE! 80% $VIBE BURNED!
+                  {adminTxHash && (
+                    <div style={{ marginTop: '4px' }}>
+                      <a
+                        href={`https://basescan.org/tx/${adminTxHash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: '#00f5ff', textDecoration: 'underline' }}
+                      >
+                        VIEW TRANSACTION ON BASESCAN ↗
+                      </a>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* ── FAQ & VIBE CLUB BENEFITS SECTION ── */}
