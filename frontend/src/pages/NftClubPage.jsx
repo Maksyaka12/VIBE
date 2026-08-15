@@ -33,6 +33,7 @@ export default function NftClubPage() {
     isMintingVibe,
     isApprovingVibe,
     txHash,
+    lastMintedId,
     errorMessage,
     mintSuccess,
     mintWithETH,
@@ -41,6 +42,14 @@ export default function NftClubPage() {
 
   const [deckIndex, setDeckIndex] = useState(0);
   const [vibePerEthRatio, setVibePerEthRatio] = useState(50000000); // 1 ETH = ~50M VIBE fallback
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  // Auto show success modal when mint completes
+  useEffect(() => {
+    if (mintSuccess) {
+      setShowSuccessModal(true);
+    }
+  }, [mintSuccess]);
 
   // Fetch live $VIBE pool price from DEX Screener on Base
   useEffect(() => {
@@ -88,8 +97,40 @@ export default function NftClubPage() {
   const rawCharacterName = nftNames[currentNftId] || 'Maltipoo';
   const cleanCharacterName = rawCharacterName.replace(/^#\d+\s*/, '').replace(/#\d+/, '').trim() || 'VIBE';
 
+  // Details for Minted NFT Modal
+  const modalNftId = lastMintedId || 5;
+  const modalRawName = nftNames[modalNftId] || 'Maltipoo';
+  const modalCleanName = modalRawName.replace(/^#\d+\s*/, '').replace(/#\d+/, '').trim() || 'VIBE';
+
   const formatVibeComma = (amount) => {
     return Number(amount).toLocaleString('en-US') + ' $VIBE';
+  };
+
+  // Download NFT Image to device
+  const handleSaveImage = async () => {
+    const imageUrl = `/nft/images/${modalNftId}.png`;
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `Vibe_Club_${modalNftId}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (e) {
+      console.error('Download error:', e);
+      window.open(imageUrl, '_blank');
+    }
+  };
+
+  // Share on X (Twitter Intent with rich formatting)
+  const handleShareOnX = () => {
+    const tweetText = `I joined Vibe Club — Genesis phase of Vibe Verse & became part of the $VIBE culture! 🐾💎\n\nI minted NFT — Vibe Club #${modalNftId} ${modalCleanName.toUpperCase()}! 🔥\n\nJoin Vibe Club to unlock exclusive perks and lock yourself in the $VIBE economy with lifetime dividends! 🚀\n\nhttps://vibeverse.dog/nft-club`;
+    const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+    window.open(shareUrl, '_blank', 'noopener,noreferrer');
   };
 
   // Total $VIBE burned strictly by this NFT mint contract
@@ -763,14 +804,33 @@ export default function NftClubPage() {
                     boxShadow: '0 0 16px rgba(0, 255, 136, 0.3)'
                   }}>
                     ✓ YOU HAVE MINTED (1/1 MAX)
-                    <div style={{ marginTop: '6px' }}>
+                    <div style={{ marginTop: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                      <button
+                        onClick={() => setShowSuccessModal(true)}
+                        style={{
+                          fontFamily: 'var(--vv-pixel)',
+                          background: 'rgba(0, 245, 255, 0.15)',
+                          border: '1.5px solid #00f5ff',
+                          color: '#00f5ff',
+                          padding: '6px 12px',
+                          borderRadius: '8px',
+                          fontSize: '8px',
+                          cursor: 'pointer',
+                          fontWeight: 900,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px'
+                        }}
+                      >
+                        🎉 VIEW MINT CARD & SHARE
+                      </button>
                       <a
                         href={`https://opensea.io/assets/base/${NFT_CONTRACT_ADDRESS}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{ color: '#00f5ff', textDecoration: 'underline', fontSize: '8px' }}
                       >
-                        VIEW YOUR NFT ON OPENSEA ↗
+                        VIEW ON OPENSEA ↗
                       </a>
                     </div>
                   </div>
@@ -1148,6 +1208,173 @@ export default function NftClubPage() {
           </div>
         </div>
       </div>
+
+      {/* ── SUCCESS MINT MODAL POPUP ── */}
+      {showSuccessModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 5, 17, 0.88)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '20px'
+        }}>
+          <div style={{
+            background: 'linear-gradient(145deg, rgba(4, 20, 48, 0.96), rgba(2, 11, 26, 0.98))',
+            border: '2px solid #00f5ff',
+            borderRadius: '24px',
+            padding: '28px 24px',
+            maxWidth: '400px',
+            width: '100%',
+            boxShadow: '0 0 50px rgba(0, 245, 255, 0.4), 0 20px 60px rgba(0, 0, 0, 0.9)',
+            position: 'relative',
+            textAlign: 'center',
+            boxSizing: 'border-box'
+          }}>
+            {/* CLOSE BUTTON (X) */}
+            <button
+              onClick={() => setShowSuccessModal(false)}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(0, 245, 255, 0.4)',
+                color: '#00f5ff',
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                fontSize: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 'bold',
+                zIndex: 10
+              }}
+            >
+              ✕
+            </button>
+
+            {/* CELEBRATION BADGE */}
+            <div style={{
+              fontSize: '8px',
+              color: '#00ff88',
+              letterSpacing: '1px',
+              marginBottom: '8px',
+              background: 'rgba(0, 255, 136, 0.12)',
+              border: '1px solid #00ff88',
+              padding: '4px 12px',
+              borderRadius: '12px',
+              display: 'inline-block'
+            }}>
+              🎉 MINT SUCCESSFUL!
+            </div>
+
+            {/* HEADER TITLE */}
+            <h2 style={{
+              fontFamily: 'var(--vv-pixel)',
+              fontSize: '12px',
+              color: '#00f5ff',
+              textShadow: '0 0 14px rgba(0, 245, 255, 0.5)',
+              margin: '6px 0 16px 0',
+              lineHeight: 1.4,
+              letterSpacing: '0.4px'
+            }}>
+              VIBE CLUB #{modalNftId} {modalCleanName.toUpperCase()}<br/>
+              <span style={{ color: '#ffffff', fontSize: '9px' }}>SUCCESSFULLY MINTED!</span>
+            </h2>
+
+            {/* NFT IMAGE DISPLAY */}
+            <div style={{
+              position: 'relative',
+              borderRadius: '16px',
+              overflow: 'hidden',
+              border: '2px solid #00f5ff',
+              boxShadow: '0 0 24px rgba(0, 245, 255, 0.3)',
+              aspectRatio: '1/1',
+              maxWidth: '260px',
+              margin: '0 auto 20px auto',
+              background: '#020b1a'
+            }}>
+              <img
+                src={`/nft/images/${modalNftId}.png`}
+                onError={(e) => handleImageError(e, modalNftId)}
+                alt={`Vibe Club #${modalNftId}`}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block'
+                }}
+              />
+            </div>
+
+            {/* ACTION BUTTONS (SAVE IMAGE + SHARE ON X) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {/* 1. SAVE IMAGE BUTTON */}
+              <button
+                onClick={handleSaveImage}
+                style={{
+                  width: '100%',
+                  height: '44px',
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '10px',
+                  fontWeight: 900,
+                  background: 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)',
+                  border: '2px solid #ffffff',
+                  borderRadius: '12px',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 16px rgba(0, 245, 255, 0.4)',
+                  letterSpacing: '0.5px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px'
+                }}
+              >
+                📥 SAVE IMAGE
+              </button>
+
+              {/* 2. SHARE ON X BUTTON */}
+              <button
+                onClick={handleShareOnX}
+                style={{
+                  width: '100%',
+                  height: '44px',
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '10px',
+                  fontWeight: 900,
+                  background: '#000000',
+                  border: '2px solid #1da1f2',
+                  borderRadius: '12px',
+                  color: '#1da1f2',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 16px rgba(29, 161, 242, 0.3)',
+                  letterSpacing: '0.5px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px'
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                SHARE ON X
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
