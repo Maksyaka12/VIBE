@@ -122,7 +122,7 @@ export default function VibeVerseLockScreen() {
 
       {/* Primary Action Button -> Go to NFT Mint Page */}
       <button
-        onClick={() => navigate('/nft-club')}
+        onClick={() => navigate('/vibe-club')}
         className="vv-lock-btn"
         style={{
           fontFamily: 'var(--vv-pixel)',
