@@ -167,10 +167,35 @@ export default function NftClubPage() {
 
   // Share on X (Twitter Intent with rich formatting)
   const handleShareOnX = () => {
-    const tweetText = `I joined Vibe Club — Genesis phase of Vibe Verse & became part of the $VIBE culture! 🐾💎\n\nI minted NFT — Vibe Club #${modalNftId} ${modalCleanName.toUpperCase()}! 🔥\n\nJoin Vibe Club to unlock exclusive perks and lock yourself in the $VIBE economy with lifetime dividends! 🚀\n\nhttps://vibeverse.dog/nft-club`;
+    const tweetText = `I JOINED 333 VIBE CLUB 🐾🔥\n\nVibe Club – the first NFT collection officially integrated into @o1_exchange B20 ecosystem & directly related to $VIBE B20 economy 💎\n\nI grabbed Vibe Club #${modalNftId} ${modalCleanName.toUpperCase()} 🐾\n\nMint yours (FCFS) → https://vibeverse.dog/vibe-club`;
     const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
     window.open(shareUrl, '_blank', 'noopener,noreferrer');
   };
+
+  // Target Launch: August 15, 2026 17:00:00 UTC
+  const LAUNCH_TIMESTAMP = Date.UTC(2026, 7, 15, 17, 0, 0);
+  const [currentTime, setCurrentTime] = useState(() => Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const timeRemainingMs = Math.max(0, LAUNCH_TIMESTAMP - currentTime);
+  const isLaunchLive = timeRemainingMs <= 0;
+
+  const isBypassPreview = typeof window !== 'undefined' && (
+    window.location.search.includes('preview') ||
+    window.location.search.includes('admin') ||
+    window.location.search.includes('dev')
+  );
+
+  const showLockScreen = !isLaunchLive && !isAdmin && !isBypassPreview;
+
+  const totalRemainingSec = Math.floor(timeRemainingMs / 1000);
+  const countdownHours = String(Math.floor(totalRemainingSec / 3600)).padStart(2, '0');
+  const countdownMins = String(Math.floor((totalRemainingSec % 3600) / 60)).padStart(2, '0');
+  const countdownSecs = String(totalRemainingSec % 60).padStart(2, '0');
 
   // 4 Mint Phases definition
   const phases = [
@@ -193,6 +218,239 @@ export default function NftClubPage() {
       e.target.src = `https://ipfs.io/ipfs/bafybeifoc434thlscysnqvy45idxfjn7g7qjtedntek3rckn3vukffczxe/${id}.png`;
     }
   };
+
+  if (showLockScreen) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        width: '100vw',
+        background: 'radial-gradient(circle at 50% 30%, #041430 0%, #020b1a 70%, #000511 100%)',
+        color: '#fff',
+        fontFamily: 'var(--vv-pixel)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '24px 16px',
+        boxSizing: 'border-box',
+        textAlign: 'center',
+        position: 'relative',
+        overflow: 'hidden',
+        textTransform: 'uppercase'
+      }}>
+        {/* Inline animation keyframes */}
+        <style>{`
+          @keyframes vvPulseDotAnimation {
+            0% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 4px #00ff88; }
+            50% { transform: scale(1.35); opacity: 1; box-shadow: 0 0 12px #00ff88, 0 0 20px #00ff88; }
+            100% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 4px #00ff88; }
+          }
+          .vv-lock-pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ff88;
+            display: inline-block;
+            animation: vvPulseDotAnimation 1.6s infinite ease-in-out;
+          }
+          @media (max-width: 768px) {
+            .vv-lock-title {
+              font-size: 16px !important;
+              line-height: 1.4 !important;
+            }
+            .vv-lock-badge {
+              font-size: 8px !important;
+              padding: 6px 12px !important;
+            }
+            .vv-timer-box {
+              padding: 12px 14px !important;
+              min-width: 58px !important;
+            }
+            .vv-timer-digit {
+              font-size: 20px !important;
+            }
+          }
+        `}</style>
+
+        {/* Top Right Header with Connect Wallet (Allows Admin to connect and instantly bypass) */}
+        <div style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          zIndex: 10
+        }}>
+          {authenticated ? (
+            <button
+              onClick={logout}
+              style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '8px',
+                background: 'rgba(0, 245, 255, 0.12)',
+                border: '1.5px solid #00f5ff',
+                color: '#00ff88',
+                padding: '8px 14px',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <WalletSvgIcon size={12} /> {walletAddress?.slice(0, 6)}...{walletAddress?.slice(-4)}
+            </button>
+          ) : (
+            <button
+              onClick={login}
+              style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '8px',
+                background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
+                color: '#fff',
+                border: '1.5px solid #ffffff',
+                padding: '8px 14px',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                fontWeight: 900,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <WalletSvgIcon size={12} /> CONNECT WALLET
+            </button>
+          )}
+        </div>
+
+        {/* Background Map Glow */}
+        <div style={{
+          position: 'absolute',
+          width: '600px',
+          height: '600px',
+          background: 'radial-gradient(circle, rgba(0, 245, 255, 0.15) 0%, rgba(0, 0, 0, 0) 70%)',
+          pointerEvents: 'none'
+        }} />
+
+        {/* Mascot Logo */}
+        <div style={{ position: 'relative', marginBottom: '24px' }}>
+          <img
+            src="/vibe-logo.png"
+            alt="VIBE"
+            style={{
+              width: '96px',
+              height: '96px',
+              borderRadius: '24px',
+              border: '3px solid #00f5ff',
+              boxShadow: '0 0 32px rgba(0, 245, 255, 0.5)'
+            }}
+          />
+        </div>
+
+        {/* Title */}
+        <h1 className="vv-lock-title" style={{
+          fontFamily: 'var(--vv-pixel)',
+          fontSize: '22px',
+          color: '#00f5ff',
+          textShadow: '0 0 20px rgba(0, 245, 255, 0.6)',
+          marginBottom: '14px',
+          maxWidth: '750px',
+          lineHeight: 1.4,
+          letterSpacing: '0.5px'
+        }}>
+          VIBE CLUB IS COMING
+        </h1>
+
+        {/* Green Badge */}
+        <div className="vv-lock-badge" style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '8px',
+          background: 'rgba(0, 255, 136, 0.12)',
+          border: '1.5px solid #00ff88',
+          color: '#00ff88',
+          borderRadius: '20px',
+          padding: '8px 18px',
+          fontSize: '9.5px',
+          fontFamily: 'var(--vv-pixel)',
+          letterSpacing: '0.6px',
+          marginBottom: '32px',
+          boxShadow: '0 0 18px rgba(0, 255, 136, 0.25)',
+          whiteSpace: 'nowrap'
+        }}>
+          <span className="vv-lock-pulse-dot" />
+          <span>VIBE VERSE: GENESIS PHASE</span>
+        </div>
+
+        {/* Pixel Countdown Box */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '12px',
+          marginBottom: '20px'
+        }}>
+          <div className="vv-timer-box" style={{
+            background: 'rgba(2, 11, 26, 0.92)',
+            border: '2px solid #00f5ff',
+            borderRadius: '14px',
+            padding: '16px 22px',
+            minWidth: '76px',
+            boxShadow: '0 0 24px rgba(0, 245, 255, 0.35)',
+            textAlign: 'center'
+          }}>
+            <div className="vv-timer-digit" style={{ fontSize: '26px', color: '#00f5ff', textShadow: '0 0 16px #00f5ff' }}>
+              {countdownHours}
+            </div>
+            <div style={{ fontSize: '7.5px', color: '#88aacc', marginTop: '4px', letterSpacing: '0.5px' }}>HOURS</div>
+          </div>
+
+          <span style={{ fontSize: '24px', color: '#ffd700' }}>:</span>
+
+          <div className="vv-timer-box" style={{
+            background: 'rgba(2, 11, 26, 0.92)',
+            border: '2px solid #ffd700',
+            borderRadius: '14px',
+            padding: '16px 22px',
+            minWidth: '76px',
+            boxShadow: '0 0 24px rgba(255, 215, 0, 0.35)',
+            textAlign: 'center'
+          }}>
+            <div className="vv-timer-digit" style={{ fontSize: '26px', color: '#ffd700', textShadow: '0 0 16px #ffd700' }}>
+              {countdownMins}
+            </div>
+            <div style={{ fontSize: '7.5px', color: '#88aacc', marginTop: '4px', letterSpacing: '0.5px' }}>MINS</div>
+          </div>
+
+          <span style={{ fontSize: '24px', color: '#ffd700' }}>:</span>
+
+          <div className="vv-timer-box" style={{
+            background: 'rgba(2, 11, 26, 0.92)',
+            border: '2px solid #ff007f',
+            borderRadius: '14px',
+            padding: '16px 22px',
+            minWidth: '76px',
+            boxShadow: '0 0 24px rgba(255, 0, 127, 0.35)',
+            textAlign: 'center'
+          }}>
+            <div className="vv-timer-digit" style={{ fontSize: '26px', color: '#ff007f', textShadow: '0 0 16px #ff007f' }}>
+              {countdownSecs}
+            </div>
+            <div style={{ fontSize: '7.5px', color: '#88aacc', marginTop: '4px', letterSpacing: '0.5px' }}>SECS</div>
+          </div>
+        </div>
+
+        {/* Subtitle */}
+        <div style={{
+          fontSize: '9px',
+          color: '#88aacc',
+          letterSpacing: '0.8px',
+          fontFamily: 'var(--vv-pixel)',
+          lineHeight: 1.6
+        }}>
+          PUBLIC MINT LAUNCHES AT 17:00 UTC • 333 TOTAL SUPPLY • FCFS
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{
