@@ -108,12 +108,29 @@ export default function NftClubPage() {
     return Number(amount).toLocaleString('en-US') + ' $VIBE';
   };
 
-  // Download NFT Image to device
+  // Download / Save NFT Image to device gallery
   const handleSaveImage = async () => {
     const imageUrl = `/nft/images/${modalNftId}.png`;
     try {
       const response = await fetch(imageUrl);
       const blob = await response.blob();
+      const file = new File([blob], `Vibe_Club_${modalNftId}.png`, { type: 'image/png' });
+
+      // 1. Try Native Mobile Web Share (Direct save to iOS Photos / Android Gallery)
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: `Vibe Club #${modalNftId}`,
+            text: `Vibe Club #${modalNftId} NFT`
+          });
+          return;
+        } catch (shareErr) {
+          if (shareErr.name === 'AbortError') return;
+        }
+      }
+
+      // 2. Standard Browser Download fallback
       const blobUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = blobUrl;
@@ -1310,18 +1327,17 @@ export default function NftClubPage() {
               🎉 MINT SUCCESSFUL!
             </div>
 
-            {/* HEADER TITLE */}
+            {/* HEADER TITLE (CLEAN NO DUPLICATE) */}
             <h2 style={{
               fontFamily: 'var(--vv-pixel)',
               fontSize: '12px',
               color: '#00f5ff',
               textShadow: '0 0 14px rgba(0, 245, 255, 0.5)',
-              margin: '6px 0 16px 0',
+              margin: '6px 0 14px 0',
               lineHeight: 1.4,
               letterSpacing: '0.4px'
             }}>
-              VIBE CLUB #{modalNftId} {modalCleanName.toUpperCase()}<br/>
-              <span style={{ color: '#ffffff', fontSize: '9px' }}>SUCCESSFULLY MINTED!</span>
+              VIBE CLUB #{modalNftId} {modalCleanName.toUpperCase()}
             </h2>
 
             {/* NFT IMAGE DISPLAY */}
@@ -1332,8 +1348,8 @@ export default function NftClubPage() {
               border: '2px solid #00f5ff',
               boxShadow: '0 0 24px rgba(0, 245, 255, 0.3)',
               aspectRatio: '1/1',
-              maxWidth: '260px',
-              margin: '0 auto 20px auto',
+              maxWidth: '250px',
+              margin: '0 auto 16px auto',
               background: '#020b1a'
             }}>
               <img
@@ -1349,60 +1365,143 @@ export default function NftClubPage() {
               />
             </div>
 
-            {/* ACTION BUTTONS (SAVE IMAGE + SHARE ON X) */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {/* 1. SAVE IMAGE BUTTON */}
-              <button
-                onClick={handleSaveImage}
-                style={{
-                  width: '100%',
-                  height: '44px',
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '10px',
-                  fontWeight: 900,
-                  background: 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)',
-                  border: '2px solid #ffffff',
-                  borderRadius: '12px',
-                  color: '#ffffff',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 16px rgba(0, 245, 255, 0.4)',
-                  letterSpacing: '0.5px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px'
-                }}
-              >
-                📥 SAVE IMAGE
-              </button>
+            {/* STEPS FLOW: STEP 1 (SAVE IMAGE) -> STEP 2 (SHARE ON X) */}
+            <div style={{ marginTop: '10px' }}>
+              {/* STEP HEADERS WITH CONNECTOR LINE */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '8px',
+                position: 'relative',
+                padding: '0 6px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', zIndex: 2 }}>
+                  <span style={{
+                    background: '#00f5ff',
+                    color: '#020b1a',
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '7.5px',
+                    fontWeight: 900,
+                    padding: '2px 6px',
+                    borderRadius: '4px'
+                  }}>
+                    1
+                  </span>
+                  <span style={{
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '7.5px',
+                    color: '#00f5ff',
+                    letterSpacing: '0.4px'
+                  }}>
+                    SAVE IMAGE
+                  </span>
+                </div>
 
-              {/* 2. SHARE ON X BUTTON */}
-              <button
-                onClick={handleShareOnX}
-                style={{
-                  width: '100%',
-                  height: '44px',
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '10px',
-                  fontWeight: 900,
-                  background: '#000000',
-                  border: '2px solid #1da1f2',
-                  borderRadius: '12px',
-                  color: '#1da1f2',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 16px rgba(29, 161, 242, 0.3)',
-                  letterSpacing: '0.5px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px'
-                }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-                SHARE ON X
-              </button>
+                {/* CONNECTOR LINE WITH ARROW */}
+                <div style={{
+                  flex: 1,
+                  height: '2px',
+                  background: 'linear-gradient(90deg, #00f5ff, #1da1f2)',
+                  margin: '0 8px',
+                  position: 'relative',
+                  opacity: 0.7
+                }}>
+                  <span style={{
+                    position: 'absolute',
+                    right: '-2px',
+                    top: '-5.5px',
+                    fontSize: '8px',
+                    color: '#1da1f2'
+                  }}>
+                    ▶
+                  </span>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', zIndex: 2 }}>
+                  <span style={{
+                    background: '#1da1f2',
+                    color: '#ffffff',
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '7.5px',
+                    fontWeight: 900,
+                    padding: '2px 6px',
+                    borderRadius: '4px'
+                  }}>
+                    2
+                  </span>
+                  <span style={{
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '7.5px',
+                    color: '#1da1f2',
+                    letterSpacing: '0.4px'
+                  }}>
+                    SHARE ON X
+                  </span>
+                </div>
+              </div>
+
+              {/* ACTION BUTTONS GRID */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '10px'
+              }}>
+                {/* 1. SAVE IMAGE BUTTON */}
+                <button
+                  onClick={handleSaveImage}
+                  style={{
+                    height: '44px',
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '9px',
+                    fontWeight: 900,
+                    background: 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)',
+                    border: '1.5px solid #ffffff',
+                    borderRadius: '12px',
+                    color: '#ffffff',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(0, 245, 255, 0.35)',
+                    letterSpacing: '0.4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    padding: '0 4px',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  📥 SAVE IMAGE
+                </button>
+
+                {/* 2. SHARE ON X BUTTON */}
+                <button
+                  onClick={handleShareOnX}
+                  style={{
+                    height: '44px',
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '9px',
+                    fontWeight: 900,
+                    background: '#000000',
+                    border: '1.5px solid #1da1f2',
+                    borderRadius: '12px',
+                    color: '#1da1f2',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(29, 161, 242, 0.3)',
+                    letterSpacing: '0.4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    padding: '0 4px',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                  SHARE ON X
+                </button>
+              </div>
             </div>
           </div>
         </div>
