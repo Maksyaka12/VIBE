@@ -568,7 +568,7 @@ function Roadmap() {
       <div className="wrap">
         <div className="sec-head rv" ref={r} style={{ textAlign: 'center' }}>
           <h2>The <span className="bl">Masterplan</span>.</h2>
-          <p className="sec-sub" style={{ margin: '0 auto' }}>Our vision to make $VIBE the ultimate cultural phenomenon on Base.</p>
+          <p className="sec-sub" style={{ margin: '0 auto' }}>Every great journey starts with a single Base Dog paw print.</p>
         </div>
         
         <div className="roadmap-timeline">
@@ -644,7 +644,7 @@ function Roadmap() {
                 </div>
                 <div className="r-subnote">
                   <span className="r-subnote-dot"></span>
-                  <span>Introducing Vibe Verse: B20 $VIBE On-Chain World</span>
+                  <span>Introducing Vibe Verse: B20 $VIBE Onchain World</span>
                   <span className="badge-rm prog" style={{marginLeft:'auto',fontSize:'0.65rem',padding:'4px 8px'}}><Loader2 size={11} className="spin"/> IN PROGRESS</span>
                 </div>
               </div>
@@ -657,22 +657,7 @@ function Roadmap() {
 
           {/* Phase 4 */}
           <div className="roadmap-phase rv" ref={useRev()}>
-            <div className="roadmap-phase-title">Phase 4: B20 Ecosystem Dominance</div>
-            <div className="roadmap-items">
-              <div className="roadmap-item">
-                <div className="r-title"><Crown size={24} color="var(--blue)"/> The Face of o1</div>
-                <div className="r-desc">Establishing $VIBE as the official mascot and cultural phenomenon of o1 Exchange. Where o1 goes, $VIBE leads.</div>
-              </div>
-              <div className="roadmap-item">
-                <div className="r-title"><Crown size={24} color="var(--blue)"/> The Mascot of Base</div>
-                <div className="r-desc">Transcending a single DEX to become the undisputed, universally loved dog mascot of the entire Base blockchain ecosystem.</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Phase 5 */}
-          <div className="roadmap-phase rv" ref={useRev()}>
-            <div className="roadmap-phase-title">Phase 5: Global Awareness</div>
+            <div className="roadmap-phase-title">Phase 4: Global Awareness</div>
             <div className="roadmap-items">
               <div className="roadmap-item">
                 <div className="r-title"><Globe size={24} color="var(--blue)"/> Top Tier Listings</div>
