@@ -627,7 +627,7 @@ function Roadmap() {
             <div className="roadmap-items">
               <div className="roadmap-item done">
                 <div className="r-title"><Users size={24} color="var(--blue)"/> Vibe Club NFTs on B20 <span className="badge-rm done"><Check size={14} strokeWidth={3}/> DONE</span></div>
-                <div className="r-desc">Introducing the first NFT collection officially integrated into the o1 B20 ecosystem and directly tied to the $VIBE token economy.</div>
+                <div className="r-desc">Introducing the first-ever NFT collection officially integrated into the o1 B20 ecosystem and directly tied to the $VIBE token economy.</div>
                 <div className="r-subnote done">
                   <span className="r-subnote-dot done"></span>
                   <span>Vibe Club mint is live &rarr; <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" style={{color:'var(--blue)',textDecoration:'underline',fontWeight:600}}>vibeverse.dog/vibeclub</a></span>
