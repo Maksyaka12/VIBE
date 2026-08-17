@@ -579,7 +579,7 @@ export default function NftClubPage() {
         alignItems: 'center'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img src="/vibe-logo.png" alt="VIBE" style={{ width: '34px', height: '34px', borderRadius: '8px' }} />
+          <img src="/new-logo-vibe.png" alt="VIBE" style={{ width: '34px', height: '34px', borderRadius: '8px' }} />
           <div>
             <div style={{ fontFamily: 'var(--vv-pixel)', fontSize: '11px', color: '#00f5ff', letterSpacing: '0.5px' }}>
               VIBE CLUB

@@ -72,7 +72,7 @@ export default function VibeVerseLockScreen() {
       {/* Mascot Logo */}
       <div style={{ position: 'relative', marginBottom: '24px' }}>
         <img
-          src="/vibe-logo.png"
+          src="/new-logo-vibe.png"
           alt="VIBE"
           className="vv-lock-logo"
           style={{

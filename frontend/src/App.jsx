@@ -81,7 +81,7 @@ function Nav() {
       <nav className={stuck ? 'stuck' : ''}>
         <div className="nav-inner">
           <Link to="/" className="nav-brand" onClick={() => setOpen(false)}>
-            <img src="/vibe-logo.png" className="nav-logo" alt="$VIBE" />
+            <img src="/new-logo-vibe.png" className="nav-logo" alt="$VIBE" />
             $VIBE
           </Link>
           <ul className="nav-menu">
@@ -146,7 +146,7 @@ function Hero() {
         </div>
         <div className="dog-wrap">
           <img
-            src="/vibe-logo.png"
+            src="/new-logo-vibe.png"
             onError={e=>{e.target.onerror=null;e.target.src='/mascot.png';}}
             alt="$VIBE The Base Dog"
             className="dog-img"
@@ -681,7 +681,7 @@ function Footer() {
     <footer>
       <div className="foot-inner">
         <div className="foot-brand">
-          <img src="/vibe-logo.png" alt="Vibe" className="foot-logo" />
+          <img src="/new-logo-vibe.png" alt="Vibe" className="foot-logo" />
           <span>$VIBE</span> · The Base Dog
         </div>
         <div className="foot-mid">
@@ -1023,7 +1023,7 @@ export default function App() {
         appearance: {
           theme: 'dark',
           accentColor: '#00f5ff',
-          logo: 'https://vibeverse.dog/vibe-logo.png',
+          logo: 'https://vibeverse.dog/new-logo-vibe.png',
           showWalletLoginFirst: true,
         },
         embeddedWallets: {
