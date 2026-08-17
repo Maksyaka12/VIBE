@@ -625,17 +625,22 @@ function Roadmap() {
           <div className="roadmap-phase rv" ref={useRev()}>
             <div className="roadmap-phase-title">Phase 3: $VIBE Ecosystem</div>
             <div className="roadmap-items">
-              <div className="roadmap-item in-progress">
-                <div className="r-title"><Users size={24} color="var(--blue)"/> Vibe Culture: Vibe Club <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
-                <div className="r-desc">Building a full-fledged Vibe culture that drives global brand awareness, fosters a loyal community, and strengthens the power of $VIBE. Introducing the Vibe Club NFT Collection.</div>
+              <div className="roadmap-item done">
+                <div className="r-title"><Users size={24} color="var(--blue)"/> Vibe Club NFTs on B20 <span className="badge-rm done"><Check size={14} strokeWidth={3}/> DONE</span></div>
+                <div className="r-desc">Introducing the first NFT collection officially integrated into the o1 B20 ecosystem and directly tied to the $VIBE token economy.</div>
+                <div className="r-subnote done">
+                  <span className="r-subnote-dot done"></span>
+                  <span>Vibe Club mint is live &rarr; <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" style={{color:'var(--blue)',textDecoration:'underline',fontWeight:600}}>vibeverse.dog/vibeclub</a></span>
+                  <span className="badge-rm done" style={{marginLeft:'auto',fontSize:'0.65rem',padding:'4px 8px'}}><Check size={11} strokeWidth={3}/> DONE</span>
+                </div>
               </div>
               <div className="roadmap-item in-progress">
                 <div className="r-title"><Rocket size={24} color="var(--blue)"/> Product Launch: Vibe Verse <span className="badge-rm prog"><Loader2 size={14} className="spin"/> IN PROGRESS</span></div>
                 <div className="r-desc">Launching Vibe Verse — an interactive Web3 pixel-art gaming world where $VIBE serves as the native in-game utility currency.</div>
-                <div className="r-subnote">
-                  <span className="r-subnote-dot"></span>
+                <div className="r-subnote done">
+                  <span className="r-subnote-dot done"></span>
                   <span>Introducing the Vibe Club NFT Collection</span>
-                  <span className="badge-rm prog" style={{marginLeft:'auto',fontSize:'0.65rem',padding:'4px 8px'}}><Loader2 size={11} className="spin"/> IN PROGRESS</span>
+                  <span className="badge-rm done" style={{marginLeft:'auto',fontSize:'0.65rem',padding:'4px 8px'}}><Check size={11} strokeWidth={3}/> DONE</span>
                 </div>
                 <div className="r-subnote">
                   <span className="r-subnote-dot"></span>
