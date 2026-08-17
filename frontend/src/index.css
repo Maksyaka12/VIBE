@@ -911,40 +911,61 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
    VIBE CLUB SECTION & LIVE BADGE STYLES
    ════════════════════════════════════════════════════════════════ */
 
-/* Nav Hot Mint Live Badge */
+/* Nav Hot Mint Live Badge — Floating Promo Sticker Style */
+.nav-club-link {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 4px;
+}
+.mob-club-link {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
 .vibeclub-live-badge {
-  background: linear-gradient(135deg, #ff9900 0%, #ff3700 100%);
+  position: absolute;
+  top: -12px;
+  right: -10px;
+  background: linear-gradient(135deg, #ff9900 0%, #ff2a00 100%);
   color: #ffffff;
-  font-size: 0.62rem;
+  font-size: 0.52rem;
   font-weight: 900;
-  padding: 3px 8px;
+  padding: 2px 6px;
   border-radius: 99px;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  letter-spacing: 0.04em;
+  gap: 4px;
+  letter-spacing: 0.05em;
   line-height: 1;
-  box-shadow: 0 2px 10px rgba(255, 69, 0, 0.45);
+  box-shadow: 0 2px 8px rgba(255, 42, 0, 0.55);
   text-transform: uppercase;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
   white-space: nowrap;
+  pointer-events: none;
+  transform: rotate(-3deg);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  z-index: 10;
 }
-.vibeclub-live-badge:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 14px rgba(255, 69, 0, 0.65);
+.nav-club-link:hover .vibeclub-live-badge,
+.mob-club-link:hover .vibeclub-live-badge {
+  transform: rotate(0deg) scale(1.1);
+  box-shadow: 0 4px 14px rgba(255, 42, 0, 0.75);
 }
 .live-fire-dot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: #fffb00;
-  box-shadow: 0 0 6px #fffb00;
+  box-shadow: 0 0 5px #fffb00;
   display: inline-block;
   animation: pulse-live-dot 1.2s infinite ease-in-out;
 }
 @keyframes pulse-live-dot {
   0%, 100% { transform: scale(0.9); opacity: 0.8; }
-  50% { transform: scale(1.4); opacity: 1; box-shadow: 0 0 10px #fffb00; }
+  50% { transform: scale(1.4); opacity: 1; box-shadow: 0 0 8px #fffb00; }
 }
 
 /* Vibe Club Section Eyebrow */

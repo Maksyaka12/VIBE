@@ -77,7 +77,7 @@ function Nav() {
   }, []);
 
   const navLinks = [
-    { id: 'vibeclub', label: 'Vibe Club', isClub: true },
+    { id: 'vibe-club', label: 'Vibe Club', isClub: true },
     { id: 'about', label: 'About' },
     { id: 'tokenomics', label: 'Tokenomics' },
     { id: 'events', label: 'Events' },
@@ -99,13 +99,24 @@ function Nav() {
             {navLinks.map(({ id, label, isClub }) => (
               <li key={id}>
                 {isClub ? (
-                  <Link to="/vibeclub" onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <a
+                    href="/#vibe-club"
+                    onClick={(e) => {
+                      setOpen(false);
+                      if (window.location.pathname === '/') {
+                        e.preventDefault();
+                        const el = document.getElementById('vibe-club');
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                    className="nav-club-link"
+                  >
                     <span>{label}</span>
                     <span className="vibeclub-live-badge">
                       <span className="live-fire-dot"></span>
                       MINT IS LIVE
                     </span>
-                  </Link>
+                  </a>
                 ) : (
                   <Link to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     {label}
@@ -126,13 +137,25 @@ function Nav() {
         <div className="mob-links">
           {navLinks.map(({ id, label, isClub }) => (
             isClub ? (
-              <Link key={id} to="/vibeclub" onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <a
+                key={id}
+                href="/#vibe-club"
+                onClick={(e) => {
+                  setOpen(false);
+                  if (window.location.pathname === '/') {
+                    e.preventDefault();
+                    const el = document.getElementById('vibe-club');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="mob-club-link"
+              >
                 <span>{label}</span>
                 <span className="vibeclub-live-badge">
                   <span className="live-fire-dot"></span>
                   MINT IS LIVE
                 </span>
-              </Link>
+              </a>
             ) : (
               <Link key={id} to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
                 {label}
@@ -1254,6 +1277,18 @@ function StandaloneLayout({ children }) {
   );
 }
 
+function VibeClubRedirect() {
+  useEffect(() => {
+    window.location.href = 'https://vibeverse.dog/vibeclub';
+  }, []);
+  return (
+    <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
+      <Loader2 size={32} className="spin" color="var(--blue)" />
+      <p style={{ fontWeight: 600, color: 'var(--muted)' }}>Redirecting to Vibe Club Mint on VibeVerse...</p>
+    </div>
+  );
+}
+
 function DomainRouter() {
   const location = useLocation();
   const isGameDomain = typeof window !== 'undefined' && window.location.hostname.toLowerCase().includes('vibeverse');
@@ -1269,12 +1304,12 @@ function DomainRouter() {
 
   return (
     <Routes>
-      {/* ── Standalone VIBE Club NFT Mint Page ── */}
-      <Route path="/vibeclub" element={<NftClubPage />} />
-      <Route path="/vibe-club" element={<NftClubPage />} />
-      <Route path="/nft-club" element={<NftClubPage />} />
-      <Route path="/nft" element={<NftClubPage />} />
-      <Route path="/mint" element={<NftClubPage />} />
+      {/* ── Standalone VIBE Club NFT Mint Page / Redirect ── */}
+      <Route path="/vibeclub" element={isGameDomain ? <NftClubPage /> : <VibeClubRedirect />} />
+      <Route path="/vibe-club" element={isGameDomain ? <NftClubPage /> : <VibeClubRedirect />} />
+      <Route path="/nft-club" element={isGameDomain ? <NftClubPage /> : <VibeClubRedirect />} />
+      <Route path="/nft" element={isGameDomain ? <NftClubPage /> : <VibeClubRedirect />} />
+      <Route path="/mint" element={isGameDomain ? <NftClubPage /> : <VibeClubRedirect />} />
 
       {/* ── Main Routing ── */}
       <Route
