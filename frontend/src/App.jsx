@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift, Users, ShieldCheck, Calculator, Calendar, RotateCcw } from 'lucide-react';
+import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift, Users, ShieldCheck, Calculator, Calendar, RotateCcw, Gamepad2, Coins, Sparkles } from 'lucide-react';
 import { PrivyProvider } from '@privy-io/react-auth';
 import { WagmiProvider as PrivyWagmiProvider } from '@privy-io/wagmi';
 import { privyWagmiConfig } from './config/privyWagmi';
@@ -76,6 +76,17 @@ function Nav() {
     window.addEventListener('scroll', h); return () => window.removeEventListener('scroll', h);
   }, []);
 
+  const navLinks = [
+    { id: 'vibeclub', label: 'Vibe Club', isClub: true },
+    { id: 'about', label: 'About' },
+    { id: 'tokenomics', label: 'Tokenomics' },
+    { id: 'events', label: 'Events' },
+    { id: 'roadmap', label: 'Roadmap' },
+    { id: 'chart', label: 'Chart' },
+    { id: 'trade', label: 'Trade' },
+    { id: 'checker', label: 'Checker' }
+  ];
+
   return (
     <>
       <nav className={stuck ? 'stuck' : ''}>
@@ -85,8 +96,22 @@ function Nav() {
             $VIBE
           </Link>
           <ul className="nav-menu">
-            {[['about','About'],['tokenomics','Tokenomics'],['events','Events'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
-              <li key={id}><Link to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>{l}</Link></li>
+            {navLinks.map(({ id, label, isClub }) => (
+              <li key={id}>
+                {isClub ? (
+                  <Link to="/vibeclub" onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span>{label}</span>
+                    <span className="vibeclub-live-badge">
+                      <span className="live-fire-dot"></span>
+                      MINT IS LIVE
+                    </span>
+                  </Link>
+                ) : (
+                  <Link to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    {label}
+                  </Link>
+                )}
+              </li>
             ))}
           </ul>
           <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
@@ -99,8 +124,20 @@ function Nav() {
       </nav>
       <div className={`mob-menu ${open ? 'open' : ''}`}>
         <div className="mob-links">
-          {[['about','About'],['tokenomics','Tokenomics'],['events','Events'],['roadmap','Roadmap'],['chart','Chart'],['trade','Trade'],['checker','Checker']].map(([id,l])=>(
-            <Link key={id} to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>{l}</Link>
+          {navLinks.map(({ id, label, isClub }) => (
+            isClub ? (
+              <Link key={id} to="/vibeclub" onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                <span>{label}</span>
+                <span className="vibeclub-live-badge">
+                  <span className="live-fire-dot"></span>
+                  MINT IS LIVE
+                </span>
+              </Link>
+            ) : (
+              <Link key={id} to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                {label}
+              </Link>
+            )
           ))}
           <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}}>Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} /></a>
         </div>
@@ -152,6 +189,259 @@ function Hero() {
             className="dog-img"
           />
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* VIBE CLUB SECTION */
+function VibeClub() {
+  const r = useRev();
+  const [mintedCount, setMintedCount] = useState(62);
+  const [loadingMint, setLoadingMint] = useState(true);
+
+  useEffect(() => {
+    async function fetchMintStats() {
+      try {
+        const client = createPublicClient({
+          chain: base,
+          transport: http('https://base-mainnet.public.blastapi.io')
+        });
+        const count = await client.readContract({
+          address: '0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886',
+          abi: [{
+            inputs: [],
+            name: 'totalMintedCount',
+            outputs: [{ type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function'
+          }],
+          functionName: 'totalMintedCount'
+        });
+        if (count !== undefined) {
+          setMintedCount(Number(count));
+        }
+      } catch (err) {
+        console.warn('Using default mint count:', err);
+      } finally {
+        setLoadingMint(false);
+      }
+    }
+    fetchMintStats();
+  }, []);
+
+  const totalMax = 333;
+  const progressPercent = Math.min(100, Math.round((mintedCount / totalMax) * 100));
+
+  const sampleDogs = [
+    { id: '1', name: 'Jerry Vibe', role: 'OG Founder Dog', img: '/nft/images/1.png' },
+    { id: '2', name: 'DD Vibe', role: 'Diamond Dog', img: '/nft/images/2.png' },
+    { id: '3', name: 'MKS Vibe', role: 'Architect Dog', img: '/nft/images/3.png' },
+    { id: '4', name: 'Jesse Vibe', role: 'Base Commander', img: '/nft/images/4.png' },
+    { id: '5', name: 'Crypto King', role: 'Royalty Tier', img: '/nft/images/5.png' },
+    { id: '6', name: 'Cyber Maltipoo', role: 'Neo Hacker', img: '/nft/images/6.png' },
+    { id: '7', name: 'Golden Star', role: 'Mythic Legend', img: '/nft/images/7.png' },
+    { id: '9', name: 'Alpha Leader', role: 'Pack Leader', img: '/nft/images/9.png' }
+  ];
+
+  return (
+    <section id="vibe-club" className="alt" style={{ padding: '120px 0 100px 0', position: 'relative', overflow: 'hidden' }}>
+      <div className="wrap">
+        {/* Section Header */}
+        <div className="sec-head rv" ref={r} style={{ textAlign: 'center' }}>
+          <div className="vc-eyebrow">
+            <span className="vc-fire-icon">🔥</span>
+            <span>GENESIS NFT COLLECTION · 333 EXCLUSIVE PIECES</span>
+            <span className="vc-live-pill">
+              <span className="live-fire-dot"></span>
+              MINT IS LIVE
+            </span>
+          </div>
+          <h2>The Vibe <span className="bl">Club</span>.</h2>
+          <p className="sec-sub" style={{ margin: '0 auto', maxWidth: '720px' }}>
+            The first-ever NFT collection natively integrated into the o1 B20 ecosystem.
+            Every mint powers the $VIBE economy with permanent auto-burns and unlocks VIP utilities in VibeVerse.
+          </p>
+        </div>
+
+        {/* Live Metrics Grid */}
+        <div className="vc-stats-grid rv" ref={useRev()}>
+          <div className="vc-stat-card">
+            <div className="vc-stat-top">
+              <span className="vc-stat-label">Total Minted</span>
+              <span className="vc-stat-badge">{loadingMint ? <Loader2 size={11} className="spin" /> : `${progressPercent}%`}</span>
+            </div>
+            <div className="vc-stat-val">
+              {mintedCount} <span className="vc-stat-max">/ {totalMax}</span>
+            </div>
+            <div className="vc-progress-track">
+              <div className="vc-progress-bar" style={{ width: `${progressPercent}%` }} />
+            </div>
+            <div className="vc-stat-hint">Strictly limited Genesis supply</div>
+          </div>
+
+          <div className="vc-stat-card hot">
+            <div className="vc-stat-top">
+              <span className="vc-stat-label">Auto Buyback &amp; Burn</span>
+              <span className="vc-stat-badge hot"><Flame size={12} strokeWidth={3} /> DEFLATIONARY</span>
+            </div>
+            <div className="vc-stat-val" style={{ color: '#ff3700' }}>
+              80% <span className="vc-stat-sub">of Every Mint</span>
+            </div>
+            <div className="vc-stat-desc">
+              80% of mint proceeds automatically buy back and permanently burn $VIBE onchain.
+            </div>
+          </div>
+
+          <div className="vc-stat-card">
+            <div className="vc-stat-top">
+              <span className="vc-stat-label">Genesis Mint Price</span>
+              <span className="vc-stat-badge">PHASE 1</span>
+            </div>
+            <div className="vc-stat-val">
+              0.005 ETH <span className="vc-stat-sub">or $VIBE</span>
+            </div>
+            <div className="vc-stat-desc">
+              Equal access on Base with dual-token payment support (ETH or $VIBE).
+            </div>
+          </div>
+
+          <div className="vc-stat-card">
+            <div className="vc-stat-top">
+              <span className="vc-stat-label">Protocol Treasury</span>
+              <span className="vc-stat-badge">20% SHARE</span>
+            </div>
+            <div className="vc-stat-val" style={{ color: 'var(--blue)' }}>
+              20% <span className="vc-stat-sub">Community</span>
+            </div>
+            <div className="vc-stat-desc">
+              Reserved for game development, prize pools, and community reward distributions.
+            </div>
+          </div>
+        </div>
+
+        {/* The 80/20 Flywheel Banner */}
+        <div className="vc-flywheel-box rv" ref={useRev()}>
+          <div className="vc-flywheel-header">
+            <div className="vc-flywheel-title">
+              <Sparkles size={22} color="#ff9900" />
+              <span>How Vibe Club Strengthens the $VIBE Economy</span>
+            </div>
+            <p className="vc-flywheel-sub">
+              Unlike traditional NFT collections, Vibe Club is engineered with an onchain economic engine directly linked to $VIBE market scarcity.
+            </p>
+          </div>
+          <div className="vc-flywheel-steps">
+            <div className="vc-step">
+              <div className="vc-step-num">1</div>
+              <div className="vc-step-content">
+                <h4>Fair Mint on Base</h4>
+                <p>Collectors mint their unique 1-of-1 Genesis Dog using ETH or $VIBE with instant onchain reveal.</p>
+              </div>
+            </div>
+            <div className="vc-step-arrow">&rarr;</div>
+            <div className="vc-step highlight">
+              <div className="vc-step-num hot">2</div>
+              <div className="vc-step-content">
+                <h4>80% Auto-Burn Mechanism</h4>
+                <p>Smart contract directs 80% to purchase $VIBE and burn it forever to <code>0xdead</code>, permanently reducing supply.</p>
+              </div>
+            </div>
+            <div className="vc-step-arrow">&rarr;</div>
+            <div className="vc-step">
+              <div className="vc-step-num">3</div>
+              <div className="vc-step-content">
+                <h4>20% Ecosystem Fund</h4>
+                <p>20% stays in the treasury contract to sustain holder rewards, staking rewards, and game prizes.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Benefits Grid */}
+        <div className="vc-benefits-wrap rv" ref={useRev()}>
+          <div className="vc-benefits-head">
+            <h3>Exclusive <span className="bl">Holder Perks</span> &amp; Utilities</h3>
+            <p>Holding a Vibe Club Genesis NFT grants you lifelong privileges across the ecosystem.</p>
+          </div>
+
+          <div className="vc-benefits-grid">
+            <div className="vc-benefit-card">
+              <div className="vc-benefit-icon" style={{ background: 'rgba(0, 0, 255, 0.08)', color: 'var(--blue)' }}>
+                <Gamepad2 size={26} />
+              </div>
+              <h4>VibeVerse Gaming VIP</h4>
+              <p>Play as your unique Genesis dog avatar inside VibeVerse. Gain access to VIP-only map locations and earn multiplier game boosts.</p>
+            </div>
+
+            <div className="vc-benefit-card">
+              <div className="vc-benefit-icon" style={{ background: 'rgba(255, 153, 0, 0.1)', color: '#ff9900' }}>
+                <Coins size={26} />
+              </div>
+              <h4>Lifetime Holder Dividends</h4>
+              <p>Priority share of ongoing creator revenue allocations and monthly community reward distribution pools.</p>
+            </div>
+
+            <div className="vc-benefit-card">
+              <div className="vc-benefit-icon" style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
+                <Crown size={26} />
+              </div>
+              <h4>Historic B20 Pioneer Status</h4>
+              <p>Permanent status badge as a founding collector of the first B20 NFT collection in Web3 history.</p>
+            </div>
+
+            <div className="vc-benefit-card">
+              <div className="vc-benefit-icon" style={{ background: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6' }}>
+                <ShieldCheck size={26} />
+              </div>
+              <h4>100% Commercial IP Rights</h4>
+              <p>Full commercial ownership of your unique pixel dog character to use in branding, merchandise, and digital content.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* NFT Showcase Deck */}
+        <div className="vc-showcase-wrap rv" ref={useRev()}>
+          <div className="vc-showcase-head">
+            <div className="vc-showcase-title">Sample Genesis Dogs</div>
+            <div className="vc-showcase-sub">Every piece is a unique 1-of-1 pixel masterpiece with custom attributes.</div>
+          </div>
+
+          <div className="vc-dogs-row">
+            {sampleDogs.map((d) => (
+              <div key={d.id} className="vc-dog-card">
+                <div className="vc-dog-img-wrap">
+                  <img src={d.img} alt={d.name} className="vc-dog-img" />
+                  <span className="vc-dog-id">#{d.id.padStart(2, '0')}</span>
+                </div>
+                <div className="vc-dog-info">
+                  <div className="vc-dog-name">{d.name}</div>
+                  <div className="vc-dog-role">{d.role}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Main CTA Box */}
+        <div className="vc-cta-box rv" ref={useRev()}>
+          <div className="vc-cta-content">
+            <div className="vc-cta-badge">🔥 LIVE ON BASE</div>
+            <h3>Claim Your Vibe Club Genesis Dog</h3>
+            <p>Phase 1 is currently active at 0.005 ETH. Mint directly on Base to join the club.</p>
+            <div className="vc-cta-actions">
+              <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" className="btn-vc-primary">
+                <span>MINT VIBE CLUB NFT</span>
+                <ArrowRight size={20} strokeWidth={2.5} />
+              </a>
+              <a href="https://opensea.io/assets/base/0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886" target="_blank" rel="noreferrer" className="btn-vc-secondary">
+                <span>View on OpenSea</span>
+                <ArrowUpRight size={18} strokeWidth={2.5} />
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   );
@@ -938,6 +1228,8 @@ function LandingPage() {
   return (
     <>
       <Hero/>
+      <div className="divr"/>
+      <VibeClub/>
       <div className="divr"/>
       <About/>
       <div className="divr"/>
