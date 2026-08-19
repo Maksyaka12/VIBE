@@ -1080,7 +1080,7 @@ const queryClient = new QueryClient();
 export default function App() {
   return (
     <PrivyProvider
-      appId="cmsoytt8e00pb0cjrjj7k54m5"
+      appId="cmrugdvds02q60cl7tegmrnx7"
       config={{
         loginMethods: ['wallet', 'email', 'twitter', 'telegram'],
         defaultChain: base,
@@ -1088,7 +1088,7 @@ export default function App() {
         appearance: {
           theme: 'dark',
           accentColor: '#00f5ff',
-          logo: 'https://vibeverse.dog/new-logo-vibe.png',
+          logo: '/new-logo-vibe.png',
           showWalletLoginFirst: true,
         },
         embeddedWallets: {
