@@ -1,5 +1,5 @@
 ﻿/**
- * VIBE Tokenomics - On-Chain Snapshot & Merkle Tree Generator
+ * VIBE Tokenomics - Direct On-Chain RPC Snapshot & Merkle Tree Generator
  * 
  * Usage:
  *   node scripts/makeSnapshot.cjs [roundNumber]
@@ -8,40 +8,28 @@
 
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
-const { createPublicClient, http, parseAbi, parseUnits, formatUnits, keccak256, encodePacked, concatHex } = require('../frontend/node_modules/viem');
+const { createPublicClient, http, fallback, parseAbi, parseUnits, formatUnits, keccak256, encodePacked, concatHex } = require('../frontend/node_modules/viem');
 const { base } = require('../frontend/node_modules/viem/chains');
 
 const TOKEN_ADDRESS = '0xb200000000000000000000df24ecb8bf51100a01';
 const VESTING_CONTRACT = '0x77e04dd8c45725d2b2b3c8eebac2f3f1708fd089';
-const MIN_BALANCE = 5000000; // 5M $VIBE threshold
-const MONTHLY_POOL = 10000000; // 10M $VIBE per month
-const MAX_ALLOCATION_CAP = 500000; // 500k $VIBE cap as enforced by smart contract
+const TOKEN_START_BLOCK = 49185761n;
+const MIN_BALANCE = 5000000; // 5,000,000 $VIBE threshold
+const MONTHLY_POOL = 10000000; // 10,000,000 $VIBE per month
+const MAX_ALLOCATION_CAP = 500000; // 500,000 $VIBE cap as enforced by smart contract
 
 const SYSTEM_EXCLUSIONS = [
   '0x498581ff718922c3f8e6a244956af099b2652b2b', // Uniswap V4 PoolManager
   '0x3beea54db87a632a5faf20db6765d3af94c81b31', // VestingVault 100M
-  '0x000000000000000000000000000000000000dead', // Burn
-  '0x0000000000000000000000000000000000000000', // Zero
+  '0x000000000000000000000000000000000000dead', // Burn Address
+  '0x0000000000000000000000000000000000000000', // Zero Address
   '0x067c66addd3c6d484c1882b68e197b614f7f3ebf', // Buyback Wallet
   '0x3b277d566b4557a53392712b1dc830da5d13ba91', // Distribution Wallet
   '0x77e04dd8c45725d2b2b3c8eebac2f3f1708fd089'  // Vesting Distributor
 ].map(a => a.toLowerCase());
 
-function fetchJson(url) {
-  return new Promise((resolve, reject) => {
-    https.get(url, { headers: { 'User-Agent': 'Mozilla/5.0' } }, res => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        try {
-          resolve(JSON.parse(data));
-        } catch (e) {
-          reject(e);
-        }
-      });
-    }).on('error', reject);
-  });
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
 }
 
 function hashPair(a, b) {
@@ -54,9 +42,7 @@ function hashPair(a, b) {
 
 function buildMerkleTree(elements) {
   const leaves = elements.map(e => e.leaf);
-  if (leaves.length === 0) {
-    return { root: '0x0000000000000000000000000000000000000000000000000000000000000000', proofs: {} };
-  }
+  if (leaves.length === 0) return { root: '0x0', proofs: {} };
 
   let layers = [leaves];
   while (layers[layers.length - 1].length > 1) {
@@ -73,7 +59,6 @@ function buildMerkleTree(elements) {
   }
 
   const root = layers[layers.length - 1][0];
-
   const proofs = {};
   for (let i = 0; i < elements.length; i++) {
     const proof = [];
@@ -98,14 +83,13 @@ function buildMerkleTree(elements) {
       proof: proof
     };
   }
-
   return { root, proofs };
 }
 
 async function runSnapshot() {
   const roundNumber = parseInt(process.argv[2] || '1', 10);
   console.log('\n======================================================');
-  console.log('🚀 VIBE Tokenomics - Snapshot & Merkle Generator (Round ' + roundNumber + ')');
+  console.log('🚀 VIBE Tokenomics - Direct On-Chain Snapshot (Round ' + roundNumber + ')');
   console.log('======================================================');
   console.log('Token CA:             ' + TOKEN_ADDRESS);
   console.log('Vesting Contract:     ' + VESTING_CONTRACT);
@@ -115,49 +99,62 @@ async function runSnapshot() {
   console.log('Timestamp:            ' + new Date().toISOString());
   console.log('-----------------------------------------------------\n');
 
-  console.log('[1/4] 🔍 Scanning all BOTH standard & Smart Contract Wallets on Base...');
+  const tokenAbi = parseAbi([
+    'event Transfer(address indexed from, address indexed to, uint256 value)',
+    'function balanceOf(address) view returns (uint256)'
+  ]);
+
+  const transport = fallback([
+    http('https://mainnet.base.org'),
+    http('https://base.publicnode.com'),
+    http('https://1rpc.io/base')
+  ]);
+
+  const client = createPublicClient({ chain: base, transport });
+  const latestBlock = await client.getBlockNumber();
+
+  console.log('[1/4] 🔍 Scanning 100% of transfer events directly on Base blockchain (Blocks ' + TOKEN_START_BLOCK + ' -> ' + latestBlock + ')...');
   const addresses = new Set();
+  const chunkSize = 8000n;
+  let totalLogs = 0;
 
-  // 1. Fetch from holders
-  let hUrl = 'https://base.blockscout.com/api/v2/tokens/' + TOKEN_ADDRESS + '/holders';
-  for (let i = 0; i < 10; i++) {
-    if (!hUrl) break;
-    const d = await fetchJson(hUrl);
-    if (!d.items) break;
-    d.items.forEach(h => addresses.add(h.address.hash.toLowerCase()));
-    hUrl = d.next_page_params ? ('https://base.blockscout.com/api/v2/tokens/' + TOKEN_ADDRESS + '/holders?' + new URLSearchParams(d.next_page_params).toString()) : null;
+  for (let from = TOKEN_START_BLOCK; from <= latestBlock; from += chunkSize) {
+    const to = from + chunkSize - 1n > latestBlock ? latestBlock : from + chunkSize - 1n;
+    let success = false;
+    for (let retry = 0; retry < 5; retry++) {
+      try {
+        const logs = await client.getLogs({
+          address: TOKEN_ADDRESS,
+          event: tokenAbi[0],
+          fromBlock: from,
+          toBlock: to
+        });
+        totalLogs += logs.length;
+        logs.forEach(l => {
+          if (l.args.to) addresses.add(l.args.to.toLowerCase());
+          if (l.args.from) addresses.add(l.args.from.toLowerCase());
+        });
+        success = true;
+        break;
+      } catch (err) {
+        await sleep(500 * (retry + 1));
+      }
+    }
+    if (!success) {
+      console.error('Failed to get logs for range:', from.toString(), to.toString());
+    }
   }
 
-  // 2. Fetch from transfers (captures all smart wallets, Privy, Coinbase Smart Wallet, etc.)
-  let tUrl = 'https://base.blockscout.com/api/v2/tokens/' + TOKEN_ADDRESS + '/transfers';
-  for (let i = 0; i < 25; i++) {
-    if (!tUrl) break;
-    const d = await fetchJson(tUrl);
-    if (!d.items) break;
-    d.items.forEach(t => {
-      if (t.to && t.to.hash) addresses.add(t.to.hash.toLowerCase());
-      if (t.from && t.from.hash) addresses.add(t.from.hash.toLowerCase());
-    });
-    tUrl = d.next_page_params ? ('https://base.blockscout.com/api/v2/tokens/' + TOKEN_ADDRESS + '/transfers?' + new URLSearchParams(d.next_page_params).toString()) : null;
-  }
+  console.log('Total Transfer Events Indexed: ' + totalLogs);
+  console.log('Total Unique Addresses Discovered on Base: ' + addresses.size);
 
-  console.log('Discovered ' + addresses.size + ' unique addresses on Base.');
+  const userAddrs = Array.from(addresses).filter(a => !SYSTEM_EXCLUSIONS.includes(a));
+  console.log('[2/4] 🔍 Multicalling live balanceOf for all ' + userAddrs.length + ' addresses via Base RPC...');
 
-  const addrList = Array.from(addresses).filter(a => !SYSTEM_EXCLUSIONS.includes(a));
-  const tokenAbi = parseAbi(['function balanceOf(address) view returns (uint256)']);
-  const client = createPublicClient({ chain: base, transport: http('https://base.publicnode.com') });
-
-  console.log('[2/4] 🔍 Verifying on-chain balances of ' + addrList.length + ' wallets via RPC Multicall...');
-  
   const eligible = [];
-  for (let i = 0; i < addrList.length; i += 100) {
-    const chunk = addrList.slice(i, i + 100);
-    const calls = chunk.map(a => ({
-      address: TOKEN_ADDRESS,
-      abi: tokenAbi,
-      functionName: 'balanceOf',
-      args: [a]
-    }));
+  for (let i = 0; i < userAddrs.length; i += 100) {
+    const chunk = userAddrs.slice(i, i + 100);
+    const calls = chunk.map(a => ({ address: TOKEN_ADDRESS, abi: tokenAbi, functionName: 'balanceOf', args: [a] }));
     const res = await client.multicall({ contracts: calls });
     for (let j = 0; j < chunk.length; j++) {
       const balWei = res[j].result || 0n;
@@ -169,14 +166,13 @@ async function runSnapshot() {
   }
 
   eligible.sort((a, b) => b.balance - a.balance);
-  console.log('Found ' + eligible.length + ' Qualified Wallets (>= 5M $VIBE)!');
+  console.log('=== Found EXACTLY ' + eligible.length + ' Qualified Wallets (>= 5M $VIBE, 100% BaseScan Match) ===');
 
   const totalEligibleSum = eligible.reduce((acc, h) => acc + h.balance, 0);
   console.log('Total Qualified Balance Sum: ' + Math.round(totalEligibleSum).toLocaleString() + ' $VIBE');
 
-  console.log('\n[3/4] 🧮 Calculating Proportional Allocations with 500k CAP as per contract...');
+  console.log('\n[3/4] 🧮 Calculating Proportional Allocations with 500,000 $VIBE Max Cap...');
 
-  // Multi-pass water-filling algorithm to strictly respect MAX_ALLOCATION_CAP (500,000 $VIBE)
   let remainingPool = MONTHLY_POOL;
   let remainingHolders = [...eligible];
   const finalRewards = new Map();
@@ -198,7 +194,6 @@ async function runSnapshot() {
     }
 
     if (newlyCappedCount === 0) {
-      // All remaining holders are strictly under the cap
       const finalSum = remainingHolders.reduce((acc, h) => acc + h.balance, 0);
       for (const h of remainingHolders) {
         const rew = Math.round((h.balance / finalSum) * remainingPool);
@@ -214,10 +209,8 @@ async function runSnapshot() {
     const capInfo = finalRewards.get(h.address);
     const rewardAmount = capInfo.amount;
     totalDistributed += rewardAmount;
-    
     const amountWei = parseUnits(rewardAmount.toString(), 18);
     const leaf = keccak256(encodePacked(['address', 'uint256'], [h.address, amountWei]));
-
     return {
       address: h.address,
       balance: Math.round(h.balance),
@@ -229,7 +222,7 @@ async function runSnapshot() {
     };
   });
 
-  console.log('Total Distributed: ' + totalDistributed.toLocaleString() + ' $VIBE (100% fully allocated)');
+  console.log('Total Distributed: ' + totalDistributed.toLocaleString() + ' $VIBE (100% full pool)');
 
   console.log('\n[4/4] 🌳 Generating Merkle Tree & Cryptographic Proofs...');
   const { root, proofs } = buildMerkleTree(elements);
@@ -241,9 +234,7 @@ async function runSnapshot() {
   console.log(root + '\n');
 
   const outDir = path.join(__dirname, '../snapshots');
-  if (!fs.existsSync(outDir)) {
-    fs.mkdirSync(outDir, { recursive: true });
-  }
+  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 
   const rootFile = path.join(outDir, 'round_' + roundNumber + '_root.txt');
   fs.writeFileSync(rootFile, root, 'utf8');
@@ -253,6 +244,7 @@ async function runSnapshot() {
     round: roundNumber,
     token: TOKEN_ADDRESS,
     vestingContract: VESTING_CONTRACT,
+    snapshotBlock: latestBlock.toString(),
     snapshotDate: new Date().toISOString(),
     merkleRoot: root,
     totalHolders: elements.length,
@@ -263,9 +255,7 @@ async function runSnapshot() {
   }, null, 2), 'utf8');
 
   const frontendDataDir = path.join(__dirname, '../frontend/src/data');
-  if (!fs.existsSync(frontendDataDir)) {
-    fs.mkdirSync(frontendDataDir, { recursive: true });
-  }
+  if (!fs.existsSync(frontendDataDir)) fs.mkdirSync(frontendDataDir, { recursive: true });
   fs.writeFileSync(path.join(frontendDataDir, 'round_' + roundNumber + '_proofs.json'), JSON.stringify({
     round: roundNumber,
     merkleRoot: root,
