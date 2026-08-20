@@ -58,10 +58,44 @@ export default function Checker() {
   const { ready, authenticated, user, login, logout } = usePrivy();
   const [balance, setBalance] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [eligiblePoolSum, setEligiblePoolSum] = useState(194492639); // live sum of 5M+ user wallets
+  const [eligibleWalletsCount, setEligibleWalletsCount] = useState(15);
   const [claimHistory, setClaimHistory] = useState({}); // { 1: { claimed: true, txHash: '0x...', amount: '200,000 $VIBE', date: 'Aug 26, 2026' } }
   
   const nextInfo = getNextUnlockInfo();
   const now = new Date();
+
+  // Fetch real-time eligible holders list and sum from Base network
+  useEffect(() => {
+    async function fetchLiveEligiblePool() {
+      try {
+        const res = await fetch('https://base.blockscout.com/api/v2/tokens/0xb200000000000000000000df24ecb8bf51100a01/holders');
+        const data = await res.json();
+        if (data && data.items) {
+          const systemAddrs = [
+            '0x498581ff718922c3f8e6a244956af099b2652b2b', // PoolManager
+            '0x3beea54db87a632a5faf20db6765d3af94c81b31', // VestingVault
+            '0x000000000000000000000000000000000000dead', // Burn
+            '0x067c66addd3c6d484c1882b68e197b614f7f3ebf', // Buyback
+            '0x3b277d566b4557a53392712b1dc830da5d13ba91'  // Dist
+          ];
+          const eligible = data.items.filter(h => {
+            const val = Number(h.value) / 1e18;
+            const addr = h.address.hash.toLowerCase();
+            return val >= 5000000 && !systemAddrs.includes(addr);
+          });
+          if (eligible.length > 0) {
+            const sum = eligible.reduce((acc, h) => acc + (Number(h.value) / 1e18), 0);
+            setEligiblePoolSum(sum);
+            setEligibleWalletsCount(eligible.length);
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching live eligible pool:', err);
+      }
+    }
+    fetchLiveEligiblePool();
+  }, []);
 
   useEffect(() => {
     async function checkBalance() {
@@ -88,10 +122,15 @@ export default function Checker() {
 
   const isEligible = balance !== null && balance >= MIN_BALANCE;
 
-  // Dynamic estimated reward for the upcoming round based on holding weight
-  const estimatedReward = isEligible
-    ? Math.max(1, Math.round((balance / ESTIMATED_ELIGIBLE_SUPPLY) * MONTHLY_POOL))
+  // Exact dynamic calculation: userBalance / totalEligiblePool * MONTHLY_POOL
+  const effectivePool = Math.max(eligiblePoolSum, balance || 0);
+  const estimatedReward = isEligible && effectivePool > 0
+    ? Math.round((balance / effectivePool) * MONTHLY_POOL)
     : 0;
+
+  const userSharePercent = isEligible && effectivePool > 0
+    ? ((balance / effectivePool) * 100).toFixed(2)
+    : '0.00';
 
   // Helper to evaluate round status
   const getRoundStatus = (round, index) => {
@@ -207,26 +246,45 @@ export default function Checker() {
                       </span>
                     </div>
 
-                    {/* Stat Tiles in 3 columns */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px', marginBottom: '16px' }}>
-                      <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
-                        <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Your Balance</div>
-                        <div style={{ fontSize: '1.15rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>
+                    {/* Stat Tiles in 4 columns */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '12px', marginBottom: '16px' }}>
+                      <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 14px' }}>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Your Balance</div>
+                        <div style={{ fontSize: '1.1rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>
                           {balance.toLocaleString(undefined, { maximumFractionDigits: 0 })} $VIBE
                         </div>
-                      </div>
-
-                      <div style={{ background: '#ffffff', border: '1px solid rgba(0, 82, 255, 0.25)', borderRadius: '14px', padding: '12px 16px' }}>
-                        <div style={{ fontSize: '0.7rem', color: 'var(--blue)', textTransform: 'uppercase', fontWeight: 900 }}>Estimated Reward (Current)</div>
-                        <div style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--blue)', marginTop: '2px' }}>
-                          ~{estimatedReward.toLocaleString()} $VIBE
+                        <div style={{ fontSize: '0.72rem', color: 'var(--blue)', fontWeight: 700, marginTop: '2px' }}>
+                          {userSharePercent}% of qualified pool
                         </div>
                       </div>
 
-                      <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
-                        <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Snapshot Status</div>
-                        <div style={{ fontSize: '1.15rem', fontWeight: 900, color: '#10b981', marginTop: '2px' }}>
-                          Aug 26 (00:00 UTC)
+                      <div style={{ background: '#ffffff', border: '1px solid rgba(0, 82, 255, 0.25)', borderRadius: '14px', padding: '12px 14px' }}>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--blue)', textTransform: 'uppercase', fontWeight: 900 }}>Estimated Reward</div>
+                        <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--blue)', marginTop: '2px' }}>
+                          ~{estimatedReward.toLocaleString()} $VIBE
+                        </div>
+                        <div style={{ fontSize: '0.72rem', color: 'var(--muted)', fontWeight: 600, marginTop: '2px' }}>
+                          Month 1 (from 10M pool)
+                        </div>
+                      </div>
+
+                      <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 14px' }}>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Qualified Wallets</div>
+                        <div style={{ fontSize: '1.1rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>
+                          {eligibleWalletsCount} Wallets (≥ 5M)
+                        </div>
+                        <div style={{ fontSize: '0.72rem', color: '#10b981', fontWeight: 700, marginTop: '2px' }}>
+                          Live on-chain
+                        </div>
+                      </div>
+
+                      <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 14px' }}>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Qualified Pool Total</div>
+                        <div style={{ fontSize: '1.1rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>
+                          ~{(eligiblePoolSum / 1e6).toFixed(1)}M $VIBE
+                        </div>
+                        <div style={{ fontSize: '0.72rem', color: 'var(--muted)', fontWeight: 600, marginTop: '2px' }}>
+                          Sum of 5M+ balances
                         </div>
                       </div>
                     </div>
