@@ -468,7 +468,215 @@ function Tokenomics() {
           </div>
         </div>
 
-        {/* BLOCK 3: VESTING DETAILS */}
+        {/* BLOCK 3: COMMUNITY REWARDS ECONOMY */}
+        <div className="sec-head" style={{ marginBottom: '40px', marginTop: '60px' }}>
+          <h2>Community Rewards <span className="bl">Economy</span>.</h2>
+          <p className="sec-sub">
+            Strategic distribution of the 70% community allocation across continuous 10-day rolling epoch cycles with zero token inflation.
+          </p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))', gap: '24px', marginBottom: '60px' }}>
+          
+          {/* Left Side: 4 Pillar Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            
+            {/* 1. VibeVerse App Rewards */}
+            <div className="tok-card" style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderTop: '4px solid #0052ff' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                  <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0052ff' }}>
+                    <Gamepad2 size={22} />
+                  </div>
+                  <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#0052ff', letterSpacing: '-0.5px' }}>30%</span>
+                </div>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>VibeVerse App</h4>
+                <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
+                  In-game quests, mini-game leaderboards, and daily gameplay reward pools.
+                </p>
+              </div>
+              <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#0052ff', background: 'rgba(0, 82, 255, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
+                <Clock size={12} /> 10-Day Epoch Cycles
+              </div>
+            </div>
+
+            {/* 2. $VIBE Staking Pool */}
+            <div className="tok-card" style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderTop: '4px solid #7c3aed' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                  <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(124, 58, 237, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed' }}>
+                    <Coins size={22} />
+                  </div>
+                  <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#7c3aed', letterSpacing: '-0.5px' }}>15%</span>
+                </div>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>$VIBE Staking</h4>
+                <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
+                  Yield generation for holders locking $VIBE, reducing circulating market supply.
+                </p>
+              </div>
+              <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#7c3aed', background: 'rgba(124, 58, 237, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
+                <Clock size={12} /> 10-Day Epoch Cycles
+              </div>
+            </div>
+
+            {/* 3. Vibe Club NFT Holders */}
+            <div className="tok-card" style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderTop: '4px solid #10b981' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                  <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981' }}>
+                    <Crown size={22} />
+                  </div>
+                  <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#10b981', letterSpacing: '-0.5px' }}>15%</span>
+                </div>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>Vibe Club NFTs</h4>
+                <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
+                  Direct royalty dividends &amp; rewards for verified holders of the 333 Genesis NFTs.
+                </p>
+              </div>
+              <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#10b981', background: 'rgba(16, 185, 129, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
+                <Clock size={12} /> 10-Day Epoch Cycles
+              </div>
+            </div>
+
+            {/* 4. Strategic Reserve & Marketing */}
+            <div className="tok-card" style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderTop: '4px solid #f59e0b' }}>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                  <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(245, 158, 11, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b' }}>
+                    <ShieldCheck size={22} />
+                  </div>
+                  <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#f59e0b', letterSpacing: '-0.5px' }}>40%</span>
+                </div>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>Reserve &amp; Growth</h4>
+                <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
+                  Continuous stability buffer guaranteeing non-zero reward pools + marketing campaigns.
+                </p>
+              </div>
+              <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#f59e0b', background: 'rgba(245, 158, 11, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
+                <Sparkles size={12} /> Perpetual Buffer
+              </div>
+            </div>
+
+          </div>
+
+          {/* Right Side: Donut Chart */}
+          <div className="tok-card" style={{ padding: '32px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '4px', color: 'var(--ink)' }}>Community Pool Distribution</h3>
+              <p className="sub" style={{ fontSize: '0.85rem', color: 'var(--muted)', margin: 0 }}>Allocation of the 70% Revenue Share (Normalized to 100%).</p>
+            </div>
+
+            <div style={{ position: 'relative', width: '100%', maxWidth: '420px', margin: '16px auto 8px', flexShrink: 0 }}>
+              <svg viewBox="0 0 420 280" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}>
+                <defs>
+                  <linearGradient id="commBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#3b82f6" />
+                    <stop offset="100%" stopColor="#0052ff" />
+                  </linearGradient>
+                  <linearGradient id="commPurpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#a855f7" />
+                    <stop offset="100%" stopColor="#7c3aed" />
+                  </linearGradient>
+                  <linearGradient id="commGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#34d399" />
+                    <stop offset="100%" stopColor="#10b981" />
+                  </linearGradient>
+                  <linearGradient id="commAmberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#fbbf24" />
+                    <stop offset="100%" stopColor="#f59e0b" />
+                  </linearGradient>
+
+                  <filter id="commBlueGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#0052ff" floodOpacity="0.25" />
+                  </filter>
+                  <filter id="commPurpleGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#7c3aed" floodOpacity="0.25" />
+                  </filter>
+                  <filter id="commGreenGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#10b981" floodOpacity="0.25" />
+                  </filter>
+                  <filter id="commAmberGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#f59e0b" floodOpacity="0.25" />
+                  </filter>
+                </defs>
+
+                <g transform="translate(210, 140)">
+                  {/* Track Ring */}
+                  <circle cx="0" cy="0" r="80" fill="none" stroke="#f1f5f9" strokeWidth="18" />
+
+                  {/* 40% Reserve & Growth (Offset 0 to 40) */}
+                  <circle cx="0" cy="0" r="80" fill="none" stroke="url(#commAmberGrad)" strokeWidth="18"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="37 100" strokeDashoffset="-1.5"
+                          transform="rotate(-90)" filter="url(#commAmberGlow)" style={{ transition: 'all 0.5s ease' }} />
+
+                  {/* 30% VibeVerse App (Offset 40 to 70) */}
+                  <circle cx="0" cy="0" r="80" fill="none" stroke="url(#commBlueGrad)" strokeWidth="18"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="27 100" strokeDashoffset="-41.5"
+                          transform="rotate(-90)" filter="url(#commBlueGlow)" style={{ transition: 'all 0.5s ease' }} />
+
+                  {/* 15% Staking (Offset 70 to 85) */}
+                  <circle cx="0" cy="0" r="80" fill="none" stroke="url(#commPurpleGrad)" strokeWidth="18"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="12 100" strokeDashoffset="-71.5"
+                          transform="rotate(-90)" filter="url(#commPurpleGlow)" style={{ transition: 'all 0.5s ease' }} />
+
+                  {/* 15% Vibe Club NFT (Offset 85 to 100) */}
+                  <circle cx="0" cy="0" r="80" fill="none" stroke="url(#commGreenGrad)" strokeWidth="18"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="12 100" strokeDashoffset="-86.5"
+                          transform="rotate(-90)" filter="url(#commGreenGlow)" style={{ transition: 'all 0.5s ease' }} />
+
+                  {/* Callouts */}
+                  {/* Amber (Top Right) */}
+                  <circle cx="65" cy="-47" r="4" fill="#f59e0b" />
+                  <polyline points="65,-47 95,-70 125,-70" fill="none" stroke="#f59e0b" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="130" y="-64" fill="#f59e0b" fontSize="12" fontWeight="800" textAnchor="start">Reserve 40%</text>
+
+                  {/* Blue (Bottom Right) */}
+                  <circle cx="50" cy="62" r="4" fill="#0052ff" />
+                  <polyline points="50,62 78,85 115,85" fill="none" stroke="#0052ff" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="120" y="90" fill="#0052ff" fontSize="12" fontWeight="800" textAnchor="start">VibeVerse 30%</text>
+
+                  {/* Purple (Bottom Left) */}
+                  <circle cx="-55" cy="58" r="4" fill="#7c3aed" />
+                  <polyline points="-55,58 -80,85 -115,85" fill="none" stroke="#7c3aed" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="-120" y="90" fill="#7c3aed" fontSize="12" fontWeight="800" textAnchor="end">Staking 15%</text>
+
+                  {/* Green (Top Left) */}
+                  <circle cx="-62" cy="-50" r="4" fill="#10b981" />
+                  <polyline points="-62,-50 -90,-70 -125,-70" fill="none" stroke="#10b981" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="-130" y="-64" fill="#10b981" fontSize="12" fontWeight="800" textAnchor="end">NFT Club 15%</text>
+
+                  {/* Center Text */}
+                  <text x="0" y="-3" fill="var(--ink)" fontSize="28" fontWeight="900" textAnchor="middle" letterSpacing="-0.5px">100%</text>
+                  <text x="0" y="16" fill="var(--muted)" fontSize="9" fontWeight="800" textAnchor="middle" letterSpacing="1px">COMMUNITY</text>
+                </g>
+              </svg>
+            </div>
+
+            {/* Legend Pills */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '8px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(0, 82, 255, 0.08)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '4px 10px', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 800, color: 'var(--blue)' }}>
+                <Gamepad2 size={13} /> VibeVerse 30%
+              </div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(124, 58, 237, 0.08)', border: '1px solid rgba(124, 58, 237, 0.2)', padding: '4px 10px', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 800, color: '#7c3aed' }}>
+                <Coins size={13} /> Staking 15%
+              </div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '4px 10px', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 800, color: '#10b981' }}>
+                <Crown size={13} /> NFT Club 15%
+              </div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.2)', padding: '4px 10px', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 800, color: '#f59e0b' }}>
+                <ShieldCheck size={13} /> Reserve 40%
+              </div>
+            </div>
+
+            {/* Epochs Schedule Note */}
+            <div style={{ marginTop: '14px', padding: '8px 12px', background: 'rgba(0, 82, 255, 0.04)', borderRadius: '10px', border: '1px dashed rgba(0, 82, 255, 0.15)', fontSize: '0.78rem', color: 'var(--ink)', fontWeight: 600 }}>
+              Continuous 10-day rolling epoch cycles with staggered 3-day rhythm. Zero token inflation.
+            </div>
+          </div>
+
+        </div>
+
+        {/* BLOCK 4: VESTING DETAILS */}
         <div className="sec-head" style={{ marginBottom: '40px', marginTop: '40px' }}>
           <h2>Vesting <span className="bl">Details</span>.</h2>
           <p className="sec-sub">100M tokens vested. Every month 10M unlocks and get distributed among holders.</p>
