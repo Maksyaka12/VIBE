@@ -66,13 +66,33 @@ export default function Checker() {
   const nextInfo = getNextUnlockInfo();
   const now = new Date();
 
-  // Fetch real-time eligible holders list and sum from Base network (with o1 verified baseline fallback)
+  // Fetch real-time eligible holders list and sum from Base network with multi-page traversal
   useEffect(() => {
     async function fetchLiveEligiblePool() {
       try {
-        const res = await fetch('https://base.blockscout.com/api/v2/tokens/0xb200000000000000000000df24ecb8bf51100a01/holders');
-        const data = await res.json();
-        if (data && data.items) {
+        let url = 'https://base.blockscout.com/api/v2/tokens/0xb200000000000000000000df24ecb8bf51100a01/holders';
+        let allItems = [];
+        let page = 0;
+        
+        while (url && page < 10) {
+          const res = await fetch(url);
+          const data = await res.json();
+          if (!data || !data.items || data.items.length === 0) break;
+          allItems.push(...data.items);
+          
+          const lastVal = Number(data.items[data.items.length - 1].value) / 1e18;
+          if (lastVal < 5000000) break; // Finished scanning past 5M threshold
+          
+          if (data.next_page_params) {
+            const q = new URLSearchParams(data.next_page_params).toString();
+            url = `https://base.blockscout.com/api/v2/tokens/0xb200000000000000000000df24ecb8bf51100a01/holders?${q}`;
+            page++;
+          } else {
+            break;
+          }
+        }
+
+        if (allItems.length > 0) {
           const systemAddrs = [
             '0x498581ff718922c3f8e6a244956af099b2652b2b', // PoolManager
             '0x3beea54db87a632a5faf20db6765d3af94c81b31', // VestingVault
@@ -80,12 +100,13 @@ export default function Checker() {
             '0x067c66addd3c6d484c1882b68e197b614f7f3ebf', // Buyback
             '0x3b277d566b4557a53392712b1dc830da5d13ba91'  // Dist
           ];
-          const eligible = data.items.filter(h => {
+          const eligible = allItems.filter(h => {
             const val = Number(h.value) / 1e18;
             const addr = h.address.hash.toLowerCase();
             return val >= 5000000 && !systemAddrs.includes(addr);
           });
-          if (eligible.length >= DEFAULT_QUALIFIED_WALLETS_COUNT) {
+          
+          if (eligible.length > 0) {
             const sum = eligible.reduce((acc, h) => acc + (Number(h.value) / 1e18), 0);
             setEligiblePoolSum(sum);
             setEligibleWalletsCount(eligible.length);
