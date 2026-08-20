@@ -709,8 +709,8 @@ function Tokenomics() {
                   <div className="who-t">Claim Window<span>Stays open for 30 days until the next unlock</span></div>
                 </div>
                 <div className="who-r">
-                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><RotateCcw color="var(--blue)" size={20}/></div>
-                  <div className="who-t">Unclaimed Tokens<span>Returned to the community reserved pool</span></div>
+                  <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Flame color="#ef4444" size={20}/></div>
+                  <div className="who-t">Unclaimed Tokens<span>Permanently burned</span></div>
                 </div>
                 <Link to="/checker" className="who-r" style={{textDecoration:'none', cursor:'pointer', background:'var(--blue)'}}>
                   <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Check color="#fff" size={20}/></div>
