@@ -80,7 +80,7 @@ function Nav() {
     { id: 'vibe-club', label: 'Vibe Club', isClub: true },
     { id: 'about', label: 'About' },
     { id: 'tokenomics', label: 'Tokenomics' },
-    { id: 'events', label: 'Events' },
+    { id: 'rewards', label: 'Rewards' },
     { id: 'roadmap', label: 'Roadmap' },
     { id: 'chart', label: 'Chart' },
     { id: 'trade', label: 'Trade' },
@@ -968,7 +968,46 @@ function Footer() {
   );
 }
 
-const EVENT_DATA = [
+const STAKING_EPOCHS = [
+  { epoch: 'Epoch 1', dates: 'Aug 26 – Sep 05, 2026', pool: '15% Pool', status: 'ongoing', note: 'Active Accumulation' },
+  { epoch: 'Epoch 2', dates: 'Sep 05 – Sep 15, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 3', dates: 'Sep 15 – Sep 25, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 4', dates: 'Sep 25 – Oct 05, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 5', dates: 'Oct 05 – Oct 15, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 6', dates: 'Oct 15 – Oct 25, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 7', dates: 'Oct 25 – Nov 04, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 8', dates: 'Nov 04 – Nov 14, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 9', dates: 'Nov 14 – Nov 24, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 10', dates: 'Nov 24 – Dec 04, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+];
+
+const VIBEVERSE_EPOCHS = [
+  { epoch: 'Epoch 1', dates: 'Aug 29 – Sep 08, 2026', pool: '30% Pool', status: 'ongoing', note: 'Active Gameplay Leaderboard' },
+  { epoch: 'Epoch 2', dates: 'Sep 08 – Sep 18, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 3', dates: 'Sep 18 – Sep 28, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 4', dates: 'Sep 28 – Oct 08, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 5', dates: 'Oct 08 – Oct 18, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 6', dates: 'Oct 18 – Oct 28, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 7', dates: 'Oct 28 – Nov 07, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 8', dates: 'Nov 07 – Nov 17, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 9', dates: 'Nov 17 – Nov 27, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 10', dates: 'Nov 27 – Dec 07, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
+];
+
+const VIBECLUB_EPOCHS = [
+  { epoch: 'Epoch 1', dates: 'Sep 01 – Sep 11, 2026', pool: '15% Pool', status: 'ongoing', note: 'Genesis Royalty Pool' },
+  { epoch: 'Epoch 2', dates: 'Sep 11 – Sep 21, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 3', dates: 'Sep 21 – Oct 01, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 4', dates: 'Oct 01 – Oct 11, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 5', dates: 'Oct 11 – Oct 21, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 6', dates: 'Oct 21 – Oct 31, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 7', dates: 'Oct 31 – Nov 10, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 8', dates: 'Nov 10 – Nov 20, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 9', dates: 'Nov 20 – Nov 30, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 10', dates: 'Nov 30 – Dec 10, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+];
+
+const GIVEAWAYS_DATA = [
   {
     id: 3,
     title: '1000 Holders Party',
@@ -1001,189 +1040,677 @@ const EVENT_DATA = [
   }
 ];
 
-function Events() {
-  const [filter, setFilter] = useState('all');
+function Rewards() {
+  const [activeTab, setActiveTab] = useState('all');
+  const [giveawayFilter, setGiveawayFilter] = useState('all');
   const r = useRev();
+  const now = new Date();
 
-  const filteredEvents = EVENT_DATA.filter(e => filter === 'all' || e.status === filter);
+  const filteredGiveaways = GIVEAWAYS_DATA.filter(e => giveawayFilter === 'all' || e.status === giveawayFilter);
 
-  const counts = {
-    all: EVENT_DATA.length,
-    ongoing: EVENT_DATA.filter(e => e.status === 'ongoing').length,
-    ended: EVENT_DATA.filter(e => e.status === 'ended').length
+  const giveawayCounts = {
+    all: GIVEAWAYS_DATA.length,
+    ongoing: GIVEAWAYS_DATA.filter(e => e.status === 'ongoing').length,
+    ended: GIVEAWAYS_DATA.filter(e => e.status === 'ended').length
   };
 
+  const navTabs = [
+    { id: 'all', label: 'All Rewards (5)' },
+    { id: 'staking', label: 'Staking' },
+    { id: 'vibe-club', label: 'Vibe Club' },
+    { id: 'vibe-verse', label: 'Vibe Verse' },
+    { id: 'holders', label: 'Holder Rewards' },
+    { id: 'giveaways', label: 'Giveaways' },
+  ];
+
   return (
-    <section id="events" className="alt">
+    <section id="rewards" className="alt" style={{ padding: '140px 0 100px 0' }}>
       <div className="wrap">
-        <div className="sec-head rv" ref={r} style={{ marginBottom: '40px' }}>
-          <h2>Community <span className="bl">Events</span> & Rewards.</h2>
-          <p className="sec-sub">Track active and past events, participate, and win $VIBE rewards.</p>
+        <div className="sec-head rv" ref={r} style={{ marginBottom: '32px' }}>
+          <h2>Community <span className="bl">Rewards</span> Hub.</h2>
+          <p className="sec-sub">Track active reward epochs, staking yield cycles, Genesis NFT payouts, and community events.</p>
         </div>
 
-        {/* High-Contrast Individual Filter Buttons */}
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '40px', flexWrap: 'wrap' }}>
-          {['all', 'ongoing', 'ended'].map(f => {
-            const label = f === 'all' ? `All Events (${counts.all})` : f === 'ongoing' ? `Ongoing (${counts.ongoing})` : `Ended (${counts.ended})`;
-            const isActive = filter === f;
+        {/* Top Category Tab Navigation */}
+        <div style={{ display: 'flex', gap: '10px', marginBottom: '40px', flexWrap: 'wrap' }}>
+          {navTabs.map(tab => {
+            const isActive = activeTab === tab.id;
             return (
-              <button 
-                key={f}
-                onClick={() => setFilter(f)}
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
                 style={{
-                  padding: '10px 24px',
+                  padding: '10px 22px',
                   borderRadius: '99px',
                   border: isActive ? '1px solid var(--blue)' : '1px solid #cbd5e1',
-                  background: isActive ? 'var(--blue)' : '#f8fafc',
-                  color: isActive ? '#fff' : 'var(--ink)',
+                  background: isActive ? 'var(--blue)' : '#ffffff',
+                  color: isActive ? '#ffffff' : 'var(--ink)',
                   fontWeight: 800,
                   fontSize: '0.9rem',
                   cursor: 'pointer',
-                  boxShadow: isActive ? '0 4px 14px rgba(0, 82, 255, 0.35)' : '0 2px 8px rgba(0,0,0,0.06)',
-                  transition: 'all 0.2s'
+                  boxShadow: isActive ? '0 4px 14px rgba(0, 82, 255, 0.35)' : '0 2px 6px rgba(0,0,0,0.04)',
+                  transition: 'all 0.2s',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}
               >
-                {label}
+                {tab.label}
               </button>
             );
           })}
         </div>
 
-        {/* Events Grid */}
-        <div className="events-grid" style={{ display: 'grid', gap: '24px', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 380px), 1fr))' }}>
-          {filteredEvents.map(ev => (
-            <div key={ev.id} className="tok-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
-              {/* Event Image Banner */}
-              <div style={{ position: 'relative', background: '#f8fafc', borderBottom: '1px solid var(--borderf)' }}>
-                <img src={ev.image} alt={ev.title} style={{ width: '100%', height: 'auto', display: 'block' }} />
-                
-                {/* Status Pill on Banner Bottom-Right */}
-                <span style={{
-                  position: 'absolute',
-                  bottom: '12px',
-                  right: '12px',
-                  background: ev.status === 'ongoing' ? '#10b981' : '#ef4444',
-                  color: '#fff',
-                  padding: '4px 12px',
-                  borderRadius: '99px',
-                  fontSize: '0.72rem',
-                  fontWeight: 900,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                  boxShadow: ev.status === 'ongoing' ? '0 4px 12px rgba(16, 185, 129, 0.4)' : '0 4px 12px rgba(239, 68, 68, 0.4)'
-                }}>
-                  {ev.status === 'ongoing' && <span style={{ width: '6px', height: '6px', background: '#fff', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,255,255,0.8)' }} />}
-                  {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
-                </span>
+        {/* ── 1. STAKING REWARDS SECTION ── */}
+        {(activeTab === 'all' || activeTab === 'staking') && (
+          <div className="tok-card" style={{ marginBottom: '36px', padding: '32px 28px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--borderf)', paddingBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(124, 58, 237, 0.1)', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Coins size={26} strokeWidth={2.5} />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: 900, margin: 0, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    $VIBE Staking Rewards
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800, padding: '4px 10px', borderRadius: '6px', background: 'rgba(124, 58, 237, 0.12)', color: '#7c3aed', border: '1px solid rgba(124, 58, 237, 0.25)' }}>
+                      15% Allocation
+                    </span>
+                  </h3>
+                  <p style={{ margin: '4px 0 0 0', color: 'var(--muted)', fontSize: '0.88rem', fontWeight: 500 }}>
+                    Yield generation for holders locking $VIBE, distributed across continuous 10-day rolling epoch cycles.
+                  </p>
+                </div>
               </div>
 
-              {/* Event Body */}
-              <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                
-                {/* Title Header */}
-                <div style={{ marginBottom: '14px' }}>
-                  <h3 style={{ fontSize: '1.3rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
-                </div>
+              <a
+                href={O1}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-fill"
+                style={{ background: '#7c3aed', padding: '10px 20px', fontSize: '0.88rem', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
+                Stake $VIBE <ArrowUpRight size={16} strokeWidth={2.5} />
+              </a>
+            </div>
 
-                {/* 4 Separate Compact Stat Tiles in 2x2 Grid */}
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: '10px',
-                  marginBottom: '16px'
-                }}>
-                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px 12px' }}>
-                    <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
-                      Prize Pool
-                    </div>
-                    <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.9rem' }}>
-                      {ev.prizePool}
-                    </div>
-                  </div>
-
-                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px 12px' }}>
-                    <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
-                      Winners
-                    </div>
-                    <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.9rem' }}>
-                      {ev.winners}
-                    </div>
-                  </div>
-
-                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px 12px' }}>
-                    <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
-                      Status
-                    </div>
-                    <div style={{ fontWeight: 800, color: ev.status === 'ongoing' ? '#10b981' : '#ef4444', fontSize: '0.9rem', textTransform: 'capitalize' }}>
-                      {ev.status}
-                    </div>
-                  </div>
-
-                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px 12px' }}>
-                    <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '2px' }}>
-                      Distribution
-                    </div>
-                    <div style={{
-                      fontWeight: 800,
-                      color: ev.distribution.startsWith('In Progress') ? 'var(--blue)' : ev.distribution === 'Completed' ? '#10b981' : '#d97706',
-                      fontSize: '0.82rem',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '5px'
-                    }}>
-                      {ev.distribution.startsWith('In Progress') && (
-                        <span style={{
-                          width: '6px',
-                          height: '6px',
-                          background: 'var(--blue)',
-                          borderRadius: '50%',
-                          display: 'inline-block',
-                          flexShrink: 0,
-                          boxShadow: '0 0 6px rgba(0, 82, 255, 0.8)'
-                        }} />
-                      )}
-                      {ev.distribution === 'Completed' && '✓ '}
-                      {ev.distribution === 'Not Started' && '⏱ '}
-                      {ev.distribution}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action Button */}
-                <a 
-                  href={ev.link} 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  style={{
-                    marginTop: 'auto',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '6px',
-                    background: 'var(--blue)',
-                    color: '#fff',
-                    padding: '12px',
-                    borderRadius: '10px',
-                    fontWeight: 800,
-                    fontSize: '0.9rem',
-                    textDecoration: 'none',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  {ev.status === 'ongoing' ? 'Participate' : 'View Event'} <ArrowUpRight size={16} strokeWidth={2.5} />
-                </a>
+            {/* Quick Metrics Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Pool Share</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#7c3aed', marginTop: '2px' }}>15% of Reserve</div>
+              </div>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Epoch Duration</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>10 Days (Rolling)</div>
+              </div>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Eligibility</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>Locked $VIBE Wallets</div>
+              </div>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Rhythm Schedule</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#10b981', marginTop: '2px' }}>Zero Token Inflation</div>
               </div>
             </div>
-          ))}
-        </div>
-        {filteredEvents.length === 0 && (
-          <div style={{ textAlign: 'center', color: 'var(--muted)', padding: '60px 20px', fontSize: '1.1rem' }}>
-            No events found for this category.
+
+            {/* Epochs List */}
+            <div style={{ background: '#f9fbff', border: '1px solid rgba(124, 58, 237, 0.15)', borderRadius: '18px', padding: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Calendar size={16} color="#7c3aed" /> Epoch Schedule
+                </span>
+                <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600 }}>Continuous 10-Day Cycles</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {STAKING_EPOCHS.map((ep, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '12px 16px',
+                      background: '#ffffff',
+                      borderRadius: '12px',
+                      border: '1px solid #e2e8f0',
+                      flexWrap: 'wrap',
+                      gap: '8px'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{ fontWeight: 900, color: '#7c3aed', fontSize: '0.95rem', minWidth: '70px' }}>{ep.epoch}</span>
+                      <span style={{ color: 'var(--ink)', fontWeight: 600, fontSize: '0.9rem' }}>{ep.dates}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                      <span style={{ color: 'var(--muted)', fontSize: '0.82rem', fontWeight: 600 }}>{ep.note}</span>
+                      <span
+                        style={{
+                          padding: '4px 10px',
+                          borderRadius: '99px',
+                          fontSize: '0.72rem',
+                          fontWeight: 800,
+                          textTransform: 'uppercase',
+                          background: ep.status === 'ongoing' ? 'rgba(16, 185, 129, 0.12)' : '#f1f5f9',
+                          color: ep.status === 'ongoing' ? '#10b981' : 'var(--muted)',
+                          border: ep.status === 'ongoing' ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid #e2e8f0',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px'
+                        }}
+                      >
+                        {ep.status === 'ongoing' && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />}
+                        {ep.status}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )}
+
+        {/* ── 2. VIBE CLUB NFT REWARDS SECTION ── */}
+        {(activeTab === 'all' || activeTab === 'vibe-club') && (
+          <div className="tok-card" style={{ marginBottom: '36px', padding: '32px 28px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--borderf)', paddingBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Crown size={26} strokeWidth={2.5} />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: 900, margin: 0, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    Vibe Club NFT Rewards
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800, padding: '4px 10px', borderRadius: '6px', background: 'rgba(16, 185, 129, 0.12)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.25)' }}>
+                      15% Royalty Allocation
+                    </span>
+                  </h3>
+                  <p style={{ margin: '4px 0 0 0', color: 'var(--muted)', fontSize: '0.88rem', fontWeight: 500 }}>
+                    Direct royalty dividends & rewards for verified holders of the 333 Genesis NFTs across 10-day epoch cycles.
+                  </p>
+                </div>
+              </div>
+
+              <a
+                href="https://vibeverse.dog/vibeclub"
+                target="_blank"
+                rel="noreferrer"
+                className="btn-fill"
+                style={{ background: '#10b981', padding: '10px 20px', fontSize: '0.88rem', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
+                Vibe Club Portal <ArrowUpRight size={16} strokeWidth={2.5} />
+              </a>
+            </div>
+
+            {/* Quick Metrics Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Royalty Share</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#10b981', marginTop: '2px' }}>15% of Reserve</div>
+              </div>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Total Supply</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>333 Genesis NFTs</div>
+              </div>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Epoch Duration</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>10 Days (3-Day Offset)</div>
+              </div>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Distribution</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#0052ff', marginTop: '2px' }}>Automatic Dividends</div>
+              </div>
+            </div>
+
+            {/* Epochs List */}
+            <div style={{ background: '#f9fbff', border: '1px solid rgba(16, 185, 129, 0.15)', borderRadius: '18px', padding: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Calendar size={16} color="#10b981" /> Epoch Schedule
+                </span>
+                <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600 }}>Staggered 10-Day Rolling Cycles</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {VIBECLUB_EPOCHS.map((ep, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '12px 16px',
+                      background: '#ffffff',
+                      borderRadius: '12px',
+                      border: '1px solid #e2e8f0',
+                      flexWrap: 'wrap',
+                      gap: '8px'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{ fontWeight: 900, color: '#10b981', fontSize: '0.95rem', minWidth: '70px' }}>{ep.epoch}</span>
+                      <span style={{ color: 'var(--ink)', fontWeight: 600, fontSize: '0.9rem' }}>{ep.dates}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                      <span style={{ color: 'var(--muted)', fontSize: '0.82rem', fontWeight: 600 }}>{ep.note}</span>
+                      <span
+                        style={{
+                          padding: '4px 10px',
+                          borderRadius: '99px',
+                          fontSize: '0.72rem',
+                          fontWeight: 800,
+                          textTransform: 'uppercase',
+                          background: ep.status === 'ongoing' ? 'rgba(16, 185, 129, 0.12)' : '#f1f5f9',
+                          color: ep.status === 'ongoing' ? '#10b981' : 'var(--muted)',
+                          border: ep.status === 'ongoing' ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid #e2e8f0',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px'
+                        }}
+                      >
+                        {ep.status === 'ongoing' && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />}
+                        {ep.status}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── 3. VIBEVERSE APP REWARDS SECTION ── */}
+        {(activeTab === 'all' || activeTab === 'vibe-verse') && (
+          <div className="tok-card" style={{ marginBottom: '36px', padding: '32px 28px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--borderf)', paddingBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(0, 82, 255, 0.1)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Gamepad2 size={26} strokeWidth={2.5} />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: 900, margin: 0, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    VibeVerse App Rewards
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800, padding: '4px 10px', borderRadius: '6px', background: 'rgba(0, 82, 255, 0.12)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.25)' }}>
+                      30% Allocation
+                    </span>
+                  </h3>
+                  <p style={{ margin: '4px 0 0 0', color: 'var(--muted)', fontSize: '0.88rem', fontWeight: 500 }}>
+                    In-game quests, mini-game leaderboards, and daily gameplay reward pools refueled every 10-day epoch.
+                  </p>
+                </div>
+              </div>
+
+              <a
+                href="https://vibeverse.dog"
+                target="_blank"
+                rel="noreferrer"
+                className="btn-fill"
+                style={{ background: 'var(--blue)', padding: '10px 20px', fontSize: '0.88rem', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
+                Launch VibeVerse <ArrowUpRight size={16} strokeWidth={2.5} />
+              </a>
+            </div>
+
+            {/* Quick Metrics Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Gaming Pool</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--blue)', marginTop: '2px' }}>30% of Reserve</div>
+              </div>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Epoch Duration</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>10 Days (3-Day Offset)</div>
+              </div>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Target Activity</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>Leaderboards &amp; Quests</div>
+              </div>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Platform</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#7c3aed', marginTop: '2px' }}>vibeverse.dog</div>
+              </div>
+            </div>
+
+            {/* Epochs List */}
+            <div style={{ background: '#f9fbff', border: '1px solid rgba(0, 82, 255, 0.15)', borderRadius: '18px', padding: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Calendar size={16} color="var(--blue)" /> Epoch Schedule
+                </span>
+                <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600 }}>Staggered 10-Day Rolling Cycles</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {VIBEVERSE_EPOCHS.map((ep, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '12px 16px',
+                      background: '#ffffff',
+                      borderRadius: '12px',
+                      border: '1px solid #e2e8f0',
+                      flexWrap: 'wrap',
+                      gap: '8px'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{ fontWeight: 900, color: 'var(--blue)', fontSize: '0.95rem', minWidth: '70px' }}>{ep.epoch}</span>
+                      <span style={{ color: 'var(--ink)', fontWeight: 600, fontSize: '0.9rem' }}>{ep.dates}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                      <span style={{ color: 'var(--muted)', fontSize: '0.82rem', fontWeight: 600 }}>{ep.note}</span>
+                      <span
+                        style={{
+                          padding: '4px 10px',
+                          borderRadius: '99px',
+                          fontSize: '0.72rem',
+                          fontWeight: 800,
+                          textTransform: 'uppercase',
+                          background: ep.status === 'ongoing' ? 'rgba(16, 185, 129, 0.12)' : '#f1f5f9',
+                          color: ep.status === 'ongoing' ? '#10b981' : 'var(--muted)',
+                          border: ep.status === 'ongoing' ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid #e2e8f0',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px'
+                        }}
+                      >
+                        {ep.status === 'ongoing' && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />}
+                        {ep.status}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── 4. HOLDER REWARDS VESTING SECTION ── */}
+        {(activeTab === 'all' || activeTab === 'holders') && (
+          <div className="tok-card" style={{ marginBottom: '36px', padding: '32px 28px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--borderf)', paddingBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(0, 82, 255, 0.1)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Gift size={26} strokeWidth={2.5} />
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: 900, margin: 0, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    Holder Rewards Vesting
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800, padding: '4px 10px', borderRadius: '6px', background: 'rgba(0, 82, 255, 0.12)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.25)' }}>
+                      100M $VIBE Vested
+                    </span>
+                  </h3>
+                  <p style={{ margin: '4px 0 0 0', color: 'var(--muted)', fontSize: '0.88rem', fontWeight: 500 }}>
+                    10 monthly unlocks of 10M $VIBE distributed directly to qualified holders holding 5,000,000+ tokens.
+                  </p>
+                </div>
+              </div>
+
+              <Link
+                to="/checker"
+                className="btn-fill"
+                style={{ background: 'var(--blue)', padding: '10px 20px', fontSize: '0.88rem', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none' }}
+              >
+                Check Eligibility <ArrowRightCircle size={16} strokeWidth={2.5} />
+              </Link>
+            </div>
+
+            {/* Quick Metrics Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Total Vested</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--blue)', marginTop: '2px' }}>100M $VIBE (10%)</div>
+              </div>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Monthly Unlock</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>10M $VIBE / Month</div>
+              </div>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Holding Requirement</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>5M+ $VIBE Balance</div>
+              </div>
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Unclaimed Policy</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#ef4444', marginTop: '2px' }}>Permanently Burned</div>
+              </div>
+            </div>
+
+            {/* Unlock Schedule List */}
+            <div style={{ background: '#f9fbff', border: '1px solid rgba(0, 82, 255, 0.15)', borderRadius: '18px', padding: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Calendar size={16} color="var(--blue)" /> Unlock Schedule (Aug 2026 – May 2027)
+                </span>
+                <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600 }}>10 Monthly Distribution Rounds</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {UNLOCKS.map((u, idx) => {
+                  const isUnlocked = new Date(u.d) <= now;
+                  return (
+                    <div
+                      key={idx}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '12px 16px',
+                        background: '#ffffff',
+                        borderRadius: '12px',
+                        border: '1px solid #e2e8f0',
+                        flexWrap: 'wrap',
+                        gap: '8px'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{ fontWeight: 900, color: 'var(--blue)', fontSize: '0.95rem', minWidth: '70px' }}>Month {idx + 1}</span>
+                        <span style={{ color: 'var(--ink)', fontWeight: 600, fontSize: '0.9rem' }}>{u.d}</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <span style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.9rem' }}>{u.a}</span>
+                        <span
+                          style={{
+                            padding: '4px 10px',
+                            borderRadius: '99px',
+                            fontSize: '0.72rem',
+                            fontWeight: 800,
+                            textTransform: 'uppercase',
+                            background: isUnlocked ? 'rgba(0, 82, 255, 0.12)' : '#f1f5f9',
+                            color: isUnlocked ? 'var(--blue)' : 'var(--muted)',
+                            border: isUnlocked ? '1px solid rgba(0, 82, 255, 0.3)' : '1px solid #e2e8f0',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '5px'
+                          }}
+                        >
+                          {isUnlocked ? 'Unlocked' : 'Locked'}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── 5. GIVEAWAYS SECTION ── */}
+        {(activeTab === 'all' || activeTab === 'giveaways') && (
+          <div style={{ marginTop: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
+              <div>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: 900, margin: 0, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <Sparkles size={24} color="#f59e0b" /> Community Giveaways &amp; Events
+                </h3>
+                <p style={{ margin: '4px 0 0 0', color: 'var(--muted)', fontSize: '0.88rem', fontWeight: 500 }}>
+                  Special community milestones, holder celebration parties, and promotional prize pools.
+                </p>
+              </div>
+
+              {/* Status Filter for Giveaways */}
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {['all', 'ongoing', 'ended'].map(f => {
+                  const label = f === 'all' ? `All (${giveawayCounts.all})` : f === 'ongoing' ? `Ongoing (${giveawayCounts.ongoing})` : `Ended (${giveawayCounts.ended})`;
+                  const isFActive = giveawayFilter === f;
+                  return (
+                    <button
+                      key={f}
+                      onClick={() => setGiveawayFilter(f)}
+                      style={{
+                        padding: '6px 14px',
+                        borderRadius: '99px',
+                        border: isFActive ? '1px solid var(--blue)' : '1px solid #cbd5e1',
+                        background: isFActive ? 'var(--blue)' : '#ffffff',
+                        color: isFActive ? '#ffffff' : 'var(--ink)',
+                        fontWeight: 800,
+                        fontSize: '0.82rem',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Giveaways Grid */}
+            <div className="events-grid" style={{ display: 'grid', gap: '24px', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 360px), 1fr))' }}>
+              {filteredGiveaways.map(ev => (
+                <div key={ev.id} className="tok-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  {/* Event Image Banner */}
+                  <div style={{ position: 'relative', background: '#f8fafc', borderBottom: '1px solid var(--borderf)' }}>
+                    <img src={ev.image} alt={ev.title} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                    
+                    {/* Status Pill on Banner Bottom-Right */}
+                    <span style={{
+                      position: 'absolute',
+                      bottom: '12px',
+                      right: '12px',
+                      background: ev.status === 'ongoing' ? '#10b981' : '#ef4444',
+                      color: '#fff',
+                      padding: '4px 12px',
+                      borderRadius: '99px',
+                      fontSize: '0.72rem',
+                      fontWeight: 900,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                      boxShadow: ev.status === 'ongoing' ? '0 4px 12px rgba(16, 185, 129, 0.4)' : '0 4px 12px rgba(239, 68, 68, 0.4)'
+                    }}>
+                      {ev.status === 'ongoing' && <span style={{ width: '6px', height: '6px', background: '#fff', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,255,255,0.8)' }} />}
+                      {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
+                    </span>
+                  </div>
+
+                  {/* Event Body */}
+                  <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                    {/* Title Header */}
+                    <div style={{ marginBottom: '14px' }}>
+                      <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
+                    </div>
+
+                    {/* 4 Separate Compact Stat Tiles in 2x2 Grid */}
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: '10px',
+                      marginBottom: '16px'
+                    }}>
+                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px 12px' }}>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
+                          Prize Pool
+                        </div>
+                        <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.9rem' }}>
+                          {ev.prizePool}
+                        </div>
+                      </div>
+
+                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px 12px' }}>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
+                          Winners
+                        </div>
+                        <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.9rem' }}>
+                          {ev.winners}
+                        </div>
+                      </div>
+
+                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px 12px' }}>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
+                          Status
+                        </div>
+                        <div style={{ fontWeight: 800, color: ev.status === 'ongoing' ? '#10b981' : '#ef4444', fontSize: '0.9rem', textTransform: 'capitalize' }}>
+                          {ev.status}
+                        </div>
+                      </div>
+
+                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px 12px' }}>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '2px' }}>
+                          Distribution
+                        </div>
+                        <div style={{
+                          fontWeight: 800,
+                          color: ev.distribution.startsWith('In Progress') ? 'var(--blue)' : ev.distribution === 'Completed' ? '#10b981' : '#d97706',
+                          fontSize: '0.82rem',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px'
+                        }}>
+                          {ev.distribution.startsWith('In Progress') && (
+                            <span style={{
+                              width: '6px',
+                              height: '6px',
+                              background: 'var(--blue)',
+                              borderRadius: '50%',
+                              display: 'inline-block',
+                              flexShrink: 0,
+                              boxShadow: '0 0 6px rgba(0, 82, 255, 0.8)'
+                            }} />
+                          )}
+                          {ev.distribution === 'Completed' && '✓ '}
+                          {ev.distribution === 'Not Started' && '⏱ '}
+                          {ev.distribution}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Action Button */}
+                    <a 
+                      href={ev.link} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      style={{
+                        marginTop: 'auto',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        background: 'var(--blue)',
+                        color: '#fff',
+                        padding: '12px',
+                        borderRadius: '10px',
+                        fontWeight: 800,
+                        fontSize: '0.9rem',
+                        textDecoration: 'none',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      {ev.status === 'ongoing' ? 'Participate' : 'View Event'} <ArrowUpRight size={16} strokeWidth={2.5} />
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {filteredGiveaways.length === 0 && (
+              <div style={{ textAlign: 'center', color: 'var(--muted)', padding: '40px 20px', fontSize: '1rem' }}>
+                No giveaways found for this filter.
+              </div>
+            )}
+          </div>
+        )}
+
       </div>
     </section>
   );
@@ -1263,7 +1790,8 @@ function DomainRouter() {
       <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
       <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
 
-      <Route path="/events" element={<StandaloneLayout><Events /></StandaloneLayout>} />
+      <Route path="/rewards" element={<StandaloneLayout><Rewards /></StandaloneLayout>} />
+      <Route path="/events" element={<StandaloneLayout><Rewards /></StandaloneLayout>} />
       <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} />
       <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
       <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
