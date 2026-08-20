@@ -7,7 +7,7 @@ import './index.css';
 
 const CA = '0xb200000000000000000000df24ecb8bf51100a01';
 const O1 = 'https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453';
-export const VESTING_CONTRACT_ADDRESS = '0x77e04dd8c45725d2b7b3c8eebac7f3f1708fd089';
+export const VESTING_CONTRACT_ADDRESS = '0x77e04dd8c45725d2b2b3c8eebac2f3f1708fd089';
 export const BUILDER_CODE = 'bc_wsbqqe2u';
 export const BUILDER_CODE_HEX = '62635f77736271716532750b0080218021802180218021802180218021';
 
