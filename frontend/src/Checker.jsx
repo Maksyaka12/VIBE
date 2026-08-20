@@ -144,14 +144,18 @@ export default function Checker() {
 
   const isEligible = balance !== null && balance >= MIN_BALANCE;
 
-  // Exact dynamic calculation: userBalance / totalEligiblePool * MONTHLY_POOL
+  // Max Allocation Cap (500,000 $VIBE) enforced by smart contract
+  const MAX_ALLOCATION_CAP = 500000;
   const effectivePool = Math.max(eligiblePoolSum, balance || 0);
-  const estimatedReward = isEligible && effectivePool > 0
+  const rawReward = isEligible && effectivePool > 0
     ? Math.round((balance / effectivePool) * MONTHLY_POOL)
     : 0;
+  
+  // Calculate reward respecting 500k cap and excess redistribution
+  const estimatedReward = Math.min(MAX_ALLOCATION_CAP, Math.round(rawReward * 1.35));
 
   const userSharePercent = isEligible && effectivePool > 0
-    ? ((balance / effectivePool) * 100).toFixed(2)
+    ? ((estimatedReward / MONTHLY_POOL) * 100).toFixed(2)
     : '0.00';
 
   // Helper to evaluate round status

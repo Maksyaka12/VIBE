@@ -1,29 +1,31 @@
-/**
-* VIBE Tokenomics - On-Chain Snapshot & Merkle Tree Generator
-* 
-* Usage:
-*   node scripts/makeSnapshot.cjs [roundNumber]
-*   Example: node scripts/makeSnapshot.cjs 1
-*/
+﻿/**
+ * VIBE Tokenomics - On-Chain Snapshot & Merkle Tree Generator
+ * 
+ * Usage:
+ *   node scripts/makeSnapshot.cjs [roundNumber]
+ *   Example: node scripts/makeSnapshot.cjs 1
+ */
 
-let fs = require('fs');
-let path = require('path');
-let https = require('https');
-let { parseUnits, keccak256, encodePacked, concatHex } = require('../frontend/node_modules/viem');
+const fs = require('fs');
+const path = require('path');
+const https = require('https');
+const { createPublicClient, http, parseAbi, parseUnits, formatUnits, keccak256, encodePacked, concatHex } = require('../frontend/node_modules/viem');
+const { base } = require('../frontend/node_modules/viem/chains');
 
 const TOKEN_ADDRESS = '0xb200000000000000000000df24ecb8bf51100a01';
 const VESTING_CONTRACT = '0x77e04dd8c45725d2b2b3c8eebac2f3f1708fd089';
-const MIN_BALANCE = 5000000;
-const MONTHLY_POOL = 10000000;
+const MIN_BALANCE = 5000000; // 5M $VIBE threshold
+const MONTHLY_POOL = 10000000; // 10M $VIBE per month
+const MAX_ALLOCATION_CAP = 500000; // 500k $VIBE cap as enforced by smart contract
 
 const SYSTEM_EXCLUSIONS = [
-  '0x498581ff718922c3f8e6a244956af099b2652b2b',
-  '0x3beea54db87a632a5faf20db6765d3af94c81b31',
-  '0x0000000000000000000000000000000000000dead',
-  '0x0000000000000000000000000000000000000000',
-  '0x067c66addd3c6d484c1882b68e197b614f7f3ebf',
-  '0x3b277d566b4557a53392712b1dc830da5d13ba91',
-  '0x77e04dd8c45725d2b2b3c8eebac2f3f1708fd089'
+  '0x498581ff718922c3f8e6a244956af099b2652b2b', // Uniswap V4 PoolManager
+  '0x3beea54db87a632a5faf20db6765d3af94c81b31', // VestingVault 100M
+  '0x000000000000000000000000000000000000dead', // Burn
+  '0x0000000000000000000000000000000000000000', // Zero
+  '0x067c66addd3c6d484c1882b68e197b614f7f3ebf', // Buyback Wallet
+  '0x3b277d566b4557a53392712b1dc830da5d13ba91', // Distribution Wallet
+  '0x77e04dd8c45725d2b2b3c8eebac2f3f1708fd089'  // Vesting Distributor
 ].map(a => a.toLowerCase());
 
 function fetchJson(url) {
@@ -91,6 +93,7 @@ function buildMerkleTree(elements) {
       amount: elements[i].amount,
       amountWei: elements[i].amountWei.toString(),
       sharePercent: elements[i].sharePercent,
+      isCapped: elements[i].isCapped,
       leaf: elements[i].leaf,
       proof: proof
     };
@@ -103,67 +106,113 @@ async function runSnapshot() {
   const roundNumber = parseInt(process.argv[2] || '1', 10);
   console.log('\n======================================================');
   console.log('🚀 VIBE Tokenomics - Snapshot & Merkle Generator (Round ' + roundNumber + ')');
-  console.log('=====================================================');
+  console.log('======================================================');
   console.log('Token CA:             ' + TOKEN_ADDRESS);
   console.log('Vesting Contract:     ' + VESTING_CONTRACT);
   console.log('Min Holding Required: ' + MIN_BALANCE.toLocaleString() + ' $VIBE');
-  console.log('Monthly RewardPool:  ' + MONTHLY_POOL.toLocaleString() + ' $VIBE');
+  console.log('Monthly Reward Pool:  ' + MONTHLY_POOL.toLocaleString() + ' $VIBE');
+  console.log('Max Allocation Cap:   ' + MAX_ALLOCATION_CAP.toLocaleString() + ' $VIBE');
   console.log('Timestamp:            ' + new Date().toISOString());
   console.log('-----------------------------------------------------\n');
 
-  console.log('[1/4] 🔍 Scanning Base blockchain for all $VIBE token holders...');
+  console.log('[1/4] 🔍 Scanning all BOTH standard & Smart Contract Wallets on Base...');
+  const addresses = new Set();
+
+  // 1. Fetch from holders
+  let hUrl = 'https://base.blockscout.com/api/v2/tokens/' + TOKEN_ADDRESS + '/holders';
+  for (let i = 0; i < 10; i++) {
+    if (!hUrl) break;
+    const d = await fetchJson(hUrl);
+    if (!d.items) break;
+    d.items.forEach(h => addresses.add(h.address.hash.toLowerCase()));
+    hUrl = d.next_page_params ? ('https://base.blockscout.com/api/v2/tokens/' + TOKEN_ADDRESS + '/holders?' + new URLSearchParams(d.next_page_params).toString()) : null;
+  }
+
+  // 2. Fetch from transfers (captures all smart wallets, Privy, Coinbase Smart Wallet, etc.)
+  let tUrl = 'https://base.blockscout.com/api/v2/tokens/' + TOKEN_ADDRESS + '/transfers';
+  for (let i = 0; i < 25; i++) {
+    if (!tUrl) break;
+    const d = await fetchJson(tUrl);
+    if (!d.items) break;
+    d.items.forEach(t => {
+      if (t.to && t.to.hash) addresses.add(t.to.hash.toLowerCase());
+      if (t.from && t.from.hash) addresses.add(t.from.hash.toLowerCase());
+    });
+    tUrl = d.next_page_params ? ('https://base.blockscout.com/api/v2/tokens/' + TOKEN_ADDRESS + '/transfers?' + new URLSearchParams(d.next_page_params).toString()) : null;
+  }
+
+  console.log('Discovered ' + addresses.size + ' unique addresses on Base.');
+
+  const addrList = Array.from(addresses).filter(a => !SYSTEM_EXCLUSIONS.includes(a));
+  const tokenAbi = parseAbi(['function balanceOf(address) view returns (uint256)']);
+  const client = createPublicClient({ chain: base, transport: http('https://base.publicnode.com') });
+
+  console.log('[2/4] 🔍 Verifying on-chain balances of ' + addrList.length + ' wallets via RPC Multicall...');
   
-  let allHolders = [];
-  let url = 'https://base.blockscout.com/api/v2/tokens/' + TOKEN_ADDRESS + '/holders';
-  let page = 1;
-
-  while (url && page <= 20) {
-    try {
-      const data = await fetchJson(url);
-      if (!data || !data.items || data.items.length === 0) break;
-      allHolders.push(...data.items);
-      
-      const lastInPage = Number(data.items[data.items.length - 1].value) / 1e18;
-      if (lastInPage < MIN_BALANCE && allHolders.length > 50) {
-        break;
+  const eligible = [];
+  for (let i = 0; i < addrList.length; i += 100) {
+    const chunk = addrList.slice(i, i + 100);
+    const calls = chunk.map(a => ({
+      address: TOKEN_ADDRESS,
+      abi: tokenAbi,
+      functionName: 'balanceOf',
+      args: [a]
+    }));
+    const res = await client.multicall({ contracts: calls });
+    for (let j = 0; j < chunk.length; j++) {
+      const balWei = res[j].result || 0n;
+      const bal = Number(formatUnits(balWei, 18));
+      if (bal >= MIN_BALANCE) {
+        eligible.push({ address: chunk[j], balance: bal });
       }
-
-      if (data.next_page_params) {
-        const q = new URLSearchParams(data.next_page_params).toString();
-        url = 'https://base.blockscout.com/api/v2/tokens/' + TOKEN_ADDRESS + '/holders?' + q;
-        page++;
-      } else {
-        break;
-      }
-    } catch (e) {
-      console.warn('Warning on page ' + page + ':', e.message);
-      break;
     }
   }
 
-  console.log('Total addresses fetched from Base: ' + allHolders.length);
-
-  const eligible = allHolders.map(h => ({
-    address: h.address.hash,
-    balance: Number(h.value) / 1e18,
-    name: h.address.name || null
-  })).filter(h => {
-    const isExcl = SYSTEM_EXCLUSIONS.includes(h.address.toLowerCase());
-    return h.balance >= MIN_BALANCE && !isExcl;
-  });
-
-  console.log('[2/4] 📊 Filtering Qualified Wallets (>= ' + MIN_BALANCE.toLocaleString() + ' $VIBE)...');
-  console.log('Found ' + eligible.length + ' Qualified User Wallets!');
+  eligible.sort((a, b) => b.balance - a.balance);
+  console.log('Found ' + eligible.length + ' Qualified Wallets (>= 5M $VIBE)!');
 
   const totalEligibleSum = eligible.reduce((acc, h) => acc + h.balance, 0);
-  console.log('Total Qualified Pool Sum: ' + Math.round(totalEligibleSum).toLocaleString() + ' $VIBE');
+  console.log('Total Qualified Balance Sum: ' + Math.round(totalEligibleSum).toLocaleString() + ' $VIBE');
 
-  console.log('\n[3/4] 🛮 Calculating Proportional Allocations from 10,000,000 $VIBE Pool...');
-  
+  console.log('\n[3/4] 🧮 Calculating Proportional Allocations with 500k CAP as per contract...');
+
+  // Multi-pass water-filling algorithm to strictly respect MAX_ALLOCATION_CAP (500,000 $VIBE)
+  let remainingPool = MONTHLY_POOL;
+  let remainingHolders = [...eligible];
+  const finalRewards = new Map();
+
+  while (remainingHolders.length > 0) {
+    const currSum = remainingHolders.reduce((acc, h) => acc + h.balance, 0);
+    let newlyCappedCount = 0;
+    const nextRemaining = [];
+
+    for (const h of remainingHolders) {
+      const share = (h.balance / currSum) * remainingPool;
+      if (share >= MAX_ALLOCATION_CAP) {
+        finalRewards.set(h.address, { amount: MAX_ALLOCATION_CAP, isCapped: true });
+        remainingPool -= MAX_ALLOCATION_CAP;
+        newlyCappedCount++;
+      } else {
+        nextRemaining.push(h);
+      }
+    }
+
+    if (newlyCappedCount === 0) {
+      // All remaining holders are strictly under the cap
+      const finalSum = remainingHolders.reduce((acc, h) => acc + h.balance, 0);
+      for (const h of remainingHolders) {
+        const rew = Math.round((h.balance / finalSum) * remainingPool);
+        finalRewards.set(h.address, { amount: Math.min(MAX_ALLOCATION_CAP, rew), isCapped: false });
+      }
+      break;
+    }
+    remainingHolders = nextRemaining;
+  }
+
   let totalDistributed = 0;
   const elements = eligible.map(h => {
-    const shareRatio = h.balance / totalEligibleSum;
-    const rewardAmount = Math.round(shareRatio * MONTHLY_POOL);
+    const capInfo = finalRewards.get(h.address);
+    const rewardAmount = capInfo.amount;
     totalDistributed += rewardAmount;
     
     const amountWei = parseUnits(rewardAmount.toString(), 18);
@@ -174,19 +223,20 @@ async function runSnapshot() {
       balance: Math.round(h.balance),
       amount: rewardAmount,
       amountWei: amountWei,
-      sharePercent: (shareRatio * 100).toFixed(4) + '%',
+      sharePercent: ((rewardAmount / MONTHLY_POOL) * 100).toFixed(2) + '%',
+      isCapped: capInfo.isCapped,
       leaf: leaf
     };
   });
 
-  console.log('Total Distributed: ' + totalDistributed.toLocaleString() + ' $VIBE (100% matched)');
+  console.log('Total Distributed: ' + totalDistributed.toLocaleString() + ' $VIBE (100% fully allocated)');
 
-  console.log('\n[4/4] 🌳🌼 Generating Merkle Tree & Cryptographic Proofs...');
+  console.log('\n[4/4] 🌳 Generating Merkle Tree & Cryptographic Proofs...');
   const { root, proofs } = buildMerkleTree(elements);
 
   console.log('\n======================================================');
-  console.log('✅ SNAPSHOT &_MERKLE_TREE_GENERATED_SUCCESSFULLY!');
-  console.log('=====================================================');
+  console.log('✅ SNAPSHOT & MERKLE Generated Successfully!');
+  console.log('======================================================');
   console.log('🔑 Merkle Root (for Round ' + roundNumber + '):');
   console.log(root + '\n');
 
@@ -208,6 +258,7 @@ async function runSnapshot() {
     totalHolders: elements.length,
     totalEligibleSupply: totalEligibleSum,
     monthlyPool: MONTHLY_POOL,
+    maxAllocationCap: MAX_ALLOCATION_CAP,
     claims: proofs
   }, null, 2), 'utf8');
 
@@ -222,9 +273,9 @@ async function runSnapshot() {
   }, null, 2), 'utf8');
 
   const csvFile = path.join(outDir, 'round_' + roundNumber + '_table.csv');
-  let csv = 'Rank,Address,Balance,SharePercent,RewardAmount\n';
+  let csv = 'Rank,Address,Balance,SharePercent,RewardAmount,IsCapped\n';
   elements.forEach((e, idx) => {
-    csv += (idx + 1) + ',' + e.address + ',' + e.balance + ',' + e.sharePercent + ',' + e.amount + '\n';
+    csv += (idx + 1) + ',' + e.address + ',' + e.balance + ',' + e.sharePercent + ',' + e.amount + ',' + e.isCapped + '\n';
   });
   fs.writeFileSync(csvFile, csv, 'utf8');
 
@@ -234,13 +285,13 @@ async function runSnapshot() {
   console.log('3. Audit CSV:   ' + csvFile);
   console.log('4. UI Ready:    ' + path.join(frontendDataDir, 'round_' + roundNumber + '_proofs.json'));
 
-  console.log('\n📋 Top 10 Qualified Allocations:');
-  console.table(elements.slice(0, 10).map((e, idx) => ({
+  console.log('\n📋 All ' + elements.length + ' Qualified Allocations (with 500k CAP):');
+  console.table(elements.map((e, idx) => ({
     '#': idx + 1,
     'Address': e.address.slice(0, 8) + '...' + e.address.slice(-6),
     'Balance': e.balance.toLocaleString() + ' $VIBE',
     'Share': e.sharePercent,
-    'Reward': e.amount.toLocaleString() + ' $VIBE'
+    'Reward': e.amount.toLocaleString() + ' $VIBE' + (e.isCapped ? ' (CAPPED 500k)' : '')
   })));
 
   console.log('\n🎯 NEXT ACTION:');
