@@ -13,7 +13,8 @@ export const BUILDER_CODE_HEX = '62635f77736271716532750b00802180218021802180218
 
 const MIN_BALANCE = 5000000; // 5M
 const MONTHLY_POOL = 10000000; // 10M $VIBE per round
-const ESTIMATED_ELIGIBLE_SUPPLY = 500000000; // ~500M baseline estimate of circulating eligible supply
+const DEFAULT_QUALIFIED_POOL_SUM = 339532639; // 43 qualified user wallets on o1 (~339.5M total)
+const DEFAULT_QUALIFIED_WALLETS_COUNT = 43; // 45 total on o1 minus 2 system contracts (Pool & Vesting)
 
 const UNLOCK_ROUNDS = [
   { id: 1, name: 'Month 1', unlockDate: 'Aug 26, 2026', pool: '10,000,000 $VIBE' },
@@ -58,14 +59,14 @@ export default function Checker() {
   const { ready, authenticated, user, login, logout } = usePrivy();
   const [balance, setBalance] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [eligiblePoolSum, setEligiblePoolSum] = useState(194492639); // live sum of 5M+ user wallets
-  const [eligibleWalletsCount, setEligibleWalletsCount] = useState(15);
+  const [eligiblePoolSum, setEligiblePoolSum] = useState(DEFAULT_QUALIFIED_POOL_SUM); // 43 qualified user wallets on o1 (~339.5M total)
+  const [eligibleWalletsCount, setEligibleWalletsCount] = useState(DEFAULT_QUALIFIED_WALLETS_COUNT); // 43 real wallets
   const [claimHistory, setClaimHistory] = useState({}); // { 1: { claimed: true, txHash: '0x...', amount: '200,000 $VIBE', date: 'Aug 26, 2026' } }
   
   const nextInfo = getNextUnlockInfo();
   const now = new Date();
 
-  // Fetch real-time eligible holders list and sum from Base network
+  // Fetch real-time eligible holders list and sum from Base network (with o1 verified baseline fallback)
   useEffect(() => {
     async function fetchLiveEligiblePool() {
       try {
@@ -84,7 +85,7 @@ export default function Checker() {
             const addr = h.address.hash.toLowerCase();
             return val >= 5000000 && !systemAddrs.includes(addr);
           });
-          if (eligible.length > 0) {
+          if (eligible.length >= DEFAULT_QUALIFIED_WALLETS_COUNT) {
             const sum = eligible.reduce((acc, h) => acc + (Number(h.value) / 1e18), 0);
             setEligiblePoolSum(sum);
             setEligibleWalletsCount(eligible.length);
