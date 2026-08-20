@@ -121,7 +121,7 @@ export default function Checker() {
   };
 
   return (
-    <section id="checker" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '75vh', padding: '120px 20px 80px 20px' }}>
+    <section id="checker" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minHeight: '80vh', padding: '150px 20px 100px 20px' }}>
       <div className="wrap" style={{ maxWidth: 840, width: '100%' }}>
         
         <div className="sec-head" style={{ textAlign: 'center', alignItems: 'center', marginBottom: 36 }}>
