@@ -472,7 +472,7 @@ function Tokenomics() {
         <div className="sec-head" style={{ marginBottom: '40px', marginTop: '60px' }}>
           <h2>Community Rewards <span className="bl">Economy</span>.</h2>
           <p className="sec-sub">
-            Strategic distribution of the 70% community allocation across continuous 10-day rolling epoch cycles with zero token inflation.
+            The 70% Reserved for Community from buybacks belongs entirely to the community, distributed across continuous 10-day rolling epoch cycles.
           </p>
         </div>
 
@@ -491,8 +491,8 @@ function Tokenomics() {
                   <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#0052ff', letterSpacing: '-0.5px' }}>30%</span>
                 </div>
                 <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>VibeVerse App</h4>
-                <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
-                  In-game quests, mini-game leaderboards, and daily gameplay reward pools.
+                <p style={{ fontSize: '0.85rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
+                  Rewards pool in Vibe Verse App.
                 </p>
               </div>
               <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#0052ff', background: 'rgba(0, 82, 255, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
@@ -510,7 +510,7 @@ function Tokenomics() {
                   <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#7c3aed', letterSpacing: '-0.5px' }}>15%</span>
                 </div>
                 <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>$VIBE Staking</h4>
-                <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
                   Yield generation for holders locking $VIBE, reducing circulating market supply.
                 </p>
               </div>
@@ -529,8 +529,8 @@ function Tokenomics() {
                   <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#10b981', letterSpacing: '-0.5px' }}>15%</span>
                 </div>
                 <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>Vibe Club NFTs</h4>
-                <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
-                  Direct royalty dividends &amp; rewards for verified holders of the 333 Genesis NFTs.
+                <p style={{ fontSize: '0.85rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
+                  Direct royalty dividends for holders of the 333 Vibe Club NFTs.
                 </p>
               </div>
               <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#10b981', background: 'rgba(16, 185, 129, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
@@ -548,7 +548,7 @@ function Tokenomics() {
                   <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#f59e0b', letterSpacing: '-0.5px' }}>40%</span>
                 </div>
                 <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>Reserve &amp; Growth</h4>
-                <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
                   Continuous stability buffer guaranteeing non-zero reward pools + marketing campaigns.
                 </p>
               </div>
@@ -604,46 +604,45 @@ function Tokenomics() {
                   {/* Track Ring */}
                   <circle cx="0" cy="0" r="80" fill="none" stroke="#f1f5f9" strokeWidth="18" />
 
-                  {/* 40% Reserve & Growth (Offset 0 to 40) */}
-                  <circle cx="0" cy="0" r="80" fill="none" stroke="url(#commAmberGrad)" strokeWidth="18"
-                          strokeLinecap="round" pathLength="100" strokeDasharray="37 100" strokeDashoffset="-1.5"
-                          transform="rotate(-90)" filter="url(#commAmberGlow)" style={{ transition: 'all 0.5s ease' }} />
-
-                  {/* 30% VibeVerse App (Offset 40 to 70) */}
+                  {/* 1. VibeVerse App 30% (Spans 0 to 30 -> Offset -2, length 26) */}
                   <circle cx="0" cy="0" r="80" fill="none" stroke="url(#commBlueGrad)" strokeWidth="18"
-                          strokeLinecap="round" pathLength="100" strokeDasharray="27 100" strokeDashoffset="-41.5"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="26 100" strokeDashoffset="-2"
                           transform="rotate(-90)" filter="url(#commBlueGlow)" style={{ transition: 'all 0.5s ease' }} />
 
-                  {/* 15% Staking (Offset 70 to 85) */}
+                  {/* 2. $VIBE Staking 15% (Spans 30 to 45 -> Offset -32, length 11) */}
                   <circle cx="0" cy="0" r="80" fill="none" stroke="url(#commPurpleGrad)" strokeWidth="18"
-                          strokeLinecap="round" pathLength="100" strokeDasharray="12 100" strokeDashoffset="-71.5"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="11 100" strokeDashoffset="-32"
                           transform="rotate(-90)" filter="url(#commPurpleGlow)" style={{ transition: 'all 0.5s ease' }} />
 
-                  {/* 15% Vibe Club NFT (Offset 85 to 100) */}
+                  {/* 3. Vibe Club NFT 15% (Spans 45 to 60 -> Offset -47, length 11) */}
                   <circle cx="0" cy="0" r="80" fill="none" stroke="url(#commGreenGrad)" strokeWidth="18"
-                          strokeLinecap="round" pathLength="100" strokeDasharray="12 100" strokeDashoffset="-86.5"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="11 100" strokeDashoffset="-47"
                           transform="rotate(-90)" filter="url(#commGreenGlow)" style={{ transition: 'all 0.5s ease' }} />
 
-                  {/* Callouts */}
-                  {/* Amber (Top Right) */}
-                  <circle cx="65" cy="-47" r="4" fill="#f59e0b" />
-                  <polyline points="65,-47 95,-70 125,-70" fill="none" stroke="#f59e0b" strokeWidth="1.2" strokeDasharray="3 3" />
-                  <text x="130" y="-64" fill="#f59e0b" fontSize="12" fontWeight="800" textAnchor="start">Reserve 40%</text>
+                  {/* 4. Reserve & Growth 40% (Spans 60 to 100 -> Offset -62, length 36) */}
+                  <circle cx="0" cy="0" r="80" fill="none" stroke="url(#commAmberGrad)" strokeWidth="18"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="36 100" strokeDashoffset="-62"
+                          transform="rotate(-90)" filter="url(#commAmberGlow)" style={{ transition: 'all 0.5s ease' }} />
 
-                  {/* Blue (Bottom Right) */}
-                  <circle cx="50" cy="62" r="4" fill="#0052ff" />
-                  <polyline points="50,62 78,85 115,85" fill="none" stroke="#0052ff" strokeWidth="1.2" strokeDasharray="3 3" />
-                  <text x="120" y="90" fill="#0052ff" fontSize="12" fontWeight="800" textAnchor="start">VibeVerse 30%</text>
+                  {/* Callout 1: VibeVerse 30% (Originates from Blue Arc Center at 54°) */}
+                  <circle cx="65" cy="-47" r="4" fill="#0052ff" />
+                  <polyline points="65,-47 95,-70 125,-70" fill="none" stroke="#0052ff" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="130" y="-64" fill="#0052ff" fontSize="12" fontWeight="800" textAnchor="start">VibeVerse 30%</text>
 
-                  {/* Purple (Bottom Left) */}
-                  <circle cx="-55" cy="58" r="4" fill="#7c3aed" />
-                  <polyline points="-55,58 -80,85 -115,85" fill="none" stroke="#7c3aed" strokeWidth="1.2" strokeDasharray="3 3" />
-                  <text x="-120" y="90" fill="#7c3aed" fontSize="12" fontWeight="800" textAnchor="end">Staking 15%</text>
+                  {/* Callout 2: Staking 15% (Originates from Purple Arc Center at 135°) */}
+                  <circle cx="57" cy="57" r="4" fill="#7c3aed" />
+                  <polyline points="57,57 85,80 115,80" fill="none" stroke="#7c3aed" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="120" y="85" fill="#7c3aed" fontSize="12" fontWeight="800" textAnchor="start">Staking 15%</text>
 
-                  {/* Green (Top Left) */}
-                  <circle cx="-62" cy="-50" r="4" fill="#10b981" />
-                  <polyline points="-62,-50 -90,-70 -125,-70" fill="none" stroke="#10b981" strokeWidth="1.2" strokeDasharray="3 3" />
-                  <text x="-130" y="-64" fill="#10b981" fontSize="12" fontWeight="800" textAnchor="end">NFT Club 15%</text>
+                  {/* Callout 3: NFT Club 15% (Originates from Green Arc Center at 189°) */}
+                  <circle cx="-13" cy="79" r="4" fill="#10b981" />
+                  <polyline points="-13,79 -40,95 -80,95" fill="none" stroke="#10b981" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="-85" y="100" fill="#10b981" fontSize="12" fontWeight="800" textAnchor="end">NFT Club 15%</text>
+
+                  {/* Callout 4: Reserve 40% (Originates from Amber Arc Center at 288°) */}
+                  <circle cx="-76" cy="-25" r="4" fill="#f59e0b" />
+                  <polyline points="-76,-25 -105,-55 -135,-55" fill="none" stroke="#f59e0b" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="-140" y="-49" fill="#f59e0b" fontSize="12" fontWeight="800" textAnchor="end">Reserve 40%</text>
 
                   {/* Center Text */}
                   <text x="0" y="-3" fill="var(--ink)" fontSize="28" fontWeight="900" textAnchor="middle" letterSpacing="-0.5px">100%</text>
@@ -666,11 +665,6 @@ function Tokenomics() {
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.2)', padding: '4px 10px', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 800, color: '#f59e0b' }}>
                 <ShieldCheck size={13} /> Reserve 40%
               </div>
-            </div>
-
-            {/* Epochs Schedule Note */}
-            <div style={{ marginTop: '14px', padding: '8px 12px', background: 'rgba(0, 82, 255, 0.04)', borderRadius: '10px', border: '1px dashed rgba(0, 82, 255, 0.15)', fontSize: '0.78rem', color: 'var(--ink)', fontWeight: 600 }}>
-              Continuous 10-day rolling epoch cycles with staggered 3-day rhythm. Zero token inflation.
             </div>
           </div>
 
