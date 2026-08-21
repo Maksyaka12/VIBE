@@ -1257,8 +1257,8 @@ function Rewards() {
               <div
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 240px), 1fr))',
-                  gap: '14px'
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 270px), 1fr))',
+                  gap: '16px'
                 }}
               >
                 {filteredStakingEpochs.map(ep => {
@@ -1270,7 +1270,7 @@ function Rewards() {
                       key={ep.epoch}
                       style={{
                         background: isActive
-                          ? 'linear-gradient(135deg, rgba(190, 241, 255, 0.6) 0%, rgba(225, 249, 255, 0.85) 100%)'
+                          ? 'linear-gradient(135deg, rgba(190, 241, 255, 0.65) 0%, rgba(225, 249, 255, 0.85) 100%)'
                           : 'linear-gradient(135deg, rgba(190, 241, 255, 0.35) 0%, rgba(225, 249, 255, 0.6) 100%)',
                         border: isActive ? '1.5px solid var(--blue)' : '1px solid rgba(0, 160, 255, 0.25)',
                         borderRadius: '16px',
@@ -1284,21 +1284,21 @@ function Rewards() {
                     >
                       <div>
                         {/* Header */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 900, color: isActive ? 'var(--ink)' : '#475569', letterSpacing: '-0.02em' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', gap: '8px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                            <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: isActive ? 'var(--ink)' : '#475569', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
                               {ep.epoch}
                             </h4>
-                            <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748b', background: 'rgba(255, 255, 255, 0.85)', padding: '2px 7px', borderRadius: '5px', border: '1px solid rgba(0, 160, 255, 0.15)' }}>
+                            <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748b', background: 'rgba(255, 255, 255, 0.85)', padding: '2px 6px', borderRadius: '5px', border: '1px solid rgba(0, 160, 255, 0.15)', whiteSpace: 'nowrap', flexShrink: 0 }}>
                               {ep.duration || '10 Days'}
                             </span>
                           </div>
 
                           <span
                             style={{
-                              padding: '3px 10px',
+                              padding: '3px 8px',
                               borderRadius: '99px',
-                              fontSize: '0.68rem',
+                              fontSize: '0.65rem',
                               fontWeight: 800,
                               textTransform: 'uppercase',
                               letterSpacing: '0.04em',
@@ -1307,37 +1307,39 @@ function Rewards() {
                               border: isActive ? '1px solid #a7f3d0' : '1px solid rgba(0, 160, 255, 0.2)',
                               display: 'inline-flex',
                               alignItems: 'center',
-                              gap: '5px'
+                              gap: '4px',
+                              whiteSpace: 'nowrap',
+                              flexShrink: 0
                             }}
                           >
-                            {isActive && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />}
+                            {isActive && <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#10b981', flexShrink: 0 }} />}
                             {isActive ? 'Active' : isCompleted ? 'Completed' : 'Upcoming'}
                           </span>
                         </div>
 
                         {/* Metric Box */}
                         <div style={{ background: 'rgba(255, 255, 255, 0.85)', border: '1px solid rgba(0, 160, 255, 0.2)', borderRadius: '12px', padding: '12px 14px', marginBottom: '14px', backdropFilter: 'blur(4px)' }}>
-                          <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em' }}>
+                          <div style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>
                             {ep.epoch} Rewards Pool
                           </div>
-                          <div style={{ fontSize: '1.45rem', fontWeight: 900, color: isActive ? 'var(--ink)' : '#64748b', marginTop: '3px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                          <div style={{ fontSize: '1.4rem', fontWeight: 900, color: isActive ? 'var(--ink)' : '#64748b', marginTop: '3px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px', whiteSpace: 'nowrap' }}>
                             {ep.poolAmount} {ep.poolAmount !== 'TBA' && <span style={{ fontSize: '0.9rem', color: isActive ? 'var(--blue)' : '#94a3b8', fontWeight: 800 }}>$VIBE</span>}
                           </div>
                         </div>
 
                         {/* Schedule Key-Values */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px', fontSize: '0.82rem' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '6px', borderBottom: '1px solid rgba(0, 160, 255, 0.12)' }}>
-                            <span style={{ color: '#64748b', fontWeight: 500 }}>Start Time</span>
-                            <strong style={{ color: isActive ? 'var(--ink)' : '#475569', fontWeight: 600 }}>{ep.startTime}</strong>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '6px', borderBottom: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                            <span style={{ color: '#64748b', fontWeight: 600, fontSize: '0.78rem', whiteSpace: 'nowrap', flexShrink: 0 }}>Start Time</span>
+                            <strong style={{ color: isActive ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.78rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ep.startTime}</strong>
                           </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '6px', borderBottom: '1px solid rgba(0, 160, 255, 0.12)' }}>
-                            <span style={{ color: '#64748b', fontWeight: 500 }}>End Time</span>
-                            <strong style={{ color: isActive ? 'var(--ink)' : '#475569', fontWeight: 600 }}>{ep.endTime}</strong>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '6px', borderBottom: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                            <span style={{ color: '#64748b', fontWeight: 600, fontSize: '0.78rem', whiteSpace: 'nowrap', flexShrink: 0 }}>End Time</span>
+                            <strong style={{ color: isActive ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.78rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ep.endTime}</strong>
                           </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ color: '#64748b', fontWeight: 500 }}>Status</span>
-                            <strong style={{ color: isActive ? '#16a34a' : '#64748b', fontWeight: 700 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+                            <span style={{ color: '#64748b', fontWeight: 600, fontSize: '0.78rem', whiteSpace: 'nowrap', flexShrink: 0 }}>Status</span>
+                            <strong style={{ color: isActive ? '#16a34a' : '#64748b', fontWeight: 800, fontSize: '0.78rem', whiteSpace: 'nowrap' }}>
                               {isActive ? 'Active' : isCompleted ? 'Completed' : 'Upcoming'}
                             </strong>
                           </div>
@@ -1364,6 +1366,7 @@ function Rewards() {
                           gap: '6px',
                           width: '100%',
                           textDecoration: 'none',
+                          whiteSpace: 'nowrap',
                           boxShadow: isActive ? '0 4px 12px rgba(0, 0, 255, 0.2)' : '0 1px 4px rgba(0, 0, 0, 0.02)',
                           transition: 'all 0.15s'
                         }}
