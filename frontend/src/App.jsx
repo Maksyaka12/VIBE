@@ -980,7 +980,7 @@ const STAKING_EPOCHS = [
   {
     epoch: 'Epoch 2',
     duration: '10 Days',
-    poolAmount: '2,000,000',
+    poolAmount: 'TBA',
     startTime: '31 Aug 2026, 15:00 UTC',
     endTime: '10 Sep 2026, 15:00 UTC',
     status: 'upcoming'
@@ -988,7 +988,7 @@ const STAKING_EPOCHS = [
   {
     epoch: 'Epoch 3',
     duration: '10 Days',
-    poolAmount: '15% Reward Pool',
+    poolAmount: 'TBA',
     startTime: '10 Sep 2026, 15:00 UTC',
     endTime: '20 Sep 2026, 15:00 UTC',
     status: 'upcoming'
@@ -1133,49 +1133,73 @@ function Rewards() {
         {/* ── 1. STAKING REWARDS SECTION ── */}
         {activeTab === 'staking' && (
           <div style={{ marginBottom: '40px' }}>
-            {/* 1. 3-Point Staking Info Grid (Always Visible at Top) */}
+            {/* 1. 3-Point Staking Info Grid (Signature Brand Turquoise) */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px', marginBottom: '28px' }}>
-              <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px 18px', boxShadow: '0 2px 6px rgba(0, 0, 0, 0.02)' }}>
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.55) 0%, rgba(225, 249, 255, 0.75) 100%)',
+                  border: '1px solid rgba(0, 160, 255, 0.25)',
+                  borderRadius: '16px',
+                  padding: '16px 18px',
+                  boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)'
+                }}
+              >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.08)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>1</span>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.12)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>1</span>
                   <strong style={{ fontSize: '0.9rem', color: 'var(--ink)', fontWeight: 800 }}>Stake</strong>
                 </div>
-                <p style={{ margin: 0, fontSize: '0.84rem', color: '#64748b', lineHeight: 1.45 }}>
+                <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
                   Lock $VIBE tokens directly into the verified staking pool on <a href={O1} target="_blank" rel="noreferrer" style={{ color: 'var(--blue)', textDecoration: 'underline', fontWeight: 700 }}>o1.exchange</a>.
                 </p>
               </div>
 
-              <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px 18px', boxShadow: '0 2px 6px rgba(0, 0, 0, 0.02)' }}>
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.55) 0%, rgba(225, 249, 255, 0.75) 100%)',
+                  border: '1px solid rgba(0, 160, 255, 0.25)',
+                  borderRadius: '16px',
+                  padding: '16px 18px',
+                  boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)'
+                }}
+              >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.08)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>2</span>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.12)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>2</span>
                   <strong style={{ fontSize: '0.9rem', color: 'var(--ink)', fontWeight: 800 }}>10-Day Epochs</strong>
                 </div>
-                <p style={{ margin: 0, fontSize: '0.84rem', color: '#64748b', lineHeight: 1.45 }}>
+                <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
                   Staking rewards are distributed every 10 days, followed immediately by the start of a new epoch.
                 </p>
               </div>
 
-              <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px 18px', boxShadow: '0 2px 6px rgba(0, 0, 0, 0.02)' }}>
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.55) 0%, rgba(225, 249, 255, 0.75) 100%)',
+                  border: '1px solid rgba(0, 160, 255, 0.25)',
+                  borderRadius: '16px',
+                  padding: '16px 18px',
+                  boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)'
+                }}
+              >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>3</span>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#059669', background: 'rgba(16, 185, 129, 0.14)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>3</span>
                   <strong style={{ fontSize: '0.9rem', color: 'var(--ink)', fontWeight: 800 }}>Epoch Reward Pool</strong>
                 </div>
-                <p style={{ margin: 0, fontSize: '0.84rem', color: '#64748b', lineHeight: 1.45 }}>
+                <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
                   Equals exactly 15% of the total Community Rewards Pool available at the start of each epoch.
                 </p>
               </div>
             </div>
 
-            {/* 2. Sub-Header with Filter Tabs */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '18px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {/* 2. Sub-Header with Filter Tabs (Left Aligned Next to Title) */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', marginBottom: '18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>Staking Epochs</h3>
-                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', background: '#f1f5f9', border: '1px solid #e2e8f0', padding: '2px 8px', borderRadius: '99px' }}>
-                  {filteredStakingEpochs.length} Epoch{filteredStakingEpochs.length === 1 ? '' : 's'}
+                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', background: '#ffffff', border: '1px solid #e2e8f0', padding: '2px 8px', borderRadius: '99px' }}>
+                  {filteredStakingEpochs.length}
                 </span>
               </div>
 
-              {/* Status Filter for Staking Epochs */}
+              {/* Status Filter for Staking Epochs (Aligned to Left) */}
               <div style={{ display: 'flex', gap: '6px', background: '#ffffff', padding: '4px', borderRadius: '99px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
                 {[
                   { id: 'all', label: `All (${stakingCounts.all})` },
@@ -1278,7 +1302,7 @@ function Rewards() {
                             {ep.epoch} Rewards Pool
                           </div>
                           <div style={{ fontSize: '1.45rem', fontWeight: 900, color: isActive ? 'var(--ink)' : '#64748b', marginTop: '3px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
-                            {ep.poolAmount} <span style={{ fontSize: '0.9rem', color: isActive ? 'var(--blue)' : '#94a3b8', fontWeight: 800 }}>$VIBE</span>
+                            {ep.poolAmount} {ep.poolAmount !== 'TBA' && <span style={{ fontSize: '0.9rem', color: isActive ? 'var(--blue)' : '#94a3b8', fontWeight: 800 }}>$VIBE</span>}
                           </div>
                         </div>
 
