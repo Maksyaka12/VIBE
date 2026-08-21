@@ -672,7 +672,7 @@ function Tokenomics() {
         </div>
 
         {/* BLOCK 4: VESTING DETAILS */}
-        <div className="sec-head" style={{ marginBottom: '40px', marginTop: '40px' }}>
+        <div id="vesting-details" className="sec-head" style={{ marginBottom: '40px', marginTop: '40px' }}>
           <h2>Vesting <span className="bl">Details</span>.</h2>
           <p className="sec-sub">100M tokens vested. Every month 10M unlocks and get distributed among holders.</p>
         </div>
@@ -1068,16 +1068,16 @@ const GIVEAWAYS_DATA = [
 ];
 
 const HOLDER_UNLOCKS = [
-  { round: 'Round 1', month: 'Month 1', unlockDate: '26 Aug 2026, 15:00 UTC', dateObj: new Date('2026-08-26T15:00:00Z'), poolAmount: '10,000,000', requirement: '5M+ $VIBE' },
-  { round: 'Round 2', month: 'Month 2', unlockDate: '25 Sep 2026, 15:00 UTC', dateObj: new Date('2026-09-25T15:00:00Z'), poolAmount: '10,000,000', requirement: '5M+ $VIBE' },
-  { round: 'Round 3', month: 'Month 3', unlockDate: '25 Oct 2026, 15:00 UTC', dateObj: new Date('2026-10-25T15:00:00Z'), poolAmount: '10,000,000', requirement: '5M+ $VIBE' },
-  { round: 'Round 4', month: 'Month 4', unlockDate: '24 Nov 2026, 15:00 UTC', dateObj: new Date('2026-11-24T15:00:00Z'), poolAmount: '10,000,000', requirement: '5M+ $VIBE' },
-  { round: 'Round 5', month: 'Month 5', unlockDate: '24 Dec 2026, 15:00 UTC', dateObj: new Date('2026-12-24T15:00:00Z'), poolAmount: '10,000,000', requirement: '5M+ $VIBE' },
-  { round: 'Round 6', month: 'Month 6', unlockDate: '23 Jan 2027, 15:00 UTC', dateObj: new Date('2027-01-23T15:00:00Z'), poolAmount: '10,000,000', requirement: '5M+ $VIBE' },
-  { round: 'Round 7', month: 'Month 7', unlockDate: '22 Feb 2027, 15:00 UTC', dateObj: new Date('2027-02-22T15:00:00Z'), poolAmount: '10,000,000', requirement: '5M+ $VIBE' },
-  { round: 'Round 8', month: 'Month 8', unlockDate: '24 Mar 2027, 15:00 UTC', dateObj: new Date('2027-03-24T15:00:00Z'), poolAmount: '10,000,000', requirement: '5M+ $VIBE' },
-  { round: 'Round 9', month: 'Month 9', unlockDate: '23 Apr 2027, 15:00 UTC', dateObj: new Date('2027-04-23T15:00:00Z'), poolAmount: '10,000,000', requirement: '5M+ $VIBE' },
-  { round: 'Round 10', month: 'Month 10', unlockDate: '23 May 2027, 15:00 UTC', dateObj: new Date('2027-05-23T15:00:00Z'), poolAmount: '10,000,000', requirement: '5M+ $VIBE' },
+  { unlock: 'Unlock 1', unlockDate: '26 Aug 2026', dateObj: new Date('2026-08-26T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 2', unlockDate: '25 Sep 2026', dateObj: new Date('2026-09-25T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 3', unlockDate: '25 Oct 2026', dateObj: new Date('2026-10-25T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 4', unlockDate: '24 Nov 2026', dateObj: new Date('2026-11-24T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 5', unlockDate: '24 Dec 2026', dateObj: new Date('2026-12-24T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 6', unlockDate: '23 Jan 2027', dateObj: new Date('2027-01-23T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 7', unlockDate: '22 Feb 2027', dateObj: new Date('2027-02-22T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 8', unlockDate: '24 Mar 2027', dateObj: new Date('2027-03-24T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 9', unlockDate: '23 Apr 2027', dateObj: new Date('2027-04-23T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 10', unlockDate: '23 May 2027', dateObj: new Date('2027-05-23T00:00:00Z'), poolAmount: '10,000,000' },
 ];
 
 function Rewards() {
@@ -1693,7 +1693,7 @@ function Rewards() {
         {/* ── 4. HOLDER REWARDS VESTING SECTION ── */}
         {activeTab === 'holders' && (
           <div style={{ marginTop: '20px' }}>
-            {/* 1. Top 3 Highlight Cards (Signature Brand Turquoise) */}
+            {/* 1. Top 3 Step Action Cards (Signature Brand Turquoise) */}
             <div
               style={{
                 display: 'grid',
@@ -1702,7 +1702,7 @@ function Rewards() {
                 marginBottom: '28px'
               }}
             >
-              {/* Card 1 */}
+              {/* Step 1 */}
               <div
                 style={{
                   background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
@@ -1711,20 +1711,44 @@ function Rewards() {
                   padding: '20px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '8px',
+                  gap: '10px',
                   boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>1</span>
-                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>5M+ Requirement</h4>
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Explore Details</h4>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.82rem', color: '#475569', lineHeight: 1.5, fontWeight: 500 }}>
-                  Hold at least 5,000,000 $VIBE in your wallet on Base to qualify for monthly on-chain snapshot distributions.
+                  Learn full mechanics of 10-month vesting, snapshot rules, and token distribution schedule.
                 </p>
+                <a
+                  href="/tokenomics#vesting-details"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    marginTop: 'auto',
+                    background: '#ffffff',
+                    border: '1.5px solid rgba(0, 160, 255, 0.35)',
+                    color: 'var(--ink)',
+                    padding: '9px 12px',
+                    borderRadius: '10px',
+                    fontSize: '0.8rem',
+                    fontWeight: 800,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '5px',
+                    textDecoration: 'none',
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
+                    transition: 'all 0.15s'
+                  }}
+                >
+                  <span>Vesting Details</span> <ArrowUpRight size={14} strokeWidth={2.5} color="var(--blue)" />
+                </a>
               </div>
 
-              {/* Card 2 */}
+              {/* Step 2 */}
               <div
                 style={{
                   background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
@@ -1733,20 +1757,44 @@ function Rewards() {
                   padding: '20px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '8px',
+                  gap: '10px',
                   boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>2</span>
-                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>10-Month Vesting</h4>
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Buy &amp; Hold 5M+ $VIBE</h4>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.82rem', color: '#475569', lineHeight: 1.5, fontWeight: 500 }}>
-                  10,000,000 $VIBE unlocked each month over 10 consecutive distribution rounds directly via Merkle tree distributor.
+                  Hold at least 5,000,000 $VIBE in your wallet on Base to qualify for monthly on-chain snapshot distributions.
                 </p>
+                <a
+                  href={O1}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    marginTop: 'auto',
+                    background: '#ffffff',
+                    border: '1.5px solid rgba(0, 160, 255, 0.35)',
+                    color: 'var(--ink)',
+                    padding: '9px 12px',
+                    borderRadius: '10px',
+                    fontSize: '0.8rem',
+                    fontWeight: 800,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '5px',
+                    textDecoration: 'none',
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
+                    transition: 'all 0.15s'
+                  }}
+                >
+                  <span>Buy on o1.exchange</span> <ArrowUpRight size={14} strokeWidth={2.5} color="var(--blue)" />
+                </a>
               </div>
 
-              {/* Card 3 */}
+              {/* Step 3 */}
               <div
                 style={{
                   background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
@@ -1755,17 +1803,39 @@ function Rewards() {
                   padding: '20px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '8px',
+                  gap: '10px',
                   boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>3</span>
-                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Proportional &amp; Capped</h4>
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Check Eligibility &amp; Claim</h4>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.82rem', color: '#475569', lineHeight: 1.5, fontWeight: 500 }}>
-                  Allocations are proportional to your holding share with an enforced 500,000 $VIBE max cap per wallet per round.
+                  Check your wallet eligibility, view Merkle proof allocation, and claim rewards on unlock days.
                 </p>
+                <Link
+                  to="/checker"
+                  style={{
+                    marginTop: 'auto',
+                    background: 'var(--blue)',
+                    border: 'none',
+                    color: '#ffffff',
+                    padding: '9px 12px',
+                    borderRadius: '10px',
+                    fontSize: '0.8rem',
+                    fontWeight: 800,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '5px',
+                    textDecoration: 'none',
+                    boxShadow: '0 2px 8px rgba(0, 0, 255, 0.2)',
+                    transition: 'all 0.15s'
+                  }}
+                >
+                  <span>Checker &amp; Claim</span> <ArrowUpRight size={14} strokeWidth={2.5} />
+                </Link>
               </div>
             </div>
 
@@ -1827,7 +1897,7 @@ function Rewards() {
 
                   return (
                     <div
-                      key={u.round || idx}
+                      key={u.unlock || idx}
                       style={{
                         background: isUnlocked
                           ? 'linear-gradient(145deg, rgba(215, 246, 255, 0.85) 0%, rgba(240, 252, 255, 0.95) 100%)'
@@ -1860,14 +1930,9 @@ function Rewards() {
                                 flexShrink: 0
                               }}
                             />
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                              <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
-                                {u.month}
-                              </h4>
-                              <span style={{ fontSize: '0.66rem', fontWeight: 800, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.08)', padding: '2px 6px', borderRadius: '6px', whiteSpace: 'nowrap', border: '1px solid rgba(0, 0, 255, 0.12)' }}>
-                                10M Pool
-                              </span>
-                            </div>
+                            <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                              {u.unlock}
+                            </h4>
                           </div>
 
                           <span
