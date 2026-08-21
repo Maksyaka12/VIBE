@@ -5,7 +5,7 @@ import { PrivyProvider } from '@privy-io/react-auth';
 import { WagmiProvider as PrivyWagmiProvider } from '@privy-io/wagmi';
 import { privyWagmiConfig } from './config/privyWagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createPublicClient, http, formatUnits, parseAbiItem } from 'viem';
+import { createPublicClient, http, formatUnits, parseAbiItem, parseAbi } from 'viem';
 import { base } from 'viem/chains';
 import Checker from './Checker';
 import VibeVerse from './verse/VibeVerse';
@@ -1022,16 +1022,10 @@ const VIBEVERSE_EPOCHS = [
 ];
 
 const VIBECLUB_EPOCHS = [
-  { epoch: 'Epoch 1', dates: 'Sep 01 – Sep 11, 2026', pool: '15% Pool', status: 'ongoing', note: 'Vibe Club Royalty Pool' },
-  { epoch: 'Epoch 2', dates: 'Sep 11 – Sep 21, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 3', dates: 'Sep 21 – Oct 01, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 4', dates: 'Oct 01 – Oct 11, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 5', dates: 'Oct 11 – Oct 21, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 6', dates: 'Oct 21 – Oct 31, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 7', dates: 'Oct 31 – Nov 10, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 8', dates: 'Nov 10 – Nov 20, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 9', dates: 'Nov 20 – Nov 30, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 10', dates: 'Nov 30 – Dec 10, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  { epoch: 'Epoch 1', claimDate: '24 Aug 2026', dateObj: new Date('2026-08-24T00:00:00Z'), poolAmount: 'TBA' },
+  { epoch: 'Epoch 2', claimDate: '3 Sep 2026', dateObj: new Date('2026-09-03T00:00:00Z'), poolAmount: 'TBA' },
+  { epoch: 'Epoch 3', claimDate: '13 Sep 2026', dateObj: new Date('2026-09-13T00:00:00Z'), poolAmount: 'TBA' },
+  { epoch: 'Epoch 4', claimDate: '23 Sep 2026', dateObj: new Date('2026-09-23T00:00:00Z'), poolAmount: 'TBA' },
 ];
 
 const GIVEAWAYS_DATA = [
@@ -1047,7 +1041,7 @@ const GIVEAWAYS_DATA = [
   },
   {
     id: 1,
-    title: '$1M Market Cap',
+    title: '$1M MC',
     image: '/event1.png',
     winners: '50 Winners',
     prizePool: 'TBA',
@@ -1085,8 +1079,44 @@ function Rewards() {
   const [stakingFilter, setStakingFilter] = useState('all');
   const [giveawayFilter, setGiveawayFilter] = useState('all');
   const [holderFilter, setHolderFilter] = useState('all');
+  const [vibeClubFilter, setVibeClubFilter] = useState('all');
+  const [nftHoldersCount, setNftHoldersCount] = useState(4);
   const r = useRev();
   const now = new Date();
+
+  useEffect(() => {
+    async function fetchNftHolders() {
+      try {
+        const client = createPublicClient({ chain: base, transport: http('https://mainnet.base.org') });
+        const total = Number(await client.readContract({
+          address: '0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886',
+          abi: parseAbi(['function totalMintedCount() view returns (uint256)']),
+          functionName: 'totalMintedCount'
+        }));
+        if (total > 0) {
+          const abi = parseAbi(['function ownerOf(uint256 tokenId) view returns (address)']);
+          const owners = new Set();
+          for (let i = 1; i <= total; i++) {
+            try {
+              const owner = await client.readContract({
+                address: '0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886',
+                abi,
+                functionName: 'ownerOf',
+                args: [BigInt(i)]
+              });
+              owners.add(owner.toLowerCase());
+            } catch (e) {}
+          }
+          if (owners.size > 0) {
+            setNftHoldersCount(owners.size);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch NFT holders:', err);
+      }
+    }
+    fetchNftHolders();
+  }, []);
 
   const filteredStakingEpochs = STAKING_EPOCHS.filter(e => {
     if (stakingFilter === 'all') return true;
@@ -1115,6 +1145,20 @@ function Rewards() {
     all: HOLDER_UNLOCKS.length,
     unlocked: HOLDER_UNLOCKS.filter(u => now >= u.dateObj).length,
     locked: HOLDER_UNLOCKS.filter(u => now < u.dateObj).length
+  };
+
+  const filteredVibeClubEpochs = VIBECLUB_EPOCHS.filter(u => {
+    const isUnlocked = now >= u.dateObj;
+    if (vibeClubFilter === 'all') return true;
+    if (vibeClubFilter === 'unlocked') return isUnlocked;
+    if (vibeClubFilter === 'locked') return !isUnlocked;
+    return true;
+  });
+
+  const vibeClubCounts = {
+    all: VIBECLUB_EPOCHS.length,
+    unlocked: VIBECLUB_EPOCHS.filter(u => now >= u.dateObj).length,
+    locked: VIBECLUB_EPOCHS.filter(u => now < u.dateObj).length
   };
 
   const filteredGiveaways = GIVEAWAYS_DATA.filter(e => giveawayFilter === 'all' || e.status === giveawayFilter);
@@ -1478,106 +1522,342 @@ function Rewards() {
 
         {/* ── 2. VIBE CLUB NFT REWARDS SECTION ── */}
         {activeTab === 'vibe-club' && (
-          <div className="tok-card" style={{ marginBottom: '36px', padding: '32px 28px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--borderf)', paddingBottom: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Crown size={26} strokeWidth={2.5} />
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '1.5rem', fontWeight: 900, margin: 0, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    Vibe Club NFT Staking
-                    <span style={{ fontSize: '0.75rem', fontWeight: 800, padding: '4px 10px', borderRadius: '6px', background: 'rgba(16, 185, 129, 0.12)', color: '#059669', border: '1px solid rgba(16, 185, 129, 0.25)' }}>
-                      15% Allocation
-                    </span>
-                  </h3>
-                  <p style={{ margin: '4px 0 0 0', color: 'var(--muted)', fontSize: '0.88rem', fontWeight: 500 }}>
-                    Stake your Vibe Club NFT to earn monthly community rewards. Snapshot takes place on the 1st of every month.
-                  </p>
-                </div>
-              </div>
-
-              <Link
-                to="/nft"
-                className="btn-fill"
-                style={{ background: '#10b981', padding: '10px 20px', fontSize: '0.88rem', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px', textDecoration: 'none' }}
+          <div style={{ marginTop: '20px' }}>
+            {/* 1. Top 3 Step Action Cards (Signature Brand Turquoise) */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                gap: '16px',
+                marginBottom: '28px'
+              }}
+            >
+              {/* Step 1 */}
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
+                  border: '1px solid rgba(0, 160, 255, 0.3)',
+                  borderRadius: '16px',
+                  padding: '18px 20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '12px',
+                  boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
+                }}
               >
-                Go to Vibe Club <ArrowRightCircle size={16} strokeWidth={2.5} />
-              </Link>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>1</span>
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Join Vibe Club &amp; Mint NFT</h4>
+                </div>
+                <a
+                  href="https://vibeverse.dog/vibeclub"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    background: '#ffffff',
+                    border: '1.5px solid rgba(0, 160, 255, 0.35)',
+                    color: 'var(--ink)',
+                    padding: '8px 14px',
+                    borderRadius: '10px',
+                    fontSize: '0.8rem',
+                    fontWeight: 800,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '5px',
+                    textDecoration: 'none',
+                    whiteSpace: 'nowrap',
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
+                    transition: 'all 0.15s',
+                    flexShrink: 0
+                  }}
+                >
+                  <span>Mint NFT</span> <ArrowUpRight size={14} strokeWidth={2.5} color="var(--blue)" />
+                </a>
+              </div>
+
+              {/* Step 2 */}
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
+                  border: '1px solid rgba(0, 160, 255, 0.3)',
+                  borderRadius: '16px',
+                  padding: '18px 20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '12px',
+                  boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>2</span>
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Hold NFT for Snapshots</h4>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
+                  border: '1px solid rgba(0, 160, 255, 0.3)',
+                  borderRadius: '16px',
+                  padding: '18px 20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '12px',
+                  boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>3</span>
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Claim Member Dividends</h4>
+                </div>
+              </div>
             </div>
 
-            {/* Quick Metrics Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
-              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
-                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>NFT Pool Share</div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#10b981', marginTop: '2px' }}>15% of Reserve</div>
-              </div>
-              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
-                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Cycle Length</div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>10-Day Epochs</div>
-              </div>
-              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
-                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Snapshot Date</div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>1st of Month</div>
-              </div>
-              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
-                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Supply Capped</div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>1,000 NFTs</div>
-              </div>
-            </div>
-
-            {/* Epochs List */}
-            <div style={{ background: '#f9fbff', border: '1px solid rgba(0, 82, 255, 0.15)', borderRadius: '18px', padding: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Calendar size={16} color="var(--blue)" /> Staking Epochs
+            {/* 2. Sub-Header: Title & Filter Tabs */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 900, margin: 0, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                  Vibe Club Rewards
+                </h3>
+                <span style={{ fontSize: '0.72rem', fontWeight: 800, background: '#f1f5f9', color: '#475569', padding: '2px 8px', borderRadius: '99px', border: '1px solid #cbd5e1' }}>
+                  {filteredVibeClubEpochs.length}
                 </span>
-                <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600 }}>10-Day Rolling Cycles</span>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {VIBECLUB_EPOCHS.map((ep, idx) => (
-                  <div
-                    key={idx}
+
+              {/* Status Filters */}
+              <div style={{ display: 'flex', gap: '6px', background: '#f1f5f9', padding: '4px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                {[
+                  { id: 'all', label: `All (${vibeClubCounts.all})` },
+                  { id: 'unlocked', label: `Unlocked (${vibeClubCounts.unlocked})` },
+                  { id: 'locked', label: `Locked (${vibeClubCounts.locked})` }
+                ].map(f => (
+                  <button
+                    key={f.id}
+                    onClick={() => setVibeClubFilter(f.id)}
                     style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '12px 16px',
-                      background: '#ffffff',
-                      borderRadius: '12px',
-                      border: '1px solid #e2e8f0',
-                      flexWrap: 'wrap',
-                      gap: '8px'
+                      fontFamily: 'var(--font)',
+                      background: vibeClubFilter === f.id ? 'var(--blue)' : 'transparent',
+                      color: vibeClubFilter === f.id ? '#ffffff' : '#64748b',
+                      border: 'none',
+                      padding: '5px 12px',
+                      borderRadius: '8px',
+                      fontSize: '0.76rem',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      transition: 'all 0.15s'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <span style={{ fontWeight: 900, color: '#10b981', fontSize: '0.95rem', minWidth: '70px' }}>{ep.epoch}</span>
-                      <span style={{ color: 'var(--ink)', fontWeight: 600, fontSize: '0.9rem' }}>{ep.dates}</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                      <span style={{ color: 'var(--muted)', fontSize: '0.82rem', fontWeight: 600 }}>{ep.note}</span>
-                      <span
-                        style={{
-                          padding: '4px 10px',
-                          borderRadius: '99px',
-                          fontSize: '0.72rem',
-                          fontWeight: 800,
-                          textTransform: 'uppercase',
-                          background: ep.status === 'ongoing' ? 'rgba(16, 185, 129, 0.12)' : '#f1f5f9',
-                          color: ep.status === 'ongoing' ? '#10b981' : 'var(--muted)',
-                          border: ep.status === 'ongoing' ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid #e2e8f0',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '5px'
-                        }}
-                      >
-                        {ep.status === 'ongoing' && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />}
-                        {ep.status}
-                      </span>
-                    </div>
-                  </div>
+                    {f.label}
+                  </button>
                 ))}
               </div>
+            </div>
+
+            {/* 3. 4 Scalable Vibe Club Epoch Cards Grid */}
+            {filteredVibeClubEpochs.length === 0 ? (
+              <div style={{ padding: '36px 20px', textAlign: 'center', background: '#ffffff', borderRadius: '20px', border: '1px solid #e2e8f0', color: '#64748b', fontSize: '0.9rem' }}>
+                No epochs found for this filter.
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 270px), 1fr))',
+                  gap: '16px'
+                }}
+              >
+                {filteredVibeClubEpochs.map((ep, idx) => {
+                  const isUnlocked = now >= ep.dateObj;
+
+                  return (
+                    <div
+                      key={ep.epoch || idx}
+                      style={{
+                        background: isUnlocked
+                          ? 'linear-gradient(145deg, rgba(215, 246, 255, 0.85) 0%, rgba(240, 252, 255, 0.95) 100%)'
+                          : 'linear-gradient(145deg, rgba(225, 248, 255, 0.55) 0%, rgba(245, 253, 255, 0.8) 100%)',
+                        border: isUnlocked ? '2px solid var(--blue)' : '1.5px solid rgba(0, 160, 255, 0.25)',
+                        borderRadius: '22px',
+                        padding: '18px 20px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        boxShadow: isUnlocked ? '0 12px 36px -4px rgba(0, 82, 255, 0.16), 0 2px 10px rgba(0, 0, 0, 0.04)' : '0 4px 16px rgba(0, 82, 255, 0.05)',
+                        position: 'relative',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      <div>
+                        {/* Header with Mascot & Status Badge */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+                            <img
+                              src="/new-logo-vibe.png"
+                              alt="VIBE"
+                              style={{
+                                width: '38px',
+                                height: '38px',
+                                borderRadius: '50%',
+                                objectFit: 'cover',
+                                border: isUnlocked ? '2px solid var(--blue)' : '1.5px solid rgba(0, 160, 255, 0.3)',
+                                boxShadow: '0 2px 8px rgba(0, 82, 255, 0.15)',
+                                flexShrink: 0
+                              }}
+                            />
+                            <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                              {ep.epoch}
+                            </h4>
+                          </div>
+
+                          <span
+                            style={{
+                              padding: '4px 10px',
+                              borderRadius: '99px',
+                              fontSize: '0.66rem',
+                              fontWeight: 900,
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.04em',
+                              background: isUnlocked ? '#ecfdf5' : 'rgba(255, 255, 255, 0.9)',
+                              color: isUnlocked ? '#059669' : '#64748b',
+                              border: isUnlocked ? '1px solid #a7f3d0' : '1px solid rgba(0, 160, 255, 0.25)',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              whiteSpace: 'nowrap',
+                              flexShrink: 0,
+                              boxShadow: isUnlocked ? '0 2px 8px rgba(16, 185, 129, 0.15)' : 'none'
+                            }}
+                          >
+                            {isUnlocked ? (
+                              <>
+                                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981', flexShrink: 0 }} />
+                                Unlocked
+                              </>
+                            ) : (
+                              <>
+                                <Lock size={11} color="#64748b" style={{ flexShrink: 0 }} />
+                                Locked
+                              </>
+                            )}
+                          </span>
+                        </div>
+
+                        {/* Metric Box (Rewards Pool) */}
+                        <div
+                          style={{
+                            background: '#ffffff',
+                            borderRadius: '16px',
+                            padding: '14px 16px',
+                            border: '1px solid rgba(0, 160, 255, 0.22)',
+                            boxShadow: '0 3px 12px rgba(0, 82, 255, 0.05)',
+                            marginBottom: '14px'
+                          }}
+                        >
+                          <div style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap', marginBottom: '2px' }}>
+                            <Coins size={12} color="var(--blue)" /> Rewards Pool
+                          </div>
+                          <div style={{ fontSize: '1.42rem', fontWeight: 900, color: isUnlocked ? 'var(--ink)' : '#64748b', marginTop: '2px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px', whiteSpace: 'nowrap' }}>
+                            {ep.poolAmount}
+                          </div>
+                        </div>
+
+                        {/* Schedule Key-Values with Icons */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                              <Calendar size={12} color="#0284c7" /> Claim Date
+                            </span>
+                            <strong style={{ color: isUnlocked ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ep.claimDate}</strong>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                              <Users size={12} color="#0284c7" /> Holders
+                            </span>
+                            <strong style={{ color: isUnlocked ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{nftHoldersCount} Holders</strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action Button: Claim or Locked */}
+                      {isUnlocked ? (
+                        <button
+                          className="btn-fill"
+                          style={{
+                            background: 'var(--blue)',
+                            color: '#ffffff',
+                            padding: '11px 14px',
+                            fontSize: '0.86rem',
+                            fontWeight: 800,
+                            borderRadius: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px',
+                            width: '100%',
+                            textDecoration: 'none',
+                            whiteSpace: 'nowrap',
+                            boxShadow: '0 4px 16px rgba(0, 0, 255, 0.3)',
+                            transition: 'all 0.15s',
+                            cursor: 'pointer',
+                            border: 'none'
+                          }}
+                        >
+                          <span>Claim</span> <ArrowUpRight size={15} strokeWidth={2.5} />
+                        </button>
+                      ) : (
+                        <button
+                          disabled
+                          style={{
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '11px 14px',
+                            fontSize: '0.86rem',
+                            fontWeight: 800,
+                            borderRadius: '12px',
+                            background: 'rgba(255, 255, 255, 0.75)',
+                            color: '#94a3b8',
+                            border: '1.5px solid rgba(0, 160, 255, 0.18)',
+                            cursor: 'not-allowed',
+                            whiteSpace: 'nowrap',
+                            gap: '6px'
+                          }}
+                        >
+                          <Lock size={13} /> Locked
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Bottom Info Strip */}
+            <div
+              style={{
+                marginTop: '24px',
+                padding: '14px 20px',
+                background: 'rgba(255, 255, 255, 0.65)',
+                border: '1px dashed rgba(0, 160, 255, 0.35)',
+                borderRadius: '16px',
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                color: '#475569',
+                fontSize: '0.84rem',
+                fontWeight: 700
+              }}
+            >
+              <Sparkles size={15} color="var(--blue)" />
+              <span>More Vibe Club epochs will be added continuously</span>
             </div>
           </div>
         )}
