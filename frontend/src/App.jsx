@@ -1708,30 +1708,27 @@ function Rewards() {
                   background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
                   border: '1px solid rgba(0, 160, 255, 0.3)',
                   borderRadius: '16px',
-                  padding: '20px',
+                  padding: '18px 20px',
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: '10px',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '12px',
                   boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>1</span>
-                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Explore Details</h4>
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Explore Vesting Details</h4>
                 </div>
-                <p style={{ margin: 0, fontSize: '0.82rem', color: '#475569', lineHeight: 1.5, fontWeight: 500 }}>
-                  Learn full mechanics of 10-month vesting, snapshot rules, and token distribution schedule.
-                </p>
                 <a
                   href="/tokenomics#vesting-details"
                   target="_blank"
                   rel="noreferrer"
                   style={{
-                    marginTop: 'auto',
                     background: '#ffffff',
                     border: '1.5px solid rgba(0, 160, 255, 0.35)',
                     color: 'var(--ink)',
-                    padding: '9px 12px',
+                    padding: '8px 14px',
                     borderRadius: '10px',
                     fontSize: '0.8rem',
                     fontWeight: 800,
@@ -1740,11 +1737,13 @@ function Rewards() {
                     justifyContent: 'center',
                     gap: '5px',
                     textDecoration: 'none',
+                    whiteSpace: 'nowrap',
                     boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
-                    transition: 'all 0.15s'
+                    transition: 'all 0.15s',
+                    flexShrink: 0
                   }}
                 >
-                  <span>Vesting Details</span> <ArrowUpRight size={14} strokeWidth={2.5} color="var(--blue)" />
+                  <span>Tokenomics</span> <ArrowUpRight size={14} strokeWidth={2.5} color="var(--blue)" />
                 </a>
               </div>
 
@@ -1754,10 +1753,11 @@ function Rewards() {
                   background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
                   border: '1px solid rgba(0, 160, 255, 0.3)',
                   borderRadius: '16px',
-                  padding: '20px',
+                  padding: '18px 20px',
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: '10px',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '12px',
                   boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
                 }}
               >
@@ -1765,19 +1765,15 @@ function Rewards() {
                   <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>2</span>
                   <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Buy &amp; Hold 5M+ $VIBE</h4>
                 </div>
-                <p style={{ margin: 0, fontSize: '0.82rem', color: '#475569', lineHeight: 1.5, fontWeight: 500 }}>
-                  Hold at least 5,000,000 $VIBE in your wallet on Base to qualify for monthly on-chain snapshot distributions.
-                </p>
                 <a
                   href={O1}
                   target="_blank"
                   rel="noreferrer"
                   style={{
-                    marginTop: 'auto',
                     background: '#ffffff',
                     border: '1.5px solid rgba(0, 160, 255, 0.35)',
                     color: 'var(--ink)',
-                    padding: '9px 12px',
+                    padding: '8px 14px',
                     borderRadius: '10px',
                     fontSize: '0.8rem',
                     fontWeight: 800,
@@ -1786,8 +1782,10 @@ function Rewards() {
                     justifyContent: 'center',
                     gap: '5px',
                     textDecoration: 'none',
+                    whiteSpace: 'nowrap',
                     boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
-                    transition: 'all 0.15s'
+                    transition: 'all 0.15s',
+                    flexShrink: 0
                   }}
                 >
                   <span>Buy on o1.exchange</span> <ArrowUpRight size={14} strokeWidth={2.5} color="var(--blue)" />
@@ -1800,10 +1798,11 @@ function Rewards() {
                   background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
                   border: '1px solid rgba(0, 160, 255, 0.3)',
                   borderRadius: '16px',
-                  padding: '20px',
+                  padding: '18px 20px',
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: '10px',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '12px',
                   boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
                 }}
               >
@@ -1811,17 +1810,15 @@ function Rewards() {
                   <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>3</span>
                   <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Check Eligibility &amp; Claim</h4>
                 </div>
-                <p style={{ margin: 0, fontSize: '0.82rem', color: '#475569', lineHeight: 1.5, fontWeight: 500 }}>
-                  Check your wallet eligibility, view Merkle proof allocation, and claim rewards on unlock days.
-                </p>
-                <Link
-                  to="/checker"
+                <a
+                  href="/checker"
+                  target="_blank"
+                  rel="noreferrer"
                   style={{
-                    marginTop: 'auto',
                     background: 'var(--blue)',
                     border: 'none',
                     color: '#ffffff',
-                    padding: '9px 12px',
+                    padding: '8px 14px',
                     borderRadius: '10px',
                     fontSize: '0.8rem',
                     fontWeight: 800,
@@ -1830,12 +1827,14 @@ function Rewards() {
                     justifyContent: 'center',
                     gap: '5px',
                     textDecoration: 'none',
+                    whiteSpace: 'nowrap',
                     boxShadow: '0 2px 8px rgba(0, 0, 255, 0.2)',
-                    transition: 'all 0.15s'
+                    transition: 'all 0.15s',
+                    flexShrink: 0
                   }}
                 >
                   <span>Checker &amp; Claim</span> <ArrowUpRight size={14} strokeWidth={2.5} />
-                </Link>
+                </a>
               </div>
             </div>
 
@@ -2058,27 +2057,6 @@ function Rewards() {
               </div>
             )}
 
-            {/* Bottom Info Strip */}
-            <div
-              style={{
-                marginTop: '24px',
-                padding: '14px 20px',
-                background: 'rgba(255, 255, 255, 0.65)',
-                border: '1px dashed rgba(0, 160, 255, 0.35)',
-                borderRadius: '16px',
-                textAlign: 'center',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                color: '#475569',
-                fontSize: '0.84rem',
-                fontWeight: 700
-              }}
-            >
-              <Sparkles size={15} color="var(--blue)" />
-              <span>Unclaimed tokens from each monthly round are permanently burned after distribution completes.</span>
-            </div>
           </div>
         )}
 
