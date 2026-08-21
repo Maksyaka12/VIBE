@@ -15,6 +15,7 @@ import './index.css';
 
 const CA      = '0xb200000000000000000000df24ecb8bf51100a01';
 const O1      = 'https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453';
+const O1_STAKING_VAULT = 'https://launch.o1.exchange/staking/vaults/0xafa3ce23e0043b651d98e5a89b55a80b71be2f4a945a745cd6e37316b5075663?chain=8453';
 const DEX     = 'https://dexscreener.com/base/0xa1a4159e61ac9fc48aa9e9992c8d4870ef8a496d5749af1d219e8002f74835c5';
 const DEX_EMB = 'https://dexscreener.com/base/0xa1a4159e61ac9fc48aa9e9992c8d4870ef8a496d5749af1d219e8002f74835c5?embed=1&theme=dark&activeTab=chart';
 
@@ -975,7 +976,8 @@ const STAKING_EPOCHS = [
     poolAmount: '2,000,000',
     startTime: '21 Aug 2026, 15:00 UTC',
     endTime: '31 Aug 2026, 15:00 UTC',
-    status: 'active'
+    status: 'active',
+    link: O1_STAKING_VAULT
   },
   {
     epoch: 'Epoch 2',
@@ -983,7 +985,8 @@ const STAKING_EPOCHS = [
     poolAmount: 'TBA',
     startTime: '31 Aug 2026, 15:00 UTC',
     endTime: '10 Sep 2026, 15:00 UTC',
-    status: 'upcoming'
+    status: 'upcoming',
+    link: O1_STAKING_VAULT
   },
   {
     epoch: 'Epoch 3',
@@ -991,7 +994,8 @@ const STAKING_EPOCHS = [
     poolAmount: 'TBA',
     startTime: '10 Sep 2026, 15:00 UTC',
     endTime: '20 Sep 2026, 15:00 UTC',
-    status: 'upcoming'
+    status: 'upcoming',
+    link: O1_STAKING_VAULT
   },
   {
     epoch: 'Epoch 4',
@@ -999,7 +1003,8 @@ const STAKING_EPOCHS = [
     poolAmount: 'TBA',
     startTime: '20 Sep 2026, 15:00 UTC',
     endTime: '30 Sep 2026, 15:00 UTC',
-    status: 'upcoming'
+    status: 'upcoming',
+    link: O1_STAKING_VAULT
   }
 ];
 
@@ -1159,7 +1164,7 @@ function Rewards() {
                   <strong style={{ fontSize: '0.9rem', color: 'var(--ink)', fontWeight: 800 }}>Stake</strong>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
-                  Lock $VIBE tokens directly into the verified staking pool on <a href={O1} target="_blank" rel="noreferrer" style={{ color: 'var(--blue)', textDecoration: 'underline', fontWeight: 700 }}>o1.exchange</a>.
+                  Lock $VIBE tokens directly into the verified staking pool on <a href={O1_STAKING_VAULT} target="_blank" rel="noreferrer" style={{ color: 'var(--blue)', textDecoration: 'underline', fontWeight: 700 }}>o1.exchange</a>.
                 </p>
               </div>
 
@@ -1341,7 +1346,7 @@ function Rewards() {
 
                       {/* Action Button */}
                       <a
-                        href={O1}
+                        href={ep.link || O1_STAKING_VAULT}
                         target="_blank"
                         rel="noreferrer"
                         className={isActive ? 'btn-fill' : ''}
