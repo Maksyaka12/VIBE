@@ -1081,7 +1081,7 @@ const HOLDER_UNLOCKS = [
 ];
 
 function Rewards() {
-  const [activeTab, setActiveTab] = useState('staking');
+  const [activeTab, setActiveTab] = useState('holders');
   const [stakingFilter, setStakingFilter] = useState('all');
   const [giveawayFilter, setGiveawayFilter] = useState('all');
   const [holderFilter, setHolderFilter] = useState('all');
@@ -1126,10 +1126,10 @@ function Rewards() {
   };
 
   const navTabs = [
+    { id: 'holders', label: 'Holder Rewards' },
     { id: 'staking', label: 'Staking' },
     { id: 'vibe-club', label: 'Vibe Club' },
     { id: 'vibe-verse', label: 'Vibe Verse' },
-    { id: 'holders', label: 'Holder Rewards' },
     { id: 'giveaways', label: 'Giveaways' },
   ];
 
@@ -1763,7 +1763,7 @@ function Rewards() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>2</span>
-                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Buy &amp; Hold 5M+ $VIBE</h4>
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Hold 5M+ $VIBE</h4>
                 </div>
                 <a
                   href={O1}
@@ -1808,7 +1808,7 @@ function Rewards() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>3</span>
-                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Check Eligibility &amp; Claim</h4>
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Check &amp; Claim</h4>
                 </div>
                 <a
                   href="/checker"
