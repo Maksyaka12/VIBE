@@ -345,7 +345,7 @@ export default function NftMintPanel({ player }) {
             <span>👑</span> GENESIS PRIVILEGES
           </div>
           <div style={{ fontSize: '9.5px', color: '#ccc', lineHeight: 1.5 }}>
-            Vibe Club members receive lifetime regular dividends, VIP roles, and premier status across the B20 ecosystem.
+            Vibe Club members receive lifetime regular royalties, VIP roles, and premier status across the B20 ecosystem.
           </div>
         </div>
 

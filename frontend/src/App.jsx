@@ -531,7 +531,7 @@ function Tokenomics() {
                 </div>
                 <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>Vibe Club NFTs</h4>
                 <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
-                  Direct royalty dividends for holders of the 333 Vibe Club NFTs.
+                  Direct royalties for holders of the 333 Vibe Club NFTs.
                 </p>
               </div>
               <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#10b981', background: 'rgba(16, 185, 129, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
@@ -1080,11 +1080,12 @@ function Rewards() {
   const [giveawayFilter, setGiveawayFilter] = useState('all');
   const [holderFilter, setHolderFilter] = useState('all');
   const [vibeClubFilter, setVibeClubFilter] = useState('all');
-  const [nftHoldersCount, setNftHoldersCount] = useState(4);
+  const [nftHoldersCount, setNftHoldersCount] = useState(103);
   const r = useRev();
   const now = new Date();
 
   useEffect(() => {
+    let mounted = true;
     async function fetchNftHolders() {
       try {
         const client = createPublicClient({ chain: base, transport: http('https://mainnet.base.org') });
@@ -1093,29 +1094,19 @@ function Rewards() {
           abi: parseAbi(['function totalMintedCount() view returns (uint256)']),
           functionName: 'totalMintedCount'
         }));
-        if (total > 0) {
-          const abi = parseAbi(['function ownerOf(uint256 tokenId) view returns (address)']);
-          const owners = new Set();
-          for (let i = 1; i <= total; i++) {
-            try {
-              const owner = await client.readContract({
-                address: '0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886',
-                abi,
-                functionName: 'ownerOf',
-                args: [BigInt(i)]
-              });
-              owners.add(owner.toLowerCase());
-            } catch (e) {}
-          }
-          if (owners.size > 0) {
-            setNftHoldersCount(owners.size);
-          }
+        if (total > 0 && mounted) {
+          setNftHoldersCount(total);
         }
       } catch (err) {
         console.error('Failed to fetch NFT holders:', err);
       }
     }
     fetchNftHolders();
+    const interval = setInterval(fetchNftHolders, 10000);
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   const filteredStakingEpochs = STAKING_EPOCHS.filter(e => {
@@ -1613,7 +1604,7 @@ function Rewards() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>3</span>
-                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Claim Member Dividends</h4>
+                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Claim Club Royalties</h4>
                 </div>
               </div>
             </div>
