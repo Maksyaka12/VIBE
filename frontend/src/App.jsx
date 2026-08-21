@@ -1041,7 +1041,7 @@ const GIVEAWAYS_DATA = [
 ];
 
 function Rewards() {
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState('staking');
   const [giveawayFilter, setGiveawayFilter] = useState('all');
   const r = useRev();
   const now = new Date();
@@ -1055,7 +1055,6 @@ function Rewards() {
   };
 
   const navTabs = [
-    { id: 'all', label: 'All Rewards (5)' },
     { id: 'staking', label: 'Staking' },
     { id: 'vibe-club', label: 'Vibe Club' },
     { id: 'vibe-verse', label: 'Vibe Verse' },
@@ -1068,7 +1067,7 @@ function Rewards() {
       <div className="wrap">
         <div className="sec-head rv" ref={r} style={{ marginBottom: '32px' }}>
           <h2>Rewards <span className="bl">Hub</span>.</h2>
-          <p className="sec-sub">Track active reward epochs, staking yield cycles, Vibe Club NFT payouts, and community events.</p>
+          <p className="sec-sub">Track active reward epochs and community events.</p>
         </div>
 
         {/* Top Category Tab Navigation */}
@@ -1102,7 +1101,7 @@ function Rewards() {
         </div>
 
         {/* ── 1. STAKING REWARDS SECTION ── */}
-        {(activeTab === 'all' || activeTab === 'staking') && (
+        {activeTab === 'staking' && (
           <div
             className="tok-card"
             style={{
@@ -1115,7 +1114,7 @@ function Rewards() {
             }}
           >
             {/* Compact Epoch Cards Grid (Sized to fit up to 3 per row) */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '18px', marginBottom: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))', gap: '18px', marginBottom: '20px' }}>
               {/* ── CARD 1: EPOCH 1 (ACTIVE / LIVE) ── */}
               <div
                 style={{
@@ -1347,7 +1346,7 @@ function Rewards() {
         )}
 
         {/* ── 2. VIBE CLUB NFT REWARDS SECTION ── */}
-        {(activeTab === 'all' || activeTab === 'vibe-club') && (
+        {activeTab === 'vibe-club' && (
           <div className="tok-card" style={{ marginBottom: '36px', padding: '32px 28px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--borderf)', paddingBottom: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -1455,7 +1454,7 @@ function Rewards() {
         )}
 
         {/* ── 3. VIBEVERSE APP REWARDS SECTION ── */}
-        {(activeTab === 'all' || activeTab === 'vibe-verse') && (
+        {activeTab === 'vibe-verse' && (
           <div className="tok-card" style={{ marginBottom: '36px', padding: '32px 28px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--borderf)', paddingBottom: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -1563,7 +1562,7 @@ function Rewards() {
         )}
 
         {/* ── 4. HOLDER REWARDS VESTING SECTION ── */}
-        {(activeTab === 'all' || activeTab === 'holders') && (
+        {activeTab === 'holders' && (
           <div className="tok-card" style={{ marginBottom: '36px', padding: '32px 28px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--borderf)', paddingBottom: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -1671,7 +1670,7 @@ function Rewards() {
         )}
 
         {/* ── 5. GIVEAWAYS SECTION ── */}
-        {(activeTab === 'all' || activeTab === 'giveaways') && (
+        {activeTab === 'giveaways' && (
           <div style={{ marginTop: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
               <div>
