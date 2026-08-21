@@ -6,6 +6,7 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+button, input, select, textarea { font-family: var(--font); }
 
 /* PAW CURSOR */
 *, *::after, *::before {

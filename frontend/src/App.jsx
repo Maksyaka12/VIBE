@@ -992,6 +992,14 @@ const STAKING_EPOCHS = [
     startTime: '10 Sep 2026, 15:00 UTC',
     endTime: '20 Sep 2026, 15:00 UTC',
     status: 'upcoming'
+  },
+  {
+    epoch: 'Epoch 4',
+    duration: '10 Days',
+    poolAmount: 'TBA',
+    startTime: '20 Sep 2026, 15:00 UTC',
+    endTime: '30 Sep 2026, 15:00 UTC',
+    status: 'upcoming'
   }
 ];
 
@@ -1109,6 +1117,7 @@ function Rewards() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 style={{
+                  fontFamily: 'var(--font)',
                   padding: '10px 22px',
                   borderRadius: '99px',
                   border: isActive ? '1px solid var(--blue)' : '1px solid #cbd5e1',
@@ -1116,6 +1125,7 @@ function Rewards() {
                   color: isActive ? '#ffffff' : 'var(--ink)',
                   fontWeight: 800,
                   fontSize: '0.9rem',
+                  letterSpacing: '-0.01em',
                   cursor: 'pointer',
                   boxShadow: isActive ? '0 4px 14px rgba(0, 82, 255, 0.35)' : '0 2px 6px rgba(0,0,0,0.04)',
                   transition: 'all 0.2s',
@@ -1213,6 +1223,7 @@ function Rewards() {
                       key={f.id}
                       onClick={() => setStakingFilter(f.id)}
                       style={{
+                        fontFamily: 'var(--font)',
                         padding: '6px 14px',
                         borderRadius: '99px',
                         border: 'none',
@@ -1220,6 +1231,7 @@ function Rewards() {
                         color: isFActive ? '#ffffff' : '#64748b',
                         fontWeight: 800,
                         fontSize: '0.78rem',
+                        letterSpacing: '-0.01em',
                         cursor: 'pointer',
                         transition: 'all 0.15s'
                       }}
@@ -1240,8 +1252,8 @@ function Rewards() {
               <div
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
-                  gap: '16px'
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 240px), 1fr))',
+                  gap: '14px'
                 }}
               >
                 {filteredStakingEpochs.map(ep => {
@@ -1252,14 +1264,16 @@ function Rewards() {
                     <div
                       key={ep.epoch}
                       style={{
-                        background: '#ffffff',
-                        border: isActive ? '1.5px solid var(--blue)' : '1px solid #e2e8f0',
+                        background: isActive
+                          ? 'linear-gradient(135deg, rgba(190, 241, 255, 0.6) 0%, rgba(225, 249, 255, 0.85) 100%)'
+                          : 'linear-gradient(135deg, rgba(190, 241, 255, 0.35) 0%, rgba(225, 249, 255, 0.6) 100%)',
+                        border: isActive ? '1.5px solid var(--blue)' : '1px solid rgba(0, 160, 255, 0.25)',
                         borderRadius: '16px',
-                        padding: '18px 20px',
+                        padding: '16px 18px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        boxShadow: isActive ? '0 6px 20px -3px rgba(0, 0, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.02)' : '0 2px 6px rgba(0, 0, 0, 0.02)',
+                        boxShadow: isActive ? '0 6px 20px -3px rgba(0, 0, 255, 0.12), 0 2px 6px rgba(0, 0, 0, 0.02)' : '0 2px 8px rgba(0, 82, 255, 0.04)',
                         transition: 'all 0.2s'
                       }}
                     >
@@ -1270,7 +1284,7 @@ function Rewards() {
                             <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 900, color: isActive ? 'var(--ink)' : '#475569', letterSpacing: '-0.02em' }}>
                               {ep.epoch}
                             </h4>
-                            <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748b', background: '#f1f5f9', padding: '2px 7px', borderRadius: '5px' }}>
+                            <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748b', background: 'rgba(255, 255, 255, 0.85)', padding: '2px 7px', borderRadius: '5px', border: '1px solid rgba(0, 160, 255, 0.15)' }}>
                               {ep.duration || '10 Days'}
                             </span>
                           </div>
@@ -1283,9 +1297,9 @@ function Rewards() {
                               fontWeight: 800,
                               textTransform: 'uppercase',
                               letterSpacing: '0.04em',
-                              background: isActive ? '#ecfdf5' : isCompleted ? '#f1f5f9' : '#f8fafc',
+                              background: isActive ? '#ecfdf5' : isCompleted ? 'rgba(255, 255, 255, 0.85)' : 'rgba(255, 255, 255, 0.85)',
                               color: isActive ? '#059669' : isCompleted ? '#64748b' : '#64748b',
-                              border: isActive ? '1px solid #a7f3d0' : '1px solid #e2e8f0',
+                              border: isActive ? '1px solid #a7f3d0' : '1px solid rgba(0, 160, 255, 0.2)',
                               display: 'inline-flex',
                               alignItems: 'center',
                               gap: '5px'
@@ -1297,7 +1311,7 @@ function Rewards() {
                         </div>
 
                         {/* Metric Box */}
-                        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '12px 14px', marginBottom: '14px' }}>
+                        <div style={{ background: 'rgba(255, 255, 255, 0.85)', border: '1px solid rgba(0, 160, 255, 0.2)', borderRadius: '12px', padding: '12px 14px', marginBottom: '14px', backdropFilter: 'blur(4px)' }}>
                           <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em' }}>
                             {ep.epoch} Rewards Pool
                           </div>
@@ -1308,11 +1322,11 @@ function Rewards() {
 
                         {/* Schedule Key-Values */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px', fontSize: '0.82rem' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '6px', borderBottom: '1px solid #f8fafc' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '6px', borderBottom: '1px solid rgba(0, 160, 255, 0.12)' }}>
                             <span style={{ color: '#64748b', fontWeight: 500 }}>Start Time</span>
                             <strong style={{ color: isActive ? 'var(--ink)' : '#475569', fontWeight: 600 }}>{ep.startTime}</strong>
                           </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '6px', borderBottom: '1px solid #f8fafc' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '6px', borderBottom: '1px solid rgba(0, 160, 255, 0.12)' }}>
                             <span style={{ color: '#64748b', fontWeight: 500 }}>End Time</span>
                             <strong style={{ color: isActive ? 'var(--ink)' : '#475569', fontWeight: 600 }}>{ep.endTime}</strong>
                           </div>
@@ -1332,8 +1346,8 @@ function Rewards() {
                         rel="noreferrer"
                         className={isActive ? 'btn-fill' : ''}
                         style={{
-                          background: isActive ? 'var(--blue)' : '#f8fafc',
-                          border: isActive ? 'none' : '1px solid #e2e8f0',
+                          background: isActive ? 'var(--blue)' : '#ffffff',
+                          border: isActive ? 'none' : '1px solid rgba(0, 160, 255, 0.25)',
                           color: isActive ? '#ffffff' : '#334155',
                           padding: '10px 14px',
                           fontSize: '0.85rem',
@@ -1345,7 +1359,7 @@ function Rewards() {
                           gap: '6px',
                           width: '100%',
                           textDecoration: 'none',
-                          boxShadow: isActive ? '0 4px 12px rgba(0, 0, 255, 0.2)' : 'none',
+                          boxShadow: isActive ? '0 4px 12px rgba(0, 0, 255, 0.2)' : '0 1px 4px rgba(0, 0, 0, 0.02)',
                           transition: 'all 0.15s'
                         }}
                       >
