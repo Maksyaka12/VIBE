@@ -969,16 +969,30 @@ function Footer() {
 }
 
 const STAKING_EPOCHS = [
-  { epoch: 'Epoch 1', dates: 'Aug 26 – Sep 05, 2026', pool: '15% Pool', status: 'ongoing', note: 'Active Accumulation' },
-  { epoch: 'Epoch 2', dates: 'Sep 05 – Sep 15, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 3', dates: 'Sep 15 – Sep 25, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 4', dates: 'Sep 25 – Oct 05, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 5', dates: 'Oct 05 – Oct 15, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 6', dates: 'Oct 15 – Oct 25, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 7', dates: 'Oct 25 – Nov 04, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 8', dates: 'Nov 04 – Nov 14, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 9', dates: 'Nov 14 – Nov 24, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 10', dates: 'Nov 24 – Dec 04, 2026', pool: '15% Pool', status: 'upcoming', note: 'Scheduled' },
+  {
+    epoch: 'Epoch 1',
+    duration: '10 Days',
+    poolAmount: '2,000,000',
+    startTime: '21 Aug 2026, 15:00 UTC',
+    endTime: '31 Aug 2026, 15:00 UTC',
+    status: 'active'
+  },
+  {
+    epoch: 'Epoch 2',
+    duration: '10 Days',
+    poolAmount: '2,000,000',
+    startTime: '31 Aug 2026, 15:00 UTC',
+    endTime: '10 Sep 2026, 15:00 UTC',
+    status: 'upcoming'
+  },
+  {
+    epoch: 'Epoch 3',
+    duration: '10 Days',
+    poolAmount: '15% Reward Pool',
+    startTime: '10 Sep 2026, 15:00 UTC',
+    endTime: '20 Sep 2026, 15:00 UTC',
+    status: 'upcoming'
+  }
 ];
 
 const VIBEVERSE_EPOCHS = [
@@ -1042,9 +1056,25 @@ const GIVEAWAYS_DATA = [
 
 function Rewards() {
   const [activeTab, setActiveTab] = useState('staking');
+  const [stakingFilter, setStakingFilter] = useState('all');
   const [giveawayFilter, setGiveawayFilter] = useState('all');
   const r = useRev();
   const now = new Date();
+
+  const filteredStakingEpochs = STAKING_EPOCHS.filter(e => {
+    if (stakingFilter === 'all') return true;
+    if (stakingFilter === 'active') return e.status === 'active' || e.status === 'ongoing';
+    if (stakingFilter === 'upcoming') return e.status === 'upcoming';
+    if (stakingFilter === 'completed') return e.status === 'completed' || e.status === 'ended';
+    return true;
+  });
+
+  const stakingCounts = {
+    all: STAKING_EPOCHS.length,
+    active: STAKING_EPOCHS.filter(e => e.status === 'active' || e.status === 'ongoing').length,
+    upcoming: STAKING_EPOCHS.filter(e => e.status === 'upcoming').length,
+    completed: STAKING_EPOCHS.filter(e => e.status === 'completed' || e.status === 'ended').length,
+  };
 
   const filteredGiveaways = GIVEAWAYS_DATA.filter(e => giveawayFilter === 'all' || e.status === giveawayFilter);
 
@@ -1103,236 +1133,205 @@ function Rewards() {
         {/* ── 1. STAKING REWARDS SECTION ── */}
         {activeTab === 'staking' && (
           <div style={{ marginBottom: '40px' }}>
-            {/* Epoch Cards Grid (3 cards per row on desktop) */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))',
-                gap: '20px',
-                marginBottom: '24px'
-              }}
-            >
-              {/* ── CARD 1: EPOCH 1 (ACTIVE / LIVE) ── */}
-              <div
-                style={{
-                  background: '#ffffff',
-                  border: '1.5px solid var(--blue)',
-                  borderRadius: '20px',
-                  padding: '24px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  boxShadow: '0 8px 24px -4px rgba(0, 0, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.02)',
-                  transition: 'transform 0.2s, box-shadow 0.2s'
-                }}
-              >
-                <div>
-                  {/* Card Header */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>Epoch 1</h4>
-                      <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748b', background: '#f1f5f9', padding: '3px 8px', borderRadius: '6px' }}>10 Days</span>
-                    </div>
-
-                    <span
-                      style={{
-                        padding: '4px 12px',
-                        borderRadius: '99px',
-                        fontSize: '0.72rem',
-                        fontWeight: 800,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.04em',
-                        background: '#ecfdf5',
-                        color: '#059669',
-                        border: '1px solid #a7f3d0',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                      }}
-                    >
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />
-                      Active
-                    </span>
-                  </div>
-
-                  {/* Reward Pool Metric Box */}
-                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '16px 18px', marginBottom: '20px' }}>
-                    <div style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.06em' }}>
-                      Epoch 1 Rewards Pool
-                    </div>
-                    <div style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--ink)', marginTop: '4px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                      2,000,000 <span style={{ fontSize: '1.05rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
-                    </div>
-                  </div>
-
-                  {/* Schedule Details List */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '22px', fontSize: '0.86rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '8px', borderBottom: '1px solid #f1f5f9' }}>
-                      <span style={{ color: '#64748b', fontWeight: 500 }}>Start Time</span>
-                      <strong style={{ color: 'var(--ink)', fontWeight: 700 }}>21 Aug 2026, 15:00 UTC</strong>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '8px', borderBottom: '1px solid #f1f5f9' }}>
-                      <span style={{ color: '#64748b', fontWeight: 500 }}>End Time</span>
-                      <strong style={{ color: 'var(--ink)', fontWeight: 700 }}>31 Aug 2026, 15:00 UTC</strong>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ color: '#64748b', fontWeight: 500 }}>Status</span>
-                      <strong style={{ color: '#16a34a', fontWeight: 700 }}>Active</strong>
-                    </div>
-                  </div>
+            {/* 1. 3-Point Staking Info Grid (Always Visible at Top) */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px', marginBottom: '28px' }}>
+              <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px 18px', boxShadow: '0 2px 6px rgba(0, 0, 0, 0.02)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.08)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>1</span>
+                  <strong style={{ fontSize: '0.9rem', color: 'var(--ink)', fontWeight: 800 }}>Stake</strong>
                 </div>
-
-                {/* Action Button */}
-                <a
-                  href={O1}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn-fill"
-                  style={{
-                    background: 'var(--blue)',
-                    padding: '12px 18px',
-                    fontSize: '0.9rem',
-                    fontWeight: 800,
-                    borderRadius: '12px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '6px',
-                    width: '100%',
-                    textDecoration: 'none',
-                    color: '#ffffff',
-                    boxShadow: '0 4px 14px rgba(0, 0, 255, 0.25)',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  Stake &amp; Earn on o1 <ArrowUpRight size={16} strokeWidth={2.5} />
-                </a>
-              </div>
-
-              {/* ── CARD 2: EPOCH 2 (UPCOMING) ── */}
-              <div
-                style={{
-                  background: '#ffffff',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '20px',
-                  padding: '24px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.02)'
-                }}
-              >
-                <div>
-                  {/* Card Header */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#475569', letterSpacing: '-0.02em' }}>Epoch 2</h4>
-                      <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#94a3b8', background: '#f8fafc', padding: '3px 8px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>10 Days</span>
-                    </div>
-
-                    <span
-                      style={{
-                        padding: '4px 12px',
-                        borderRadius: '99px',
-                        fontSize: '0.72rem',
-                        fontWeight: 700,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.04em',
-                        background: '#f8fafc',
-                        color: '#64748b',
-                        border: '1px solid #e2e8f0'
-                      }}
-                    >
-                      Upcoming
-                    </span>
-                  </div>
-
-                  {/* Reward Pool Metric Box */}
-                  <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '16px 18px', marginBottom: '20px' }}>
-                    <div style={{ fontSize: '0.72rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.06em' }}>
-                      Epoch 2 Rewards Pool
-                    </div>
-                    <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#64748b', marginTop: '4px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                      2,000,000 <span style={{ fontSize: '1.05rem', color: '#94a3b8', fontWeight: 700 }}>$VIBE</span>
-                    </div>
-                  </div>
-
-                  {/* Schedule Details List */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '22px', fontSize: '0.86rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '8px', borderBottom: '1px solid #f1f5f9' }}>
-                      <span style={{ color: '#94a3b8', fontWeight: 500 }}>Start Time</span>
-                      <strong style={{ color: '#475569', fontWeight: 600 }}>31 Aug 2026, 15:00 UTC</strong>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '8px', borderBottom: '1px solid #f1f5f9' }}>
-                      <span style={{ color: '#94a3b8', fontWeight: 500 }}>End Time</span>
-                      <strong style={{ color: '#475569', fontWeight: 600 }}>10 Sep 2026, 15:00 UTC</strong>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ color: '#94a3b8', fontWeight: 500 }}>Status</span>
-                      <strong style={{ color: '#94a3b8', fontWeight: 600 }}>Upcoming</strong>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Secondary Button */}
-                <a
-                  href={O1}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    background: '#f8fafc',
-                    border: '1px solid #e2e8f0',
-                    padding: '12px 18px',
-                    fontSize: '0.9rem',
-                    fontWeight: 700,
-                    borderRadius: '12px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '6px',
-                    width: '100%',
-                    textDecoration: 'none',
-                    color: '#334155',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  Stake on o1.exchange <ArrowUpRight size={16} />
-                </a>
-              </div>
-            </div>
-
-            {/* 3-Point Staking Info Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-              <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '18px 20px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.08)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>1</span>
-                  <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Stake</strong>
-                </div>
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b', lineHeight: 1.5 }}>
+                <p style={{ margin: 0, fontSize: '0.84rem', color: '#64748b', lineHeight: 1.45 }}>
                   Lock $VIBE tokens directly into the verified staking pool on <a href={O1} target="_blank" rel="noreferrer" style={{ color: 'var(--blue)', textDecoration: 'underline', fontWeight: 700 }}>o1.exchange</a>.
                 </p>
               </div>
 
-              <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '18px 20px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.08)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>2</span>
-                  <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>10-Day Epochs</strong>
+              <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px 18px', boxShadow: '0 2px 6px rgba(0, 0, 0, 0.02)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.08)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>2</span>
+                  <strong style={{ fontSize: '0.9rem', color: 'var(--ink)', fontWeight: 800 }}>10-Day Epochs</strong>
                 </div>
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b', lineHeight: 1.5 }}>
+                <p style={{ margin: 0, fontSize: '0.84rem', color: '#64748b', lineHeight: 1.45 }}>
                   Staking rewards are distributed every 10 days, followed immediately by the start of a new epoch.
                 </p>
               </div>
 
-              <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '18px 20px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.02)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>3</span>
-                  <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Epoch Reward Pool</strong>
+              <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px 18px', boxShadow: '0 2px 6px rgba(0, 0, 0, 0.02)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>3</span>
+                  <strong style={{ fontSize: '0.9rem', color: 'var(--ink)', fontWeight: 800 }}>Epoch Reward Pool</strong>
                 </div>
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b', lineHeight: 1.5 }}>
+                <p style={{ margin: 0, fontSize: '0.84rem', color: '#64748b', lineHeight: 1.45 }}>
                   Equals exactly 15% of the total Community Rewards Pool available at the start of each epoch.
                 </p>
               </div>
             </div>
+
+            {/* 2. Sub-Header with Filter Tabs */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>Staking Epochs</h3>
+                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', background: '#f1f5f9', border: '1px solid #e2e8f0', padding: '2px 8px', borderRadius: '99px' }}>
+                  {filteredStakingEpochs.length} Epoch{filteredStakingEpochs.length === 1 ? '' : 's'}
+                </span>
+              </div>
+
+              {/* Status Filter for Staking Epochs */}
+              <div style={{ display: 'flex', gap: '6px', background: '#ffffff', padding: '4px', borderRadius: '99px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+                {[
+                  { id: 'all', label: `All (${stakingCounts.all})` },
+                  { id: 'active', label: `Active (${stakingCounts.active})` },
+                  { id: 'upcoming', label: `Upcoming (${stakingCounts.upcoming})` },
+                  { id: 'completed', label: `Completed (${stakingCounts.completed})` }
+                ].map(f => {
+                  const isFActive = stakingFilter === f.id;
+                  return (
+                    <button
+                      key={f.id}
+                      onClick={() => setStakingFilter(f.id)}
+                      style={{
+                        padding: '6px 14px',
+                        borderRadius: '99px',
+                        border: 'none',
+                        background: isFActive ? 'var(--blue)' : 'transparent',
+                        color: isFActive ? '#ffffff' : '#64748b',
+                        fontWeight: 800,
+                        fontSize: '0.78rem',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s'
+                      }}
+                    >
+                      {f.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 3. Compact Streamlined Epoch Cards Grid (Scalable to 50+ epochs) */}
+            {filteredStakingEpochs.length === 0 ? (
+              <div style={{ padding: '36px 20px', textAlign: 'center', background: '#ffffff', borderRadius: '16px', border: '1px solid #e2e8f0', color: '#64748b', fontSize: '0.9rem' }}>
+                No epochs found for this filter.
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
+                  gap: '16px'
+                }}
+              >
+                {filteredStakingEpochs.map(ep => {
+                  const isActive = ep.status === 'active' || ep.status === 'ongoing';
+                  const isCompleted = ep.status === 'completed' || ep.status === 'ended';
+
+                  return (
+                    <div
+                      key={ep.epoch}
+                      style={{
+                        background: '#ffffff',
+                        border: isActive ? '1.5px solid var(--blue)' : '1px solid #e2e8f0',
+                        borderRadius: '16px',
+                        padding: '18px 20px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        boxShadow: isActive ? '0 6px 20px -3px rgba(0, 0, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.02)' : '0 2px 6px rgba(0, 0, 0, 0.02)',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      <div>
+                        {/* Header */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 900, color: isActive ? 'var(--ink)' : '#475569', letterSpacing: '-0.02em' }}>
+                              {ep.epoch}
+                            </h4>
+                            <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748b', background: '#f1f5f9', padding: '2px 7px', borderRadius: '5px' }}>
+                              {ep.duration || '10 Days'}
+                            </span>
+                          </div>
+
+                          <span
+                            style={{
+                              padding: '3px 10px',
+                              borderRadius: '99px',
+                              fontSize: '0.68rem',
+                              fontWeight: 800,
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.04em',
+                              background: isActive ? '#ecfdf5' : isCompleted ? '#f1f5f9' : '#f8fafc',
+                              color: isActive ? '#059669' : isCompleted ? '#64748b' : '#64748b',
+                              border: isActive ? '1px solid #a7f3d0' : '1px solid #e2e8f0',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '5px'
+                            }}
+                          >
+                            {isActive && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />}
+                            {isActive ? 'Active' : isCompleted ? 'Completed' : 'Upcoming'}
+                          </span>
+                        </div>
+
+                        {/* Metric Box */}
+                        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '12px 14px', marginBottom: '14px' }}>
+                          <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em' }}>
+                            {ep.epoch} Rewards Pool
+                          </div>
+                          <div style={{ fontSize: '1.45rem', fontWeight: 900, color: isActive ? 'var(--ink)' : '#64748b', marginTop: '3px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                            {ep.poolAmount} <span style={{ fontSize: '0.9rem', color: isActive ? 'var(--blue)' : '#94a3b8', fontWeight: 800 }}>$VIBE</span>
+                          </div>
+                        </div>
+
+                        {/* Schedule Key-Values */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px', fontSize: '0.82rem' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '6px', borderBottom: '1px solid #f8fafc' }}>
+                            <span style={{ color: '#64748b', fontWeight: 500 }}>Start Time</span>
+                            <strong style={{ color: isActive ? 'var(--ink)' : '#475569', fontWeight: 600 }}>{ep.startTime}</strong>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '6px', borderBottom: '1px solid #f8fafc' }}>
+                            <span style={{ color: '#64748b', fontWeight: 500 }}>End Time</span>
+                            <strong style={{ color: isActive ? 'var(--ink)' : '#475569', fontWeight: 600 }}>{ep.endTime}</strong>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ color: '#64748b', fontWeight: 500 }}>Status</span>
+                            <strong style={{ color: isActive ? '#16a34a' : '#64748b', fontWeight: 700 }}>
+                              {isActive ? 'Active' : isCompleted ? 'Completed' : 'Upcoming'}
+                            </strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action Button */}
+                      <a
+                        href={O1}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={isActive ? 'btn-fill' : ''}
+                        style={{
+                          background: isActive ? 'var(--blue)' : '#f8fafc',
+                          border: isActive ? 'none' : '1px solid #e2e8f0',
+                          color: isActive ? '#ffffff' : '#334155',
+                          padding: '10px 14px',
+                          fontSize: '0.85rem',
+                          fontWeight: 800,
+                          borderRadius: '10px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px',
+                          width: '100%',
+                          textDecoration: 'none',
+                          boxShadow: isActive ? '0 4px 12px rgba(0, 0, 255, 0.2)' : 'none',
+                          transition: 'all 0.15s'
+                        }}
+                      >
+                        {isActive ? 'Stake & Earn on o1' : 'Stake on o1.exchange'} <ArrowUpRight size={15} strokeWidth={2.5} />
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
 
