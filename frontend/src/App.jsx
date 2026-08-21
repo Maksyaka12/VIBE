@@ -2063,176 +2063,213 @@ function Rewards() {
         {/* ── 5. GIVEAWAYS SECTION ── */}
         {activeTab === 'giveaways' && (
           <div style={{ marginTop: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
-              <div>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 900, margin: 0, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Sparkles size={24} color="#f59e0b" /> Community Giveaways &amp; Events
+            {/* Sub-Header: Title & Filter Tabs */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 900, margin: 0, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                  Giveaways
                 </h3>
-                <p style={{ margin: '4px 0 0 0', color: 'var(--muted)', fontSize: '0.88rem', fontWeight: 500 }}>
-                  Special community milestones, holder celebration parties, and promotional prize pools.
-                </p>
+                <span style={{ fontSize: '0.72rem', fontWeight: 800, background: '#f1f5f9', color: '#475569', padding: '2px 8px', borderRadius: '99px', border: '1px solid #cbd5e1' }}>
+                  {filteredGiveaways.length}
+                </span>
               </div>
 
-              {/* Status Filter for Giveaways */}
-              <div style={{ display: 'flex', gap: '8px' }}>
-                {['all', 'ongoing', 'ended'].map(f => {
-                  const label = f === 'all' ? `All (${giveawayCounts.all})` : f === 'ongoing' ? `Ongoing (${giveawayCounts.ongoing})` : `Ended (${giveawayCounts.ended})`;
-                  const isFActive = giveawayFilter === f;
-                  return (
-                    <button
-                      key={f}
-                      onClick={() => setGiveawayFilter(f)}
-                      style={{
-                        padding: '6px 14px',
-                        borderRadius: '99px',
-                        border: isFActive ? '1px solid var(--blue)' : '1px solid #cbd5e1',
-                        background: isFActive ? 'var(--blue)' : '#ffffff',
-                        color: isFActive ? '#ffffff' : 'var(--ink)',
-                        fontWeight: 800,
-                        fontSize: '0.82rem',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
+              {/* Status Filters */}
+              <div style={{ display: 'flex', gap: '6px', background: '#f1f5f9', padding: '4px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                {[
+                  { id: 'all', label: `All (${giveawayCounts.all})` },
+                  { id: 'ongoing', label: `Ongoing (${giveawayCounts.ongoing})` },
+                  { id: 'ended', label: `Ended (${giveawayCounts.ended})` }
+                ].map(f => (
+                  <button
+                    key={f.id}
+                    onClick={() => setGiveawayFilter(f.id)}
+                    style={{
+                      fontFamily: 'var(--font)',
+                      background: giveawayFilter === f.id ? 'var(--blue)' : 'transparent',
+                      color: giveawayFilter === f.id ? '#ffffff' : '#64748b',
+                      border: 'none',
+                      padding: '5px 12px',
+                      borderRadius: '8px',
+                      fontSize: '0.76rem',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      transition: 'all 0.15s'
+                    }}
+                  >
+                    {f.label}
+                  </button>
+                ))}
               </div>
             </div>
 
             {/* Giveaways Grid */}
-            <div className="events-grid" style={{ display: 'grid', gap: '24px', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 360px), 1fr))' }}>
-              {filteredGiveaways.map(ev => (
-                <div key={ev.id} className="tok-card" style={{ padding: '0', overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                  {/* Event Image Banner */}
-                  <div style={{ position: 'relative', background: '#f8fafc', borderBottom: '1px solid var(--borderf)' }}>
-                    <img src={ev.image} alt={ev.title} style={{ width: '100%', height: 'auto', display: 'block' }} />
-                    
-                    {/* Status Pill on Banner Bottom-Right */}
-                    <span style={{
-                      position: 'absolute',
-                      bottom: '12px',
-                      right: '12px',
-                      background: ev.status === 'ongoing' ? '#10b981' : '#ef4444',
-                      color: '#fff',
-                      padding: '4px 12px',
-                      borderRadius: '99px',
-                      fontSize: '0.72rem',
-                      fontWeight: 900,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.5px',
-                      boxShadow: ev.status === 'ongoing' ? '0 4px 12px rgba(16, 185, 129, 0.4)' : '0 4px 12px rgba(239, 68, 68, 0.4)'
-                    }}>
-                      {ev.status === 'ongoing' && <span style={{ width: '6px', height: '6px', background: '#fff', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,255,255,0.8)' }} />}
-                      {ev.status === 'ongoing' ? 'Ongoing' : 'Ended'}
-                    </span>
-                  </div>
+            {filteredGiveaways.length === 0 ? (
+              <div style={{ padding: '36px 20px', textAlign: 'center', background: '#ffffff', borderRadius: '20px', border: '1px solid #e2e8f0', color: '#64748b', fontSize: '0.9rem' }}>
+                No giveaways found for this filter.
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 270px), 1fr))',
+                  gap: '16px'
+                }}
+              >
+                {filteredGiveaways.map((ev) => {
+                  const isOngoing = ev.status === 'ongoing';
 
-                  {/* Event Body */}
-                  <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                    {/* Title Header */}
-                    <div style={{ marginBottom: '14px' }}>
-                      <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0, color: 'var(--ink)', lineHeight: '1.2' }}>{ev.title}</h3>
-                    </div>
-
-                    {/* 4 Separate Compact Stat Tiles in 2x2 Grid */}
-                    <div style={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr 1fr',
-                      gap: '10px',
-                      marginBottom: '16px'
-                    }}>
-                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px 12px' }}>
-                        <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
-                          Prize Pool
-                        </div>
-                        <div style={{ fontWeight: 800, color: 'var(--blue)', fontSize: '0.9rem' }}>
-                          {ev.prizePool}
-                        </div>
-                      </div>
-
-                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px 12px' }}>
-                        <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
-                          Winners
-                        </div>
-                        <div style={{ fontWeight: 800, color: 'var(--ink)', fontSize: '0.9rem' }}>
-                          {ev.winners}
-                        </div>
-                      </div>
-
-                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px 12px' }}>
-                        <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '2px' }}>
-                          Status
-                        </div>
-                        <div style={{ fontWeight: 800, color: ev.status === 'ongoing' ? '#10b981' : '#ef4444', fontSize: '0.9rem', textTransform: 'capitalize' }}>
-                          {ev.status}
-                        </div>
-                      </div>
-
-                      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px 12px' }}>
-                        <div style={{ fontSize: '0.68rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.5px', marginBottom: '2px' }}>
-                          Distribution
-                        </div>
-                        <div style={{
-                          fontWeight: 800,
-                          color: ev.distribution.startsWith('In Progress') ? 'var(--blue)' : ev.distribution === 'Completed' ? '#10b981' : '#d97706',
-                          fontSize: '0.82rem',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '5px'
-                        }}>
-                          {ev.distribution.startsWith('In Progress') && (
-                            <span style={{
-                              width: '6px',
-                              height: '6px',
-                              background: 'var(--blue)',
-                              borderRadius: '50%',
-                              display: 'inline-block',
-                              flexShrink: 0,
-                              boxShadow: '0 0 6px rgba(0, 82, 255, 0.8)'
-                            }} />
-                          )}
-                          {ev.distribution === 'Completed' && '✓ '}
-                          {ev.distribution === 'Not Started' && '⏱ '}
-                          {ev.distribution}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Action Button */}
-                    <a 
-                      href={ev.link} 
-                      target="_blank" 
-                      rel="noreferrer" 
+                  return (
+                    <div
+                      key={ev.id}
                       style={{
-                        marginTop: 'auto',
+                        background: isOngoing
+                          ? 'linear-gradient(145deg, rgba(215, 246, 255, 0.85) 0%, rgba(240, 252, 255, 0.95) 100%)'
+                          : 'linear-gradient(145deg, rgba(225, 248, 255, 0.55) 0%, rgba(245, 253, 255, 0.8) 100%)',
+                        border: isOngoing ? '2px solid var(--blue)' : '1.5px solid rgba(0, 160, 255, 0.25)',
+                        borderRadius: '22px',
+                        padding: '18px 20px',
                         display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '6px',
-                        background: 'var(--blue)',
-                        color: '#fff',
-                        padding: '12px',
-                        borderRadius: '10px',
-                        fontWeight: 800,
-                        fontSize: '0.9rem',
-                        textDecoration: 'none',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        boxShadow: isOngoing
+                          ? '0 12px 36px -4px rgba(0, 82, 255, 0.16), 0 2px 10px rgba(0, 0, 0, 0.04)'
+                          : '0 4px 16px rgba(0, 82, 255, 0.05)',
+                        position: 'relative',
                         transition: 'all 0.2s'
                       }}
                     >
-                      {ev.status === 'ongoing' ? 'Participate' : 'View Event'} <ArrowUpRight size={16} strokeWidth={2.5} />
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-            {filteredGiveaways.length === 0 && (
-              <div style={{ textAlign: 'center', color: 'var(--muted)', padding: '40px 20px', fontSize: '1rem' }}>
-                No giveaways found for this filter.
+                      <div>
+                        {/* Header with Mascot & Status Badge */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                            <img
+                              src="/new-logo-vibe.png"
+                              alt="VIBE"
+                              style={{
+                                width: '38px',
+                                height: '38px',
+                                borderRadius: '50%',
+                                objectFit: 'cover',
+                                border: isOngoing ? '2px solid var(--blue)' : '1.5px solid rgba(0, 160, 255, 0.3)',
+                                boxShadow: '0 2px 8px rgba(0, 82, 255, 0.15)',
+                                flexShrink: 0
+                              }}
+                            />
+                            <h4
+                              style={{
+                                margin: 0,
+                                fontSize: '1.02rem',
+                                fontWeight: 900,
+                                color: 'var(--ink)',
+                                letterSpacing: '-0.02em',
+                                lineHeight: 1.25
+                              }}
+                            >
+                              {ev.title}
+                            </h4>
+                          </div>
+
+                          <span
+                            style={{
+                              padding: '4px 10px',
+                              borderRadius: '99px',
+                              fontSize: '0.66rem',
+                              fontWeight: 900,
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.04em',
+                              background: isOngoing ? '#ecfdf5' : 'rgba(255, 255, 255, 0.9)',
+                              color: isOngoing ? '#059669' : '#64748b',
+                              border: isOngoing ? '1px solid #a7f3d0' : '1px solid rgba(0, 160, 255, 0.25)',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              whiteSpace: 'nowrap',
+                              flexShrink: 0,
+                              boxShadow: isOngoing ? '0 2px 8px rgba(16, 185, 129, 0.15)' : 'none'
+                            }}
+                          >
+                            {isOngoing ? (
+                              <>
+                                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981', flexShrink: 0 }} />
+                                Ongoing
+                              </>
+                            ) : (
+                              <>
+                                <Clock size={11} color="#64748b" style={{ flexShrink: 0 }} />
+                                Ended
+                              </>
+                            )}
+                          </span>
+                        </div>
+
+                        {/* Metric Box (Prize Pool) */}
+                        <div
+                          style={{
+                            background: '#ffffff',
+                            borderRadius: '16px',
+                            padding: '14px 16px',
+                            border: '1px solid rgba(0, 160, 255, 0.22)',
+                            boxShadow: '0 3px 12px rgba(0, 82, 255, 0.05)',
+                            marginBottom: '14px'
+                          }}
+                        >
+                          <div style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap', marginBottom: '2px' }}>
+                            <Coins size={12} color="var(--blue)" /> Prize Pool
+                          </div>
+                          <div style={{ fontSize: '1.42rem', fontWeight: 900, color: isOngoing ? 'var(--ink)' : '#64748b', marginTop: '2px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px', whiteSpace: 'nowrap' }}>
+                            {ev.prizePool}
+                          </div>
+                        </div>
+
+                        {/* Key-Values with Icons */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                              <Users size={12} color="#0284c7" /> Winners
+                            </span>
+                            <strong style={{ color: isOngoing ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ev.winners}</strong>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                              <Gift size={12} color="#0284c7" /> Distribution
+                            </span>
+                            <strong style={{ color: isOngoing ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ev.distribution}</strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action Button */}
+                      <a
+                        href={ev.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={isOngoing ? 'btn-fill' : ''}
+                        style={{
+                          background: isOngoing ? 'var(--blue)' : '#ffffff',
+                          color: isOngoing ? '#ffffff' : 'var(--ink)',
+                          border: isOngoing ? 'none' : '1.5px solid rgba(0, 160, 255, 0.35)',
+                          padding: '11px 14px',
+                          fontSize: '0.86rem',
+                          fontWeight: 800,
+                          borderRadius: '12px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px',
+                          width: '100%',
+                          textDecoration: 'none',
+                          whiteSpace: 'nowrap',
+                          boxShadow: isOngoing ? '0 4px 16px rgba(0, 0, 255, 0.3)' : '0 1px 4px rgba(0,0,0,0.02)',
+                          transition: 'all 0.15s'
+                        }}
+                      >
+                        <span>{isOngoing ? 'Participate' : 'View Event'}</span>
+                        <ArrowUpRight size={15} strokeWidth={2.5} color={isOngoing ? '#ffffff' : 'var(--blue)'} />
+                      </a>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
