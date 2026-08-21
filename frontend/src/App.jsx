@@ -1037,7 +1037,7 @@ const VIBECLUB_EPOCHS = [
 const GIVEAWAYS_DATA = [
   {
     id: 3,
-    title: '1000 Holders Party',
+    title: '1000 Holders',
     image: '/event3.png',
     winners: '33 Winners',
     prizePool: 'TBA',
@@ -1047,7 +1047,7 @@ const GIVEAWAYS_DATA = [
   },
   {
     id: 1,
-    title: 'Giveaway $1M Market Cap',
+    title: '$1M Market Cap',
     image: '/event1.png',
     winners: '50 Winners',
     prizePool: 'TBA',
@@ -1584,108 +1584,56 @@ function Rewards() {
 
         {/* ── 3. VIBEVERSE APP REWARDS SECTION ── */}
         {activeTab === 'vibe-verse' && (
-          <div className="tok-card" style={{ marginBottom: '36px', padding: '32px 28px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '24px', borderBottom: '1px solid var(--borderf)', paddingBottom: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(0, 82, 255, 0.1)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Gamepad2 size={26} strokeWidth={2.5} />
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '1.5rem', fontWeight: 900, margin: 0, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    VibeVerse App Rewards
-                    <span style={{ fontSize: '0.75rem', fontWeight: 800, padding: '4px 10px', borderRadius: '6px', background: 'rgba(0, 82, 255, 0.12)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.25)' }}>
-                      30% Allocation
-                    </span>
-                  </h3>
-                  <p style={{ margin: '4px 0 0 0', color: 'var(--muted)', fontSize: '0.88rem', fontWeight: 500 }}>
-                    In-game quests, mini-game leaderboards, and daily gameplay reward pools refueled every 10-day epoch.
-                  </p>
-                </div>
-              </div>
-
-              <a
-                href="https://vibeverse.dog"
-                target="_blank"
-                rel="noreferrer"
-                className="btn-fill"
-                style={{ background: 'var(--blue)', padding: '10px 20px', fontSize: '0.88rem', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+          <div
+            style={{
+              marginTop: '20px',
+              padding: '60px 24px',
+              background: 'linear-gradient(145deg, rgba(215, 246, 255, 0.85) 0%, rgba(240, 252, 255, 0.95) 100%)',
+              border: '1.5px solid rgba(0, 160, 255, 0.25)',
+              borderRadius: '24px',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '16px',
+              boxShadow: '0 8px 30px rgba(0, 82, 255, 0.06)'
+            }}
+          >
+            <img
+              src="/new-logo-vibe.png"
+              alt="VIBE"
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                border: '2px solid var(--blue)',
+                boxShadow: '0 4px 16px rgba(0, 82, 255, 0.2)'
+              }}
+            />
+            <div>
+              <h3 style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--ink)', margin: '0 0 6px 0', letterSpacing: '-0.02em' }}>
+                VibeVerse Rewards
+              </h3>
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: 'rgba(0, 82, 255, 0.1)',
+                  color: 'var(--blue)',
+                  border: '1px solid rgba(0, 82, 255, 0.2)',
+                  padding: '6px 16px',
+                  borderRadius: '99px',
+                  fontSize: '0.86rem',
+                  fontWeight: 900,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}
               >
-                Launch VibeVerse <ArrowUpRight size={16} strokeWidth={2.5} />
-              </a>
-            </div>
-
-            {/* Quick Metrics Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
-              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
-                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Gaming Pool</div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--blue)', marginTop: '2px' }}>30% of Reserve</div>
-              </div>
-              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
-                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Epoch Duration</div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>10 Days (3-Day Offset)</div>
-              </div>
-              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
-                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Target Activity</div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', marginTop: '2px' }}>Leaderboards &amp; Quests</div>
-              </div>
-              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '12px 16px' }}>
-                <div style={{ fontSize: '0.72rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Platform</div>
-                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: '#7c3aed', marginTop: '2px' }}>vibeverse.dog</div>
-              </div>
-            </div>
-
-            {/* Epochs List */}
-            <div style={{ background: '#f9fbff', border: '1px solid rgba(0, 82, 255, 0.15)', borderRadius: '18px', padding: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Calendar size={16} color="var(--blue)" /> Epoch Schedule
-                </span>
-                <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600 }}>Staggered 10-Day Rolling Cycles</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {VIBEVERSE_EPOCHS.map((ep, idx) => (
-                  <div
-                    key={idx}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '12px 16px',
-                      background: '#ffffff',
-                      borderRadius: '12px',
-                      border: '1px solid #e2e8f0',
-                      flexWrap: 'wrap',
-                      gap: '8px'
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <span style={{ fontWeight: 900, color: 'var(--blue)', fontSize: '0.95rem', minWidth: '70px' }}>{ep.epoch}</span>
-                      <span style={{ color: 'var(--ink)', fontWeight: 600, fontSize: '0.9rem' }}>{ep.dates}</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                      <span style={{ color: 'var(--muted)', fontSize: '0.82rem', fontWeight: 600 }}>{ep.note}</span>
-                      <span
-                        style={{
-                          padding: '4px 10px',
-                          borderRadius: '99px',
-                          fontSize: '0.72rem',
-                          fontWeight: 800,
-                          textTransform: 'uppercase',
-                          background: ep.status === 'ongoing' ? 'rgba(16, 185, 129, 0.12)' : '#f1f5f9',
-                          color: ep.status === 'ongoing' ? '#10b981' : 'var(--muted)',
-                          border: ep.status === 'ongoing' ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid #e2e8f0',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '5px'
-                        }}
-                      >
-                        {ep.status === 'ongoing' && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />}
-                        {ep.status}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                <Sparkles size={14} color="var(--blue)" /> Coming Soon
+              </span>
             </div>
           </div>
         )}
@@ -2272,6 +2220,28 @@ function Rewards() {
                 })}
               </div>
             )}
+
+            {/* Bottom Info Strip */}
+            <div
+              style={{
+                marginTop: '24px',
+                padding: '14px 20px',
+                background: 'rgba(255, 255, 255, 0.65)',
+                border: '1px dashed rgba(0, 160, 255, 0.35)',
+                borderRadius: '16px',
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                color: '#475569',
+                fontSize: '0.84rem',
+                fontWeight: 700
+              }}
+            >
+              <Sparkles size={15} color="var(--blue)" />
+              <span>More giveaways coming soon</span>
+            </div>
           </div>
         )}
 
