@@ -1248,9 +1248,9 @@ function Rewards() {
               </div>
             </div>
 
-            {/* 3. Compact Streamlined Epoch Cards Grid (Scalable to 50+ epochs) */}
+            {/* 3. Modern Web3 DeFi Epoch Cards Grid with Mascot Integration */}
             {filteredStakingEpochs.length === 0 ? (
-              <div style={{ padding: '36px 20px', textAlign: 'center', background: '#ffffff', borderRadius: '16px', border: '1px solid #e2e8f0', color: '#64748b', fontSize: '0.9rem' }}>
+              <div style={{ padding: '36px 20px', textAlign: 'center', background: '#ffffff', borderRadius: '20px', border: '1px solid #e2e8f0', color: '#64748b', fontSize: '0.9rem' }}>
                 No epochs found for this filter.
               </div>
             ) : (
@@ -1270,76 +1270,132 @@ function Rewards() {
                       key={ep.epoch}
                       style={{
                         background: isActive
-                          ? 'linear-gradient(135deg, rgba(190, 241, 255, 0.65) 0%, rgba(225, 249, 255, 0.85) 100%)'
-                          : 'linear-gradient(135deg, rgba(190, 241, 255, 0.35) 0%, rgba(225, 249, 255, 0.6) 100%)',
-                        border: isActive ? '1.5px solid var(--blue)' : '1px solid rgba(0, 160, 255, 0.25)',
-                        borderRadius: '16px',
-                        padding: '16px 18px',
+                          ? 'linear-gradient(145deg, rgba(215, 246, 255, 0.85) 0%, rgba(240, 252, 255, 0.95) 100%)'
+                          : 'linear-gradient(145deg, rgba(225, 248, 255, 0.55) 0%, rgba(245, 253, 255, 0.8) 100%)',
+                        border: isActive ? '2px solid var(--blue)' : '1.5px solid rgba(0, 160, 255, 0.25)',
+                        borderRadius: '22px',
+                        padding: '18px 20px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        boxShadow: isActive ? '0 6px 20px -3px rgba(0, 0, 255, 0.12), 0 2px 6px rgba(0, 0, 0, 0.02)' : '0 2px 8px rgba(0, 82, 255, 0.04)',
+                        boxShadow: isActive ? '0 12px 36px -4px rgba(0, 82, 255, 0.16), 0 2px 10px rgba(0, 0, 0, 0.04)' : '0 4px 16px rgba(0, 82, 255, 0.05)',
+                        position: 'relative',
+                        overflow: 'hidden',
                         transition: 'all 0.2s'
                       }}
                     >
                       <div>
-                        {/* Header */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', gap: '8px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-                            <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: isActive ? 'var(--ink)' : '#475569', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
-                              {ep.epoch}
-                            </h4>
-                            <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748b', background: 'rgba(255, 255, 255, 0.85)', padding: '2px 6px', borderRadius: '5px', border: '1px solid rgba(0, 160, 255, 0.15)', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                              {ep.duration || '10 Days'}
-                            </span>
+                        {/* Header with Mascot & Status Badge */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+                            <img
+                              src="/new-logo-vibe.png"
+                              alt="VIBE"
+                              style={{
+                                width: '38px',
+                                height: '38px',
+                                borderRadius: '50%',
+                                objectFit: 'cover',
+                                border: isActive ? '2px solid var(--blue)' : '1.5px solid rgba(0, 160, 255, 0.3)',
+                                boxShadow: '0 2px 8px rgba(0, 82, 255, 0.15)',
+                                flexShrink: 0
+                              }}
+                            />
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                                  {ep.epoch}
+                                </h4>
+                                <span style={{ fontSize: '0.66rem', fontWeight: 800, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.08)', padding: '2px 6px', borderRadius: '6px', whiteSpace: 'nowrap', border: '1px solid rgba(0, 0, 255, 0.12)' }}>
+                                  {ep.duration || '10 Days'}
+                                </span>
+                              </div>
+                              <span style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 600 }}>Staking Cycle</span>
+                            </div>
                           </div>
 
                           <span
                             style={{
-                              padding: '3px 8px',
+                              padding: '4px 10px',
                               borderRadius: '99px',
-                              fontSize: '0.65rem',
-                              fontWeight: 800,
+                              fontSize: '0.66rem',
+                              fontWeight: 900,
                               textTransform: 'uppercase',
                               letterSpacing: '0.04em',
-                              background: isActive ? '#ecfdf5' : isCompleted ? 'rgba(255, 255, 255, 0.85)' : 'rgba(255, 255, 255, 0.85)',
-                              color: isActive ? '#059669' : isCompleted ? '#64748b' : '#64748b',
-                              border: isActive ? '1px solid #a7f3d0' : '1px solid rgba(0, 160, 255, 0.2)',
+                              background: isActive ? '#ecfdf5' : 'rgba(255, 255, 255, 0.9)',
+                              color: isActive ? '#059669' : '#64748b',
+                              border: isActive ? '1px solid #a7f3d0' : '1px solid rgba(0, 160, 255, 0.25)',
                               display: 'inline-flex',
                               alignItems: 'center',
-                              gap: '4px',
+                              gap: '5px',
                               whiteSpace: 'nowrap',
-                              flexShrink: 0
+                              flexShrink: 0,
+                              boxShadow: isActive ? '0 2px 8px rgba(16, 185, 129, 0.15)' : 'none'
                             }}
                           >
-                            {isActive && <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#10b981', flexShrink: 0 }} />}
+                            {isActive && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981', flexShrink: 0 }} />}
                             {isActive ? 'Active' : isCompleted ? 'Completed' : 'Upcoming'}
                           </span>
                         </div>
 
-                        {/* Metric Box */}
-                        <div style={{ background: 'rgba(255, 255, 255, 0.85)', border: '1px solid rgba(0, 160, 255, 0.2)', borderRadius: '12px', padding: '12px 14px', marginBottom: '14px', backdropFilter: 'blur(4px)' }}>
-                          <div style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>
-                            {ep.epoch} Rewards Pool
+                        {/* Metric Box (Hero of Card with subtle watermark) */}
+                        <div
+                          style={{
+                            background: '#ffffff',
+                            borderRadius: '16px',
+                            padding: '14px 16px',
+                            border: '1px solid rgba(0, 160, 255, 0.22)',
+                            boxShadow: '0 3px 12px rgba(0, 82, 255, 0.05)',
+                            position: 'relative',
+                            overflow: 'hidden',
+                            marginBottom: '14px'
+                          }}
+                        >
+                          <img
+                            src="/new-logo-vibe.png"
+                            alt=""
+                            style={{
+                              position: 'absolute',
+                              right: '-10px',
+                              bottom: '-12px',
+                              width: '68px',
+                              height: '68px',
+                              opacity: 0.08,
+                              pointerEvents: 'none'
+                            }}
+                          />
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                            <span style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'inline-flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
+                              <Coins size={12} color="var(--blue)" /> Rewards Pool
+                            </span>
+                            <span style={{ fontSize: '0.68rem', fontWeight: 800, color: isActive ? '#059669' : '#64748b', background: isActive ? 'rgba(16, 185, 129, 0.1)' : '#f1f5f9', padding: '1px 6px', borderRadius: '4px' }}>
+                              15% Pool
+                            </span>
                           </div>
-                          <div style={{ fontSize: '1.4rem', fontWeight: 900, color: isActive ? 'var(--ink)' : '#64748b', marginTop: '3px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px', whiteSpace: 'nowrap' }}>
-                            {ep.poolAmount} {ep.poolAmount !== 'TBA' && <span style={{ fontSize: '0.9rem', color: isActive ? 'var(--blue)' : '#94a3b8', fontWeight: 800 }}>$VIBE</span>}
+                          <div style={{ fontSize: '1.42rem', fontWeight: 900, color: isActive ? 'var(--ink)' : '#64748b', marginTop: '2px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px', whiteSpace: 'nowrap' }}>
+                            {ep.poolAmount} {ep.poolAmount !== 'TBA' && <span style={{ fontSize: '0.88rem', color: isActive ? 'var(--blue)' : '#94a3b8', fontWeight: 800 }}>$VIBE</span>}
                           </div>
                         </div>
 
-                        {/* Schedule Key-Values */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '6px', borderBottom: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
-                            <span style={{ color: '#64748b', fontWeight: 600, fontSize: '0.78rem', whiteSpace: 'nowrap', flexShrink: 0 }}>Start Time</span>
-                            <strong style={{ color: isActive ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.78rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ep.startTime}</strong>
+                        {/* Schedule Key-Values with Icons */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                              <Calendar size={12} color="#0284c7" /> Start Time
+                            </span>
+                            <strong style={{ color: isActive ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ep.startTime}</strong>
                           </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '6px', borderBottom: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
-                            <span style={{ color: '#64748b', fontWeight: 600, fontSize: '0.78rem', whiteSpace: 'nowrap', flexShrink: 0 }}>End Time</span>
-                            <strong style={{ color: isActive ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.78rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ep.endTime}</strong>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                              <Clock size={12} color="#0284c7" /> End Time
+                            </span>
+                            <strong style={{ color: isActive ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ep.endTime}</strong>
                           </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
-                            <span style={{ color: '#64748b', fontWeight: 600, fontSize: '0.78rem', whiteSpace: 'nowrap', flexShrink: 0 }}>Status</span>
-                            <strong style={{ color: isActive ? '#16a34a' : '#64748b', fontWeight: 800, fontSize: '0.78rem', whiteSpace: 'nowrap' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                              <Sparkles size={12} color="#0284c7" /> Status
+                            </span>
+                            <strong style={{ color: isActive ? '#16a34a' : '#64748b', fontWeight: 800, fontSize: '0.76rem', whiteSpace: 'nowrap' }}>
                               {isActive ? 'Active' : isCompleted ? 'Completed' : 'Upcoming'}
                             </strong>
                           </div>
@@ -1354,12 +1410,12 @@ function Rewards() {
                         className={isActive ? 'btn-fill' : ''}
                         style={{
                           background: isActive ? 'var(--blue)' : '#ffffff',
-                          border: isActive ? 'none' : '1px solid rgba(0, 160, 255, 0.25)',
-                          color: isActive ? '#ffffff' : '#334155',
-                          padding: '10px 14px',
-                          fontSize: '0.85rem',
+                          border: isActive ? 'none' : '1.5px solid rgba(0, 160, 255, 0.3)',
+                          color: isActive ? '#ffffff' : '#1e293b',
+                          padding: '11px 14px',
+                          fontSize: '0.86rem',
                           fontWeight: 800,
-                          borderRadius: '10px',
+                          borderRadius: '12px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -1367,7 +1423,7 @@ function Rewards() {
                           width: '100%',
                           textDecoration: 'none',
                           whiteSpace: 'nowrap',
-                          boxShadow: isActive ? '0 4px 12px rgba(0, 0, 255, 0.2)' : '0 1px 4px rgba(0, 0, 0, 0.02)',
+                          boxShadow: isActive ? '0 4px 16px rgba(0, 0, 255, 0.3)' : '0 2px 6px rgba(0, 0, 0, 0.03)',
                           transition: 'all 0.15s'
                         }}
                       >
