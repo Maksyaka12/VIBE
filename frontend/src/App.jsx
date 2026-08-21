@@ -1280,7 +1280,6 @@ function Rewards() {
                         justifyContent: 'space-between',
                         boxShadow: isActive ? '0 12px 36px -4px rgba(0, 82, 255, 0.16), 0 2px 10px rgba(0, 0, 0, 0.04)' : '0 4px 16px rgba(0, 82, 255, 0.05)',
                         position: 'relative',
-                        overflow: 'hidden',
                         transition: 'all 0.2s'
                       }}
                     >
@@ -1301,16 +1300,13 @@ function Rewards() {
                                 flexShrink: 0
                               }}
                             />
-                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
-                                  {ep.epoch}
-                                </h4>
-                                <span style={{ fontSize: '0.66rem', fontWeight: 800, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.08)', padding: '2px 6px', borderRadius: '6px', whiteSpace: 'nowrap', border: '1px solid rgba(0, 0, 255, 0.12)' }}>
-                                  {ep.duration || '10 Days'}
-                                </span>
-                              </div>
-                              <span style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 600 }}>Staking Cycle</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                                {ep.epoch}
+                              </h4>
+                              <span style={{ fontSize: '0.66rem', fontWeight: 800, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.08)', padding: '2px 6px', borderRadius: '6px', whiteSpace: 'nowrap', border: '1px solid rgba(0, 0, 255, 0.12)' }}>
+                                {ep.duration || '10 Days'}
+                              </span>
                             </div>
                           </div>
 
@@ -1338,7 +1334,7 @@ function Rewards() {
                           </span>
                         </div>
 
-                        {/* Metric Box (Hero of Card with subtle watermark) */}
+                        {/* Metric Box (Rewards Pool) */}
                         <div
                           style={{
                             background: '#ffffff',
@@ -1346,31 +1342,11 @@ function Rewards() {
                             padding: '14px 16px',
                             border: '1px solid rgba(0, 160, 255, 0.22)',
                             boxShadow: '0 3px 12px rgba(0, 82, 255, 0.05)',
-                            position: 'relative',
-                            overflow: 'hidden',
                             marginBottom: '14px'
                           }}
                         >
-                          <img
-                            src="/new-logo-vibe.png"
-                            alt=""
-                            style={{
-                              position: 'absolute',
-                              right: '-10px',
-                              bottom: '-12px',
-                              width: '68px',
-                              height: '68px',
-                              opacity: 0.08,
-                              pointerEvents: 'none'
-                            }}
-                          />
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                            <span style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'inline-flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
-                              <Coins size={12} color="var(--blue)" /> Rewards Pool
-                            </span>
-                            <span style={{ fontSize: '0.68rem', fontWeight: 800, color: isActive ? '#059669' : '#64748b', background: isActive ? 'rgba(16, 185, 129, 0.1)' : '#f1f5f9', padding: '1px 6px', borderRadius: '4px' }}>
-                              15% Pool
-                            </span>
+                          <div style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap', marginBottom: '2px' }}>
+                            <Coins size={12} color="var(--blue)" /> Rewards Pool
                           </div>
                           <div style={{ fontSize: '1.42rem', fontWeight: 900, color: isActive ? 'var(--ink)' : '#64748b', marginTop: '2px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px', whiteSpace: 'nowrap' }}>
                             {ep.poolAmount} {ep.poolAmount !== 'TBA' && <span style={{ fontSize: '0.88rem', color: isActive ? 'var(--blue)' : '#94a3b8', fontWeight: 800 }}>$VIBE</span>}
@@ -1391,49 +1367,85 @@ function Rewards() {
                             </span>
                             <strong style={{ color: isActive ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ep.endTime}</strong>
                           </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
-                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
-                              <Sparkles size={12} color="#0284c7" /> Status
-                            </span>
-                            <strong style={{ color: isActive ? '#16a34a' : '#64748b', fontWeight: 800, fontSize: '0.76rem', whiteSpace: 'nowrap' }}>
-                              {isActive ? 'Active' : isCompleted ? 'Completed' : 'Upcoming'}
-                            </strong>
-                          </div>
                         </div>
                       </div>
 
                       {/* Action Button */}
-                      <a
-                        href={ep.link || O1_STAKING_VAULT}
-                        target="_blank"
-                        rel="noreferrer"
-                        className={isActive ? 'btn-fill' : ''}
-                        style={{
-                          background: isActive ? 'var(--blue)' : '#ffffff',
-                          border: isActive ? 'none' : '1.5px solid rgba(0, 160, 255, 0.3)',
-                          color: isActive ? '#ffffff' : '#1e293b',
-                          padding: '11px 14px',
-                          fontSize: '0.86rem',
-                          fontWeight: 800,
-                          borderRadius: '12px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '6px',
-                          width: '100%',
-                          textDecoration: 'none',
-                          whiteSpace: 'nowrap',
-                          boxShadow: isActive ? '0 4px 16px rgba(0, 0, 255, 0.3)' : '0 2px 6px rgba(0, 0, 0, 0.03)',
-                          transition: 'all 0.15s'
-                        }}
-                      >
-                        {isActive ? 'Stake & Earn on o1' : 'Stake on o1.exchange'} <ArrowUpRight size={15} strokeWidth={2.5} />
-                      </a>
+                      {isActive ? (
+                        <a
+                          href={ep.link || O1_STAKING_VAULT}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="btn-fill"
+                          style={{
+                            background: 'var(--blue)',
+                            color: '#ffffff',
+                            padding: '11px 14px',
+                            fontSize: '0.86rem',
+                            fontWeight: 800,
+                            borderRadius: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px',
+                            width: '100%',
+                            textDecoration: 'none',
+                            whiteSpace: 'nowrap',
+                            boxShadow: '0 4px 16px rgba(0, 0, 255, 0.3)',
+                            transition: 'all 0.15s'
+                          }}
+                        >
+                          <span>Stake & Earn</span> <ArrowUpRight size={15} strokeWidth={2.5} />
+                        </a>
+                      ) : (
+                        <button
+                          disabled
+                          style={{
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '11px 14px',
+                            fontSize: '0.86rem',
+                            fontWeight: 800,
+                            borderRadius: '12px',
+                            background: 'rgba(255, 255, 255, 0.75)',
+                            color: '#94a3b8',
+                            border: '1.5px solid rgba(0, 160, 255, 0.18)',
+                            cursor: 'not-allowed',
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          Coming Soon
+                        </button>
+                      )}
                     </div>
                   );
                 })}
               </div>
             )}
+
+            {/* Bottom Info Strip: More Epochs Appearing Continuously */}
+            <div
+              style={{
+                marginTop: '24px',
+                padding: '14px 20px',
+                background: 'rgba(255, 255, 255, 0.65)',
+                border: '1px dashed rgba(0, 160, 255, 0.35)',
+                borderRadius: '16px',
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                color: '#475569',
+                fontSize: '0.84rem',
+                fontWeight: 700
+              }}
+            >
+              <Sparkles size={15} color="var(--blue)" />
+              <span>More staking epochs will be added continuously before each 10-day cycle begins.</span>
+            </div>
           </div>
         )}
 
