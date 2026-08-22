@@ -1224,10 +1224,10 @@ function Rewards() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                   <span style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.12)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>1</span>
-                  <strong style={{ fontSize: '0.9rem', color: 'var(--ink)', fontWeight: 800 }}>Stake</strong>
+                  <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Stake</strong>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
-                  Lock $VIBE tokens directly into the verified staking pool on <a href={O1_STAKING_VAULT} target="_blank" rel="noreferrer" style={{ color: 'var(--blue)', textDecoration: 'underline', fontWeight: 700 }}>o1.exchange</a>.
+                  Lock $VIBE tokens directly into the verified staking pool on <a href={O1_STAKING_VAULT} target="_blank" rel="noreferrer" style={{ color: 'var(--blue)', textDecoration: 'underline', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '3px' }}>o1.exchange <ArrowUpRight size={13} strokeWidth={2.5} /></a>.
                 </p>
               </div>
 
@@ -1242,7 +1242,7 @@ function Rewards() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                   <span style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.12)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>2</span>
-                  <strong style={{ fontSize: '0.9rem', color: 'var(--ink)', fontWeight: 800 }}>10-Day Epochs</strong>
+                  <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>10-Day Epochs</strong>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
                   Staking rewards are distributed every 10 days, followed immediately by the start of a new epoch.
@@ -1260,7 +1260,7 @@ function Rewards() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                   <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#059669', background: 'rgba(16, 185, 129, 0.14)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>3</span>
-                  <strong style={{ fontSize: '0.9rem', color: 'var(--ink)', fontWeight: 800 }}>Epoch Reward Pool</strong>
+                  <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Epoch Reward Pool</strong>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
                   Equals exactly 15% of the total Community Rewards Pool available at the start of each epoch.
@@ -1518,69 +1518,43 @@ function Rewards() {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-                gap: '16px',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: '14px',
                 marginBottom: '28px'
               }}
             >
               {/* Step 1 */}
               <div
                 style={{
-                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
-                  border: '1px solid rgba(0, 160, 255, 0.3)',
+                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.55) 0%, rgba(225, 249, 255, 0.75) 100%)',
+                  border: '1px solid rgba(0, 160, 255, 0.25)',
                   borderRadius: '16px',
                   padding: '16px 18px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '12px',
-                  boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
+                  boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>1</span>
-                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Join Vibe Club &amp; Mint NFT</h4>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.12)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>1</span>
+                  <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Join Vibe Club</strong>
                 </div>
-                <a
-                  href="https://vibeverse.dog/vibeclub"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    background: '#ffffff',
-                    border: '1.5px solid rgba(0, 160, 255, 0.35)',
-                    color: 'var(--ink)',
-                    padding: '8px 14px',
-                    borderRadius: '10px',
-                    fontSize: '0.8rem',
-                    fontWeight: 800,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '5px',
-                    textDecoration: 'none',
-                    whiteSpace: 'nowrap',
-                    boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
-                    transition: 'all 0.15s',
-                    flexShrink: 0
-                  }}
-                >
-                  <span>Mint NFT</span> <ArrowUpRight size={14} strokeWidth={2.5} color="var(--blue)" />
-                </a>
+                <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
+                  Mint your Vibe Club NFT on the <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" style={{ color: 'var(--blue)', textDecoration: 'underline', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '3px' }}>Mint Page <ArrowUpRight size={13} strokeWidth={2.5} /></a> to become eligible for club royalties.
+                </p>
               </div>
 
               {/* Step 2 */}
               <div
                 style={{
-                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
-                  border: '1px solid rgba(0, 160, 255, 0.3)',
+                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.55) 0%, rgba(225, 249, 255, 0.75) 100%)',
+                  border: '1px solid rgba(0, 160, 255, 0.25)',
                   borderRadius: '16px',
                   padding: '16px 18px',
-                  boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
+                  boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>2</span>
-                  <strong style={{ fontSize: '0.95rem', color: 'var(--ink)', fontWeight: 900 }}>Claim Club Royalties</strong>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.12)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>2</span>
+                  <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Claim Club Royalties</strong>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
                   Available to all Vibe Club NFT holders at the time of snapshots at 00:00 UTC on claim day.
@@ -1590,16 +1564,16 @@ function Rewards() {
               {/* Step 3 */}
               <div
                 style={{
-                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
-                  border: '1px solid rgba(0, 160, 255, 0.3)',
+                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.55) 0%, rgba(225, 249, 255, 0.75) 100%)',
+                  border: '1px solid rgba(0, 160, 255, 0.25)',
                   borderRadius: '16px',
                   padding: '16px 18px',
-                  boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
+                  boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                   <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#059669', background: 'rgba(16, 185, 129, 0.14)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>3</span>
-                  <strong style={{ fontSize: '0.95rem', color: 'var(--ink)', fontWeight: 900 }}>Vibe Club Royalty Pool</strong>
+                  <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Vibe Club Royalty Pool</strong>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
                   Equals exactly 15% of the total Community Rewards Pool available at the start of each epoch.
