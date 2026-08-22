@@ -1022,10 +1022,10 @@ const VIBEVERSE_EPOCHS = [
 ];
 
 const VIBECLUB_EPOCHS = [
-  { epoch: 'Epoch 1', claimDate: '24 Aug 2026', dateObj: new Date('2026-08-24T00:00:00Z'), poolAmount: 'TBA' },
-  { epoch: 'Epoch 2', claimDate: '3 Sep 2026', dateObj: new Date('2026-09-03T00:00:00Z'), poolAmount: 'TBA' },
-  { epoch: 'Epoch 3', claimDate: '13 Sep 2026', dateObj: new Date('2026-09-13T00:00:00Z'), poolAmount: 'TBA' },
-  { epoch: 'Epoch 4', claimDate: '23 Sep 2026', dateObj: new Date('2026-09-23T00:00:00Z'), poolAmount: 'TBA' },
+  { epoch: 'Royalty 1', claimDate: '24 Aug 2026', dateObj: new Date('2026-08-24T00:00:00Z'), poolAmount: 'TBA' },
+  { epoch: 'Royalty 2', claimDate: '3 Sep 2026', dateObj: new Date('2026-09-03T00:00:00Z'), poolAmount: 'TBA' },
+  { epoch: 'Royalty 3', claimDate: '13 Sep 2026', dateObj: new Date('2026-09-13T00:00:00Z'), poolAmount: 'TBA' },
+  { epoch: 'Royalty 4', claimDate: '23 Sep 2026', dateObj: new Date('2026-09-23T00:00:00Z'), poolAmount: 'TBA' },
 ];
 
 const GIVEAWAYS_DATA = [
@@ -1624,7 +1624,7 @@ function Rewards() {
             {/* 3. 4 Scalable Vibe Club Epoch Cards Grid */}
             {filteredVibeClubEpochs.length === 0 ? (
               <div style={{ padding: '36px 20px', textAlign: 'center', background: '#ffffff', borderRadius: '20px', border: '1px solid #e2e8f0', color: '#64748b', fontSize: '0.9rem' }}>
-                No epochs found for this filter.
+                No royalty rounds found for this filter.
               </div>
             ) : (
               <div
@@ -1710,7 +1710,7 @@ function Rewards() {
                           </span>
                         </div>
 
-                        {/* Metric Box (Rewards Pool) */}
+                        {/* Metric Box (Royalty Pool) */}
                         <div
                           style={{
                             background: '#ffffff',
@@ -1722,7 +1722,7 @@ function Rewards() {
                           }}
                         >
                           <div style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap', marginBottom: '2px' }}>
-                            <Coins size={12} color="var(--blue)" /> Rewards Pool
+                            <Coins size={12} color="var(--blue)" /> Royalty Pool
                           </div>
                           <div style={{ fontSize: '1.42rem', fontWeight: 900, color: isUnlocked ? 'var(--ink)' : '#64748b', marginTop: '2px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px', whiteSpace: 'nowrap' }}>
                             {ep.poolAmount}
