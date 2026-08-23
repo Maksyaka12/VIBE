@@ -1164,37 +1164,27 @@ function Rewards() {
     {
       id: 'holders',
       label: 'Holder Rewards',
-      tag: '10 Unlocks • 100M Pool',
-      desc: 'Vesting rewards distributed to eligible 5M+ $VIBE holders across 10 unlock cycles.',
-      image: '/rewards/card-holder-rewards.svg',
+      image: '/rewards/holder-rewards.jfif',
     },
     {
       id: 'staking',
       label: 'Staking',
-      tag: 'Epoch 1 Active • 2.2M Pool',
-      desc: '10-day reward epochs with verified staking on o1.exchange on Base Network.',
-      image: '/rewards/card-staking.svg',
+      image: '/rewards/staking.jfif',
     },
     {
       id: 'vibe-club',
       label: 'Vibe Club',
-      tag: '15% Royalties • 4 Rounds',
-      desc: 'Exclusive lifetime royalties pool for verified Vibe Club NFT holders.',
-      image: '/rewards/card-vibe-club.svg',
+      image: '/rewards/vibe-club.jfif',
     },
     {
       id: 'vibe-verse',
       label: 'Vibe Verse',
-      tag: 'Gamified Meta • Coming Soon',
-      desc: 'Interactive play-to-earn metaverse gaming experience and community leaderboards.',
-      image: '/rewards/card-vibe-verse.svg',
+      image: '/rewards/vibe-verse.jfif',
     },
     {
       id: 'giveaways',
       label: 'Giveaways',
-      tag: 'Community Events • 3 Milestones',
-      desc: 'Holder count & market cap celebration prize pools, cash and token airdrops.',
-      image: '/rewards/card-giveaways.svg',
+      image: '/rewards/giveaways.jfif',
     },
   ];
 
@@ -1263,38 +1253,13 @@ function Rewards() {
                         objectFit: 'cover'
                       }}
                     />
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '14px',
-                        right: '14px',
-                        background: 'rgba(255, 255, 255, 0.94)',
-                        backdropFilter: 'blur(8px)',
-                        color: 'var(--blue)',
-                        border: '1.5px solid rgba(0, 82, 255, 0.25)',
-                        padding: '5px 12px',
-                        borderRadius: '99px',
-                        fontSize: '0.72rem',
-                        fontWeight: 900,
-                        letterSpacing: '0.03em',
-                        textTransform: 'uppercase',
-                        boxShadow: '0 2px 10px rgba(0, 82, 255, 0.12)'
-                      }}
-                    >
-                      {cat.tag}
-                    </div>
                   </div>
 
-                  {/* Card Body */}
-                  <div style={{ padding: '20px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#ffffff', gap: '14px' }}>
-                    <div>
-                      <h3 style={{ margin: '0 0 5px 0', fontSize: '1.24rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                        {cat.label}
-                      </h3>
-                      <p style={{ margin: 0, fontSize: '0.84rem', color: '#64748b', fontWeight: 600, lineHeight: 1.4 }}>
-                        {cat.desc}
-                      </p>
-                    </div>
+                  {/* Card Body: Title & Explore button only */}
+                  <div style={{ padding: '18px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#ffffff', gap: '14px' }}>
+                    <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                      {cat.label}
+                    </h3>
                     <button
                       className="btn-fill"
                       style={{
