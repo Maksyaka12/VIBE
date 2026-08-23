@@ -104,15 +104,15 @@ function Nav() {
               </li>
             ))}
           </ul>
-          <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
+          <div style={{display:'flex', alignItems:'center', gap:'6px'}}>
             <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" className="nav-mint">
-              Mint NFT <ArrowUpRight size={16} strokeWidth={2.5} />
+              Mint NFT <ArrowUpRight size={14} strokeWidth={2.5} />
             </a>
             <a href={O1} target="_blank" rel="noreferrer" className="nav-buy">
-              Buy $VIBE <ArrowUpRight size={16} strokeWidth={2.5} />
+              Buy $VIBE <ArrowUpRight size={14} strokeWidth={2.5} />
             </a>
             <button className="ham" onClick={() => setOpen(!open)}>
-              {open ? <X size={26} color="var(--ink)" /> : <Menu size={26} color="var(--ink)" />}
+              {open ? <X size={24} color="var(--ink)" /> : <Menu size={24} color="var(--ink)" />}
             </button>
           </div>
         </div>
@@ -1088,7 +1088,7 @@ function Rewards() {
     if (stakingFilter === 'all') return true;
     if (stakingFilter === 'active') return e.status === 'active' || e.status === 'ongoing';
     if (stakingFilter === 'upcoming') return e.status === 'upcoming';
-    if (stakingFilter === 'completed') return e.status === 'completed' || e.status === 'ended';
+    if (stakingFilter === 'ended' || stakingFilter === 'completed') return e.status === 'completed' || e.status === 'ended';
     return true;
   });
 
@@ -1096,42 +1096,53 @@ function Rewards() {
     all: STAKING_EPOCHS.length,
     active: STAKING_EPOCHS.filter(e => e.status === 'active' || e.status === 'ongoing').length,
     upcoming: STAKING_EPOCHS.filter(e => e.status === 'upcoming').length,
-    completed: STAKING_EPOCHS.filter(e => e.status === 'completed' || e.status === 'ended').length,
+    ended: STAKING_EPOCHS.filter(e => e.status === 'completed' || e.status === 'ended').length,
   };
 
   const filteredHolderUnlocks = HOLDER_UNLOCKS.filter(u => {
     const isUnlocked = now >= u.dateObj;
     if (holderFilter === 'all') return true;
-    if (holderFilter === 'unlocked') return isUnlocked;
-    if (holderFilter === 'locked') return !isUnlocked;
+    if (holderFilter === 'active') return isUnlocked && u.status !== 'ended';
+    if (holderFilter === 'upcoming' || holderFilter === 'locked') return !isUnlocked;
+    if (holderFilter === 'ended' || holderFilter === 'completed') return u.status === 'ended' || u.status === 'completed';
     return true;
   });
 
   const holderCounts = {
     all: HOLDER_UNLOCKS.length,
-    unlocked: HOLDER_UNLOCKS.filter(u => now >= u.dateObj).length,
-    locked: HOLDER_UNLOCKS.filter(u => now < u.dateObj).length
+    active: HOLDER_UNLOCKS.filter(u => now >= u.dateObj && u.status !== 'ended').length,
+    upcoming: HOLDER_UNLOCKS.filter(u => now < u.dateObj).length,
+    ended: HOLDER_UNLOCKS.filter(u => u.status === 'ended' || u.status === 'completed').length
   };
 
   const filteredVibeClubEpochs = VIBECLUB_EPOCHS.filter(u => {
     const isUnlocked = now >= u.dateObj;
     if (vibeClubFilter === 'all') return true;
-    if (vibeClubFilter === 'unlocked') return isUnlocked;
-    if (vibeClubFilter === 'locked') return !isUnlocked;
+    if (vibeClubFilter === 'active') return isUnlocked && u.status !== 'ended';
+    if (vibeClubFilter === 'upcoming' || vibeClubFilter === 'locked') return !isUnlocked;
+    if (vibeClubFilter === 'ended' || vibeClubFilter === 'completed') return u.status === 'ended' || u.status === 'completed';
     return true;
   });
 
   const vibeClubCounts = {
     all: VIBECLUB_EPOCHS.length,
-    unlocked: VIBECLUB_EPOCHS.filter(u => now >= u.dateObj).length,
-    locked: VIBECLUB_EPOCHS.filter(u => now < u.dateObj).length
+    active: VIBECLUB_EPOCHS.filter(u => now >= u.dateObj && u.status !== 'ended').length,
+    upcoming: VIBECLUB_EPOCHS.filter(u => now < u.dateObj).length,
+    ended: VIBECLUB_EPOCHS.filter(u => u.status === 'ended' || u.status === 'completed').length
   };
 
-  const filteredGiveaways = GIVEAWAYS_DATA.filter(e => giveawayFilter === 'all' || e.status === giveawayFilter);
+  const filteredGiveaways = GIVEAWAYS_DATA.filter(e => {
+    if (giveawayFilter === 'all') return true;
+    if (giveawayFilter === 'active' || giveawayFilter === 'ongoing') return e.status === 'ongoing';
+    if (giveawayFilter === 'upcoming') return e.status === 'upcoming';
+    if (giveawayFilter === 'ended') return e.status === 'ended';
+    return true;
+  });
 
   const giveawayCounts = {
     all: GIVEAWAYS_DATA.length,
-    ongoing: GIVEAWAYS_DATA.filter(e => e.status === 'ongoing').length,
+    active: GIVEAWAYS_DATA.filter(e => e.status === 'ongoing').length,
+    upcoming: GIVEAWAYS_DATA.filter(e => e.status === 'upcoming').length,
     ended: GIVEAWAYS_DATA.filter(e => e.status === 'ended').length
   };
 
@@ -1457,12 +1468,12 @@ function Rewards() {
               </div>
 
               {/* Status Filter for Staking Epochs (Aligned to Left) */}
-              <div style={{ display: 'flex', gap: '6px', background: '#ffffff', padding: '4px', borderRadius: '99px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+              <div style={{ display: 'flex', gap: '4px', background: '#ffffff', padding: '3px', borderRadius: '99px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.02)', flexWrap: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
                 {[
                   { id: 'all', label: `All (${stakingCounts.all})` },
                   { id: 'active', label: `Active (${stakingCounts.active})` },
                   { id: 'upcoming', label: `Upcoming (${stakingCounts.upcoming})` },
-                  { id: 'completed', label: `Completed (${stakingCounts.completed})` }
+                  { id: 'ended', label: `Ended (${stakingCounts.ended})` }
                 ].map(f => {
                   const isFActive = stakingFilter === f.id;
                   return (
@@ -1471,14 +1482,16 @@ function Rewards() {
                       onClick={() => setStakingFilter(f.id)}
                       style={{
                         fontFamily: 'var(--font)',
-                        padding: '6px 14px',
+                        padding: '4px 10px',
                         borderRadius: '99px',
                         border: 'none',
                         background: isFActive ? 'var(--blue)' : 'transparent',
                         color: isFActive ? '#ffffff' : '#64748b',
                         fontWeight: 800,
-                        fontSize: '0.78rem',
+                        fontSize: '0.72rem',
                         letterSpacing: '-0.01em',
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
                         cursor: 'pointer',
                         transition: 'all 0.15s'
                       }}
@@ -1772,11 +1785,12 @@ function Rewards() {
               </div>
 
               {/* Status Filters */}
-              <div style={{ display: 'flex', gap: '6px', background: '#f1f5f9', padding: '4px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', gap: '4px', background: '#f1f5f9', padding: '3px', borderRadius: '99px', border: '1px solid #e2e8f0', flexWrap: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
                 {[
                   { id: 'all', label: `All (${vibeClubCounts.all})` },
-                  { id: 'unlocked', label: `Unlocked (${vibeClubCounts.unlocked})` },
-                  { id: 'locked', label: `Locked (${vibeClubCounts.locked})` }
+                  { id: 'active', label: `Active (${vibeClubCounts.active})` },
+                  { id: 'upcoming', label: `Upcoming (${vibeClubCounts.upcoming})` },
+                  { id: 'ended', label: `Ended (${vibeClubCounts.ended})` }
                 ].map(f => (
                   <button
                     key={f.id}
@@ -1786,10 +1800,12 @@ function Rewards() {
                       background: vibeClubFilter === f.id ? 'var(--blue)' : 'transparent',
                       color: vibeClubFilter === f.id ? '#ffffff' : '#64748b',
                       border: 'none',
-                      padding: '5px 12px',
-                      borderRadius: '8px',
-                      fontSize: '0.76rem',
+                      padding: '4px 10px',
+                      borderRadius: '99px',
+                      fontSize: '0.72rem',
                       fontWeight: 800,
+                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
                       cursor: 'pointer',
                       transition: 'all 0.15s'
                     }}
@@ -2132,11 +2148,12 @@ function Rewards() {
               </div>
 
               {/* Status Filters */}
-              <div style={{ display: 'flex', gap: '6px', background: '#f1f5f9', padding: '4px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', gap: '4px', background: '#f1f5f9', padding: '3px', borderRadius: '99px', border: '1px solid #e2e8f0', flexWrap: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
                 {[
                   { id: 'all', label: `All (${holderCounts.all})` },
-                  { id: 'unlocked', label: `Unlocked (${holderCounts.unlocked})` },
-                  { id: 'locked', label: `Locked (${holderCounts.locked})` }
+                  { id: 'active', label: `Active (${holderCounts.active})` },
+                  { id: 'upcoming', label: `Upcoming (${holderCounts.upcoming})` },
+                  { id: 'ended', label: `Ended (${holderCounts.ended})` }
                 ].map(f => (
                   <button
                     key={f.id}
@@ -2146,10 +2163,12 @@ function Rewards() {
                       background: holderFilter === f.id ? 'var(--blue)' : 'transparent',
                       color: holderFilter === f.id ? '#ffffff' : '#64748b',
                       border: 'none',
-                      padding: '5px 12px',
-                      borderRadius: '8px',
-                      fontSize: '0.76rem',
+                      padding: '4px 10px',
+                      borderRadius: '99px',
+                      fontSize: '0.72rem',
                       fontWeight: 800,
+                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
                       cursor: 'pointer',
                       transition: 'all 0.15s'
                     }}
@@ -2357,10 +2376,10 @@ function Rewards() {
               </div>
 
               {/* Status Filters */}
-              <div style={{ display: 'flex', gap: '6px', background: '#f1f5f9', padding: '4px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', gap: '4px', background: '#f1f5f9', padding: '3px', borderRadius: '99px', border: '1px solid #e2e8f0', flexWrap: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
                 {[
                   { id: 'all', label: `All (${giveawayCounts.all})` },
-                  { id: 'ongoing', label: `Ongoing (${giveawayCounts.ongoing})` },
+                  { id: 'active', label: `Active (${giveawayCounts.active})` },
                   { id: 'ended', label: `Ended (${giveawayCounts.ended})` }
                 ].map(f => (
                   <button
@@ -2368,13 +2387,15 @@ function Rewards() {
                     onClick={() => setGiveawayFilter(f.id)}
                     style={{
                       fontFamily: 'var(--font)',
-                      background: giveawayFilter === f.id ? 'var(--blue)' : 'transparent',
-                      color: giveawayFilter === f.id ? '#ffffff' : '#64748b',
+                      background: (giveawayFilter === f.id || (f.id === 'active' && giveawayFilter === 'ongoing')) ? 'var(--blue)' : 'transparent',
+                      color: (giveawayFilter === f.id || (f.id === 'active' && giveawayFilter === 'ongoing')) ? '#ffffff' : '#64748b',
                       border: 'none',
-                      padding: '5px 12px',
-                      borderRadius: '8px',
-                      fontSize: '0.76rem',
+                      padding: '4px 10px',
+                      borderRadius: '99px',
+                      fontSize: '0.72rem',
                       fontWeight: 800,
+                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
                       cursor: 'pointer',
                       transition: 'all 0.15s'
                     }}
