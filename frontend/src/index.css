@@ -590,7 +590,7 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   
   /* BUTTONS FULL WIDTH STACKED */
   .hero-btns { display: flex; flex-direction: column; width: 100%; gap: 12px; margin-bottom: 24px; }
-  .btn-fill, .btn-line { width: 100%; justify-content: center; padding: 18px; font-size: 1rem; border-radius: 12px; }
+  .hero-btns .btn-fill, .hero-btns .btn-line { width: 100%; justify-content: center; padding: 18px; font-size: 1rem; border-radius: 12px; }
   
   /* CA BOX */
   .hero-ca-wrap { width: 100%; max-width: 100%; }

@@ -1316,32 +1316,33 @@ function Rewards() {
                     </div>
                   </div>
 
-                  {/* Card Body: Title & Explore button in single clean line */}
-                  <div style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#ffffff', gap: '10px' }}>
-                    <h3 style={{ margin: 0, fontSize: 'clamp(1rem, 3.4vw, 1.2rem)', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {/* Card Body: Left Title, Right Compact Explore Button */}
+                  <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#ffffff', gap: '12px', width: '100%', boxSizing: 'border-box' }}>
+                    <h3 style={{ margin: 0, fontSize: '1.18rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
                       {cat.label}
                     </h3>
-                    <button
-                      className="btn-fill"
+                    <div
                       style={{
                         background: 'var(--blue)',
                         color: '#ffffff',
-                        padding: '8px 14px',
-                        fontSize: '0.8rem',
+                        padding: '9px 18px',
+                        fontSize: '0.84rem',
                         fontWeight: 800,
                         borderRadius: '10px',
                         display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '5px',
+                        gap: '6px',
                         whiteSpace: 'nowrap',
-                        border: 'none',
-                        cursor: 'pointer',
                         flexShrink: 0,
-                        boxShadow: '0 2px 10px rgba(0, 82, 255, 0.22)'
+                        width: 'auto',
+                        minWidth: 'auto',
+                        maxWidth: 'max-content',
+                        boxShadow: '0 3px 12px rgba(0, 82, 255, 0.25)',
+                        transition: 'all 0.2s'
                       }}
                     >
                       <span>Explore</span> <ArrowRight size={14} strokeWidth={2.5} />
-                    </button>
+                    </div>
                   </div>
                 </div>
               ))}
