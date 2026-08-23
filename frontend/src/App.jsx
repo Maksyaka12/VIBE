@@ -973,7 +973,7 @@ const STAKING_EPOCHS = [
   {
     epoch: 'Epoch 1',
     duration: '10 Days',
-    poolAmount: '2,000,000',
+    poolAmount: '2,200,000',
     startTime: '21 Aug 2026, 15:00 UTC',
     endTime: '31 Aug 2026, 15:00 UTC',
     status: 'active',
@@ -1022,7 +1022,7 @@ const VIBEVERSE_EPOCHS = [
 ];
 
 const VIBECLUB_EPOCHS = [
-  { epoch: 'Royalty 1', claimDate: '24 Aug 2026', dateObj: new Date('2026-08-24T00:00:00Z'), poolAmount: 'TBA' },
+  { epoch: 'Royalty 1', claimDate: '28 Aug 2026', dateObj: new Date('2026-08-28T00:00:00Z'), poolAmount: 'TBA' },
   { epoch: 'Royalty 2', claimDate: '3 Sep 2026', dateObj: new Date('2026-09-03T00:00:00Z'), poolAmount: 'TBA' },
   { epoch: 'Royalty 3', claimDate: '13 Sep 2026', dateObj: new Date('2026-09-13T00:00:00Z'), poolAmount: 'TBA' },
   { epoch: 'Royalty 4', claimDate: '23 Sep 2026', dateObj: new Date('2026-09-23T00:00:00Z'), poolAmount: 'TBA' },
@@ -1161,11 +1161,41 @@ function Rewards() {
   };
 
   const navTabs = [
-    { id: 'holders', label: 'Holder Rewards' },
-    { id: 'staking', label: 'Staking' },
-    { id: 'vibe-club', label: 'Vibe Club' },
-    { id: 'vibe-verse', label: 'Vibe Verse' },
-    { id: 'giveaways', label: 'Giveaways' },
+    {
+      id: 'holders',
+      label: 'Holder Rewards',
+      tag: '10 Unlocks',
+      desc: '100M Vesting pool for 5M+ holders',
+      Icon: Coins
+    },
+    {
+      id: 'staking',
+      label: 'Staking',
+      tag: '2.2M Pool',
+      desc: '10-day reward epochs on o1.exchange',
+      Icon: Rocket
+    },
+    {
+      id: 'vibe-club',
+      label: 'Vibe Club',
+      tag: 'Club Royalties',
+      desc: 'Lifetime rewards for NFT members',
+      Icon: Crown
+    },
+    {
+      id: 'vibe-verse',
+      label: 'Vibe Verse',
+      tag: 'Coming Soon',
+      desc: 'Gamified rewards & leaderboards',
+      Icon: Gamepad2
+    },
+    {
+      id: 'giveaways',
+      label: 'Giveaways',
+      tag: '3 Events',
+      desc: 'Milestones, cash & token prizes',
+      Icon: Gift
+    },
   ];
 
   return (
@@ -1176,34 +1206,119 @@ function Rewards() {
           <p className="sec-sub">Track active reward epochs and community events.</p>
         </div>
 
-        {/* Top Category Tab Navigation */}
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '40px', flexWrap: 'wrap' }}>
+        {/* Top Category Cards Navigation */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+            gap: '14px',
+            marginBottom: '36px'
+          }}
+        >
           {navTabs.map(tab => {
             const isActive = activeTab === tab.id;
+            const TabIcon = tab.Icon;
             return (
-              <button
+              <div
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
+                role="button"
+                tabIndex={0}
                 style={{
-                  fontFamily: 'var(--font)',
-                  padding: '10px 22px',
-                  borderRadius: '99px',
-                  border: isActive ? '1px solid var(--blue)' : '1px solid #cbd5e1',
-                  background: isActive ? 'var(--blue)' : '#ffffff',
-                  color: isActive ? '#ffffff' : 'var(--ink)',
-                  fontWeight: 800,
-                  fontSize: '0.9rem',
-                  letterSpacing: '-0.01em',
+                  background: isActive
+                    ? 'linear-gradient(145deg, rgba(205, 244, 255, 0.95) 0%, rgba(235, 251, 255, 0.98) 100%)'
+                    : 'linear-gradient(145deg, rgba(255, 255, 255, 0.85) 0%, rgba(245, 252, 255, 0.7) 100%)',
+                  border: isActive ? '2px solid var(--blue)' : '1.5px solid rgba(0, 160, 255, 0.22)',
+                  borderRadius: '20px',
+                  padding: '18px 18px 16px 18px',
                   cursor: 'pointer',
-                  boxShadow: isActive ? '0 4px 14px rgba(0, 82, 255, 0.35)' : '0 2px 6px rgba(0,0,0,0.04)',
-                  transition: 'all 0.2s',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px'
+                  textAlign: 'left',
+                  boxShadow: isActive
+                    ? '0 10px 28px -4px rgba(0, 82, 255, 0.22), 0 2px 10px rgba(0, 0, 0, 0.04)'
+                    : '0 2px 8px rgba(0, 82, 255, 0.04)',
+                  transform: isActive ? 'translateY(-2px)' : 'none',
+                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}
               >
-                {tab.label}
-              </button>
+                {/* Active top accent bar */}
+                {isActive && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: '3px',
+                      background: 'var(--blue)'
+                    }}
+                  />
+                )}
+
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                    <div
+                      style={{
+                        width: '38px',
+                        height: '38px',
+                        borderRadius: '10px',
+                        background: isActive ? 'var(--blue)' : 'rgba(0, 82, 255, 0.08)',
+                        color: isActive ? '#ffffff' : 'var(--blue)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: isActive ? '0 3px 10px rgba(0, 82, 255, 0.3)' : 'none',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      <TabIcon size={20} strokeWidth={2.3} />
+                    </div>
+
+                    <span
+                      style={{
+                        fontSize: '0.68rem',
+                        fontWeight: 800,
+                        padding: '3px 8px',
+                        borderRadius: '99px',
+                        background: isActive ? 'var(--blue)' : 'rgba(0, 82, 255, 0.08)',
+                        color: isActive ? '#ffffff' : 'var(--blue)',
+                        border: isActive ? 'none' : '1px solid rgba(0, 160, 255, 0.2)',
+                        letterSpacing: '0.02em',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      {tab.tag}
+                    </span>
+                  </div>
+
+                  <h4
+                    style={{
+                      margin: '0 0 4px 0',
+                      fontSize: '1.02rem',
+                      fontWeight: 900,
+                      color: 'var(--ink)',
+                      letterSpacing: '-0.02em'
+                    }}
+                  >
+                    {tab.label}
+                  </h4>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: '0.78rem',
+                      color: isActive ? 'var(--ink2)' : '#64748b',
+                      lineHeight: 1.35,
+                      fontWeight: 600
+                    }}
+                  >
+                    {tab.desc}
+                  </p>
+                </div>
+              </div>
             );
           })}
         </div>
