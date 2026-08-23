@@ -78,10 +78,9 @@ function Nav() {
   }, []);
 
   const navLinks = [
-    { id: 'vibe-club', label: 'Vibe Club', isClub: true },
     { id: 'about', label: 'About' },
     { id: 'tokenomics', label: 'Tokenomics' },
-    { id: 'rewards', label: 'Rewards' },
+    { id: 'rewards', label: 'Rewards Hub' },
     { id: 'roadmap', label: 'Roadmap' },
     { id: 'chart', label: 'Chart' },
     { id: 'trade', label: 'Trade' },
@@ -97,32 +96,21 @@ function Nav() {
             $VIBE
           </Link>
           <ul className="nav-menu">
-            {navLinks.map(({ id, label, isClub }) => (
+            {navLinks.map(({ id, label }) => (
               <li key={id}>
-                {isClub ? (
-                  <a
-                    href="https://vibeverse.dog/vibeclub"
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => setOpen(false)}
-                    className="nav-club-link"
-                  >
-                    <span>{label}</span>
-                    <span className="vibeclub-live-badge">
-                      <span className="live-fire-dot"></span>
-                      MINT IS LIVE
-                    </span>
-                  </a>
-                ) : (
-                  <Link to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    {label}
-                  </Link>
-                )}
+                <Link to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  {label}
+                </Link>
               </li>
             ))}
           </ul>
-          <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
-            <a href={O1} target="_blank" rel="noreferrer" className="nav-buy">Buy $VIBE <ArrowUpRight size={16} strokeWidth={2.5} /></a>
+          <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
+            <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" className="nav-mint">
+              Mint NFT <ArrowUpRight size={16} strokeWidth={2.5} />
+            </a>
+            <a href={O1} target="_blank" rel="noreferrer" className="nav-buy">
+              Buy $VIBE <ArrowUpRight size={16} strokeWidth={2.5} />
+            </a>
             <button className="ham" onClick={() => setOpen(!open)}>
               {open ? <X size={26} color="var(--ink)" /> : <Menu size={26} color="var(--ink)" />}
             </button>
@@ -131,29 +119,17 @@ function Nav() {
       </nav>
       <div className={`mob-menu ${open ? 'open' : ''}`}>
         <div className="mob-links">
-          {navLinks.map(({ id, label, isClub }) => (
-            isClub ? (
-              <a
-                key={id}
-                href="https://vibeverse.dog/vibeclub"
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => setOpen(false)}
-                className="mob-club-link"
-              >
-                <span>{label}</span>
-                <span className="vibeclub-live-badge">
-                  <span className="live-fire-dot"></span>
-                  MINT IS LIVE
-                </span>
-              </a>
-            ) : (
-              <Link key={id} to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-                {label}
-              </Link>
-            )
+          {navLinks.map(({ id, label }) => (
+            <Link key={id} to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+              {label}
+            </Link>
           ))}
-          <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}}>Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} /></a>
+          <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" className="mob-mint" onClick={() => setOpen(false)}>
+            Mint NFT <ArrowUpRight size={20} strokeWidth={2.5} />
+          </a>
+          <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}} onClick={() => setOpen(false)}>
+            Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} />
+          </a>
         </div>
       </div>
     </>
@@ -2088,147 +2064,59 @@ function Rewards() {
         {activeTab === 'holders' && (
           <div style={{ marginTop: '20px' }}>
             {/* 1. Top 3 Step Action Cards (Signature Brand Turquoise) */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-                gap: '16px',
-                marginBottom: '28px'
-              }}
-            >
-              {/* Step 1 */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px', marginBottom: '28px' }}>
               <div
                 style={{
-                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
-                  border: '1px solid rgba(0, 160, 255, 0.3)',
+                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.55) 0%, rgba(225, 249, 255, 0.75) 100%)',
+                  border: '1px solid rgba(0, 160, 255, 0.25)',
                   borderRadius: '16px',
-                  padding: '18px 20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '12px',
-                  boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
+                  padding: '16px 18px',
+                  boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>1</span>
-                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Explore Vesting Details</h4>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.12)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>1</span>
+                  <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Explore Holder Rewards Details</strong>
                 </div>
-                <a
-                  href="/tokenomics#vesting-details"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    background: '#ffffff',
-                    border: '1.5px solid rgba(0, 160, 255, 0.35)',
-                    color: 'var(--ink)',
-                    padding: '8px 14px',
-                    borderRadius: '10px',
-                    fontSize: '0.8rem',
-                    fontWeight: 800,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '5px',
-                    textDecoration: 'none',
-                    whiteSpace: 'nowrap',
-                    boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
-                    transition: 'all 0.15s',
-                    flexShrink: 0
-                  }}
-                >
-                  <span>Tokenomics</span> <ArrowUpRight size={14} strokeWidth={2.5} color="var(--blue)" />
-                </a>
+                <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
+                  All vesting details and schedule are available in the <a href="/tokenomics#vesting-details" target="_blank" rel="noreferrer" style={{ color: 'var(--blue)', textDecoration: 'underline', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '3px' }}>Tokenomics <ArrowUpRight size={13} strokeWidth={2.5} /></a> section under Vesting Details.
+                </p>
               </div>
 
-              {/* Step 2 */}
               <div
                 style={{
-                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
-                  border: '1px solid rgba(0, 160, 255, 0.3)',
+                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.55) 0%, rgba(225, 249, 255, 0.75) 100%)',
+                  border: '1px solid rgba(0, 160, 255, 0.25)',
                   borderRadius: '16px',
-                  padding: '18px 20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '12px',
-                  boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
+                  padding: '16px 18px',
+                  boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>2</span>
-                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Hold 5M+ $VIBE</h4>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--blue)', background: 'rgba(0, 0, 255, 0.12)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>2</span>
+                  <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Buy &amp; Hold</strong>
                 </div>
-                <a
-                  href={O1}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    background: '#ffffff',
-                    border: '1.5px solid rgba(0, 160, 255, 0.35)',
-                    color: 'var(--ink)',
-                    padding: '8px 14px',
-                    borderRadius: '10px',
-                    fontSize: '0.8rem',
-                    fontWeight: 800,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '5px',
-                    textDecoration: 'none',
-                    whiteSpace: 'nowrap',
-                    boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
-                    transition: 'all 0.15s',
-                    flexShrink: 0
-                  }}
-                >
-                  <span>Buy on o1.exchange</span> <ArrowUpRight size={14} strokeWidth={2.5} color="var(--blue)" />
-                </a>
+                <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
+                  Hold 5M+ $VIBE tokens at the time of each unlock snapshot to be eligible and share the rewards pool.
+                </p>
               </div>
 
-              {/* Step 3 */}
               <div
                 style={{
-                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.75) 0%, rgba(225, 249, 255, 0.9) 100%)',
-                  border: '1px solid rgba(0, 160, 255, 0.3)',
+                  background: 'linear-gradient(135deg, rgba(190, 241, 255, 0.55) 0%, rgba(225, 249, 255, 0.75) 100%)',
+                  border: '1px solid rgba(0, 160, 255, 0.25)',
                   borderRadius: '16px',
-                  padding: '18px 20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '12px',
-                  boxShadow: '0 4px 16px rgba(0, 82, 255, 0.06)'
+                  padding: '16px 18px',
+                  boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 900, background: 'var(--blue)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px' }}>3</span>
-                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 900, color: 'var(--ink)' }}>Check &amp; Claim</h4>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#059669', background: 'rgba(16, 185, 129, 0.14)', width: '22px', height: '22px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>3</span>
+                  <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Holder Rewards Pool</strong>
                 </div>
-                <a
-                  href="/checker"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    background: 'var(--blue)',
-                    border: 'none',
-                    color: '#ffffff',
-                    padding: '8px 14px',
-                    borderRadius: '10px',
-                    fontSize: '0.8rem',
-                    fontWeight: 800,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '5px',
-                    textDecoration: 'none',
-                    whiteSpace: 'nowrap',
-                    boxShadow: '0 2px 8px rgba(0, 0, 255, 0.2)',
-                    transition: 'all 0.15s',
-                    flexShrink: 0
-                  }}
-                >
-                  <span>Checker &amp; Claim</span> <ArrowUpRight size={14} strokeWidth={2.5} />
-                </a>
+                <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
+                  100M $VIBE total vested supply with 10M monthly unlocks distributed proportionally among all eligible holders.
+                </p>
               </div>
             </div>
 
