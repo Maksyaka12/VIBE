@@ -1187,6 +1187,37 @@ function Rewards() {
     },
   ];
 
+  const getCategoryBadges = (catId) => {
+    let active = 0;
+    let upcoming = 0;
+
+    if (catId === 'holders') {
+      active = HOLDER_UNLOCKS.filter(u => now >= u.dateObj).length;
+      upcoming = HOLDER_UNLOCKS.filter(u => now < u.dateObj).length;
+    } else if (catId === 'staking') {
+      active = STAKING_EPOCHS.filter(e => e.status === 'active' || e.status === 'ongoing').length;
+      upcoming = STAKING_EPOCHS.filter(e => e.status === 'upcoming').length;
+    } else if (catId === 'vibe-club') {
+      active = VIBECLUB_EPOCHS.filter(u => now >= u.dateObj).length;
+      upcoming = VIBECLUB_EPOCHS.filter(u => now < u.dateObj).length;
+    } else if (catId === 'vibe-verse') {
+      active = 0;
+      upcoming = 1;
+    } else if (catId === 'giveaways') {
+      active = GIVEAWAYS_DATA.filter(e => e.status === 'ongoing').length;
+      upcoming = GIVEAWAYS_DATA.filter(e => e.status !== 'ended' && e.status !== 'ongoing').length || 1;
+    }
+
+    const badges = [];
+    if (active > 0) {
+      badges.push({ type: 'active', label: `Active: ${active}` });
+    }
+    if (upcoming > 0) {
+      badges.push({ type: 'upcoming', label: `Upcoming: 1` });
+    }
+    return badges;
+  };
+
   return (
     <section id="rewards" className="alt" style={{ padding: '140px 0 100px 0' }}>
       <div className="wrap">
@@ -1252,6 +1283,48 @@ function Rewards() {
                         objectFit: 'cover'
                       }}
                     />
+
+                    {/* Top Right Status Badges */}
+                    <div style={{ position: 'absolute', top: '14px', right: '14px', display: 'flex', gap: '6px', zIndex: 2, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                      {getCategoryBadges(cat.id).map((b, idx) => (
+                        <div
+                          key={idx}
+                          style={{
+                            background: b.type === 'active' ? '#ecfdf5' : 'rgba(255, 255, 255, 0.95)',
+                            color: b.type === 'active' ? '#059669' : '#0284c7',
+                            border: b.type === 'active' ? '1.5px solid #a7f3d0' : '1.5px solid rgba(0, 160, 255, 0.3)',
+                            backdropFilter: 'blur(8px)',
+                            padding: '4px 10px',
+                            borderRadius: '99px',
+                            fontSize: '0.72rem',
+                            fontWeight: 900,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            boxShadow: b.type === 'active' ? '0 2px 10px rgba(16, 185, 129, 0.25)' : '0 2px 10px rgba(0, 82, 255, 0.1)',
+                            letterSpacing: '0.02em',
+                            textTransform: 'uppercase'
+                          }}
+                        >
+                          {b.type === 'active' && (
+                            <span
+                              style={{
+                                width: '7px',
+                                height: '7px',
+                                borderRadius: '50%',
+                                background: '#10b981',
+                                boxShadow: '0 0 8px #10b981',
+                                display: 'inline-block'
+                              }}
+                            />
+                          )}
+                          {b.type === 'upcoming' && (
+                            <Clock size={11} color="#0284c7" strokeWidth={2.5} />
+                          )}
+                          {b.label}
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Card Body: Title & Explore button only */}
@@ -1867,9 +1940,9 @@ function Rewards() {
                           </div>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
                             <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
-                              <Users size={12} color="#0284c7" /> Holders
+                              <ShieldCheck size={12} color="#0284c7" /> Requirement
                             </span>
-                            <strong style={{ color: isUnlocked ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{nftHoldersCount} Holders</strong>
+                            <strong style={{ color: isUnlocked ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>NFT Holder</strong>
                           </div>
                         </div>
                       </div>
