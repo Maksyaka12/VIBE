@@ -1316,9 +1316,9 @@ function Rewards() {
                     </div>
                   </div>
 
-                  {/* Card Body: Title & Explore button only */}
-                  <div style={{ padding: '18px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#ffffff', gap: '14px' }}>
-                    <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                  {/* Card Body: Title & Explore button in single clean line */}
+                  <div style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#ffffff', gap: '10px' }}>
+                    <h3 style={{ margin: 0, fontSize: 'clamp(1rem, 3.4vw, 1.2rem)', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {cat.label}
                     </h3>
                     <button
@@ -1326,21 +1326,21 @@ function Rewards() {
                       style={{
                         background: 'var(--blue)',
                         color: '#ffffff',
-                        padding: '10px 18px',
-                        fontSize: '0.84rem',
+                        padding: '8px 14px',
+                        fontSize: '0.8rem',
                         fontWeight: 800,
-                        borderRadius: '12px',
-                        display: 'flex',
+                        borderRadius: '10px',
+                        display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '6px',
+                        gap: '5px',
                         whiteSpace: 'nowrap',
                         border: 'none',
                         cursor: 'pointer',
                         flexShrink: 0,
-                        boxShadow: '0 4px 14px rgba(0, 82, 255, 0.25)'
+                        boxShadow: '0 2px 10px rgba(0, 82, 255, 0.22)'
                       }}
                     >
-                      <span>Explore</span> <ArrowRight size={15} strokeWidth={2.5} />
+                      <span>Explore</span> <ArrowRight size={14} strokeWidth={2.5} />
                     </button>
                   </div>
                 </div>
