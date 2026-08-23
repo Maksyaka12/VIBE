@@ -1081,7 +1081,6 @@ function Rewards() {
   const [holderFilter, setHolderFilter] = useState('all');
   const [vibeClubFilter, setVibeClubFilter] = useState('all');
   const [nftHoldersCount, setNftHoldersCount] = useState(103);
-  const r = useRev();
   const now = new Date();
 
   useEffect(() => {
@@ -1194,7 +1193,7 @@ function Rewards() {
         {/* Main Rewards Hub Header (when no specific category is selected) */}
         {activeTab === null ? (
           <>
-            <div className="sec-head rv" ref={r} style={{ marginBottom: '36px' }}>
+            <div className="sec-head" style={{ marginBottom: '36px' }}>
               <h2>Rewards <span className="bl">Hub</span>.</h2>
               <p className="sec-sub">Track active reward epochs and community events.</p>
             </div>
