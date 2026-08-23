@@ -1075,7 +1075,7 @@ const HOLDER_UNLOCKS = [
 ];
 
 function Rewards() {
-  const [activeTab, setActiveTab] = useState('holders');
+  const [activeTab, setActiveTab] = useState(null);
   const [stakingFilter, setStakingFilter] = useState('all');
   const [giveawayFilter, setGiveawayFilter] = useState('all');
   const [holderFilter, setHolderFilter] = useState('all');
@@ -1160,168 +1160,217 @@ function Rewards() {
     ended: GIVEAWAYS_DATA.filter(e => e.status === 'ended').length
   };
 
-  const navTabs = [
+  const categoryCards = [
     {
       id: 'holders',
       label: 'Holder Rewards',
-      tag: '10 Unlocks',
-      desc: '100M Vesting pool for 5M+ holders',
-      Icon: Coins
+      tag: '10 Unlocks • 100M Pool',
+      desc: 'Vesting rewards distributed to eligible 5M+ $VIBE holders across 10 unlock cycles.',
+      image: '/rewards/card-holder-rewards.svg',
     },
     {
       id: 'staking',
       label: 'Staking',
-      tag: '2.2M Pool',
-      desc: '10-day reward epochs on o1.exchange',
-      Icon: Rocket
+      tag: 'Epoch 1 Active • 2.2M Pool',
+      desc: '10-day reward epochs with verified staking on o1.exchange on Base Network.',
+      image: '/rewards/card-staking.svg',
     },
     {
       id: 'vibe-club',
       label: 'Vibe Club',
-      tag: 'Club Royalties',
-      desc: 'Lifetime rewards for NFT members',
-      Icon: Crown
+      tag: '15% Royalties • 4 Rounds',
+      desc: 'Exclusive lifetime royalties pool for verified Vibe Club NFT holders.',
+      image: '/rewards/card-vibe-club.svg',
     },
     {
       id: 'vibe-verse',
       label: 'Vibe Verse',
-      tag: 'Coming Soon',
-      desc: 'Gamified rewards & leaderboards',
-      Icon: Gamepad2
+      tag: 'Gamified Meta • Coming Soon',
+      desc: 'Interactive play-to-earn metaverse gaming experience and community leaderboards.',
+      image: '/rewards/card-vibe-verse.svg',
     },
     {
       id: 'giveaways',
       label: 'Giveaways',
-      tag: '3 Events',
-      desc: 'Milestones, cash & token prizes',
-      Icon: Gift
+      tag: 'Community Events • 3 Milestones',
+      desc: 'Holder count & market cap celebration prize pools, cash and token airdrops.',
+      image: '/rewards/card-giveaways.svg',
     },
   ];
 
   return (
     <section id="rewards" className="alt" style={{ padding: '140px 0 100px 0' }}>
       <div className="wrap">
-        <div className="sec-head rv" ref={r} style={{ marginBottom: '32px' }}>
-          <h2>Rewards <span className="bl">Hub</span>.</h2>
-          <p className="sec-sub">Track active reward epochs and community events.</p>
-        </div>
+        {/* Main Rewards Hub Header (when no specific category is selected) */}
+        {activeTab === null ? (
+          <>
+            <div className="sec-head rv" ref={r} style={{ marginBottom: '36px' }}>
+              <h2>Rewards <span className="bl">Hub</span>.</h2>
+              <p className="sec-sub">Track active reward epochs and community events.</p>
+            </div>
 
-        {/* Top Category Cards Navigation */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
-            gap: '14px',
-            marginBottom: '36px'
-          }}
-        >
-          {navTabs.map(tab => {
-            const isActive = activeTab === tab.id;
-            const TabIcon = tab.Icon;
-            return (
-              <div
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                role="button"
-                tabIndex={0}
-                style={{
-                  background: isActive
-                    ? 'linear-gradient(145deg, rgba(205, 244, 255, 0.95) 0%, rgba(235, 251, 255, 0.98) 100%)'
-                    : 'linear-gradient(145deg, rgba(255, 255, 255, 0.85) 0%, rgba(245, 252, 255, 0.7) 100%)',
-                  border: isActive ? '2px solid var(--blue)' : '1.5px solid rgba(0, 160, 255, 0.22)',
-                  borderRadius: '20px',
-                  padding: '18px 18px 16px 18px',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  boxShadow: isActive
-                    ? '0 10px 28px -4px rgba(0, 82, 255, 0.22), 0 2px 10px rgba(0, 0, 0, 0.04)'
-                    : '0 2px 8px rgba(0, 82, 255, 0.04)',
-                  transform: isActive ? 'translateY(-2px)' : 'none',
-                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
-              >
-                {/* Active top accent bar */}
-                {isActive && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: '3px',
-                      background: 'var(--blue)'
-                    }}
-                  />
-                )}
-
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+            {/* 5 Graphic Category Cards Grid */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
+                gap: '24px',
+                marginBottom: '40px'
+              }}
+            >
+              {categoryCards.map(cat => (
+                <div
+                  key={cat.id}
+                  onClick={() => {
+                    setActiveTab(cat.id);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  style={{
+                    background: '#ffffff',
+                    borderRadius: '24px',
+                    border: '2px solid rgba(0, 82, 255, 0.18)',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    boxShadow: '0 8px 30px rgba(0, 82, 255, 0.08)',
+                    transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.transform = 'translateY(-6px)';
+                    e.currentTarget.style.borderColor = 'var(--blue)';
+                    e.currentTarget.style.boxShadow = '0 16px 36px -4px rgba(0, 82, 255, 0.25)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.borderColor = 'rgba(0, 82, 255, 0.18)';
+                    e.currentTarget.style.boxShadow = '0 8px 30px rgba(0, 82, 255, 0.08)';
+                  }}
+                >
+                  {/* Card Image Banner */}
+                  <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%', background: '#f8fafc', overflow: 'hidden' }}>
+                    <img
+                      src={cat.image}
+                      alt={cat.label}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover'
+                      }}
+                    />
                     <div
                       style={{
-                        width: '38px',
-                        height: '38px',
-                        borderRadius: '10px',
-                        background: isActive ? 'var(--blue)' : 'rgba(0, 82, 255, 0.08)',
-                        color: isActive ? '#ffffff' : 'var(--blue)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: isActive ? '0 3px 10px rgba(0, 82, 255, 0.3)' : 'none',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      <TabIcon size={20} strokeWidth={2.3} />
-                    </div>
-
-                    <span
-                      style={{
-                        fontSize: '0.68rem',
-                        fontWeight: 800,
-                        padding: '3px 8px',
+                        position: 'absolute',
+                        top: '14px',
+                        right: '14px',
+                        background: 'rgba(255, 255, 255, 0.94)',
+                        backdropFilter: 'blur(8px)',
+                        color: 'var(--blue)',
+                        border: '1.5px solid rgba(0, 82, 255, 0.25)',
+                        padding: '5px 12px',
                         borderRadius: '99px',
-                        background: isActive ? 'var(--blue)' : 'rgba(0, 82, 255, 0.08)',
-                        color: isActive ? '#ffffff' : 'var(--blue)',
-                        border: isActive ? 'none' : '1px solid rgba(0, 160, 255, 0.2)',
-                        letterSpacing: '0.02em',
-                        whiteSpace: 'nowrap'
+                        fontSize: '0.72rem',
+                        fontWeight: 900,
+                        letterSpacing: '0.03em',
+                        textTransform: 'uppercase',
+                        boxShadow: '0 2px 10px rgba(0, 82, 255, 0.12)'
                       }}
                     >
-                      {tab.tag}
-                    </span>
+                      {cat.tag}
+                    </div>
                   </div>
 
-                  <h4
-                    style={{
-                      margin: '0 0 4px 0',
-                      fontSize: '1.02rem',
-                      fontWeight: 900,
-                      color: 'var(--ink)',
-                      letterSpacing: '-0.02em'
-                    }}
-                  >
-                    {tab.label}
-                  </h4>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: '0.78rem',
-                      color: isActive ? 'var(--ink2)' : '#64748b',
-                      lineHeight: 1.35,
-                      fontWeight: 600
-                    }}
-                  >
-                    {tab.desc}
-                  </p>
+                  {/* Card Body */}
+                  <div style={{ padding: '20px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#ffffff', gap: '14px' }}>
+                    <div>
+                      <h3 style={{ margin: '0 0 5px 0', fontSize: '1.24rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                        {cat.label}
+                      </h3>
+                      <p style={{ margin: 0, fontSize: '0.84rem', color: '#64748b', fontWeight: 600, lineHeight: 1.4 }}>
+                        {cat.desc}
+                      </p>
+                    </div>
+                    <button
+                      className="btn-fill"
+                      style={{
+                        background: 'var(--blue)',
+                        color: '#ffffff',
+                        padding: '10px 18px',
+                        fontSize: '0.84rem',
+                        fontWeight: 800,
+                        borderRadius: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        whiteSpace: 'nowrap',
+                        border: 'none',
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                        boxShadow: '0 4px 14px rgba(0, 82, 255, 0.25)'
+                      }}
+                    >
+                      <span>Explore</span> <ArrowRight size={15} strokeWidth={2.5} />
+                    </button>
+                  </div>
                 </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          /* Detail View for Selected Category with Back Button & Quick Switcher */
+          <div style={{ marginBottom: '32px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginBottom: '24px' }}>
+              <button
+                onClick={() => setActiveTab(null)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  background: '#ffffff',
+                  border: '1.5px solid rgba(0, 82, 255, 0.25)',
+                  color: 'var(--blue)',
+                  fontWeight: 800,
+                  fontSize: '0.88rem',
+                  padding: '10px 20px',
+                  borderRadius: '14px',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(0, 82, 255, 0.08)',
+                  transition: 'all 0.15s'
+                }}
+              >
+                <ArrowRight size={16} style={{ transform: 'rotate(180deg)' }} /> Back to Rewards Hub
+              </button>
+
+              <div style={{ display: 'flex', gap: '6px', background: '#f1f5f9', padding: '4px', borderRadius: '14px', border: '1px solid #e2e8f0', flexWrap: 'wrap' }}>
+                {categoryCards.map(c => (
+                  <button
+                    key={c.id}
+                    onClick={() => setActiveTab(c.id)}
+                    style={{
+                      fontFamily: 'var(--font)',
+                      background: activeTab === c.id ? 'var(--blue)' : 'transparent',
+                      color: activeTab === c.id ? '#ffffff' : '#64748b',
+                      border: 'none',
+                      padding: '6px 14px',
+                      borderRadius: '10px',
+                      fontSize: '0.78rem',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      transition: 'all 0.15s'
+                    }}
+                  >
+                    {c.label}
+                  </button>
+                ))}
               </div>
-            );
-          })}
-        </div>
+            </div>
+          </div>
+        )}
 
         {/* ── 1. STAKING REWARDS SECTION ── */}
         {activeTab === 'staking' && (
