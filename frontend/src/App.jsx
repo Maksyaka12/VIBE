@@ -1205,14 +1205,16 @@ function Rewards() {
       upcoming = 1;
     } else if (catId === 'giveaways') {
       active = GIVEAWAYS_DATA.filter(e => e.status === 'ongoing').length;
-      upcoming = GIVEAWAYS_DATA.filter(e => e.status !== 'ended' && e.status !== 'ongoing').length || 1;
+      upcoming = GIVEAWAYS_DATA.filter(e => e.status !== 'ended' && e.status !== 'ongoing').length;
     }
 
     const badges = [];
     if (active > 0) {
       badges.push({ type: 'active', label: `Active: ${active}` });
     }
-    if (upcoming > 0) {
+    if (active === 0) {
+      badges.push({ type: 'upcoming', label: `Upcoming: 1` });
+    } else if (upcoming > 0) {
       badges.push({ type: 'upcoming', label: `Upcoming: 1` });
     }
     return badges;
@@ -1284,42 +1286,42 @@ function Rewards() {
                       }}
                     />
 
-                    {/* Top Right Status Badges */}
-                    <div style={{ position: 'absolute', top: '14px', right: '14px', display: 'flex', gap: '6px', zIndex: 2, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                    {/* Top Right Status Badges (Crisp dark design) */}
+                    <div style={{ position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '5px', zIndex: 2, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                       {getCategoryBadges(cat.id).map((b, idx) => (
                         <div
                           key={idx}
                           style={{
-                            background: b.type === 'active' ? '#ecfdf5' : 'rgba(255, 255, 255, 0.95)',
-                            color: b.type === 'active' ? '#059669' : '#0284c7',
-                            border: b.type === 'active' ? '1.5px solid #a7f3d0' : '1.5px solid rgba(0, 160, 255, 0.3)',
+                            background: '#090d16',
+                            color: b.type === 'active' ? '#22c55e' : '#94a3b8',
+                            border: b.type === 'active' ? '1px solid rgba(34, 197, 94, 0.4)' : '1px solid rgba(148, 163, 184, 0.25)',
                             backdropFilter: 'blur(8px)',
-                            padding: '4px 10px',
+                            padding: '3px 8px',
                             borderRadius: '99px',
-                            fontSize: '0.72rem',
-                            fontWeight: 900,
+                            fontSize: '0.66rem',
+                            fontWeight: 800,
                             display: 'inline-flex',
                             alignItems: 'center',
-                            gap: '6px',
-                            boxShadow: b.type === 'active' ? '0 2px 10px rgba(16, 185, 129, 0.25)' : '0 2px 10px rgba(0, 82, 255, 0.1)',
-                            letterSpacing: '0.02em',
+                            gap: '5px',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.45)',
+                            letterSpacing: '0.03em',
                             textTransform: 'uppercase'
                           }}
                         >
                           {b.type === 'active' && (
                             <span
                               style={{
-                                width: '7px',
-                                height: '7px',
+                                width: '5px',
+                                height: '5px',
                                 borderRadius: '50%',
-                                background: '#10b981',
-                                boxShadow: '0 0 8px #10b981',
+                                background: '#22c55e',
+                                boxShadow: '0 0 6px #22c55e',
                                 display: 'inline-block'
                               }}
                             />
                           )}
                           {b.type === 'upcoming' && (
-                            <Clock size={11} color="#0284c7" strokeWidth={2.5} />
+                            <Clock size={10} color="#94a3b8" strokeWidth={2.3} />
                           )}
                           {b.label}
                         </div>
