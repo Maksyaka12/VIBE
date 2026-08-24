@@ -499,7 +499,7 @@ function Tokenomics() {
                 </p>
               </div>
               <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#0052ff', background: 'rgba(0, 82, 255, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
-                <Clock size={12} /> 10-Day Epoch Cycles
+                <Clock size={12} /> 10-Day Epochs
               </div>
             </div>
 
@@ -518,7 +518,7 @@ function Tokenomics() {
                 </p>
               </div>
               <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#7c3aed', background: 'rgba(124, 58, 237, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
-                <Clock size={12} /> 10-Day Epoch Cycles
+                <Clock size={12} /> 10-Day Epochs
               </div>
             </div>
 
@@ -537,7 +537,7 @@ function Tokenomics() {
                 </p>
               </div>
               <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#10b981', background: 'rgba(16, 185, 129, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
-                <Clock size={12} /> 10-Day Epoch Cycles
+                <Clock size={12} /> 10-Day Epochs
               </div>
             </div>
 
@@ -550,7 +550,7 @@ function Tokenomics() {
                   </div>
                   <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#f59e0b', letterSpacing: '-0.5px' }}>40%</span>
                 </div>
-                <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>Reserve &amp; Growth</h4>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>Reserve</h4>
                 <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
                   Stability buffer for continuous reward pools and marketing campaigns.
                 </p>
@@ -1381,33 +1381,10 @@ function Rewards() {
 
             {/* Rewards Hub FAQ Section (Underneath Category Cards) */}
             <div style={{ marginTop: '54px' }}>
-              <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-                <div
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    background: 'rgba(0, 82, 255, 0.08)',
-                    color: 'var(--blue)',
-                    border: '1px solid rgba(0, 82, 255, 0.18)',
-                    padding: '5px 14px',
-                    borderRadius: '99px',
-                    fontSize: '0.74rem',
-                    fontWeight: 800,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.06em',
-                    marginBottom: '10px'
-                  }}
-                >
-                  <HelpCircle size={13} strokeWidth={2.5} />
-                  <span>Important Rules &amp; FAQ</span>
-                </div>
-                <h3 style={{ fontSize: '1.65rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: '0 0 6px 0' }}>
-                  Frequently Asked <span style={{ color: 'var(--blue)' }}>Questions</span>
+              <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                <h3 style={{ fontSize: '1.65rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0 }}>
+                  Rules &amp; <span style={{ color: 'var(--blue)' }}>FAQ</span>
                 </h3>
-                <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--muted)' }}>
-                  Key details on claiming methods, staking vaults, and distribution rules.
-                </p>
               </div>
 
               <div
