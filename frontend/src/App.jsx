@@ -1551,7 +1551,7 @@ function Rewards() {
                   <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>10-Day Epochs</strong>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
-                  Staking rewards are distributed every 10 days, followed immediately by the start of a new epoch.
+                  Staking rewards are distributed every 10 days, followed by the start of a new epoch.
                 </p>
               </div>
 
