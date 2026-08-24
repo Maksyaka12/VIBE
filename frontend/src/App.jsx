@@ -1254,33 +1254,8 @@ function Rewards() {
                 }}
               >
                 {/* 1. Holder & Vibe Club */}
-                <div
-                  style={{
-                    background: '#ffffff',
-                    border: '1.5px solid rgba(0, 82, 255, 0.18)',
-                    borderRadius: '16px',
-                    padding: '16px 18px',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '14px',
-                    boxShadow: '0 4px 16px rgba(0, 82, 255, 0.05)',
-                    textAlign: 'left'
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '36px',
-                      height: '36px',
-                      borderRadius: '10px',
-                      background: 'rgba(0, 82, 255, 0.08)',
-                      border: '1px solid rgba(0, 82, 255, 0.2)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      marginTop: '2px'
-                    }}
-                  >
+                <div className="rewards-highlight-card">
+                  <div className="icon-box">
                     <Sparkles size={18} color="var(--blue)" />
                   </div>
                   <div>
@@ -1297,40 +1272,15 @@ function Rewards() {
                     >
                       <span>Direct Hub Claim</span>
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--ink2)', lineHeight: '1.45' }}>
                       <strong style={{ color: 'var(--ink)' }}>Holder Rewards</strong> &amp; <strong style={{ color: 'var(--ink)' }}>Vibe Club</strong> rewards are claimed directly in the Rewards Hub.
                     </div>
                   </div>
                 </div>
 
                 {/* 2. Staking & Giveaways */}
-                <div
-                  style={{
-                    background: '#ffffff',
-                    border: '1.5px solid rgba(139, 92, 246, 0.2)',
-                    borderRadius: '16px',
-                    padding: '16px 18px',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '14px',
-                    boxShadow: '0 4px 16px rgba(139, 92, 246, 0.05)',
-                    textAlign: 'left'
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '36px',
-                      height: '36px',
-                      borderRadius: '10px',
-                      background: 'rgba(139, 92, 246, 0.08)',
-                      border: '1px solid rgba(139, 92, 246, 0.25)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      marginTop: '2px'
-                    }}
-                  >
+                <div className="rewards-highlight-card">
+                  <div className="icon-box">
                     <Coins size={18} color="#8b5cf6" />
                   </div>
                   <div>
@@ -1347,40 +1297,15 @@ function Rewards() {
                     >
                       <span>Staking &amp; Giveaways</span>
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--ink2)', lineHeight: '1.45' }}>
                       <strong style={{ color: 'var(--ink)' }}>Staking</strong> rewards are claimed on o1.exchange. <strong style={{ color: 'var(--ink)' }}>Giveaways</strong> are sent directly to wallets.
                     </div>
                   </div>
                 </div>
 
                 {/* 3. Unclaimed Tokens Burn */}
-                <div
-                  style={{
-                    background: '#ffffff',
-                    border: '1.5px solid rgba(255, 85, 0, 0.2)',
-                    borderRadius: '16px',
-                    padding: '16px 18px',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '14px',
-                    boxShadow: '0 4px 16px rgba(255, 85, 0, 0.05)',
-                    textAlign: 'left'
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '36px',
-                      height: '36px',
-                      borderRadius: '10px',
-                      background: 'rgba(255, 85, 0, 0.08)',
-                      border: '1px solid rgba(255, 85, 0, 0.25)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      marginTop: '2px'
-                    }}
-                  >
+                <div className="rewards-highlight-card">
+                  <div className="icon-box">
                     <Flame size={18} color="#ff5500" />
                   </div>
                   <div>
@@ -1397,7 +1322,7 @@ function Rewards() {
                     >
                       <span>Unclaimed Burn Rule</span>
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--ink2)', lineHeight: '1.45' }}>
                       All unclaimed tokens within the designated claim period are <strong style={{ color: '#ff5500' }}>permanently burned</strong>.
                     </div>
                   </div>
