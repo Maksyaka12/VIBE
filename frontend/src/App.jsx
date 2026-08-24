@@ -758,7 +758,7 @@ function Tokenomics() {
                   </div>
                   <div className="who-t">
                     Mint Process
-                    <span>Minting is available with both native ETH and $VIBE tokens</span>
+                    <span>Minting is available with both ETH and native $VIBE tokens</span>
                   </div>
                 </div>
 
