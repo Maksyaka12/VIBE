@@ -497,6 +497,7 @@ function Tokenomics() {
         {/* BLOCK 3: COMMUNITY REWARDS ECONOMY */}
         <div className="sec-head" style={{ marginBottom: '40px', marginTop: '60px' }}>
           <h2>Community Rewards <span className="bl">Economy</span>.</h2>
+          <p className="sec-sub">Constitutes the 70% reserved for the community in the Buyback Program.</p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))', gap: '24px', marginBottom: '60px' }}>
@@ -508,18 +509,7 @@ function Tokenomics() {
 
               <div className="who">
                 
-                {/* 1. Community Rewards Pool */}
-                <div className="who-r">
-                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Users color="var(--blue)" size={20} />
-                  </div>
-                  <div className="who-t">
-                    Community Rewards Pool <span style={{ color: 'var(--blue)', fontWeight: 900, display: 'inline', marginLeft: '4px' }}>(70%)</span>
-                    <span>70% of every buyback is strictly reserved for the community</span>
-                  </div>
-                </div>
-
-                {/* 2. 10-Day Epoch Distribution */}
+                {/* 1. 10-Day Epoch Distribution */}
                 <div className="who-r">
                   <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Clock color="#7c3aed" size={20} />
@@ -527,6 +517,17 @@ function Tokenomics() {
                   <div className="who-t">
                     10-Day Rolling Epochs
                     <span>Reward distribution across all pools happens every 10 days</span>
+                  </div>
+                </div>
+
+                {/* 2. Epoch Allocation Size */}
+                <div className="who-r">
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Calculator color="var(--blue)" size={20} />
+                  </div>
+                  <div className="who-t">
+                    Epoch Allocation Size
+                    <span>Equals the designated percentage of the total Community Rewards Pool</span>
                   </div>
                 </div>
 
