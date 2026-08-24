@@ -1323,7 +1323,7 @@ function Rewards() {
                       <span>Unclaimed Burn Rule</span>
                     </div>
                     <div style={{ fontSize: '0.82rem', color: 'var(--ink2)', lineHeight: '1.45' }}>
-                      All unclaimed tokens within the designated claim period are <strong style={{ color: '#ff5500' }}>permanently burned</strong>.
+                      All unclaimed tokens within the claim period are <strong style={{ color: '#ff5500' }}>permanently burned</strong>.
                     </div>
                   </div>
                 </div>
@@ -1533,7 +1533,7 @@ function Rewards() {
                   <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Stake</strong>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
-                  Lock $VIBE tokens directly into the verified staking pool on <a href={O1_STAKING_VAULT} target="_blank" rel="noreferrer" style={{ color: 'var(--blue)', textDecoration: 'underline', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '3px' }}>o1.exchange <ArrowUpRight size={13} strokeWidth={2.5} /></a> on Base Network.
+                  Lock $VIBE tokens directly into the verified staking pool on <a href={O1_STAKING_VAULT} target="_blank" rel="noreferrer" style={{ color: 'var(--blue)', textDecoration: 'underline', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '3px' }}>o1.exchange <ArrowUpRight size={13} strokeWidth={2.5} /></a> on Base.
                 </p>
               </div>
 
@@ -1569,7 +1569,7 @@ function Rewards() {
                   <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Epoch Reward Pool</strong>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
-                  Equals exactly 15% of the total Community Rewards Pool available at the start of each epoch.
+                  Equals 15% of the total Community Rewards Pool available at the start of each epoch.
                 </p>
               </div>
             </div>
@@ -1884,7 +1884,7 @@ function Rewards() {
                   <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Vibe Club Royalty Pool</strong>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
-                  Equals exactly 15% of the total Community Rewards Pool available at the start of each epoch.
+                  Equals 15% of the total Community Rewards Pool available at the start of each epoch.
                 </p>
               </div>
             </div>
