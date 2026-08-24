@@ -65,6 +65,7 @@ export function useVibeNftContract() {
   const [mintCount, setMintCount] = useState(0);
   const [mintLive, setMintLive] = useState(true);
   const [contractEthBalance, setContractEthBalance] = useState('0');
+  const [contractVibeBalance, setContractVibeBalance] = useState('0');
   const [totalOnChainVibeBurned, setTotalOnChainVibeBurned] = useState(0);
   const [aggregatorRouterAddress, setAggregatorRouterAddress] = useState('');
 
@@ -131,6 +132,7 @@ export function useVibeNftContract() {
       setMaxSupply(Number(supply));
       setMintLive(live);
       setContractEthBalance(formatEther(ethBal));
+      setContractVibeBalance(formatEther(contractVibeBal));
       setAggregatorRouterAddress(aggRouter);
 
       // Cumulative burned across all phases (80% of mint revenue)
@@ -522,6 +524,7 @@ export function useVibeNftContract() {
     ethPriceFormatted: formatEther(ethPriceWei),
     vibePriceFormatted: Number(formatEther(vibePriceWei)).toLocaleString('en-US'),
     contractEthBalance,
+    contractVibeBalance,
     totalOnChainVibeBurned,
     aggregatorRouterAddress,
     hasMinted,
