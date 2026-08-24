@@ -325,14 +325,16 @@ function Tokenomics() {
   
   const baseCirculating = 900_000_000;
   const currentCirculating = baseCirculating + unlockedTokens - (totalBurnedNum || 0);
+  const currentTotalSupply = 1_000_000_000 - (totalBurnedNum || 0);
   
-  const formatCirculating = (num) => {
+  const formatSupply = (num) => {
     if (num >= 1000000) return (num / 1000000).toFixed(2).replace(/\.00$/, '') + 'M';
     if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
     return num.toLocaleString();
   };
 
-  const circulatingStr = loading ? <Loader2 size={24} className="spin"/> : formatCirculating(currentCirculating);
+  const circulatingStr = loading ? <Loader2 size={24} className="spin"/> : formatSupply(currentCirculating);
+  const totalSupplyStr = loading ? <Loader2 size={24} className="spin"/> : (totalBurnedNum > 0 ? formatSupply(currentTotalSupply) : '1B');
 
   return (
     <section id="tokenomics" className="alt">
@@ -345,7 +347,28 @@ function Tokenomics() {
         </div>
         
         <div className="stat-tiles wide-stats" style={{ marginBottom: '60px' }}>
-          <div className="stile"><span className="v">1B</span><span className="l">Total Supply</span></div>
+          <div className="stile">
+            <span className="v">{totalSupplyStr}</span>
+            <span className="l">Total Supply</span>
+            {!loading && totalBurnedNum > 0 && (
+              <div className="d" style={{ marginTop: '8px' }}>
+                <span style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontSize: '0.8rem',
+                  background: 'rgba(239, 68, 68, 0.12)',
+                  color: '#ef4444',
+                  padding: '2px 8px',
+                  borderRadius: '99px',
+                  fontWeight: '800',
+                  lineHeight: '1'
+                }}>
+                  <Flame size={14} strokeWidth={2.5} /> {totalBurned}
+                </span>
+              </div>
+            )}
+          </div>
           <div className="stile">
             <span className="v">{circulatingStr}</span>
             <span className="l">Circulating</span>
@@ -481,85 +504,112 @@ function Tokenomics() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))', gap: '24px', marginBottom: '60px' }}>
           
-          {/* Left Side: 4 Pillar Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            
-            {/* 1. VibeVerse App Rewards */}
-            <div className="tok-card" style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderTop: '4px solid #0052ff' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                  <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0052ff' }}>
-                    <Gamepad2 size={22} />
-                  </div>
-                  <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#0052ff', letterSpacing: '-0.5px' }}>30%</span>
-                </div>
-                <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>VibeVerse App</h4>
-                <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
-                  Rewards pool in Vibe Verse App.
+          {/* Left Side: Unified Economy & Distribution Breakdown Block */}
+          <div className="tok-card" style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div>
+              <div style={{ marginBottom: '20px' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '4px', color: 'var(--ink)' }}>
+                  Economy &amp; Distribution Breakdown
+                </h3>
+                <p className="sub" style={{ fontSize: '0.85rem', color: 'var(--muted)', margin: 0 }}>
+                  Detailed overview of community rewards allocation and epoch mechanism.
                 </p>
               </div>
-              <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#0052ff', background: 'rgba(0, 82, 255, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
-                <Clock size={12} /> 10-Day Epochs
-              </div>
-            </div>
 
-            {/* 2. $VIBE Staking Pool */}
-            <div className="tok-card" style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderTop: '4px solid #7c3aed' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                  <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(124, 58, 237, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed' }}>
-                    <Coins size={22} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                
+                {/* 1. Community Rewards Pool */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: 'rgba(0, 82, 255, 0.04)', padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(0, 82, 255, 0.12)' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0052ff', flexShrink: 0, marginTop: '2px' }}>
+                    <Users size={18} />
                   </div>
-                  <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#7c3aed', letterSpacing: '-0.5px' }}>15%</span>
-                </div>
-                <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>$VIBE Staking</h4>
-                <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
-                  Yield generation for holders locking $VIBE, reducing circulating supply.
-                </p>
-              </div>
-              <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#7c3aed', background: 'rgba(124, 58, 237, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
-                <Clock size={12} /> 10-Day Epochs
-              </div>
-            </div>
-
-            {/* 3. Vibe Club NFT Holders */}
-            <div className="tok-card" style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderTop: '4px solid #10b981' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                  <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981' }}>
-                    <Crown size={22} />
+                  <div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '2px' }}>
+                      Community Rewards Pool <span style={{ color: '#0052ff', fontSize: '0.8rem', fontWeight: 900 }}>(70% of Buybacks)</span>
+                    </div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
+                      70% of Creator Revenue from buybacks is strictly reserved for the community and automatically allocated across all reward pools.
+                    </div>
                   </div>
-                  <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#10b981', letterSpacing: '-0.5px' }}>15%</span>
                 </div>
-                <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>Vibe Club NFTs</h4>
-                <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
-                  Direct royalties for holders of the 333 Vibe Club NFTs.
-                </p>
-              </div>
-              <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#10b981', background: 'rgba(16, 185, 129, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
-                <Clock size={12} /> 10-Day Epochs
-              </div>
-            </div>
 
-            {/* 4. Strategic Reserve & Marketing */}
-            <div className="tok-card" style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderTop: '4px solid #f59e0b' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                  <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(245, 158, 11, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b' }}>
-                    <ShieldCheck size={22} />
+                {/* 2. 10-Day Epoch Distribution */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: 'rgba(124, 58, 237, 0.04)', padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(124, 58, 237, 0.12)' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(124, 58, 237, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed', flexShrink: 0, marginTop: '2px' }}>
+                    <Clock size={18} />
                   </div>
-                  <span style={{ fontSize: '1.4rem', fontWeight: '900', color: '#f59e0b', letterSpacing: '-0.5px' }}>40%</span>
+                  <div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '2px' }}>
+                      10-Day Rolling Epochs <span style={{ color: '#7c3aed', fontSize: '0.8rem', fontWeight: 900 }}>(Distribution Cycle)</span>
+                    </div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
+                      Reward distributions for all reward types occur in epochs. Each epoch across all categories lasts exactly 10 days.
+                    </div>
+                  </div>
                 </div>
-                <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--ink)' }}>Reserve</h4>
-                <p style={{ fontSize: '0.82rem', color: 'var(--muted)', margin: 0, lineHeight: '1.45' }}>
-                  Stability buffer for continuous reward pools and marketing campaigns.
-                </p>
-              </div>
-              <div style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.72rem', fontWeight: 800, color: '#f59e0b', background: 'rgba(245, 158, 11, 0.06)', padding: '4px 8px', borderRadius: '6px', width: 'fit-content' }}>
-                <Sparkles size={12} /> Perpetual Buffer
+
+                {/* 3. VibeVerse App (30%) */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: 'rgba(59, 130, 246, 0.04)', padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(59, 130, 246, 0.12)' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(59, 130, 246, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6', flexShrink: 0, marginTop: '2px' }}>
+                    <Gamepad2 size={18} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '2px' }}>
+                      VibeVerse App <span style={{ color: '#3b82f6', fontSize: '0.8rem', fontWeight: 900 }}>(30%)</span>
+                    </div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
+                      Dedicated rewards pool integrated directly into the upcoming Vibe Verse App ecosystem.
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. $VIBE Staking (15%) */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: 'rgba(168, 85, 247, 0.04)', padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(168, 85, 247, 0.12)' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(168, 85, 247, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#a855f7', flexShrink: 0, marginTop: '2px' }}>
+                    <Coins size={18} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '2px' }}>
+                      $VIBE Staking <span style={{ color: '#a855f7', fontSize: '0.8rem', fontWeight: 900 }}>(15%)</span>
+                    </div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
+                      Yield generation for holders locking $VIBE on o1.exchange, reducing circulating market supply.
+                    </div>
+                  </div>
+                </div>
+
+                {/* 5. Vibe Club NFTs (15%) */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: 'rgba(16, 185, 129, 0.04)', padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(16, 185, 129, 0.12)' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', flexShrink: 0, marginTop: '2px' }}>
+                    <Crown size={18} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '2px' }}>
+                      Vibe Club NFTs <span style={{ color: '#10b981', fontSize: '0.8rem', fontWeight: 900 }}>(15%)</span>
+                    </div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
+                      Direct royalties distributed to holders of the 333 Vibe Club NFTs.
+                    </div>
+                  </div>
+                </div>
+
+                {/* 6. Reserve (40%) */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: 'rgba(245, 158, 11, 0.04)', padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(245, 158, 11, 0.12)' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b', flexShrink: 0, marginTop: '2px' }}>
+                    <ShieldCheck size={18} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '2px' }}>
+                      Reserve <span style={{ color: '#f59e0b', fontSize: '0.8rem', fontWeight: 900 }}>(40%)</span>
+                    </div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
+                      Perpetual stability buffer ensuring continuous reward pool refills and ecosystem growth.
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
-
           </div>
 
           {/* Right Side: Donut Chart */}
