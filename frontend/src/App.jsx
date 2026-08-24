@@ -1216,6 +1216,166 @@ function Rewards() {
             <div className="sec-head" style={{ marginBottom: '36px' }}>
               <h2>Rewards <span className="bl">Hub</span>.</h2>
               <p className="sec-sub">Track active reward epochs and community events.</p>
+
+              {/* 3 Info Highlights / Guidelines */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+                  gap: '14px',
+                  marginTop: '24px'
+                }}
+              >
+                {/* 1. Holder & Vibe Club */}
+                <div
+                  style={{
+                    background: '#ffffff',
+                    border: '1.5px solid rgba(0, 82, 255, 0.18)',
+                    borderRadius: '16px',
+                    padding: '16px 18px',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '14px',
+                    boxShadow: '0 4px 16px rgba(0, 82, 255, 0.05)',
+                    textAlign: 'left'
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '10px',
+                      background: 'rgba(0, 82, 255, 0.08)',
+                      border: '1px solid rgba(0, 82, 255, 0.2)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      marginTop: '2px'
+                    }}
+                  >
+                    <Sparkles size={18} color="var(--blue)" />
+                  </div>
+                  <div>
+                    <div
+                      style={{
+                        fontSize: '0.85rem',
+                        fontWeight: 800,
+                        color: 'var(--ink)',
+                        marginBottom: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      <span>Direct Hub Claim</span>
+                    </div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
+                      <strong style={{ color: 'var(--ink)' }}>Holder Rewards</strong> &amp; <strong style={{ color: 'var(--ink)' }}>Vibe Club</strong> rewards are claimed directly in the Rewards Hub.
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Staking & Giveaways */}
+                <div
+                  style={{
+                    background: '#ffffff',
+                    border: '1.5px solid rgba(139, 92, 246, 0.2)',
+                    borderRadius: '16px',
+                    padding: '16px 18px',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '14px',
+                    boxShadow: '0 4px 16px rgba(139, 92, 246, 0.05)',
+                    textAlign: 'left'
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '10px',
+                      background: 'rgba(139, 92, 246, 0.08)',
+                      border: '1px solid rgba(139, 92, 246, 0.25)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      marginTop: '2px'
+                    }}
+                  >
+                    <Coins size={18} color="#8b5cf6" />
+                  </div>
+                  <div>
+                    <div
+                      style={{
+                        fontSize: '0.85rem',
+                        fontWeight: 800,
+                        color: 'var(--ink)',
+                        marginBottom: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      <span>Staking &amp; Giveaways</span>
+                    </div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
+                      <strong style={{ color: 'var(--ink)' }}>Staking</strong> rewards are claimed on o1.exchange. <strong style={{ color: 'var(--ink)' }}>Giveaways</strong> are sent directly to wallets.
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Unclaimed Tokens Burn */}
+                <div
+                  style={{
+                    background: '#ffffff',
+                    border: '1.5px solid rgba(255, 85, 0, 0.2)',
+                    borderRadius: '16px',
+                    padding: '16px 18px',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '14px',
+                    boxShadow: '0 4px 16px rgba(255, 85, 0, 0.05)',
+                    textAlign: 'left'
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '10px',
+                      background: 'rgba(255, 85, 0, 0.08)',
+                      border: '1px solid rgba(255, 85, 0, 0.25)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      marginTop: '2px'
+                    }}
+                  >
+                    <Flame size={18} color="#ff5500" />
+                  </div>
+                  <div>
+                    <div
+                      style={{
+                        fontSize: '0.85rem',
+                        fontWeight: 800,
+                        color: 'var(--ink)',
+                        marginBottom: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      <span>Unclaimed Burn Rule</span>
+                    </div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
+                      All unclaimed tokens within the designated claim period across all reward types are <strong style={{ color: '#ff5500' }}>permanently burned</strong>.
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* 5 Graphic Category Cards Grid */}
