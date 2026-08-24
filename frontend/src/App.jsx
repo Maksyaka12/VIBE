@@ -494,9 +494,9 @@ function Tokenomics() {
           </div>
         </div>
 
-        {/* BLOCK 3: COMMUNITY REWARDS ECONOMY */}
+        {/* BLOCK 3: REWARDS ECONOMY */}
         <div className="sec-head" style={{ marginBottom: '40px', marginTop: '60px' }}>
-          <h2>Community Rewards <span className="bl">Economy</span>.</h2>
+          <h2>Rewards <span className="bl">Economy</span>.</h2>
           <p className="sec-sub">Constitutes the 70% reserved for the community in the Buyback Program.</p>
         </div>
 
@@ -576,7 +576,7 @@ function Tokenomics() {
                 </div>
 
                 {/* 7. Action Button: Explore Rewards Hub */}
-                <a href="#rewards" className="who-r" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--blue)' }}>
+                <Link to="/rewards" className="who-r" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--blue)' }}>
                   <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Gift color="#fff" size={20} />
                   </div>
@@ -586,7 +586,7 @@ function Tokenomics() {
                       Track available rewards <ArrowRightCircle size={14} style={{ verticalAlign: 'middle', marginLeft: 4 }} />
                     </span>
                   </div>
-                </a>
+                </Link>
 
               </div>
             </div>
@@ -697,6 +697,154 @@ function Tokenomics() {
               </div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.2)', padding: '4px 10px', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 800, color: '#f59e0b' }}>
                 <ShieldCheck size={13} /> Reserve 40%
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* BLOCK 4: VIBE CLUB ECONOMY */}
+        <div className="sec-head" style={{ marginBottom: '40px', marginTop: '60px' }}>
+          <h2>Vibe Club <span className="bl">Economy</span>.</h2>
+          <p className="sec-sub">First-ever NFT collection directly integrated into the B20 token economy.</p>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))', gap: '24px', marginBottom: '60px' }}>
+          
+          {/* Left Side: Vibe Club Breakdown */}
+          <div className="tok-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div>
+              <h3>Vibe Club Breakdown</h3>
+
+              <div className="who">
+                
+                {/* 1. Deflationary Mint Burn */}
+                <div className="who-r">
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Flame color="#ef4444" size={20} />
+                  </div>
+                  <div className="who-t">
+                    Deflationary Mint Burn
+                    <span>Every mint triggers an instant burn, reducing total $VIBE supply</span>
+                  </div>
+                </div>
+
+                {/* 2. B20 Standard Integration */}
+                <div className="who-r">
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Sparkles color="var(--blue)" size={20} />
+                  </div>
+                  <div className="who-t">
+                    First B20 NFT Collection
+                    <span>First-ever NFT collection fully integrated into the B20 token economy</span>
+                  </div>
+                </div>
+
+                {/* 3. 10-Day Royalty Yield */}
+                <div className="who-r">
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Crown color="#10b981" size={20} />
+                  </div>
+                  <div className="who-t">
+                    10-Day Royalty Yield
+                    <span>NFT holders receive regular royalty payouts every 10 days</span>
+                  </div>
+                </div>
+
+                {/* 4. Limited 333 Supply */}
+                <div className="who-r">
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <ShieldCheck color="#f59e0b" size={20} />
+                  </div>
+                  <div className="who-t">
+                    Limited 333 Supply
+                    <span>Strictly capped 333 NFTs with lifetime community benefits</span>
+                  </div>
+                </div>
+
+                {/* 5. Action Button: Join Vibe Club */}
+                <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" className="who-r" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--blue)' }}>
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Crown color="#fff" size={20} />
+                  </div>
+                  <div className="who-t" style={{ color: '#fff' }}>
+                    Join Vibe Club
+                    <span style={{ color: 'rgba(255,255,255,0.8)' }}>
+                      Mint your NFT <ArrowUpRight size={14} style={{ verticalAlign: 'middle', marginLeft: 4 }} />
+                    </span>
+                  </div>
+                </a>
+
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side: Mint Revenue Donut Chart */}
+          <div className="tok-card" style={{ padding: '32px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative' }}>
+            <div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '4px', color: 'var(--ink)' }}>Mint Revenue Allocation</h3>
+              <p className="sub" style={{ fontSize: '0.85rem', color: 'var(--muted)', margin: 0 }}>Utilization of all ETH collected from the Vibe Club NFT mint.</p>
+            </div>
+
+            <div style={{ position: 'relative', width: '100%', maxWidth: '420px', margin: '16px auto 8px', flexShrink: 0 }}>
+              <svg viewBox="0 0 420 280" style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}>
+                <defs>
+                  <linearGradient id="nftBurnGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ff5f5f" />
+                    <stop offset="100%" stopColor="#ef4444" />
+                  </linearGradient>
+                  <linearGradient id="nftBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#3b82f6" />
+                    <stop offset="100%" stopColor="#0052ff" />
+                  </linearGradient>
+
+                  <filter id="nftRedGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#ef4444" floodOpacity="0.25" />
+                  </filter>
+                  <filter id="nftBlueGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#0052ff" floodOpacity="0.25" />
+                  </filter>
+                </defs>
+
+                <g transform="translate(210, 140)">
+                  {/* Track Ring */}
+                  <circle cx="0" cy="0" r="80" fill="none" stroke="#f1f5f9" strokeWidth="18" />
+
+                  {/* 80% Permanent Burn (Spans 0 to 80 -> Offset -2, length 76) */}
+                  <circle cx="0" cy="0" r="80" fill="none" stroke="url(#nftBurnGrad)" strokeWidth="18"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="76 100" strokeDashoffset="-2"
+                          transform="rotate(-90)" filter="url(#nftRedGlow)" style={{ transition: 'all 0.5s ease' }} />
+
+                  {/* 20% Reserved for Community (Spans 80 to 100 -> Offset -82, length 16) */}
+                  <circle cx="0" cy="0" r="80" fill="none" stroke="url(#nftBlueGrad)" strokeWidth="18"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="16 100" strokeDashoffset="-82"
+                          transform="rotate(-90)" filter="url(#nftBlueGlow)" style={{ transition: 'all 0.5s ease' }} />
+
+                  {/* Left Callout (Burn 80% - Top Left) */}
+                  <circle cx="-76" cy="-25" r="4" fill="#ef4444" />
+                  <polyline points="-76,-25 -105,-55 -135,-55" fill="none" stroke="#ef4444" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="-140" y="-49" fill="#ef4444" fontSize="13" fontWeight="800" textAnchor="end">Permanent Burn 80%</text>
+
+                  {/* Right Callout (Reserved for Community 20% - Top Right) */}
+                  <circle cx="65" cy="-47" r="4" fill="#0052ff" />
+                  <polyline points="65,-47 95,-70 125,-70" fill="none" stroke="#0052ff" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="130" y="-76" fill="#0052ff" fontSize="13" fontWeight="800" textAnchor="start">Reserved for</text>
+                  <text x="130" y="-61" fill="#0052ff" fontSize="13" fontWeight="800" textAnchor="start">Community 20%</text>
+
+                  {/* Center Text */}
+                  <text x="0" y="-3" fill="var(--ink)" fontSize="30" fontWeight="900" textAnchor="middle" letterSpacing="-0.5px">100%</text>
+                  <text x="0" y="18" fill="var(--muted)" fontSize="10" fontWeight="800" textAnchor="middle" letterSpacing="1.5px">MINT REVENUE</text>
+                </g>
+              </svg>
+            </div>
+
+            {/* Bottom Legend Pills */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '8px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '5px 12px', borderRadius: '99px', fontSize: '0.8rem', fontWeight: 800, color: '#ef4444' }}>
+                <Flame size={14} /> Burn 80%
+              </div>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0, 82, 255, 0.08)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '5px 12px', borderRadius: '99px', fontSize: '0.8rem', fontWeight: 800, color: 'var(--blue)' }}>
+                <Users size={14} /> Community 20%
               </div>
             </div>
           </div>
