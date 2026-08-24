@@ -1219,7 +1219,65 @@ const VIBECLUB_EPOCHS = [
   { epoch: 'Royalty 4', claimDate: '23 Sep 2026', dateObj: new Date('2026-09-23T00:00:00Z'), poolAmount: 'TBA' },
 ];
 
+function formatCountdown(targetDate) {
+  if (!targetDate) return '';
+  const now = new Date().getTime();
+  const target = new Date(targetDate).getTime();
+  const diff = target - now;
+
+  if (diff <= 0) return 'Ended';
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+  const pad = (n) => String(n).padStart(2, '0');
+
+  if (days > 0) {
+    return `${days}D:${pad(hours)}H:${pad(minutes)}M`;
+  }
+  return `${pad(hours)}H:${pad(minutes)}M`;
+}
+
+function GiveawayCountdown({ targetDate, isOngoing }) {
+  const [timeLeft, setTimeLeft] = useState(() => formatCountdown(targetDate));
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft(formatCountdown(targetDate));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [targetDate]);
+
+  return (
+    <strong
+      style={{
+        color: isOngoing ? 'var(--ink)' : '#475569',
+        fontWeight: 800,
+        fontSize: '0.76rem',
+        whiteSpace: 'nowrap',
+        textAlign: 'right',
+        fontVariantNumeric: 'tabular-nums',
+        letterSpacing: '0.02em'
+      }}
+    >
+      {timeLeft}
+    </strong>
+  );
+}
+
 const GIVEAWAYS_DATA = [
+  {
+    id: 4,
+    title: '7 NFTs Vibe Club',
+    image: '/rewards/vibe-club.jfif',
+    winners: '7 Winners',
+    prizePool: '7 NFTs',
+    burnNote: '~3M $VIBE burn',
+    status: 'ongoing',
+    deadlineDate: new Date('2026-08-27T12:00:00Z'),
+    link: 'https://x.com/vibeB20'
+  },
   {
     id: 3,
     title: '1000 Holders',
@@ -2876,8 +2934,13 @@ function Rewards() {
                           <div style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap', marginBottom: '2px' }}>
                             <Coins size={12} color="var(--blue)" /> Prize Pool
                           </div>
-                          <div style={{ fontSize: '1.42rem', fontWeight: 900, color: isOngoing ? 'var(--ink)' : '#64748b', marginTop: '2px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px', whiteSpace: 'nowrap' }}>
-                            {ev.prizePool}
+                          <div style={{ fontSize: '1.38rem', fontWeight: 900, color: isOngoing ? 'var(--ink)' : '#64748b', marginTop: '2px', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+                            <span>{ev.prizePool}</span>
+                            {ev.burnNote && (
+                              <span style={{ fontSize: '0.72rem', color: '#ef4444', fontWeight: 800, background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '2px 7px', borderRadius: '99px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                                🔥 {ev.burnNote}
+                              </span>
+                            )}
                           </div>
                         </div>
 
@@ -2889,12 +2952,21 @@ function Rewards() {
                             </span>
                             <strong style={{ color: isOngoing ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ev.winners}</strong>
                           </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
-                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
-                              <Gift size={12} color="#0284c7" /> Distribution
-                            </span>
-                            <strong style={{ color: isOngoing ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ev.distribution}</strong>
-                          </div>
+                          {ev.deadlineDate ? (
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                              <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                                <Clock size={12} color="#0284c7" /> Deadline
+                              </span>
+                              <GiveawayCountdown targetDate={ev.deadlineDate} isOngoing={isOngoing} />
+                            </div>
+                          ) : (
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                              <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                                <Gift size={12} color="#0284c7" /> Distribution
+                              </span>
+                              <strong style={{ color: isOngoing ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ev.distribution}</strong>
+                            </div>
+                          )}
                         </div>
                       </div>
 
