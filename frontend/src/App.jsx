@@ -497,113 +497,105 @@ function Tokenomics() {
         {/* BLOCK 3: COMMUNITY REWARDS ECONOMY */}
         <div className="sec-head" style={{ marginBottom: '40px', marginTop: '60px' }}>
           <h2>Community Rewards <span className="bl">Economy</span>.</h2>
-          <p className="sec-sub">
-            The 70% Reserved for Community from buybacks belongs entirely to the community, distributed across continuous 10-day rolling epoch cycles.
-          </p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))', gap: '24px', marginBottom: '60px' }}>
           
-          {/* Left Side: Unified Economy & Distribution Breakdown Block */}
+          {/* Left Side: Unified Distribution Breakdown Block */}
           <div className="tok-card" style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
-              <div style={{ marginBottom: '20px' }}>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '4px', color: 'var(--ink)' }}>
-                  Economy &amp; Distribution Breakdown
-                </h3>
-                <p className="sub" style={{ fontSize: '0.85rem', color: 'var(--muted)', margin: 0 }}>
-                  Detailed overview of community rewards allocation and epoch mechanism.
-                </p>
-              </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '16px', color: 'var(--ink)' }}>
+                Distribution Breakdown
+              </h3>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 
                 {/* 1. Community Rewards Pool */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: 'rgba(0, 82, 255, 0.04)', padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(0, 82, 255, 0.12)' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0052ff', flexShrink: 0, marginTop: '2px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--blue)', flexShrink: 0 }}>
                     <Users size={18} />
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '2px' }}>
-                      Community Rewards Pool <span style={{ color: '#0052ff', fontSize: '0.8rem', fontWeight: 900 }}>(70% of Buybacks)</span>
+                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.25 }}>
+                      Community Rewards Pool <span style={{ color: 'var(--blue)', fontSize: '0.78rem', fontWeight: 900 }}>(70%)</span>
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
-                      70% of Creator Revenue from buybacks is strictly reserved for the community and automatically allocated across all reward pools.
+                    <div style={{ fontSize: '0.76rem', color: 'var(--muted)', marginTop: '2px' }}>
+                      70% of every buyback is strictly reserved for the community.
                     </div>
                   </div>
                 </div>
 
                 {/* 2. 10-Day Epoch Distribution */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: 'rgba(124, 58, 237, 0.04)', padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(124, 58, 237, 0.12)' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(124, 58, 237, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed', flexShrink: 0, marginTop: '2px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed', flexShrink: 0 }}>
                     <Clock size={18} />
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '2px' }}>
-                      10-Day Rolling Epochs <span style={{ color: '#7c3aed', fontSize: '0.8rem', fontWeight: 900 }}>(Distribution Cycle)</span>
+                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.25 }}>
+                      10-Day Rolling Epochs
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
-                      Reward distributions for all reward types occur in epochs. Each epoch across all categories lasts exactly 10 days.
+                    <div style={{ fontSize: '0.76rem', color: 'var(--muted)', marginTop: '2px' }}>
+                      Reward distribution across all pools happens every 10 days.
                     </div>
                   </div>
                 </div>
 
                 {/* 3. VibeVerse App (30%) */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: 'rgba(59, 130, 246, 0.04)', padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(59, 130, 246, 0.12)' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(59, 130, 246, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6', flexShrink: 0, marginTop: '2px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6', flexShrink: 0 }}>
                     <Gamepad2 size={18} />
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '2px' }}>
-                      VibeVerse App <span style={{ color: '#3b82f6', fontSize: '0.8rem', fontWeight: 900 }}>(30%)</span>
+                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.25 }}>
+                      VibeVerse App <span style={{ color: '#3b82f6', fontSize: '0.78rem', fontWeight: 900 }}>(30%)</span>
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
-                      Dedicated rewards pool integrated directly into the upcoming Vibe Verse App ecosystem.
+                    <div style={{ fontSize: '0.76rem', color: 'var(--muted)', marginTop: '2px' }}>
+                      Rewards pool inside the upcoming Vibe Verse App.
                     </div>
                   </div>
                 </div>
 
                 {/* 4. $VIBE Staking (15%) */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: 'rgba(168, 85, 247, 0.04)', padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(168, 85, 247, 0.12)' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(168, 85, 247, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#a855f7', flexShrink: 0, marginTop: '2px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#a855f7', flexShrink: 0 }}>
                     <Coins size={18} />
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '2px' }}>
-                      $VIBE Staking <span style={{ color: '#a855f7', fontSize: '0.8rem', fontWeight: 900 }}>(15%)</span>
+                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.25 }}>
+                      $VIBE Staking <span style={{ color: '#a855f7', fontSize: '0.78rem', fontWeight: 900 }}>(15%)</span>
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
-                      Yield generation for holders locking $VIBE on o1.exchange, reducing circulating market supply.
+                    <div style={{ fontSize: '0.76rem', color: 'var(--muted)', marginTop: '2px' }}>
+                      Yield for locking $VIBE in verified staking pool on o1.
                     </div>
                   </div>
                 </div>
 
                 {/* 5. Vibe Club NFTs (15%) */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: 'rgba(16, 185, 129, 0.04)', padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(16, 185, 129, 0.12)' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', flexShrink: 0, marginTop: '2px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', flexShrink: 0 }}>
                     <Crown size={18} />
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '2px' }}>
-                      Vibe Club NFTs <span style={{ color: '#10b981', fontSize: '0.8rem', fontWeight: 900 }}>(15%)</span>
+                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.25 }}>
+                      Vibe Club NFTs <span style={{ color: '#10b981', fontSize: '0.78rem', fontWeight: 900 }}>(15%)</span>
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
-                      Direct royalties distributed to holders of the 333 Vibe Club NFTs.
+                    <div style={{ fontSize: '0.76rem', color: 'var(--muted)', marginTop: '2px' }}>
+                      Direct royalties for holders of the 333 Vibe Club NFTs.
                     </div>
                   </div>
                 </div>
 
                 {/* 6. Reserve (40%) */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', background: 'rgba(245, 158, 11, 0.04)', padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(245, 158, 11, 0.12)' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(245, 158, 11, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b', flexShrink: 0, marginTop: '2px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
+                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b', flexShrink: 0 }}>
                     <ShieldCheck size={18} />
                   </div>
                   <div>
-                    <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--ink)', marginBottom: '2px' }}>
-                      Reserve <span style={{ color: '#f59e0b', fontSize: '0.8rem', fontWeight: 900 }}>(40%)</span>
+                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.25 }}>
+                      Reserve <span style={{ color: '#f59e0b', fontSize: '0.78rem', fontWeight: 900 }}>(40%)</span>
                     </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
-                      Perpetual stability buffer ensuring continuous reward pool refills and ecosystem growth.
+                    <div style={{ fontSize: '0.76rem', color: 'var(--muted)', marginTop: '2px' }}>
+                      Buffer for continuous reward refills and marketing.
                     </div>
                   </div>
                 </div>
