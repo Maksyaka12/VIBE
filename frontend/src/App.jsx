@@ -98,7 +98,19 @@ function Nav() {
           <ul className="nav-menu">
             {navLinks.map(({ id, label }) => (
               <li key={id}>
-                <Link to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Link
+                  to={`/${id}`}
+                  onClick={() => setOpen(false)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    ...(id === 'rewards' ? {
+                      color: '#ff6600',
+                      fontWeight: 800
+                    } : {})
+                  }}
+                >
                   {label}
                 </Link>
               </li>
@@ -120,7 +132,21 @@ function Nav() {
       <div className={`mob-menu ${open ? 'open' : ''}`}>
         <div className="mob-links">
           {navLinks.map(({ id, label }) => (
-            <Link key={id} to={`/${id}`} onClick={() => setOpen(false)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+            <Link
+              key={id}
+              to={`/${id}`}
+              onClick={() => setOpen(false)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+                ...(id === 'rewards' ? {
+                  color: '#ff6600',
+                  fontWeight: 800
+                } : {})
+              }}
+            >
               {label}
             </Link>
           ))}
@@ -1163,18 +1189,22 @@ function Rewards() {
       image: '/rewards/vibe-club.jfif',
     },
     {
-      id: 'vibe-verse',
-      label: 'Vibe Verse',
-      image: '/rewards/vibe-verse.jfif',
-    },
-    {
       id: 'giveaways',
       label: 'Giveaways',
       image: '/rewards/giveaways.jfif',
     },
+    {
+      id: 'vibe-verse',
+      label: 'Vibe Verse',
+      image: '/rewards/vibe-verse.jfif',
+    },
   ];
 
   const getCategoryBadges = (catId) => {
+    if (catId === 'vibe-verse') {
+      return [{ type: 'coming-soon', label: 'COMING SOON' }];
+    }
+
     let active = 0;
     let upcoming = 0;
 
@@ -1187,9 +1217,6 @@ function Rewards() {
     } else if (catId === 'vibe-club') {
       active = VIBECLUB_EPOCHS.filter(u => now >= u.dateObj).length;
       upcoming = VIBECLUB_EPOCHS.filter(u => now < u.dateObj).length;
-    } else if (catId === 'vibe-verse') {
-      active = 0;
-      upcoming = 1;
     } else if (catId === 'giveaways') {
       active = GIVEAWAYS_DATA.filter(e => e.status === 'ongoing').length;
       upcoming = GIVEAWAYS_DATA.filter(e => e.status !== 'ended' && e.status !== 'ongoing').length;
@@ -1371,7 +1398,7 @@ function Rewards() {
                       <span>Unclaimed Burn Rule</span>
                     </div>
                     <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: '1.45' }}>
-                      All unclaimed tokens within the designated claim period across all reward types are <strong style={{ color: '#ff5500' }}>permanently burned</strong>.
+                      All unclaimed tokens within the designated claim period are <strong style={{ color: '#ff5500' }}>permanently burned</strong>.
                     </div>
                   </div>
                 </div>
@@ -1440,8 +1467,8 @@ function Rewards() {
                           key={idx}
                           style={{
                             background: '#090d16',
-                            color: b.type === 'active' ? '#22c55e' : '#94a3b8',
-                            border: b.type === 'active' ? '1px solid rgba(34, 197, 94, 0.4)' : '1px solid rgba(148, 163, 184, 0.25)',
+                            color: b.type === 'active' ? '#22c55e' : b.type === 'coming-soon' ? '#f59e0b' : '#94a3b8',
+                            border: b.type === 'active' ? '1px solid rgba(34, 197, 94, 0.4)' : b.type === 'coming-soon' ? '1px solid rgba(245, 158, 11, 0.4)' : '1px solid rgba(148, 163, 184, 0.25)',
                             backdropFilter: 'blur(8px)',
                             padding: '3px 8px',
                             borderRadius: '99px',
@@ -1466,6 +1493,9 @@ function Rewards() {
                                 display: 'inline-block'
                               }}
                             />
+                          )}
+                          {b.type === 'coming-soon' && (
+                            <Lock size={10} color="#f59e0b" strokeWidth={2.3} />
                           )}
                           {b.type === 'upcoming' && (
                             <Clock size={10} color="#94a3b8" strokeWidth={2.3} />
