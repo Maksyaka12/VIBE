@@ -740,18 +740,29 @@ function Tokenomics() {
                   </div>
                 </div>
 
-                {/* 3. 10-Day Royalty Yield */}
+                {/* 3. NFTs Utility */}
                 <div className="who-r">
                   <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Crown color="#10b981" size={20} />
                   </div>
                   <div className="who-t">
-                    10-Day Royalty Yield
-                    <span>NFT holders receive regular royalty payouts every 10 days</span>
+                    NFTs Utility
+                    <span>Holders receive regular royalty payouts distributed every 10 days</span>
                   </div>
                 </div>
 
-                {/* 4. Limited 333 Supply */}
+                {/* 4. Mint Process */}
+                <div className="who-r">
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Coins color="#7c3aed" size={20} />
+                  </div>
+                  <div className="who-t">
+                    Mint Process
+                    <span>Minting is available with both native ETH and $VIBE tokens</span>
+                  </div>
+                </div>
+
+                {/* 5. Limited 333 Supply */}
                 <div className="who-r">
                   <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <ShieldCheck color="#f59e0b" size={20} />
@@ -762,7 +773,7 @@ function Tokenomics() {
                   </div>
                 </div>
 
-                {/* 5. Action Button: Join Vibe Club */}
+                {/* 6. Action Button: Join Vibe Club */}
                 <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" className="who-r" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--blue)' }}>
                   <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Crown color="#fff" size={20} />
@@ -783,7 +794,7 @@ function Tokenomics() {
           <div className="tok-card" style={{ padding: '32px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative' }}>
             <div>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '4px', color: 'var(--ink)' }}>Mint Revenue Allocation</h3>
-              <p className="sub" style={{ fontSize: '0.85rem', color: 'var(--muted)', margin: 0 }}>Utilization of all ETH collected from the Vibe Club NFT mint.</p>
+              <p className="sub" style={{ fontSize: '0.85rem', color: 'var(--muted)', margin: 0 }}>Utilization of revenue collected from the Vibe Club NFT mint.</p>
             </div>
 
             <div style={{ position: 'relative', width: '100%', maxWidth: '420px', margin: '16px auto 8px', flexShrink: 0 }}>
@@ -810,26 +821,26 @@ function Tokenomics() {
                   {/* Track Ring */}
                   <circle cx="0" cy="0" r="80" fill="none" stroke="#f1f5f9" strokeWidth="18" />
 
-                  {/* 80% Permanent Burn (Spans 0 to 80 -> Offset -2, length 76) */}
-                  <circle cx="0" cy="0" r="80" fill="none" stroke="url(#nftBurnGrad)" strokeWidth="18"
-                          strokeLinecap="round" pathLength="100" strokeDasharray="76 100" strokeDashoffset="-2"
-                          transform="rotate(-90)" filter="url(#nftRedGlow)" style={{ transition: 'all 0.5s ease' }} />
-
-                  {/* 20% Reserved for Community (Spans 80 to 100 -> Offset -82, length 16) */}
+                  {/* 20% Reserved for Community (Spans 0 to 20 -> Offset -2.5, length 15) */}
                   <circle cx="0" cy="0" r="80" fill="none" stroke="url(#nftBlueGrad)" strokeWidth="18"
-                          strokeLinecap="round" pathLength="100" strokeDasharray="16 100" strokeDashoffset="-82"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="15 100" strokeDashoffset="-2.5"
                           transform="rotate(-90)" filter="url(#nftBlueGlow)" style={{ transition: 'all 0.5s ease' }} />
 
-                  {/* Left Callout (Burn 80% - Top Left) */}
-                  <circle cx="-76" cy="-25" r="4" fill="#ef4444" />
-                  <polyline points="-76,-25 -105,-55 -135,-55" fill="none" stroke="#ef4444" strokeWidth="1.2" strokeDasharray="3 3" />
-                  <text x="-140" y="-49" fill="#ef4444" fontSize="13" fontWeight="800" textAnchor="end">Permanent Burn 80%</text>
+                  {/* 80% Burn (Spans 20 to 100 -> Offset -22.5, length 75) */}
+                  <circle cx="0" cy="0" r="80" fill="none" stroke="url(#nftBurnGrad)" strokeWidth="18"
+                          strokeLinecap="round" pathLength="100" strokeDasharray="75 100" strokeDashoffset="-22.5"
+                          transform="rotate(-90)" filter="url(#nftRedGlow)" style={{ transition: 'all 0.5s ease' }} />
 
-                  {/* Right Callout (Reserved for Community 20% - Top Right) */}
-                  <circle cx="65" cy="-47" r="4" fill="#0052ff" />
-                  <polyline points="65,-47 95,-70 125,-70" fill="none" stroke="#0052ff" strokeWidth="1.2" strokeDasharray="3 3" />
-                  <text x="130" y="-76" fill="#0052ff" fontSize="13" fontWeight="800" textAnchor="start">Reserved for</text>
-                  <text x="130" y="-61" fill="#0052ff" fontSize="13" fontWeight="800" textAnchor="start">Community 20%</text>
+                  {/* Left Callout (Burn 80% - Top Left at 85% of circle) */}
+                  <circle cx="-65" cy="-47" r="4" fill="#ef4444" />
+                  <polyline points="-65,-47 -95,-70 -125,-70" fill="none" stroke="#ef4444" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="-130" y="-64" fill="#ef4444" fontSize="13" fontWeight="800" textAnchor="end">Burn 80%</text>
+
+                  {/* Right Callout (Reserved for Community 20% - Top Right at 10% of circle) */}
+                  <circle cx="47" cy="-65" r="4" fill="#0052ff" />
+                  <polyline points="47,-65 80,-80 120,-80" fill="none" stroke="#0052ff" strokeWidth="1.2" strokeDasharray="3 3" />
+                  <text x="125" y="-86" fill="#0052ff" fontSize="13" fontWeight="800" textAnchor="start">Reserved for</text>
+                  <text x="125" y="-71" fill="#0052ff" fontSize="13" fontWeight="800" textAnchor="start">Community 20%</text>
 
                   {/* Center Text */}
                   <text x="0" y="-3" fill="var(--ink)" fontSize="30" fontWeight="900" textAnchor="middle" letterSpacing="-0.5px">100%</text>
