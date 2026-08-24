@@ -133,9 +133,15 @@ export function useVibeNftContract() {
       setContractEthBalance(formatEther(ethBal));
       setAggregatorRouterAddress(aggRouter);
 
-      // Exact on-chain burned $VIBE: 80% burned to dead address, 20% kept on contract rewards pool => burned = contractVibe * 4
-      const burnedWei = BigInt(contractVibeBal) * 4n;
-      setTotalOnChainVibeBurned(Number(formatEther(burnedWei)));
+      // Cumulative burned across all phases (80% of mint revenue)
+      const p1M = Math.min(mintedNum, 103);
+      const p2M = Math.max(0, Math.min(mintedNum - 103, 100));
+      const p3M = Math.max(0, Math.min(mintedNum - 203, 100));
+      const p4M = Math.max(0, mintedNum - 303);
+
+      const ethBurned = (p1M * 0.005 + p2M * 0.015 + p3M * 0.05 + p4M * 0.1) * 0.8;
+      // Default estimate if DEX price not loaded yet, or fallback
+      setTotalOnChainVibeBurned(ethBurned);
 
       // Automated phase calculation
       let phase = 1;
