@@ -1530,4 +1530,25 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
     border: 1px solid rgba(0, 82, 255, 0.2) !important;
     box-shadow: none !important;
   }
+}
+
+/* Rewards FAQ Item Styles */
+.rewards-faq-item {
+  background: linear-gradient(135deg, #e4f7fc 0%, #c4f0fb 100%);
+  border: 1.5px solid rgba(0, 160, 240, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 160, 240, 0.1);
+  transition: all 0.25s ease;
+}
+
+.rewards-faq-item:hover {
+  border-color: rgba(0, 140, 240, 0.55);
+  box-shadow: 0 6px 20px rgba(0, 160, 240, 0.16);
+}
+
+@media (max-width: 768px) {
+  .rewards-faq-item {
+    background: #ffffff !important;
+    border: 1.5px solid rgba(0, 82, 255, 0.18) !important;
+    box-shadow: 0 3px 12px rgba(0, 82, 255, 0.05) !important;
+  }
 }

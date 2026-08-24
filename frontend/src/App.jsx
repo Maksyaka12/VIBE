@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift, Users, ShieldCheck, Calculator, Calendar, RotateCcw, Gamepad2, Coins, Sparkles, Lock } from 'lucide-react';
+import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift, Users, ShieldCheck, Calculator, Calendar, RotateCcw, Gamepad2, Coins, Sparkles, Lock, ChevronDown, HelpCircle } from 'lucide-react';
 import { PrivyProvider } from '@privy-io/react-auth';
 import { WagmiProvider as PrivyWagmiProvider } from '@privy-io/wagmi';
 import { privyWagmiConfig } from './config/privyWagmi';
@@ -1083,6 +1083,7 @@ function Rewards() {
   const [holderFilter, setHolderFilter] = useState('all');
   const [vibeClubFilter, setVibeClubFilter] = useState('all');
   const [nftHoldersCount, setNftHoldersCount] = useState(103);
+  const [openFaq, setOpenFaq] = useState(null);
   const now = new Date();
 
   useEffect(() => {
@@ -1243,91 +1244,6 @@ function Rewards() {
             <div className="sec-head" style={{ marginBottom: '36px' }}>
               <h2>Rewards <span className="bl">Hub</span>.</h2>
               <p className="sec-sub">Track active reward epochs and community events.</p>
-
-              {/* 3 Info Highlights / Guidelines */}
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
-                  gap: '14px',
-                  marginTop: '24px'
-                }}
-              >
-                {/* 1. Holder & Vibe Club */}
-                <div className="rewards-highlight-card">
-                  <div className="icon-box">
-                    <Sparkles size={18} color="var(--blue)" />
-                  </div>
-                  <div>
-                    <div
-                      style={{
-                        fontSize: '0.85rem',
-                        fontWeight: 800,
-                        color: 'var(--ink)',
-                        marginBottom: '4px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                      }}
-                    >
-                      <span>Direct Hub Claim</span>
-                    </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--ink2)', lineHeight: '1.45' }}>
-                      <strong style={{ color: 'var(--ink)' }}>Holder Rewards</strong> &amp; <strong style={{ color: 'var(--ink)' }}>Vibe Club</strong> rewards are claimed directly in the Rewards Hub.
-                    </div>
-                  </div>
-                </div>
-
-                {/* 2. Staking & Giveaways */}
-                <div className="rewards-highlight-card">
-                  <div className="icon-box">
-                    <Coins size={18} color="#8b5cf6" />
-                  </div>
-                  <div>
-                    <div
-                      style={{
-                        fontSize: '0.85rem',
-                        fontWeight: 800,
-                        color: 'var(--ink)',
-                        marginBottom: '4px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                      }}
-                    >
-                      <span>Staking &amp; Giveaways</span>
-                    </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--ink2)', lineHeight: '1.45' }}>
-                      <strong style={{ color: 'var(--ink)' }}>Staking</strong> rewards are claimed on o1. <strong style={{ color: 'var(--ink)' }}>Giveaways</strong> are sent directly to winners.
-                    </div>
-                  </div>
-                </div>
-
-                {/* 3. Unclaimed Tokens Burn */}
-                <div className="rewards-highlight-card">
-                  <div className="icon-box">
-                    <Flame size={18} color="#ff5500" />
-                  </div>
-                  <div>
-                    <div
-                      style={{
-                        fontSize: '0.85rem',
-                        fontWeight: 800,
-                        color: 'var(--ink)',
-                        marginBottom: '4px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                      }}
-                    >
-                      <span>Unclaimed Burn Rule</span>
-                    </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--ink2)', lineHeight: '1.45' }}>
-                      All unclaimed tokens within the claim period are <strong style={{ color: '#ff5500' }}>permanently burned</strong>.
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* 5 Graphic Category Cards Grid */}
@@ -1461,6 +1377,164 @@ function Rewards() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Rewards Hub FAQ Section (Underneath Category Cards) */}
+            <div style={{ marginTop: '54px' }}>
+              <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+                <div
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    background: 'rgba(0, 82, 255, 0.08)',
+                    color: 'var(--blue)',
+                    border: '1px solid rgba(0, 82, 255, 0.18)',
+                    padding: '5px 14px',
+                    borderRadius: '99px',
+                    fontSize: '0.74rem',
+                    fontWeight: 800,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    marginBottom: '10px'
+                  }}
+                >
+                  <HelpCircle size={13} strokeWidth={2.5} />
+                  <span>Important Rules &amp; FAQ</span>
+                </div>
+                <h3 style={{ fontSize: '1.65rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: '0 0 6px 0' }}>
+                  Frequently Asked <span style={{ color: 'var(--blue)' }}>Questions</span>
+                </h3>
+                <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--muted)' }}>
+                  Key details on claiming methods, staking vaults, and distribution rules.
+                </p>
+              </div>
+
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px',
+                  maxWidth: '820px',
+                  margin: '0 auto'
+                }}
+              >
+                {[
+                  {
+                    question: 'Where do I claim Holder Rewards & Vibe Club rewards?',
+                    answer: 'Holder Rewards & Vibe Club rewards are claimed directly in the Rewards Hub.',
+                    icon: <Sparkles size={18} color="var(--blue)" />,
+                    iconBg: 'rgba(0, 82, 255, 0.08)',
+                    renderAnswer: () => (
+                      <span>
+                        <strong style={{ color: 'var(--ink)' }}>Holder Rewards</strong> &amp; <strong style={{ color: 'var(--ink)' }}>Vibe Club</strong> rewards are claimed directly in the Rewards Hub.
+                      </span>
+                    )
+                  },
+                  {
+                    question: 'How are Staking and Giveaway rewards distributed?',
+                    answer: 'Staking rewards are claimed on o1. Giveaways are sent directly to winners.',
+                    icon: <Coins size={18} color="#8b5cf6" />,
+                    iconBg: 'rgba(139, 92, 246, 0.08)',
+                    renderAnswer: () => (
+                      <span>
+                        <strong style={{ color: 'var(--ink)' }}>Staking</strong> rewards are claimed on o1. <strong style={{ color: 'var(--ink)' }}>Giveaways</strong> are sent directly to winners.
+                      </span>
+                    )
+                  },
+                  {
+                    question: 'What is the rule for unclaimed reward tokens?',
+                    answer: 'All unclaimed tokens within the claim period are permanently burned.',
+                    icon: <Flame size={18} color="#ff5500" />,
+                    iconBg: 'rgba(255, 85, 0, 0.08)',
+                    renderAnswer: () => (
+                      <span>
+                        All unclaimed tokens within the claim period are <strong style={{ color: '#ff5500' }}>permanently burned</strong>.
+                      </span>
+                    )
+                  }
+                ].map((faq, idx) => {
+                  const isOpen = openFaq === idx;
+                  return (
+                    <div
+                      key={idx}
+                      className="rewards-faq-item"
+                      style={{
+                        borderRadius: '18px',
+                        overflow: 'hidden',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setOpenFaq(isOpen ? null : idx)}
+                        style={{
+                          width: '100%',
+                          padding: '16px 20px',
+                          background: 'transparent',
+                          border: 'none',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: '12px',
+                          cursor: 'pointer',
+                          textAlign: 'left'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                          <div
+                            style={{
+                              width: '36px',
+                              height: '36px',
+                              borderRadius: '10px',
+                              background: faq.iconBg,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              flexShrink: 0
+                            }}
+                          >
+                            {faq.icon}
+                          </div>
+                          <div>
+                            <span style={{ fontSize: '0.96rem', fontWeight: 800, color: 'var(--ink)', display: 'block' }}>
+                              {faq.question}
+                            </span>
+                          </div>
+                        </div>
+                        <div
+                          style={{
+                            transform: isOpen ? 'rotate(180deg)' : 'none',
+                            transition: 'transform 0.25s ease',
+                            color: 'var(--blue)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            flexShrink: 0
+                          }}
+                        >
+                          <ChevronDown size={20} strokeWidth={2.5} />
+                        </div>
+                      </button>
+
+                      {isOpen && (
+                        <div
+                          style={{
+                            padding: '0 20px 18px 70px',
+                            fontSize: '0.88rem',
+                            color: 'var(--ink2)',
+                            lineHeight: 1.55,
+                            borderTop: '1px solid rgba(0, 82, 255, 0.08)'
+                          }}
+                        >
+                          <div style={{ paddingTop: '12px' }}>
+                            {faq.renderAnswer()}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </>
         ) : (
