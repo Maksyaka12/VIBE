@@ -502,103 +502,90 @@ function Tokenomics() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))', gap: '24px', marginBottom: '60px' }}>
           
           {/* Left Side: Unified Distribution Breakdown Block */}
-          <div className="tok-card" style={{ padding: '28px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div className="tok-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '16px', color: 'var(--ink)' }}>
-                Distribution Breakdown
-              </h3>
+              <h3>Distribution Breakdown</h3>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div className="who">
                 
                 {/* 1. Community Rewards Pool */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--blue)', flexShrink: 0 }}>
-                    <Users size={18} />
+                <div className="who-r">
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Users color="var(--blue)" size={20} />
                   </div>
-                  <div>
-                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.25 }}>
-                      Community Rewards Pool <span style={{ color: 'var(--blue)', fontSize: '0.78rem', fontWeight: 900 }}>(70%)</span>
-                    </div>
-                    <div style={{ fontSize: '0.76rem', color: 'var(--muted)', marginTop: '2px' }}>
-                      70% of every buyback is strictly reserved for the community.
-                    </div>
+                  <div className="who-t">
+                    Community Rewards Pool <span style={{ color: 'var(--blue)', fontWeight: 900, display: 'inline', marginLeft: '4px' }}>(70%)</span>
+                    <span>70% of every buyback is strictly reserved for the community</span>
                   </div>
                 </div>
 
                 {/* 2. 10-Day Epoch Distribution */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed', flexShrink: 0 }}>
-                    <Clock size={18} />
+                <div className="who-r">
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Clock color="#7c3aed" size={20} />
                   </div>
-                  <div>
-                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.25 }}>
-                      10-Day Rolling Epochs
-                    </div>
-                    <div style={{ fontSize: '0.76rem', color: 'var(--muted)', marginTop: '2px' }}>
-                      Reward distribution across all pools happens every 10 days.
-                    </div>
+                  <div className="who-t">
+                    10-Day Rolling Epochs
+                    <span>Reward distribution across all pools happens every 10 days</span>
                   </div>
                 </div>
 
                 {/* 3. VibeVerse App (30%) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6', flexShrink: 0 }}>
-                    <Gamepad2 size={18} />
+                <div className="who-r">
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Gamepad2 color="#3b82f6" size={20} />
                   </div>
-                  <div>
-                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.25 }}>
-                      VibeVerse App <span style={{ color: '#3b82f6', fontSize: '0.78rem', fontWeight: 900 }}>(30%)</span>
-                    </div>
-                    <div style={{ fontSize: '0.76rem', color: 'var(--muted)', marginTop: '2px' }}>
-                      Rewards pool inside the upcoming Vibe Verse App.
-                    </div>
+                  <div className="who-t">
+                    VibeVerse App <span style={{ color: '#3b82f6', fontWeight: 900, display: 'inline', marginLeft: '4px' }}>(30%)</span>
+                    <span>Rewards pool inside the upcoming Vibe Verse App</span>
                   </div>
                 </div>
 
                 {/* 4. $VIBE Staking (15%) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#a855f7', flexShrink: 0 }}>
-                    <Coins size={18} />
+                <div className="who-r">
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Coins color="#a855f7" size={20} />
                   </div>
-                  <div>
-                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.25 }}>
-                      $VIBE Staking <span style={{ color: '#a855f7', fontSize: '0.78rem', fontWeight: 900 }}>(15%)</span>
-                    </div>
-                    <div style={{ fontSize: '0.76rem', color: 'var(--muted)', marginTop: '2px' }}>
-                      Yield for locking $VIBE in verified staking pool on o1.
-                    </div>
+                  <div className="who-t">
+                    $VIBE Staking <span style={{ color: '#a855f7', fontWeight: 900, display: 'inline', marginLeft: '4px' }}>(15%)</span>
+                    <span>Yield for locking $VIBE in verified staking pool on o1</span>
                   </div>
                 </div>
 
                 {/* 5. Vibe Club NFTs (15%) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', flexShrink: 0 }}>
-                    <Crown size={18} />
+                <div className="who-r">
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Crown color="#10b981" size={20} />
                   </div>
-                  <div>
-                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.25 }}>
-                      Vibe Club NFTs <span style={{ color: '#10b981', fontSize: '0.78rem', fontWeight: 900 }}>(15%)</span>
-                    </div>
-                    <div style={{ fontSize: '0.76rem', color: 'var(--muted)', marginTop: '2px' }}>
-                      Direct royalties for holders of the 333 Vibe Club NFTs.
-                    </div>
+                  <div className="who-t">
+                    Vibe Club NFTs <span style={{ color: '#10b981', fontWeight: 900, display: 'inline', marginLeft: '4px' }}>(15%)</span>
+                    <span>Direct royalties for holders of the 333 Vibe Club NFTs</span>
                   </div>
                 </div>
 
                 {/* 6. Reserve (40%) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
-                  <div style={{ width: '34px', height: '34px', borderRadius: '50%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b', flexShrink: 0 }}>
-                    <ShieldCheck size={18} />
+                <div className="who-r">
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <ShieldCheck color="#f59e0b" size={20} />
                   </div>
-                  <div>
-                    <div style={{ fontSize: '0.92rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.25 }}>
-                      Reserve <span style={{ color: '#f59e0b', fontSize: '0.78rem', fontWeight: 900 }}>(40%)</span>
-                    </div>
-                    <div style={{ fontSize: '0.76rem', color: 'var(--muted)', marginTop: '2px' }}>
-                      Buffer for continuous reward refills and marketing.
-                    </div>
+                  <div className="who-t">
+                    Reserve <span style={{ color: '#f59e0b', fontWeight: 900, display: 'inline', marginLeft: '4px' }}>(40%)</span>
+                    <span>Buffer for continuous reward refills and marketing</span>
                   </div>
                 </div>
+
+                {/* 7. Action Button: Explore Rewards Hub */}
+                <a href="#rewards" className="who-r" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--blue)' }}>
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Gift color="#fff" size={20} />
+                  </div>
+                  <div className="who-t" style={{ color: '#fff' }}>
+                    Explore Rewards Hub
+                    <span style={{ color: 'rgba(255,255,255,0.8)' }}>
+                      Track available rewards <ArrowRightCircle size={14} style={{ verticalAlign: 'middle', marginLeft: 4 }} />
+                    </span>
+                  </div>
+                </a>
 
               </div>
             </div>
