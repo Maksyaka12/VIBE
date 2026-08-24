@@ -1276,7 +1276,7 @@ const GIVEAWAYS_DATA = [
     burnNote: '~3M $VIBE burn',
     status: 'ongoing',
     deadlineDate: new Date('2026-08-27T12:00:00Z'),
-    link: 'https://x.com/vibeB20'
+    link: 'https://x.com/vibeB20/status/2092000984671129772'
   },
   {
     id: 3,
