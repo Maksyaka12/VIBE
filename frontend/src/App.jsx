@@ -80,7 +80,7 @@ function Nav() {
   const navLinks = [
     { id: 'about', label: 'About' },
     { id: 'tokenomics', label: 'Tokenomics' },
-    { id: 'rewards', label: 'Rewards Hub' },
+    { id: 'hub', label: 'Rewards Hub' },
     { id: 'roadmap', label: 'Roadmap' },
     { id: 'chart', label: 'Chart' },
     { id: 'trade', label: 'Trade' },
@@ -105,7 +105,7 @@ function Nav() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
-                    ...(id === 'rewards' ? {
+                    ...(id === 'hub' ? {
                       color: '#ff6600',
                       fontWeight: 800
                     } : {})
@@ -576,7 +576,7 @@ function Tokenomics() {
                 </div>
 
                 {/* 7. Action Button: Explore Rewards Hub */}
-                <Link to="/rewards" className="who-r" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--blue)' }}>
+                <Link to="/hub" className="who-r" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--blue)' }}>
                   <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Gift color="#fff" size={20} />
                   </div>
@@ -3035,6 +3035,7 @@ function DomainRouter() {
       <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
       <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
 
+      <Route path="/hub" element={<StandaloneLayout><Rewards /></StandaloneLayout>} />
       <Route path="/rewards" element={<StandaloneLayout><Rewards /></StandaloneLayout>} />
       <Route path="/events" element={<StandaloneLayout><Rewards /></StandaloneLayout>} />
       <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} />
