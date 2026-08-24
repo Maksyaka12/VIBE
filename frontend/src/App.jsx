@@ -2247,7 +2247,7 @@ function Rewards() {
                   <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 800 }}>Holder Rewards Pool</strong>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.84rem', color: 'var(--ink2)', lineHeight: 1.45 }}>
-                  100M $VIBE vested with 10M monthly unlocks distributed proportionally among all eligible holders.
+                  100M $VIBE vested with 10M monthly unlocks distributed among all eligible holders.
                 </p>
               </div>
             </div>
