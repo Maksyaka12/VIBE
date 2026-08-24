@@ -1298,7 +1298,7 @@ function Rewards() {
                       <span>Staking &amp; Giveaways</span>
                     </div>
                     <div style={{ fontSize: '0.82rem', color: 'var(--ink2)', lineHeight: '1.45' }}>
-                      <strong style={{ color: 'var(--ink)' }}>Staking</strong> rewards are claimed on o1.exchange. <strong style={{ color: 'var(--ink)' }}>Giveaways</strong> are sent directly to wallets.
+                      <strong style={{ color: 'var(--ink)' }}>Staking</strong> rewards are claimed on o1. <strong style={{ color: 'var(--ink)' }}>Giveaways</strong> are sent directly to winners.
                     </div>
                   </div>
                 </div>
