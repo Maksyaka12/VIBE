@@ -404,29 +404,30 @@ function Tokenomics() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))', gap: '24px', marginBottom: '60px' }}>
           
           {/* Left Side: Stat Tiles */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-              <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
+            {/* Top 2 Tiles: expand to fill top section */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', flex: 1 }}>
+              <div className="stile" style={{ margin: 0, padding: '28px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <span className="v">{loading ? <Loader2 size={24} className="spin"/> : totalBuybacks}</span>
                 <span className="l">Total Buyback</span>
               </div>
-              <div className="stile" style={{ margin: 0, padding: '24px', minHeight: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <div className="stile" style={{ margin: 0, padding: '28px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <span className="v" style={{ color: '#ef4444' }}>{loading ? <Loader2 size={24} className="spin"/> : totalBurned}</span>
                 <span className="l">Total Burned</span>
               </div>
             </div>
 
             {/* Thinner Full-Width Card 1: Reserved for Community */}
-            <div className="stile" style={{ margin: 0, padding: '16px 20px', minHeight: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderRadius: '16px' }}>
-              <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--ink)' }}>Reserved for Community:</span>
-              <span style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--blue)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center' }}>
+            <div className="stile" style={{ margin: 0, padding: '18px 24px', minHeight: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderRadius: '18px' }}>
+              <span className="l" style={{ margin: 0, fontSize: '0.75rem' }}>Reserved for Community:</span>
+              <span className="v" style={{ margin: 0, fontSize: '1.75rem', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
                 {loading ? <Loader2 size={20} className="spin"/> : communityRewards}
               </span>
             </div>
 
-            {/* Thinner Full-Width Card 2: Buyback Address + View on Basescan */}
-            <div className="stile" style={{ margin: 0, padding: '14px 20px', minHeight: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderRadius: '16px' }}>
-              <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--ink)' }}>Buyback & Burn & Rewards Address</span>
+            {/* Thinner Full-Width Card 2: Buyback & Burn & Rewards Address + View on Basescan */}
+            <div className="stile" style={{ margin: 0, padding: '16px 24px', minHeight: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderRadius: '18px' }}>
+              <span className="l" style={{ margin: 0, fontSize: '0.75rem' }}>Buyback & Burn & Rewards Address</span>
               <a
                 href="https://basescan.org/token/0xb200000000000000000000df24ecb8bf51100a01?a=0x067c66aDdD3C6D484c1882B68E197B614f7f3Ebf#transactions"
                 target="_blank"
@@ -439,11 +440,12 @@ function Tokenomics() {
                   color: '#ffffff',
                   padding: '9px 18px',
                   borderRadius: '10px',
-                  fontSize: '0.85rem',
+                  fontSize: '0.82rem',
                   fontWeight: 700,
                   textDecoration: 'none',
                   transition: 'all 0.2s ease',
-                  boxShadow: '0 2px 10px rgba(0, 82, 255, 0.2)'
+                  boxShadow: '0 2px 10px rgba(0, 82, 255, 0.2)',
+                  whiteSpace: 'nowrap'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-1px)';
@@ -455,7 +457,7 @@ function Tokenomics() {
                 }}
               >
                 <span>View on Basescan</span>
-                <ArrowUpRight size={15} />
+                <ArrowUpRight size={14} />
               </a>
             </div>
           </div>
