@@ -3147,8 +3147,6 @@ function DomainRouter() {
       <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
       <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
       <Route path="/checker" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
-      <Route path="/claim" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
-      <Route path="/claim-portal" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
       <Route
         path="/verse"
         element={isDevPreview ? <VibeVerse /> : <VibeVerseLockScreen />}

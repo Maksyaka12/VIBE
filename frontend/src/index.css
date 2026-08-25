@@ -32,8 +32,8 @@ a, button {
   --border:  rgba(0,0,0,0.08);
   --borderf: rgba(0,0,255,0.2);
   --font:    'Inter', sans-serif;
-  --max-w:   1440px;
-  --pad:     48px;
+  --max-w:   1400px;
+  --pad:     60px;
 }
 
 body {
@@ -169,7 +169,7 @@ nav.stuck {
   margin: 0 auto;
   padding: 0 var(--pad);
   display: grid;
-  grid-template-columns: 1fr 480px;
+  grid-template-columns: 1fr 460px;
   gap: 60px; align-items: center;
   width: 100%;
 }
@@ -256,7 +256,7 @@ h1 .line2 {
 .dog-wrap {
   position: relative;
   display: flex; align-items: center; justify-content: center;
-  width: 460px; height: 460px;
+  width: 440px; height: 440px;
   background: var(--surface);
   border-radius: 64px;
   padding: 44px;
