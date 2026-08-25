@@ -725,7 +725,7 @@ function Tokenomics() {
         {/* BLOCK 4: VIBE CLUB ECONOMY */}
         <div className="sec-head" style={{ marginBottom: '40px', marginTop: '60px' }}>
           <h2>Vibe Club <span className="bl">Economy</span>.</h2>
-          <p className="sec-sub">First-ever NFT collection directly integrated into the B20 token economy.</p>
+          <p className="sec-sub">Official $VIBE NFT collection fully integrated into B20 economy.</p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))', gap: '24px', marginBottom: '60px' }}>
@@ -748,18 +748,7 @@ function Tokenomics() {
                   </div>
                 </div>
 
-                {/* 2. B20 Standard Integration */}
-                <div className="who-r">
-                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Sparkles color="var(--blue)" size={20} />
-                  </div>
-                  <div className="who-t">
-                    First B20 NFT Collection
-                    <span>First-ever NFT collection fully integrated into the B20 token economy</span>
-                  </div>
-                </div>
-
-                {/* 3. NFTs Utility */}
+                {/* 2. NFTs Utility */}
                 <div className="who-r">
                   <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Crown color="#10b981" size={20} />
@@ -770,7 +759,7 @@ function Tokenomics() {
                   </div>
                 </div>
 
-                {/* 4. Mint Process */}
+                {/* 3. Mint Process */}
                 <div className="who-r">
                   <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Coins color="#7c3aed" size={20} />
@@ -781,7 +770,7 @@ function Tokenomics() {
                   </div>
                 </div>
 
-                {/* 5. Limited 333 Supply */}
+                {/* 4. Limited 333 Supply */}
                 <div className="who-r">
                   <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <ShieldCheck color="#f59e0b" size={20} />
@@ -789,6 +778,17 @@ function Tokenomics() {
                   <div className="who-t">
                     Limited 333 Supply
                     <span>Strictly capped 333 NFTs with lifetime community benefits</span>
+                  </div>
+                </div>
+
+                {/* 5. Equal Holder Rewards */}
+                <div className="who-r">
+                  <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Users color="var(--blue)" size={20} />
+                  </div>
+                  <div className="who-t">
+                    Equal Holder Rewards
+                    <span>All 333 NFTs are equal, ensuring every holder receives identical royalty rewards</span>
                   </div>
                 </div>
 
