@@ -20,11 +20,16 @@ const DEX     = 'https://dexscreener.com/base/0xa1a4159e61ac9fc48aa9e9992c8d4870
 const DEX_EMB = 'https://dexscreener.com/base/0xa1a4159e61ac9fc48aa9e9992c8d4870ef8a496d5749af1d219e8002f74835c5?embed=1&theme=dark&activeTab=chart';
 
 const UNLOCKS = [
-  {d:'Aug 26, 2026', a:'10M'},{d:'Sep 25, 2026', a:'20M'},
-  {d:'Oct 25, 2026', a:'30M'},{d:'Nov 24, 2026', a:'40M'},
-  {d:'Dec 24, 2026', a:'50M'},{d:'Jan 23, 2027', a:'60M'},
-  {d:'Feb 22, 2027', a:'70M'},{d:'Mar 24, 2027', a:'80M'},
-  {d:'Apr 23, 2027', a:'90M'},{d:'May 23, 2027', a:'100M'},
+  { d: 'Aug 26, 2026', a: '10M', iso: '2026-08-26T00:15:00Z' },
+  { d: 'Sep 25, 2026', a: '10M', iso: '2026-09-25T00:15:00Z' },
+  { d: 'Oct 25, 2026', a: '10M', iso: '2026-10-25T00:15:00Z' },
+  { d: 'Nov 24, 2026', a: '10M', iso: '2026-11-24T00:15:00Z' },
+  { d: 'Dec 24, 2026', a: '10M', iso: '2026-12-24T00:15:00Z' },
+  { d: 'Jan 23, 2027', a: '10M', iso: '2027-01-23T00:15:00Z' },
+  { d: 'Feb 22, 2027', a: '10M', iso: '2027-02-22T00:15:00Z' },
+  { d: 'Mar 24, 2027', a: '10M', iso: '2027-03-24T00:15:00Z' },
+  { d: 'Apr 23, 2027', a: '10M', iso: '2027-04-23T00:15:00Z' },
+  { d: 'May 23, 2027', a: '10M', iso: '2027-05-23T00:15:00Z' },
 ];
 
 const BUYBACK_WALLET = '0x067c66aDdD3C6D484c1882B68E197B614f7f3Ebf';
@@ -890,10 +895,7 @@ function Tokenomics() {
         <div className="tok-layout">
           <div>
             <div className="tok-card">
-              <h3>Holder Rewards · 100M $VIBE</h3>
-              <p className="sub">10M unlocks monthly · starts Aug 26, 2026</p>
-              <div className="prog"><div className="prog-f" style={{width:'10%'}}/></div>
-              <div className="prog-labs"><span>0M today</span><span>100M total</span></div>
+              <h3 style={{ marginBottom: '20px' }}>Holder Rewards · 100M $VIBE</h3>
               <div className="who">
                 <div className="who-r">
                   <div className="who-ico"><img src="/vibe-logo.png" className="who-img-sq" /></div>
@@ -935,7 +937,7 @@ function Tokenomics() {
             <p className="sub">Aug 2026 &rarr; May 2027</p>
             <div className="ul-wrap">
               {UNLOCKS.map((u,i)=>{
-                const isUnlocked = new Date(u.d) <= now;
+                const isUnlocked = new Date(u.iso || u.d) <= new Date();
                 return (
                   <div key={i} className="ul-r">
                     <span className="ul-d">{u.d}</span>
