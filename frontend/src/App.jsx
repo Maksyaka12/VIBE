@@ -1234,10 +1234,10 @@ const VIBEVERSE_EPOCHS = [
 ];
 
 const VIBECLUB_EPOCHS = [
-  { epoch: 'Royalty 1', claimDate: '28 Aug 2026', dateObj: new Date('2026-08-28T00:00:00Z'), poolAmount: 'TBA' },
-  { epoch: 'Royalty 2', claimDate: '3 Sep 2026', dateObj: new Date('2026-09-03T00:00:00Z'), poolAmount: 'TBA' },
-  { epoch: 'Royalty 3', claimDate: '13 Sep 2026', dateObj: new Date('2026-09-13T00:00:00Z'), poolAmount: 'TBA' },
-  { epoch: 'Royalty 4', claimDate: '23 Sep 2026', dateObj: new Date('2026-09-23T00:00:00Z'), poolAmount: 'TBA' },
+  { epoch: 'Royalty 1', snapshotTime: '28 Aug, 00:00 UTC', claimDate: '28 Aug 2026', dateObj: new Date('2026-08-28T00:00:00Z'), poolAmount: 'TBA' },
+  { epoch: 'Royalty 2', snapshotTime: '3 Sep, 00:00 UTC', claimDate: '3 Sep 2026', dateObj: new Date('2026-09-03T00:00:00Z'), poolAmount: 'TBA' },
+  { epoch: 'Royalty 3', snapshotTime: '13 Sep, 00:00 UTC', claimDate: '13 Sep 2026', dateObj: new Date('2026-09-13T00:00:00Z'), poolAmount: 'TBA' },
+  { epoch: 'Royalty 4', snapshotTime: '23 Sep, 00:00 UTC', claimDate: '23 Sep 2026', dateObj: new Date('2026-09-23T00:00:00Z'), poolAmount: 'TBA' },
 ];
 
 function formatCountdown(targetDate) {
@@ -1448,14 +1448,14 @@ function Rewards() {
       image: '/rewards/holder-rewards.jfif',
     },
     {
-      id: 'staking',
-      label: 'Staking',
-      image: '/rewards/staking.jfif',
-    },
-    {
       id: 'vibe-club',
       label: 'Vibe Club',
       image: '/rewards/vibe-club.jfif',
+    },
+    {
+      id: 'staking',
+      label: 'Staking',
+      image: '/rewards/staking.jfif',
     },
     {
       id: 'giveaways',
@@ -2363,15 +2363,21 @@ function Rewards() {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
                             <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
-                              <Calendar size={12} color="#0284c7" /> Claim Date
-                            </span>
-                            <strong style={{ color: isUnlocked ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ep.claimDate}</strong>
-                          </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
-                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
                               <ShieldCheck size={12} color="#0284c7" /> Requirement
                             </span>
                             <strong style={{ color: isUnlocked ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>NFT Holder</strong>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                              <Clock size={12} color="#0284c7" /> Holder Snapshot
+                            </span>
+                            <strong style={{ color: isUnlocked ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ep.snapshotTime}</strong>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                              <Calendar size={12} color="#0284c7" /> Claim Date
+                            </span>
+                            <strong style={{ color: isUnlocked ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ep.claimDate}</strong>
                           </div>
                         </div>
                       </div>
