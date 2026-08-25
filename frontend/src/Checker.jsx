@@ -185,7 +185,7 @@ export default function Checker() {
 
   return (
     <section id="claim-portal" style={{ minHeight: '80vh', padding: '130px 0 100px 0', background: 'var(--bg)' }}>
-      <div className="wrap" style={{ maxWidth: '980px' }}>
+      <div className="wrap" style={{ maxWidth: '1240px' }}>
         
         {/* Portal Header */}
         <div className="sec-head" style={{ textAlign: 'center', marginBottom: '32px' }}>
