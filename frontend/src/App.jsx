@@ -418,16 +418,18 @@ function Tokenomics() {
             </div>
 
             {/* Thinner Full-Width Card 1: Reserved for Community */}
-            <div className="stile" style={{ margin: 0, padding: '18px 24px', minHeight: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderRadius: '18px' }}>
-              <span className="l" style={{ margin: 0, fontSize: '0.75rem' }}>Reserved for Community:</span>
-              <span className="v" style={{ margin: 0, fontSize: '1.75rem', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
+            <div className="stile" style={{ margin: 0, padding: '14px 18px', minHeight: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', borderRadius: '18px' }}>
+              <span className="l" style={{ margin: 0, fontSize: '0.72rem', letterSpacing: '0.04em' }}>Reserved for Community:</span>
+              <span className="v" style={{ margin: 0, fontSize: '1.6rem', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
                 {loading ? <Loader2 size={20} className="spin"/> : communityRewards}
               </span>
             </div>
 
             {/* Thinner Full-Width Card 2: Buyback & Burn & Rewards Address + View on Basescan */}
-            <div className="stile" style={{ margin: 0, padding: '16px 24px', minHeight: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderRadius: '18px' }}>
-              <span className="l" style={{ margin: 0, fontSize: '0.75rem' }}>Buyback & Burn & Rewards Address</span>
+            <div className="stile" style={{ margin: 0, padding: '14px 18px', minHeight: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', borderRadius: '18px' }}>
+              <span className="l" style={{ margin: 0, fontSize: '0.7rem', letterSpacing: '0.03em', lineHeight: 1.35 }}>
+                Buyback & Burn & Rewards Address
+              </span>
               <a
                 href="https://basescan.org/token/0xb200000000000000000000df24ecb8bf51100a01?a=0x067c66aDdD3C6D484c1882B68E197B614f7f3Ebf#transactions"
                 target="_blank"
@@ -435,17 +437,18 @@ function Tokenomics() {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '6px',
+                  gap: '4px',
                   background: 'var(--blue)',
                   color: '#ffffff',
-                  padding: '9px 18px',
-                  borderRadius: '10px',
-                  fontSize: '0.82rem',
+                  padding: '7px 12px',
+                  borderRadius: '9px',
+                  fontSize: '0.74rem',
                   fontWeight: 700,
                   textDecoration: 'none',
                   transition: 'all 0.2s ease',
                   boxShadow: '0 2px 10px rgba(0, 82, 255, 0.2)',
-                  whiteSpace: 'nowrap'
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-1px)';
@@ -457,7 +460,7 @@ function Tokenomics() {
                 }}
               >
                 <span>View on Basescan</span>
-                <ArrowUpRight size={14} />
+                <ArrowUpRight size={13} />
               </a>
             </div>
           </div>
