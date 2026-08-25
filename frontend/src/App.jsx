@@ -1330,16 +1330,16 @@ const GIVEAWAYS_DATA = [
 ];
 
 const HOLDER_UNLOCKS = [
-  { unlock: 'Unlock 1', unlockDate: '26 Aug 2026', dateObj: new Date('2026-08-26T00:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 2', unlockDate: '25 Sep 2026', dateObj: new Date('2026-09-25T00:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 3', unlockDate: '25 Oct 2026', dateObj: new Date('2026-10-25T00:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 4', unlockDate: '24 Nov 2026', dateObj: new Date('2026-11-24T00:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 5', unlockDate: '24 Dec 2026', dateObj: new Date('2026-12-24T00:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 6', unlockDate: '23 Jan 2027', dateObj: new Date('2027-01-23T00:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 7', unlockDate: '22 Feb 2027', dateObj: new Date('2027-02-22T00:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 8', unlockDate: '24 Mar 2027', dateObj: new Date('2027-03-24T00:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 9', unlockDate: '23 Apr 2027', dateObj: new Date('2027-04-23T00:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 10', unlockDate: '23 May 2027', dateObj: new Date('2027-05-23T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 1', snapshotTime: '26 Aug, 00:00 UTC', unlockDate: '26 Aug, 00:15 UTC', dateObj: new Date('2026-08-26T00:15:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 2', snapshotTime: '25 Sep, 00:00 UTC', unlockDate: '25 Sep, 00:15 UTC', dateObj: new Date('2026-09-25T00:15:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 3', snapshotTime: '25 Oct, 00:00 UTC', unlockDate: '25 Oct, 00:15 UTC', dateObj: new Date('2026-10-25T00:15:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 4', snapshotTime: '24 Nov, 00:00 UTC', unlockDate: '24 Nov, 00:15 UTC', dateObj: new Date('2026-11-24T00:15:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 5', snapshotTime: '24 Dec, 00:00 UTC', unlockDate: '24 Dec, 00:15 UTC', dateObj: new Date('2026-12-24T00:15:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 6', snapshotTime: '23 Jan, 00:00 UTC', unlockDate: '23 Jan, 00:15 UTC', dateObj: new Date('2027-01-23T00:15:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 7', snapshotTime: '22 Feb, 00:00 UTC', unlockDate: '22 Feb, 00:15 UTC', dateObj: new Date('2027-02-22T00:15:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 8', snapshotTime: '24 Mar, 00:00 UTC', unlockDate: '24 Mar, 00:15 UTC', dateObj: new Date('2027-03-24T00:15:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 9', snapshotTime: '23 Apr, 00:00 UTC', unlockDate: '23 Apr, 00:15 UTC', dateObj: new Date('2027-04-23T00:15:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 10', snapshotTime: '23 May, 00:00 UTC', unlockDate: '23 May, 00:15 UTC', dateObj: new Date('2027-05-23T00:15:00Z'), poolAmount: '10,000,000' },
 ];
 
 function Rewards() {
@@ -2722,6 +2722,12 @@ function Rewards() {
 
                         {/* Schedule Key-Values with Icons */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                              <Clock size={12} color="#0284c7" /> Snapshot Time
+                            </span>
+                            <strong style={{ color: isUnlocked ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{u.snapshotTime}</strong>
+                          </div>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
                             <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
                               <Calendar size={12} color="#0284c7" /> Unlock Date
