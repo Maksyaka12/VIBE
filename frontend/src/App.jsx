@@ -418,49 +418,26 @@ function Tokenomics() {
             </div>
 
             {/* Thinner Full-Width Card 1: Reserved for Community */}
-            <div className="stile" style={{ margin: 0, padding: '14px 18px', minHeight: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', borderRadius: '18px' }}>
-              <span className="l" style={{ margin: 0, fontSize: '0.72rem', letterSpacing: '0.04em' }}>Reserved for Community:</span>
-              <span className="v" style={{ margin: 0, fontSize: '1.6rem', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
+            <div className="stile rev-thin-card">
+              <span className="rev-thin-label">Reserved for Community:</span>
+              <span className="rev-thin-val">
                 {loading ? <Loader2 size={20} className="spin"/> : communityRewards}
               </span>
             </div>
 
             {/* Thinner Full-Width Card 2: Buyback & Burn & Rewards Address + View on Basescan */}
-            <div className="stile" style={{ margin: 0, padding: '14px 18px', minHeight: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', borderRadius: '18px' }}>
-              <span className="l" style={{ margin: 0, fontSize: '0.7rem', letterSpacing: '0.03em', lineHeight: 1.35 }}>
+            <div className="stile rev-thin-card">
+              <span className="rev-thin-label">
                 Buyback & Burn & Rewards Address
               </span>
               <a
                 href="https://basescan.org/token/0xb200000000000000000000df24ecb8bf51100a01?a=0x067c66aDdD3C6D484c1882B68E197B614f7f3Ebf#transactions"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  background: 'var(--blue)',
-                  color: '#ffffff',
-                  padding: '7px 12px',
-                  borderRadius: '9px',
-                  fontSize: '0.74rem',
-                  fontWeight: 700,
-                  textDecoration: 'none',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 2px 10px rgba(0, 82, 255, 0.2)',
-                  whiteSpace: 'nowrap',
-                  flexShrink: 0
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 82, 255, 0.35)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 2px 10px rgba(0, 82, 255, 0.2)';
-                }}
+                className="rev-basescan-btn"
               >
                 <span>View on Basescan</span>
-                <ArrowUpRight size={13} />
+                <ArrowUpRight size={14} />
               </a>
             </div>
           </div>
