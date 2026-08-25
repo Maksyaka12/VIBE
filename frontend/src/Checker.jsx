@@ -25,7 +25,6 @@ import {
   ChevronDown
 } from 'lucide-react';
 import round1Data from './data/round_1_proofs.json';
-import './index.css';
 
 const CA = '0xb200000000000000000000df24ecb8bf51100a01';
 const NFT_CA = '0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886';
