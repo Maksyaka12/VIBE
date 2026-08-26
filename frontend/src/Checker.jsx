@@ -62,23 +62,27 @@ const NFT_ABI = parseAbi([
 
 function formatCountdown(targetIso) {
   if (!targetIso) return '';
-  const now = new Date().getTime();
-  const target = new Date(targetIso).getTime();
-  const diff = target - now;
+  try {
+    const now = new Date().getTime();
+    const target = new Date(targetIso).getTime();
+    const diff = target - now;
 
-  if (diff <= 0) return '00h 00m 00s';
+    if (diff <= 0) return '00h 00m 00s';
 
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((diff / (1000 * 60)) % 60);
-  const seconds = Math.floor((diff / 1000) % 60);
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
 
-  const pad = (n) => String(n).padStart(2, '0');
+    const pad = (n) => String(n).padStart(2, '0');
 
-  if (days > 0) {
-    return `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+    if (days > 0) {
+      return `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+    }
+    return `${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+  } catch (e) {
+    return '';
   }
-  return `${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
 }
 
 export default function Checker() {
@@ -89,7 +93,7 @@ export default function Checker() {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [currentTime, setCurrentTime] = useState(() => new Date());
-  const [claimStatus, setClaimStatus] = useState({}); // { [id]: 'idle' | 'claiming' | 'claimed' }
+  const [claimStatus, setClaimStatus] = useState({});
   const [claimedHistory, setClaimedHistory] = useState([]);
 
   // Admin Panel States
@@ -116,12 +120,18 @@ export default function Checker() {
       try {
         const stored = localStorage.getItem(`vibe_claim_history_${address.toLowerCase()}`);
         if (stored) {
-          setClaimedHistory(JSON.parse(stored));
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            setClaimedHistory(parsed);
+          } else {
+            setClaimedHistory([]);
+          }
         } else {
           setClaimedHistory([]);
         }
       } catch (e) {
         console.error('Failed to parse claimed history:', e);
+        setClaimedHistory([]);
       }
     } else {
       setClaimedHistory([]);
@@ -188,23 +198,23 @@ export default function Checker() {
   };
 
   // Proof data for Round 1
-  const userProofData = address && round1Data?.claims ? round1Data.claims[address.toLowerCase()] : null;
+  const userProofData = (address && round1Data && round1Data.claims) ? round1Data.claims[address.toLowerCase()] : null;
   const isHolderEligibleLive = (balance !== null && balance >= MIN_HOLDER_BALANCE);
   const hasConfirmedHolderClaim = !!userProofData;
-  const holderRewardAmount = userProofData ? userProofData.amount : (isHolderEligibleLive ? 500000 : 0);
+  const holderRewardAmount = userProofData ? (userProofData.amount || 0) : (isHolderEligibleLive ? 500000 : 0);
 
   const isVibeClubEligible = (nftCount !== null && nftCount > 0);
 
   // Check if connected wallet is Admin / Contract Owner
-  const isAdmin = address && (address.toLowerCase() === ADMIN_WALLET.toLowerCase());
+  const isAdmin = !!(address && (address.toLowerCase() === ADMIN_WALLET.toLowerCase()));
 
   // Check Claim Status for Round 1 Holder
-  const isHolderRound1Claimed = claimedHistory.some(c => c.id === 'holder-1') || claimStatus['holder-1'] === 'claimed';
+  const isHolderRound1Claimed = (Array.isArray(claimedHistory) && claimedHistory.some(c => c && c.id === 'holder-1')) || claimStatus['holder-1'] === 'claimed';
   const isHolderRound1Live = currentTime >= new Date(HOLDER_ROUNDS[0].targetDate);
   const isHolderRound1Available = isHolderRound1Live && !isHolderRound1Claimed;
 
   // Check Claim Status for Royalty 1 Vibe Club
-  const isVibeClubRoyalty1Claimed = claimedHistory.some(c => c.id === 'vibeclub-1') || claimStatus['vibeclub-1'] === 'claimed';
+  const isVibeClubRoyalty1Claimed = (Array.isArray(claimedHistory) && claimedHistory.some(c => c && c.id === 'vibeclub-1')) || claimStatus['vibeclub-1'] === 'claimed';
   const isVibeClubRoyalty1Live = currentTime >= new Date(VIBECLUB_ROUNDS[0].targetDate);
   const isVibeClubRoyalty1Available = isVibeClubRoyalty1Live && !isVibeClubRoyalty1Claimed;
 
@@ -343,11 +353,12 @@ export default function Checker() {
         roundId,
         title: type === 'holder' ? `Holder Rewards · Unlock ${roundId}` : `Vibe Club · Royalty ${roundId}`,
         amount: amountNum,
-        txHash: txHashResult || '0x' + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join(''),
+        txHash: txHashResult || ('0x' + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join('')),
         timestamp: new Date().toISOString()
       };
 
-      const updatedHistory = [newClaimItem, ...claimedHistory.filter(c => c.id !== claimKey)];
+      const prevHistory = Array.isArray(claimedHistory) ? claimedHistory : [];
+      const updatedHistory = [newClaimItem, ...prevHistory.filter(c => c && c.id !== claimKey)];
       setClaimedHistory(updatedHistory);
       if (address) {
         localStorage.setItem(`vibe_claim_history_${address.toLowerCase()}`, JSON.stringify(updatedHistory));
@@ -494,7 +505,7 @@ export default function Checker() {
                   <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <span style={{ fontSize: '0.62rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, lineHeight: 1.1, letterSpacing: '0.04em', marginBottom: '2px' }}>$VIBE Balance</span>
                     <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 900, lineHeight: 1 }}>
-                      {loading || balance === null ? <Loader2 size={13} className="spin" style={{ display: 'inline' }} /> : `${balance.toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE`}
+                      {loading || balance === null ? <Loader2 size={13} className="spin" style={{ display: 'inline' }} /> : `${(balance || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE`}
                     </strong>
                   </div>
                 </div>
@@ -518,7 +529,7 @@ export default function Checker() {
                   <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <span style={{ fontSize: '0.62rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, lineHeight: 1.1, letterSpacing: '0.04em', marginBottom: '2px' }}>Vibe Club</span>
                     <strong style={{ fontSize: '0.92rem', color: '#10b981', fontWeight: 900, lineHeight: 1 }}>
-                      {loading || nftCount === null ? <Loader2 size={13} className="spin" style={{ display: 'inline' }} /> : `${nftCount} NFT${nftCount === 1 ? '' : 's'}`}
+                      {loading || nftCount === null ? <Loader2 size={13} className="spin" style={{ display: 'inline' }} /> : `${nftCount || 0} NFT${nftCount === 1 ? '' : 's'}`}
                     </strong>
                   </div>
                 </div>
@@ -576,181 +587,179 @@ export default function Checker() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))', gap: '24px' }}>
                   
                   {/* Holder Rewards Active Claim Card */}
-                  {isHolderRound1Available && (
-                    <div
-                      style={{
-                        background: 'var(--surface)',
-                        border: '2px solid rgba(0, 82, 255, 0.35)',
-                        borderRadius: '24px',
-                        padding: '28px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        boxShadow: '0 8px 32px rgba(0, 82, 255, 0.08)',
-                        position: 'relative'
-                      }}
-                    >
-                      <div>
-                        {/* Header */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                              <Coins size={22} color="var(--blue)" />
-                            </div>
-                            <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                              Holder Rewards · Unlock 1
-                            </h3>
+                  <div
+                    style={{
+                      background: 'var(--surface)',
+                      border: '2px solid rgba(0, 82, 255, 0.35)',
+                      borderRadius: '24px',
+                      padding: '28px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      boxShadow: '0 8px 32px rgba(0, 82, 255, 0.08)',
+                      position: 'relative'
+                    }}
+                  >
+                    <div>
+                      {/* Header */}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <Coins size={22} color="var(--blue)" />
                           </div>
-                          <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#059669', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                            Live Now
-                          </span>
+                          <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                            Holder Rewards · Unlock 1
+                          </h3>
                         </div>
+                        <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#059669', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          Live Now
+                        </span>
+                      </div>
 
-                        {/* Metric Box (Rewards Pool) */}
-                        <div
-                          style={{
-                            background: '#ffffff',
-                            borderRadius: '16px',
-                            padding: '14px 18px',
-                            border: '1px solid rgba(0, 160, 255, 0.2)',
-                            boxShadow: '0 3px 12px rgba(0, 82, 255, 0.04)',
-                            marginBottom: '20px'
-                          }}
-                        >
-                          <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
-                            <Coins size={13} color="var(--blue)" /> Rewards Pool
-                          </div>
-                          <div style={{ fontSize: '1.42rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
-                            10,000,000 <span style={{ fontSize: '0.9rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
-                          </div>
+                      {/* Metric Box (Rewards Pool) */}
+                      <div
+                        style={{
+                          background: '#ffffff',
+                          borderRadius: '16px',
+                          padding: '14px 18px',
+                          border: '1px solid rgba(0, 160, 255, 0.2)',
+                          boxShadow: '0 3px 12px rgba(0, 82, 255, 0.04)',
+                          marginBottom: '20px'
+                        }}
+                      >
+                        <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
+                          <Coins size={13} color="var(--blue)" /> Rewards Pool
                         </div>
-
-                        {/* Allocation / Eligibility Box */}
-                        <div style={{ marginBottom: '24px' }}>
-                          {(hasConfirmedHolderClaim || isHolderEligibleLive) ? (
-                            <div
-                              style={{
-                                background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
-                                border: '1.5px solid #a7f3d0',
-                                borderRadius: '20px',
-                                padding: '24px 20px',
-                                textAlign: 'center',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                minHeight: '190px',
-                                boxSizing: 'border-box',
-                                gap: '14px'
-                              }}
-                            >
-                              <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
-                                You're eligible for claim
-                              </h4>
-                              
-                              <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: 0 }}>
-                                {holderRewardAmount.toLocaleString('en-US')} <span style={{ fontSize: '1.25rem', color: 'var(--blue)', fontWeight: 900 }}>$VIBE</span>
-                              </div>
-                            </div>
-                          ) : (
-                            <div
-                              style={{
-                                background: '#fef2f2',
-                                border: '1.5px solid #fecaca',
-                                borderRadius: '20px',
-                                padding: '24px 20px',
-                                textAlign: 'center',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                minHeight: '190px',
-                                boxSizing: 'border-box',
-                                gap: '10px'
-                              }}
-                            >
-                              <img
-                                src="/vibe-sad-logo-nobg.png"
-                                alt="Sad VIBE"
-                                style={{ width: 85, height: 85, objectFit: 'contain' }}
-                              />
-                              <h4 style={{ fontSize: '1.25rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
-                                Not Eligible for Round 1
-                              </h4>
-                              <a
-                                href={O1}
-                                target="_blank"
-                                rel="noreferrer"
-                                style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  gap: '6px',
-                                  background: '#ef4444',
-                                  color: '#ffffff',
-                                  padding: '8px 16px',
-                                  borderRadius: '10px',
-                                  fontSize: '0.8rem',
-                                  fontWeight: 800,
-                                  textDecoration: 'none',
-                                  marginTop: '4px'
-                                }}
-                              >
-                                Buy 5M+ on o1.exchange <ArrowUpRight size={14} />
-                              </a>
-                            </div>
-                          )}
+                        <div style={{ fontSize: '1.42rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                          10,000,000 <span style={{ fontSize: '0.9rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
                         </div>
                       </div>
 
-                      {/* Action Button */}
-                      <div>
+                      {/* Allocation / Eligibility Box */}
+                      <div style={{ marginBottom: '24px' }}>
                         {(hasConfirmedHolderClaim || isHolderEligibleLive) ? (
-                          <button
-                            onClick={() => handleClaim('holder', 1, holderRewardAmount)}
-                            disabled={claimStatus['holder-1'] === 'claiming'}
-                            className="btn-fill"
+                          <div
                             style={{
-                              width: '100%',
-                              padding: '14px 20px',
-                              borderRadius: '14px',
-                              fontSize: '0.96rem',
-                              fontWeight: 900,
+                              background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
+                              border: '1.5px solid #a7f3d0',
+                              borderRadius: '20px',
+                              padding: '24px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
                               justifyContent: 'center',
-                              boxShadow: '0 4px 20px rgba(0, 82, 255, 0.35)',
-                              cursor: 'pointer'
+                              minHeight: '190px',
+                              boxSizing: 'border-box',
+                              gap: '14px'
                             }}
                           >
-                            {claimStatus['holder-1'] === 'claiming' ? (
-                              <>
-                                <Loader2 size={18} className="spin" /> Confirming Claim on Base...
-                              </>
-                            ) : (
-                              <>
-                                <Gift size={18} /> Claim {holderRewardAmount.toLocaleString('en-US')} $VIBE
-                              </>
-                            )}
-                          </button>
+                            <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                              You're eligible for claim
+                            </h4>
+                            
+                            <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: 0 }}>
+                              {(holderRewardAmount || 0).toLocaleString('en-US')} <span style={{ fontSize: '1.25rem', color: 'var(--blue)', fontWeight: 900 }}>$VIBE</span>
+                            </div>
+                          </div>
                         ) : (
-                          <button
-                            disabled
+                          <div
                             style={{
-                              width: '100%',
-                              padding: '12px 20px',
-                              borderRadius: '14px',
-                              background: '#f1f5f9',
-                              border: '1px solid #cbd5e1',
-                              color: '#94a3b8',
-                              fontWeight: 800,
-                              fontSize: '0.88rem',
-                              cursor: 'not-allowed'
+                              background: '#fef2f2',
+                              border: '1.5px solid #fecaca',
+                              borderRadius: '20px',
+                              padding: '24px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              minHeight: '190px',
+                              boxSizing: 'border-box',
+                              gap: '10px'
                             }}
                           >
-                            Not Eligible for this Round
-                          </button>
+                            <img
+                              src="/vibe-sad-logo-nobg.png"
+                              alt="Sad VIBE"
+                              style={{ width: 85, height: 85, objectFit: 'contain' }}
+                            />
+                            <h4 style={{ fontSize: '1.25rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                              Not Eligible for Round 1
+                            </h4>
+                            <a
+                              href={O1}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                background: '#ef4444',
+                                color: '#ffffff',
+                                padding: '8px 16px',
+                                borderRadius: '10px',
+                                fontSize: '0.8rem',
+                                fontWeight: 800,
+                                textDecoration: 'none',
+                                marginTop: '4px'
+                              }}
+                            >
+                              Buy 5M+ on o1.exchange <ArrowUpRight size={14} />
+                            </a>
+                          </div>
                         )}
                       </div>
                     </div>
-                  )}
+
+                    {/* Action Button */}
+                    <div>
+                      {(hasConfirmedHolderClaim || isHolderEligibleLive) ? (
+                        <button
+                          onClick={() => handleClaim('holder', 1, holderRewardAmount)}
+                          disabled={claimStatus['holder-1'] === 'claiming'}
+                          className="btn-fill"
+                          style={{
+                            width: '100%',
+                            padding: '14px 20px',
+                            borderRadius: '14px',
+                            fontSize: '0.96rem',
+                            fontWeight: 900,
+                            justifyContent: 'center',
+                            boxShadow: '0 4px 20px rgba(0, 82, 255, 0.35)',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          {claimStatus['holder-1'] === 'claiming' ? (
+                            <>
+                              <Loader2 size={18} className="spin" /> Confirming Claim on Base...
+                            </>
+                          ) : (
+                            <>
+                              <Gift size={18} /> Claim {(holderRewardAmount || 0).toLocaleString('en-US')} $VIBE
+                            </>
+                          )}
+                        </button>
+                      ) : (
+                        <button
+                          disabled
+                          style={{
+                            width: '100%',
+                            padding: '12px 20px',
+                            borderRadius: '14px',
+                            background: '#f1f5f9',
+                            border: '1px solid #cbd5e1',
+                            color: '#94a3b8',
+                            fontWeight: 800,
+                            fontSize: '0.88rem',
+                            cursor: 'not-allowed'
+                          }}
+                        >
+                          Not Eligible for this Round
+                        </button>
+                      )}
+                    </div>
+                  </div>
 
                 </div>
               </div>
@@ -790,7 +799,7 @@ export default function Checker() {
                           <Coins size={22} color="var(--blue)" />
                         </div>
                         <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                          Holder Rewards · {upcomingHolderRound.name}
+                          Holder Rewards · {upcomingHolderRound?.name || 'Unlock 2'}
                         </h3>
                       </div>
                       <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
@@ -813,7 +822,7 @@ export default function Checker() {
                         <Coins size={13} color="var(--blue)" /> Rewards Pool
                       </div>
                       <div style={{ fontSize: '1.42rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
-                        {upcomingHolderRound.pool}
+                        {upcomingHolderRound?.pool || '10,000,000 $VIBE'}
                       </div>
                     </div>
 
@@ -909,7 +918,7 @@ export default function Checker() {
                       gap: '6px'
                     }}
                   >
-                    <Lock size={14} /> Snapshot on {upcomingHolderRound.snapshotTime} ({formatCountdown(upcomingHolderRound.targetDate)})
+                    <Lock size={14} /> Snapshot on {upcomingHolderRound?.snapshotTime || '25 Sep, 00:00 UTC'} ({formatCountdown(upcomingHolderRound?.targetDate)})
                   </div>
                 </div>
 
@@ -935,7 +944,7 @@ export default function Checker() {
                           <Crown size={22} color="#10b981" />
                         </div>
                         <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                          Vibe Club · {upcomingVibeClubRound.name}
+                          Vibe Club · {upcomingVibeClubRound?.name || 'Royalty 1'}
                         </h3>
                       </div>
                       <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
@@ -1054,7 +1063,7 @@ export default function Checker() {
                       gap: '6px'
                     }}
                   >
-                    <Lock size={14} /> Snapshot on {upcomingVibeClubRound.snapshotTime} ({formatCountdown(upcomingVibeClubRound.targetDate)})
+                    <Lock size={14} /> Snapshot on {upcomingVibeClubRound?.snapshotTime || '28 Aug, 00:00 UTC'} ({formatCountdown(upcomingVibeClubRound?.targetDate)})
                   </div>
                 </div>
 
@@ -1064,7 +1073,7 @@ export default function Checker() {
             {/* ═════════════════════════════════════════════════════════════════════════ */}
             {/* ✅ SECTION 3: CLAIMED REWARDS HISTORY                                 */}
             {/* ═════════════════════════════════════════════════════════════════════════ */}
-            {claimedHistory.length > 0 && (
+            {Array.isArray(claimedHistory) && claimedHistory.length > 0 && (
               <div style={{ marginBottom: '44px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
                   <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -1075,7 +1084,7 @@ export default function Checker() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {claimedHistory.map((item) => (
                     <div
-                      key={item.id}
+                      key={item?.id || Math.random()}
                       style={{
                         background: '#ffffff',
                         border: '1.5px solid #a7f3d0',
@@ -1096,7 +1105,7 @@ export default function Checker() {
                         </div>
                         <div>
                           <strong style={{ fontSize: '1rem', color: 'var(--ink)', fontWeight: 900, display: 'block' }}>
-                            {item.title}
+                            {item?.title || 'Rewards Claim'}
                           </strong>
                           <span style={{ fontSize: '0.74rem', color: '#059669', fontWeight: 700 }}>
                             Successfully Claimed on Base
@@ -1106,11 +1115,11 @@ export default function Checker() {
 
                       {/* Middle: Amount */}
                       <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#10b981' }}>
-                        +{typeof item.amount === 'number' ? item.amount.toLocaleString('en-US') : item.amount} <span style={{ fontSize: '0.85rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
+                        +{typeof item?.amount === 'number' ? item.amount.toLocaleString('en-US') : (item?.amount || '0')} <span style={{ fontSize: '0.85rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
                       </div>
 
                       {/* Right: Tx link */}
-                      {item.txHash && item.txHash.startsWith('0x') && (
+                      {item?.txHash && item.txHash.startsWith('0x') && (
                         <a
                           href={`https://basescan.org/tx/${item.txHash}`}
                           target="_blank"
