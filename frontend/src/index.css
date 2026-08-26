@@ -1623,4 +1623,24 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
     border: 1.5px solid rgba(0, 82, 255, 0.18) !important;
     box-shadow: 0 3px 12px rgba(0, 82, 255, 0.05) !important;
   }
-}
+}
+
+/* Rewards Grid 3 Fixed Columns */
+.rewards-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 992px) {
+  .rewards-grid-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .rewards-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
