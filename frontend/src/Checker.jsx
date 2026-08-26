@@ -804,33 +804,8 @@ export default function Checker() {
                     Vibe Club Member
                   </div>
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                      <div style={{ fontSize: '1.22rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, whiteSpace: 'nowrap' }}>
-                        {loading || nftCount === null ? <Loader2 size={15} className="spin" /> : `${nftCount || 0} NFT${nftCount === 1 ? '' : 's'}`}
-                      </div>
-                      {(!loading && (nftCount === null || nftCount === 0)) && (
-                        <a
-                          href={VIBECLUB_MINT_URL}
-                          target="_blank"
-                          rel="noreferrer"
-                          style={{
-                            background: 'rgba(16, 185, 129, 0.12)',
-                            border: '1px solid rgba(16, 185, 129, 0.3)',
-                            color: '#059669',
-                            fontSize: '0.72rem',
-                            fontWeight: 800,
-                            padding: '2px 8px',
-                            borderRadius: '6px',
-                            textDecoration: 'none',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '3px',
-                            lineHeight: 1.2
-                          }}
-                        >
-                          Mint ↗
-                        </a>
-                      )}
+                    <div style={{ fontSize: '1.22rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
+                      {loading || nftCount === null ? <Loader2 size={15} className="spin" /> : `${nftCount || 0} NFT${nftCount === 1 ? '' : 's'}`}
                     </div>
                     <div style={{ fontSize: '0.67rem', color: (nftCount && nftCount > 0) ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', letterSpacing: '-0.02em' }}>
                       {(nftCount && nftCount > 0) ? '✓ Eligible for NFT Royalties' : 'Not Eligible for NFT Royalties'}
