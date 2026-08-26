@@ -20,16 +20,16 @@ const DEX     = 'https://dexscreener.com/base/0xa1a4159e61ac9fc48aa9e9992c8d4870
 const DEX_EMB = 'https://dexscreener.com/base/0xa1a4159e61ac9fc48aa9e9992c8d4870ef8a496d5749af1d219e8002f74835c5?embed=1&theme=dark&activeTab=chart';
 
 const UNLOCKS = [
-  { d: 'Aug 26, 2026', a: '10M', iso: '2026-08-26T00:15:00Z' },
-  { d: 'Sep 25, 2026', a: '10M', iso: '2026-09-25T00:15:00Z' },
-  { d: 'Oct 25, 2026', a: '10M', iso: '2026-10-25T00:15:00Z' },
-  { d: 'Nov 24, 2026', a: '10M', iso: '2026-11-24T00:15:00Z' },
-  { d: 'Dec 24, 2026', a: '10M', iso: '2026-12-24T00:15:00Z' },
-  { d: 'Jan 23, 2027', a: '10M', iso: '2027-01-23T00:15:00Z' },
-  { d: 'Feb 22, 2027', a: '10M', iso: '2027-02-22T00:15:00Z' },
-  { d: 'Mar 24, 2027', a: '10M', iso: '2027-03-24T00:15:00Z' },
-  { d: 'Apr 23, 2027', a: '10M', iso: '2027-04-23T00:15:00Z' },
-  { d: 'May 23, 2027', a: '10M', iso: '2027-05-23T00:15:00Z' },
+  { d: 'Aug 26, 2026', a: '10M', iso: '2026-08-26T14:00:00Z' },
+  { d: 'Sep 25, 2026', a: '10M', iso: '2026-09-25T14:00:00Z' },
+  { d: 'Oct 25, 2026', a: '10M', iso: '2026-10-25T14:00:00Z' },
+  { d: 'Nov 24, 2026', a: '10M', iso: '2026-11-24T14:00:00Z' },
+  { d: 'Dec 24, 2026', a: '10M', iso: '2026-12-24T14:00:00Z' },
+  { d: 'Jan 23, 2027', a: '10M', iso: '2027-01-23T14:00:00Z' },
+  { d: 'Feb 22, 2027', a: '10M', iso: '2027-02-22T14:00:00Z' },
+  { d: 'Mar 24, 2027', a: '10M', iso: '2027-03-24T14:00:00Z' },
+  { d: 'Apr 23, 2027', a: '10M', iso: '2027-04-23T14:00:00Z' },
+  { d: 'May 23, 2027', a: '10M', iso: '2027-05-23T14:00:00Z' },
 ];
 
 const BUYBACK_WALLET = '0x067c66aDdD3C6D484c1882B68E197B614f7f3Ebf';
@@ -1332,16 +1332,16 @@ const GIVEAWAYS_DATA = [
 ];
 
 const HOLDER_UNLOCKS = [
-  { unlock: 'Unlock 1', snapshotTime: '26 Aug, 00:00 UTC', unlockDate: '26 Aug, 00:15 UTC', dateObj: new Date('2026-08-26T00:15:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 2', snapshotTime: '25 Sep, 00:00 UTC', unlockDate: '25 Sep, 00:15 UTC', dateObj: new Date('2026-09-25T00:15:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 3', snapshotTime: '25 Oct, 00:00 UTC', unlockDate: '25 Oct, 00:15 UTC', dateObj: new Date('2026-10-25T00:15:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 4', snapshotTime: '24 Nov, 00:00 UTC', unlockDate: '24 Nov, 00:15 UTC', dateObj: new Date('2026-11-24T00:15:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 5', snapshotTime: '24 Dec, 00:00 UTC', unlockDate: '24 Dec, 00:15 UTC', dateObj: new Date('2026-12-24T00:15:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 6', snapshotTime: '23 Jan, 00:00 UTC', unlockDate: '23 Jan, 00:15 UTC', dateObj: new Date('2027-01-23T00:15:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 7', snapshotTime: '22 Feb, 00:00 UTC', unlockDate: '22 Feb, 00:15 UTC', dateObj: new Date('2027-02-22T00:15:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 8', snapshotTime: '24 Mar, 00:00 UTC', unlockDate: '24 Mar, 00:15 UTC', dateObj: new Date('2027-03-24T00:15:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 9', snapshotTime: '23 Apr, 00:00 UTC', unlockDate: '23 Apr, 00:15 UTC', dateObj: new Date('2027-04-23T00:15:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 10', snapshotTime: '23 May, 00:00 UTC', unlockDate: '23 May, 00:15 UTC', dateObj: new Date('2027-05-23T00:15:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 1', snapshotTime: '26 Aug, 00:00 UTC', unlockDate: '26 Aug, 14:00 UTC', dateObj: new Date('2026-08-26T14:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 2', snapshotTime: '25 Sep, 00:00 UTC', unlockDate: '25 Sep, 14:00 UTC', dateObj: new Date('2026-09-25T14:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 3', snapshotTime: '25 Oct, 00:00 UTC', unlockDate: '25 Oct, 14:00 UTC', dateObj: new Date('2026-10-25T14:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 4', snapshotTime: '24 Nov, 00:00 UTC', unlockDate: '24 Nov, 14:00 UTC', dateObj: new Date('2026-11-24T14:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 5', snapshotTime: '24 Dec, 00:00 UTC', unlockDate: '24 Dec, 14:00 UTC', dateObj: new Date('2026-12-24T14:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 6', snapshotTime: '23 Jan, 00:00 UTC', unlockDate: '23 Jan, 14:00 UTC', dateObj: new Date('2027-01-23T14:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 7', snapshotTime: '22 Feb, 00:00 UTC', unlockDate: '22 Feb, 14:00 UTC', dateObj: new Date('2027-02-22T14:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 8', snapshotTime: '24 Mar, 00:00 UTC', unlockDate: '24 Mar, 14:00 UTC', dateObj: new Date('2027-03-24T14:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 9', snapshotTime: '23 Apr, 00:00 UTC', unlockDate: '23 Apr, 14:00 UTC', dateObj: new Date('2027-04-23T14:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 10', snapshotTime: '23 May, 00:00 UTC', unlockDate: '23 May, 14:00 UTC', dateObj: new Date('2027-05-23T14:00:00Z'), poolAmount: '10,000,000' },
 ];
 
 function Rewards() {

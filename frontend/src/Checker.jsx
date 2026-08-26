@@ -46,10 +46,10 @@ const DISTRIBUTOR_ABI = parseAbi([
 ]);
 
 const HOLDER_ROUNDS = [
-  { id: 1, name: 'Unlock 1', pool: '10,000,000 $VIBE', snapshotTime: '26 Aug', unlockDate: 'Aug 26', targetDate: '2026-08-26T00:15:00Z' },
-  { id: 2, name: 'Unlock 2', pool: '10,000,000 $VIBE', snapshotTime: '25 Sep', unlockDate: 'Sep 25', targetDate: '2026-09-25T00:15:00Z' },
-  { id: 3, name: 'Unlock 3', pool: '10,000,000 $VIBE', snapshotTime: '25 Oct', unlockDate: 'Oct 25', targetDate: '2026-10-25T00:15:00Z' },
-  { id: 4, name: 'Unlock 4', pool: '10,000,000 $VIBE', snapshotTime: '24 Nov', unlockDate: 'Nov 24', targetDate: '2026-11-24T00:15:00Z' },
+  { id: 1, name: 'Unlock 1', pool: '10,000,000 $VIBE', snapshotTime: '26 Aug', unlockDate: 'Aug 26', targetDate: '2026-08-26T14:00:00Z' },
+  { id: 2, name: 'Unlock 2', pool: '10,000,000 $VIBE', snapshotTime: '25 Sep', unlockDate: 'Sep 25', targetDate: '2026-09-25T14:00:00Z' },
+  { id: 3, name: 'Unlock 3', pool: '10,000,000 $VIBE', snapshotTime: '25 Oct', unlockDate: 'Oct 25', targetDate: '2026-10-25T14:00:00Z' },
+  { id: 4, name: 'Unlock 4', pool: '10,000,000 $VIBE', snapshotTime: '24 Nov', unlockDate: 'Nov 24', targetDate: '2026-11-24T14:00:00Z' },
 ];
 
 const VIBECLUB_ROUNDS = [
@@ -605,19 +605,24 @@ export default function Checker() {
                     )}
                   </div>
 
-                  {/* Name (Top) & Vibe Club Member Badge (Bottom) */}
+                  {/* Name (Top) & Vibe Club Member Badge (Bottom) - 3 rows matching avatar height */}
                   <div
                     style={{
                       display: 'flex',
                       flexDirection: 'column',
-                      justifyContent: 'center',
-                      gap: '8px'
+                      justifyContent: 'space-between',
+                      height: '96px',
+                      padding: '2px 0',
+                      boxSizing: 'border-box'
                     }}
                   >
+                    <div style={{ fontSize: '0.74rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1 }}>
+                      Profile:
+                    </div>
                     <h3
                       style={{
                         margin: 0,
-                        fontSize: '1.75rem',
+                        fontSize: '1.65rem',
                         fontWeight: 800,
                         color: 'var(--ink)',
                         letterSpacing: '-0.02em',
@@ -631,12 +636,12 @@ export default function Checker() {
                       {userNft ? (
                         <span
                           style={{
-                            fontSize: '0.78rem',
+                            fontSize: '0.76rem',
                             fontWeight: 700,
                             color: '#10b981',
                             background: 'rgba(16, 185, 129, 0.12)',
                             border: '1.5px solid rgba(16, 185, 129, 0.28)',
-                            padding: '4px 12px',
+                            padding: '3px 10px',
                             borderRadius: '99px',
                             display: 'inline-flex',
                             alignItems: 'center',
@@ -646,22 +651,28 @@ export default function Checker() {
                           Vibe Club Member
                         </span>
                       ) : (
-                        <span
+                        <a
+                          href={VIBECLUB_MINT_URL}
+                          target="_blank"
+                          rel="noreferrer"
                           style={{
-                            fontSize: '0.78rem',
+                            fontSize: '0.76rem',
                             fontWeight: 700,
-                            color: '#64748b',
-                            background: '#f1f5f9',
-                            border: '1.5px solid #e2e8f0',
-                            padding: '4px 12px',
+                            color: 'var(--blue)',
+                            background: 'rgba(0, 82, 255, 0.08)',
+                            border: '1.5px solid rgba(0, 82, 255, 0.25)',
+                            padding: '3px 12px',
                             borderRadius: '99px',
                             display: 'inline-flex',
                             alignItems: 'center',
-                            lineHeight: 1.2
+                            gap: '4px',
+                            lineHeight: 1.2,
+                            textDecoration: 'none',
+                            transition: 'all 0.15s ease'
                           }}
                         >
-                          No NFT
-                        </span>
+                          Join Vibe Club ↗
+                        </a>
                       )}
                     </div>
                   </div>
@@ -758,7 +769,7 @@ export default function Checker() {
                     background: '#ffffff',
                     border: '1.5px solid rgba(0, 140, 255, 0.2)',
                     borderRadius: '18px',
-                    padding: '16px 14px',
+                    padding: '16px 12px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
@@ -772,19 +783,19 @@ export default function Checker() {
                     <div style={{ fontSize: '1.18rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
                       {loading || balance === null ? <Loader2 size={15} className="spin" /> : formatCompactBalance(balance)}
                     </div>
-                    <div style={{ fontSize: '0.70rem', color: isHolderEligibleLive ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div style={{ fontSize: '0.64rem', color: isHolderEligibleLive ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', letterSpacing: '-0.02em' }}>
                       {isHolderEligibleLive ? '✓ Eligible for Holder Rewards' : 'Not Eligible for Holder Rewards'}
                     </div>
                   </div>
                 </div>
 
-                {/* 2. Vibe Club NFTs Tile */}
+                {/* 2. Vibe Club Member Tile */}
                 <div
                   style={{
                     background: '#ffffff',
                     border: '1.5px solid rgba(16, 185, 129, 0.24)',
                     borderRadius: '18px',
-                    padding: '16px 14px',
+                    padding: '16px 12px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
@@ -792,13 +803,38 @@ export default function Checker() {
                   }}
                 >
                   <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    Vibe Club NFTs
+                    Vibe Club Member
                   </div>
                   <div>
-                    <div style={{ fontSize: '1.18rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
-                      {loading || nftCount === null ? <Loader2 size={15} className="spin" /> : `${nftCount || 0} NFT${nftCount === 1 ? '' : 's'}`}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px', marginBottom: '6px' }}>
+                      <div style={{ fontSize: '1.18rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, whiteSpace: 'nowrap' }}>
+                        {loading || nftCount === null ? <Loader2 size={15} className="spin" /> : `${nftCount || 0} NFT${nftCount === 1 ? '' : 's'}`}
+                      </div>
+                      {(!loading && (nftCount === null || nftCount === 0)) && (
+                        <a
+                          href={VIBECLUB_MINT_URL}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{
+                            background: 'rgba(16, 185, 129, 0.12)',
+                            border: '1px solid rgba(16, 185, 129, 0.3)',
+                            color: '#059669',
+                            fontSize: '0.70rem',
+                            fontWeight: 800,
+                            padding: '3px 8px',
+                            borderRadius: '7px',
+                            textDecoration: 'none',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '3px',
+                            lineHeight: 1
+                          }}
+                        >
+                          Mint ↗
+                        </a>
+                      )}
                     </div>
-                    <div style={{ fontSize: '0.70rem', color: (nftCount && nftCount > 0) ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div style={{ fontSize: '0.64rem', color: (nftCount && nftCount > 0) ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', letterSpacing: '-0.01em' }}>
                       {(nftCount && nftCount > 0) ? '✓ Eligible for NFT Royalties' : 'Not Eligible for NFT Royalties'}
                     </div>
                   </div>
@@ -811,7 +847,7 @@ export default function Checker() {
                     background: '#ffffff',
                     border: isHolderRound1Available ? '1.5px solid rgba(0, 140, 255, 0.35)' : '1.5px solid rgba(0, 140, 255, 0.18)',
                     borderRadius: '18px',
-                    padding: '16px 14px',
+                    padding: '16px 12px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
@@ -827,7 +863,7 @@ export default function Checker() {
                     <div style={{ fontSize: '1.18rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
                       {totalAvailableCount} Available
                     </div>
-                    <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
                       <span>Claim Rewards</span> ↓
                     </div>
                   </div>
@@ -840,7 +876,7 @@ export default function Checker() {
                     background: '#ffffff',
                     border: '1.5px solid rgba(0, 140, 255, 0.18)',
                     borderRadius: '18px',
-                    padding: '16px 14px',
+                    padding: '16px 12px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
@@ -856,7 +892,7 @@ export default function Checker() {
                     <div style={{ fontSize: '1.18rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
                       2 Upcoming
                     </div>
-                    <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
                       <span>View Schedule</span> ↓
                     </div>
                   </div>
@@ -869,7 +905,7 @@ export default function Checker() {
                     background: '#ffffff',
                     border: '1.5px solid rgba(16, 185, 129, 0.2)',
                     borderRadius: '18px',
-                    padding: '16px 14px',
+                    padding: '16px 12px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
@@ -885,7 +921,7 @@ export default function Checker() {
                     <div style={{ fontSize: '1.18rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
                       {claimedHistory?.length || 0} Claimed
                     </div>
-                    <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
                       <span>View History</span> ↓
                     </div>
                   </div>
