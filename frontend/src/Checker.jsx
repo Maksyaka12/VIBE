@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePrivy, useWallets } from '@privy-io/react-auth';
-import { createPublicClient, http, formatUnits, parseAbi, encodeFunctionData, parseUnits } from 'viem';
+import { createPublicClient, http, formatUnits, parseAbi, encodeFunctionData, parseUnits, parseAbiItem } from 'viem';
 import { base } from 'viem/chains';
 import {
   CheckCircle2,
@@ -290,6 +290,60 @@ export default function Checker() {
         fetchUserNft(address, currentNfts);
       } else {
         setUserNft(null);
+      }
+
+      // 3. Check on-chain if user has claimed Round 1 and sync real Basescan TxHash
+      try {
+        const hasClaimedRound1 = await client.readContract({
+          address: DISTRIBUTOR_CA,
+          abi: parseAbi(['function hasClaimed(uint256, address) view returns (bool)']),
+          functionName: 'hasClaimed',
+          args: [1n, address]
+        });
+
+        if (hasClaimedRound1) {
+          setClaimStatus(prev => ({ ...prev, 'holder-1': 'claimed' }));
+          
+          let realTxHash = null;
+          try {
+            const currentBlock = await client.getBlockNumber();
+            const logs = await client.getLogs({
+              address: CA,
+              event: parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)'),
+              args: { from: DISTRIBUTOR_CA, to: address },
+              fromBlock: currentBlock > 10000n ? (currentBlock - 9000n) : 0n,
+              toBlock: currentBlock
+            });
+            if (logs && logs.length > 0) {
+              realTxHash = logs[logs.length - 1].transactionHash;
+            }
+          } catch (logErr) {
+            console.warn('Failed to fetch claim logs:', logErr);
+          }
+
+          const existingHistory = JSON.parse(localStorage.getItem(`vibe_claim_history_${address.toLowerCase()}`) || '[]');
+          const existingItem = existingHistory.find(h => h.id === 'holder-1');
+          
+          const finalTxHash = (realTxHash && realTxHash.length === 66) 
+            ? realTxHash 
+            : (existingItem?.txHash && existingItem.txHash.length === 66 ? existingItem.txHash : realTxHash);
+
+          const syncedItem = {
+            id: 'holder-1',
+            type: 'holder',
+            roundId: 1,
+            title: 'Holder Rewards · Unlock 1',
+            amount: (userProofData?.amount || 126127),
+            txHash: finalTxHash,
+            timestamp: existingItem?.timestamp || new Date().toISOString()
+          };
+
+          const updated = [syncedItem, ...existingHistory.filter(h => h.id !== 'holder-1')];
+          setClaimedHistory(updated);
+          localStorage.setItem(`vibe_claim_history_${address.toLowerCase()}`, JSON.stringify(updated));
+        }
+      } catch (claimCheckErr) {
+        console.warn('Failed to sync on-chain claim status:', claimCheckErr);
       }
     } catch (e) {
       console.error("Failed to read balances:", e);
@@ -595,13 +649,44 @@ export default function Checker() {
             }]
           });
           if (callsRes) {
-            txHashResult = typeof callsRes === 'string' ? callsRes : (callsRes.id || 'Confirmed');
+            const callId = typeof callsRes === 'object' ? (callsRes.id || callsRes) : callsRes;
+            for (let i = 0; i < 20; i++) {
+              await new Promise(r => setTimeout(r, 1000));
+              try {
+                const status = await provider.request({
+                  method: 'wallet_getCallsStatus',
+                  params: [callId]
+                });
+                if (status?.receipts?.[0]?.transactionHash) {
+                  txHashResult = status.receipts[0].transactionHash;
+                  break;
+                }
+              } catch (e) {}
+            }
           }
         } catch (e) {
           txHashResult = await provider.request({
             method: 'eth_sendTransaction',
             params: [{ from: address, to: DISTRIBUTOR_CA, data: calldata, value: '0x0' }]
           });
+        }
+
+        // Auto-fetch real transaction hash from on-chain event log if needed
+        if (!txHashResult || txHashResult.length !== 66) {
+          try {
+            const client = createPublicClient({ chain: base, transport: http('https://mainnet.base.org') });
+            const currentBlock = await client.getBlockNumber();
+            const logs = await client.getLogs({
+              address: CA,
+              event: parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)'),
+              args: { from: DISTRIBUTOR_CA, to: address },
+              fromBlock: currentBlock > 10000n ? (currentBlock - 9000n) : 0n,
+              toBlock: currentBlock
+            });
+            if (logs && logs.length > 0) {
+              txHashResult = logs[logs.length - 1].transactionHash;
+            }
+          } catch (e) {}
         }
       }
 
@@ -1819,9 +1904,13 @@ export default function Checker() {
                           </div>
 
                           {/* Right: Tx link */}
-                          {item?.txHash && item.txHash.startsWith('0x') && (
+                          {item?.txHash && (
                             <a
-                              href={`https://basescan.org/tx/${item.txHash}`}
+                              href={
+                                item.txHash.startsWith('0x') && item.txHash.length === 66
+                                  ? `https://basescan.org/tx/${item.txHash}`
+                                  : `https://basescan.org/address/${address}#tokentxns`
+                              }
                               target="_blank"
                               rel="noreferrer"
                               style={{
