@@ -157,6 +157,30 @@ export default function Checker() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  // Holder Rewards Round 1 Status
+  const round1Target = new Date(HOLDER_ROUNDS[0].targetDate);
+  const isHolderRound1Live = currentTime >= round1Target;
+  
+  // Check Proofs data for Round 1
+  const userProofData = address && round1Data?.claims ? round1Data.claims[address.toLowerCase()] : null;
+  const isHolderEligibleLive = (balance !== null && balance >= MIN_HOLDER_BALANCE);
+  const hasConfirmedHolderClaim = !!userProofData;
+  const holderRewardAmount = userProofData ? userProofData.amount : (isHolderEligibleLive ? 500000 : 0);
+
+  // Vibe Club Royalty 1 Status
+  const royalty1Target = new Date(VIBECLUB_ROUNDS[0].targetDate);
+  const isRoyalty1Live = currentTime >= royalty1Target;
+  const isVibeClubEligible = (nftCount !== null && nftCount > 0);
+
+  const handleClaim = (type, roundId, amountStr) => {
+    setClaimStatus(prev => ({ ...prev, [`${type}-${roundId}`]: 'claiming' }));
+    
+    // Web3 Claim simulation / handler
+    setTimeout(() => {
+      setClaimStatus(prev => ({ ...prev, [`${type}-${roundId}`]: 'claimed' }));
+    }, 1800);
+  };
+
   // Counts for Available Rewards tabs
   const holderReadyCount = (isHolderRound1Live && (hasConfirmedHolderClaim || isHolderEligibleLive)) ? 1 : 0;
   const vibeClubReadyCount = (isRoyalty1Live && isVibeClubEligible) ? 1 : 0;
