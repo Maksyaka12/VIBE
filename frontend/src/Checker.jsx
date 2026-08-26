@@ -46,17 +46,17 @@ const DISTRIBUTOR_ABI = parseAbi([
 ]);
 
 const HOLDER_ROUNDS = [
-  { id: 1, name: 'Unlock 1', pool: '10,000,000 $VIBE', snapshotTime: '26 Aug', unlockDate: 'Aug 26', targetDate: '2026-08-26T14:00:00Z' },
-  { id: 2, name: 'Unlock 2', pool: '10,000,000 $VIBE', snapshotTime: '25 Sep', unlockDate: 'Sep 25', targetDate: '2026-09-25T14:00:00Z' },
-  { id: 3, name: 'Unlock 3', pool: '10,000,000 $VIBE', snapshotTime: '25 Oct', unlockDate: 'Oct 25', targetDate: '2026-10-25T14:00:00Z' },
-  { id: 4, name: 'Unlock 4', pool: '10,000,000 $VIBE', snapshotTime: '24 Nov', unlockDate: 'Nov 24', targetDate: '2026-11-24T14:00:00Z' },
+  { id: 1, name: 'Unlock 1', pool: '10,000,000 $VIBE', snapshotDate: 'Aug 26, 00:00 UTC', snapshotIso: '2026-08-26T00:00:00Z', unlockDate: 'Aug 26', targetDate: '2026-08-26T14:00:00Z' },
+  { id: 2, name: 'Unlock 2', pool: '10,000,000 $VIBE', snapshotDate: 'Sep 25, 00:00 UTC', snapshotIso: '2026-09-25T00:00:00Z', unlockDate: 'Sep 25', targetDate: '2026-09-25T14:00:00Z' },
+  { id: 3, name: 'Unlock 3', pool: '10,000,000 $VIBE', snapshotDate: 'Oct 25, 00:00 UTC', snapshotIso: '2026-10-25T00:00:00Z', unlockDate: 'Oct 25', targetDate: '2026-10-25T14:00:00Z' },
+  { id: 4, name: 'Unlock 4', pool: '10,000,000 $VIBE', snapshotDate: 'Nov 24, 00:00 UTC', snapshotIso: '2026-11-24T00:00:00Z', unlockDate: 'Nov 24', targetDate: '2026-11-24T14:00:00Z' },
 ];
 
 const VIBECLUB_ROUNDS = [
-  { id: 1, name: 'Royalty 1', pool: 'TBA', snapshotTime: '28 Aug', claimDate: 'Aug 28', targetDate: '2026-08-28T00:00:00Z' },
-  { id: 2, name: 'Royalty 2', pool: 'TBA', snapshotTime: '3 Sep', claimDate: 'Sep 3', targetDate: '2026-09-03T00:00:00Z' },
-  { id: 3, name: 'Royalty 3', pool: 'TBA', snapshotTime: '13 Sep', claimDate: 'Sep 13', targetDate: '2026-09-13T00:00:00Z' },
-  { id: 4, name: 'Royalty 4', pool: 'TBA', snapshotTime: '23 Sep', claimDate: 'Sep 23', targetDate: '2026-09-23T00:00:00Z' },
+  { id: 1, name: 'Royalty 1', pool: 'TBA', snapshotDate: 'Aug 28, 00:00 UTC', snapshotIso: '2026-08-28T00:00:00Z', claimDate: 'Aug 28', targetDate: '2026-08-28T14:00:00Z' },
+  { id: 2, name: 'Royalty 2', pool: 'TBA', snapshotDate: 'Sep 3, 00:00 UTC', snapshotIso: '2026-09-03T00:00:00Z', claimDate: 'Sep 3', targetDate: '2026-09-03T14:00:00Z' },
+  { id: 3, name: 'Royalty 3', pool: 'TBA', snapshotDate: 'Sep 13, 00:00 UTC', snapshotIso: '2026-09-13T00:00:00Z', claimDate: 'Sep 13', targetDate: '2026-09-13T14:00:00Z' },
+  { id: 4, name: 'Royalty 4', pool: 'TBA', snapshotDate: 'Sep 23, 00:00 UTC', snapshotIso: '2026-09-23T00:00:00Z', claimDate: 'Sep 23', targetDate: '2026-09-23T14:00:00Z' },
 ];
 
 const ERC20_ABI = parseAbi([
@@ -888,15 +888,15 @@ export default function Checker() {
                         }}
                       >
                         <div>
-                          {/* Header (Matching Rewards Hub) */}
+                          {/* Header */}
                           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
                               <img
                                 src="/new-logo-vibe.png"
                                 alt="VIBE"
                                 style={{
-                                  width: '38px',
-                                  height: '38px',
+                                  width: '36px',
+                                  height: '36px',
                                   borderRadius: '50%',
                                   objectFit: 'cover',
                                   border: '2px solid var(--blue)',
@@ -904,13 +904,18 @@ export default function Checker() {
                                   flexShrink: 0
                                 }}
                               />
-                              <h4 style={{ margin: 0, fontSize: '1.10rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
-                                Unlock 1
-                              </h4>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                                <h4 style={{ margin: 0, fontSize: '1.02rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                                  Holder Rewards
+                                </h4>
+                                <span style={{ fontSize: '0.66rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '2px 7px', borderRadius: '99px', lineHeight: 1.2, whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center' }}>
+                                  Unlock 1
+                                </span>
+                              </div>
                             </div>
                             <span
                               style={{
-                                padding: '4px 10px',
+                                padding: '3px 8px',
                                 borderRadius: '99px',
                                 fontSize: '0.66rem',
                                 fontWeight: 900,
@@ -921,7 +926,7 @@ export default function Checker() {
                                 border: '1px solid #a7f3d0',
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '5px',
+                                gap: '4px',
                                 whiteSpace: 'nowrap',
                                 flexShrink: 0,
                                 boxShadow: '0 2px 8px rgba(16, 185, 129, 0.15)'
@@ -1175,15 +1180,15 @@ export default function Checker() {
                       }}
                     >
                       <div>
-                        {/* Header (Matching Rewards Hub) */}
+                        {/* Header */}
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
                             <img
                               src="/new-logo-vibe.png"
                               alt="VIBE"
                               style={{
-                                width: '38px',
-                                height: '38px',
+                                width: '36px',
+                                height: '36px',
                                 borderRadius: '50%',
                                 objectFit: 'cover',
                                 border: '1.5px solid rgba(0, 160, 255, 0.3)',
@@ -1191,13 +1196,18 @@ export default function Checker() {
                                 flexShrink: 0
                               }}
                             />
-                            <h4 style={{ margin: 0, fontSize: '1.10rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
-                              {upcomingHolderRound?.name || 'Unlock 1'}
-                            </h4>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                              <h4 style={{ margin: 0, fontSize: '1.02rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                                Holder Rewards
+                              </h4>
+                              <span style={{ fontSize: '0.66rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '2px 7px', borderRadius: '99px', lineHeight: 1.2, whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center' }}>
+                                {upcomingHolderRound?.name || 'Unlock 1'}
+                              </span>
+                            </div>
                           </div>
                           <span
                             style={{
-                              padding: '4px 10px',
+                              padding: '3px 8px',
                               borderRadius: '99px',
                               fontSize: '0.66rem',
                               fontWeight: 900,
@@ -1208,7 +1218,7 @@ export default function Checker() {
                               border: '1px solid rgba(0, 160, 255, 0.25)',
                               display: 'inline-flex',
                               alignItems: 'center',
-                              gap: '5px',
+                              gap: '4px',
                               whiteSpace: 'nowrap',
                               flexShrink: 0
                             }}
@@ -1350,6 +1360,62 @@ export default function Checker() {
                           {formatDigitalCountdown(upcomingHolderRound?.targetDate)}
                         </span>
                       </div>
+
+                      {/* Snapshot Status Caption */}
+                      <div
+                        style={{
+                          marginTop: '10px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px',
+                          fontSize: '0.74rem',
+                          color: '#64748b',
+                          fontWeight: 700
+                        }}
+                      >
+                        {currentTime >= new Date(upcomingHolderRound?.snapshotIso) ? (
+                          <>
+                            <Check size={12} color="#10b981" strokeWidth={3} />
+                            <span>Snapshot taken:</span>
+                            <span
+                              style={{
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '0.74rem',
+                                fontWeight: 900,
+                                color: '#059669',
+                                background: '#ecfdf5',
+                                border: '1px solid #a7f3d0',
+                                padding: '2px 6px',
+                                borderRadius: '6px',
+                                letterSpacing: '0.02em'
+                              }}
+                            >
+                              {upcomingHolderRound?.snapshotDate || 'Aug 26, 00:00 UTC'}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <Clock size={12} color="#64748b" />
+                            <span>Snapshot date:</span>
+                            <span
+                              style={{
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '0.74rem',
+                                fontWeight: 900,
+                                color: '#0284c7',
+                                background: 'rgba(2, 132, 199, 0.08)',
+                                border: '1px solid rgba(2, 132, 199, 0.2)',
+                                padding: '2px 6px',
+                                borderRadius: '6px',
+                                letterSpacing: '0.02em'
+                              }}
+                            >
+                              {upcomingHolderRound?.snapshotDate || 'Aug 26, 00:00 UTC'}
+                            </span>
+                          </>
+                        )}
+                      </div>
                     </div>
 
                     {/* 2. Next Vibe Club Royalty Card */}
@@ -1362,13 +1428,13 @@ export default function Checker() {
                       }}
                     >
                       <div>
-                        {/* Header (Matching Rewards Hub) */}
+                        {/* Header */}
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
                             <div
                               style={{
-                                width: '38px',
-                                height: '38px',
+                                width: '36px',
+                                height: '36px',
                                 borderRadius: '50%',
                                 background: 'rgba(0, 82, 255, 0.1)',
                                 border: '1.5px solid rgba(0, 160, 255, 0.3)',
@@ -1379,15 +1445,20 @@ export default function Checker() {
                                 flexShrink: 0
                               }}
                             >
-                              <Crown size={18} color="var(--blue)" />
+                              <Crown size={17} color="var(--blue)" />
                             </div>
-                            <h4 style={{ margin: 0, fontSize: '1.10rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
-                              {upcomingVibeClubRound?.name || 'Royalty 1'}
-                            </h4>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                              <h4 style={{ margin: 0, fontSize: '1.02rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                                Vibe Club
+                              </h4>
+                              <span style={{ fontSize: '0.66rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '2px 7px', borderRadius: '99px', lineHeight: 1.2, whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center' }}>
+                                {upcomingVibeClubRound?.name || 'Royalty 1'}
+                              </span>
+                            </div>
                           </div>
                           <span
                             style={{
-                              padding: '4px 10px',
+                              padding: '3px 8px',
                               borderRadius: '99px',
                               fontSize: '0.66rem',
                               fontWeight: 900,
@@ -1398,7 +1469,7 @@ export default function Checker() {
                               border: '1px solid rgba(0, 160, 255, 0.25)',
                               display: 'inline-flex',
                               alignItems: 'center',
-                              gap: '5px',
+                              gap: '4px',
                               whiteSpace: 'nowrap',
                               flexShrink: 0
                             }}
@@ -1539,6 +1610,62 @@ export default function Checker() {
                         >
                           {formatDigitalCountdown(upcomingVibeClubRound?.targetDate)}
                         </span>
+                      </div>
+
+                      {/* Snapshot Status Caption */}
+                      <div
+                        style={{
+                          marginTop: '10px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px',
+                          fontSize: '0.74rem',
+                          color: '#64748b',
+                          fontWeight: 700
+                        }}
+                      >
+                        {currentTime >= new Date(upcomingVibeClubRound?.snapshotIso) ? (
+                          <>
+                            <Check size={12} color="#10b981" strokeWidth={3} />
+                            <span>Snapshot taken:</span>
+                            <span
+                              style={{
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '0.74rem',
+                                fontWeight: 900,
+                                color: '#059669',
+                                background: '#ecfdf5',
+                                border: '1px solid #a7f3d0',
+                                padding: '2px 6px',
+                                borderRadius: '6px',
+                                letterSpacing: '0.02em'
+                              }}
+                            >
+                              {upcomingVibeClubRound?.snapshotDate || 'Aug 28, 00:00 UTC'}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <Clock size={12} color="#64748b" />
+                            <span>Snapshot date:</span>
+                            <span
+                              style={{
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '0.74rem',
+                                fontWeight: 900,
+                                color: '#0284c7',
+                                background: 'rgba(2, 132, 199, 0.08)',
+                                border: '1px solid rgba(2, 132, 199, 0.2)',
+                                padding: '2px 6px',
+                                borderRadius: '6px',
+                                letterSpacing: '0.02em'
+                              }}
+                            >
+                              {upcomingVibeClubRound?.snapshotDate || 'Aug 28, 00:00 UTC'}
+                            </span>
+                          </>
+                        )}
                       </div>
                     </div>
 
