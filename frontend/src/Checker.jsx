@@ -114,6 +114,18 @@ function formatDigitalCountdown(targetIso) {
   }
 }
 
+function formatCompactBalance(val) {
+  if (val === null || val === undefined) return '0 $VIBE';
+  const num = Number(val);
+  if (num >= 1000000) {
+    return `${(num / 1000000).toFixed(2)}M $VIBE`;
+  }
+  if (num >= 1000) {
+    return `${(num / 1000).toFixed(2)}K $VIBE`;
+  }
+  return `${num.toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE`;
+}
+
 export default function Checker() {
   const { ready, authenticated, user, login, logout } = usePrivy();
   const { wallets } = useWallets();
@@ -593,15 +605,13 @@ export default function Checker() {
                     )}
                   </div>
 
-                  {/* Name (Top) & Vibe Club Member Badge (Bottom) - Equal height to avatar */}
+                  {/* Name (Top) & Vibe Club Member Badge (Bottom) */}
                   <div
                     style={{
                       display: 'flex',
                       flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      height: '96px',
-                      padding: '4px 0',
-                      boxSizing: 'border-box'
+                      justifyContent: 'center',
+                      gap: '8px'
                     }}
                   >
                     <h3
@@ -740,36 +750,29 @@ export default function Checker() {
                 </div>
               </div>
 
-              {/* Dashboard Metric & Quick-Nav Tiles Grid */}
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                  gap: '16px',
-                  marginTop: '28px'
-                }}
-              >
+              {/* Dashboard Metric & Quick-Nav Tiles Grid (5 Columns in Single Row) */}
+              <div className="dashboard-metrics-5">
                 {/* 1. $VIBE Balance Tile */}
                 <div
                   style={{
                     background: '#ffffff',
                     border: '1.5px solid rgba(0, 140, 255, 0.2)',
-                    borderRadius: '20px',
-                    padding: '20px',
+                    borderRadius: '18px',
+                    padding: '16px 14px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    boxShadow: '0 4px 16px rgba(0, 82, 255, 0.04)'
+                    boxShadow: '0 4px 16px rgba(0, 82, 255, 0.03)'
                   }}
                 >
-                  <div style={{ fontSize: '0.74rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '10px' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     $VIBE Balance
                   </div>
                   <div>
-                    <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '8px' }}>
-                      {loading || balance === null ? <Loader2 size={16} className="spin" /> : `${(balance || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE`}
+                    <div style={{ fontSize: '1.18rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
+                      {loading || balance === null ? <Loader2 size={15} className="spin" /> : formatCompactBalance(balance)}
                     </div>
-                    <div style={{ fontSize: '0.76rem', color: isHolderEligibleLive ? '#10b981' : '#ef4444', fontWeight: 700 }}>
+                    <div style={{ fontSize: '0.70rem', color: isHolderEligibleLive ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {isHolderEligibleLive ? '✓ Eligible for Holder Rewards' : 'Not Eligible for Holder Rewards'}
                     </div>
                   </div>
@@ -780,22 +783,22 @@ export default function Checker() {
                   style={{
                     background: '#ffffff',
                     border: '1.5px solid rgba(16, 185, 129, 0.24)',
-                    borderRadius: '20px',
-                    padding: '20px',
+                    borderRadius: '18px',
+                    padding: '16px 14px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    boxShadow: '0 4px 16px rgba(16, 185, 129, 0.04)'
+                    boxShadow: '0 4px 16px rgba(16, 185, 129, 0.03)'
                   }}
                 >
-                  <div style={{ fontSize: '0.74rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '10px' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     Vibe Club NFTs
                   </div>
                   <div>
-                    <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '8px' }}>
-                      {loading || nftCount === null ? <Loader2 size={16} className="spin" /> : `${nftCount || 0} NFT${nftCount === 1 ? '' : 's'}`}
+                    <div style={{ fontSize: '1.18rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
+                      {loading || nftCount === null ? <Loader2 size={15} className="spin" /> : `${nftCount || 0} NFT${nftCount === 1 ? '' : 's'}`}
                     </div>
-                    <div style={{ fontSize: '0.76rem', color: (nftCount && nftCount > 0) ? '#10b981' : '#ef4444', fontWeight: 700 }}>
+                    <div style={{ fontSize: '0.70rem', color: (nftCount && nftCount > 0) ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {(nftCount && nftCount > 0) ? '✓ Eligible for NFT Royalties' : 'Not Eligible for NFT Royalties'}
                     </div>
                   </div>
@@ -807,24 +810,24 @@ export default function Checker() {
                   style={{
                     background: '#ffffff',
                     border: isHolderRound1Available ? '1.5px solid rgba(0, 140, 255, 0.35)' : '1.5px solid rgba(0, 140, 255, 0.18)',
-                    borderRadius: '20px',
-                    padding: '20px',
+                    borderRadius: '18px',
+                    padding: '16px 14px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    boxShadow: '0 4px 16px rgba(0, 82, 255, 0.04)',
+                    boxShadow: '0 4px 16px rgba(0, 82, 255, 0.03)',
                     cursor: 'pointer',
                     transition: 'all 0.15s ease'
                   }}
                 >
-                  <div style={{ fontSize: '0.74rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '10px' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     Available Rewards
                   </div>
                   <div>
-                    <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '8px' }}>
-                      {totalAvailableCount} Ready
+                    <div style={{ fontSize: '1.18rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
+                      {totalAvailableCount} Available
                     </div>
-                    <div style={{ fontSize: '0.76rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
                       <span>Claim Rewards</span> ↓
                     </div>
                   </div>
@@ -836,8 +839,8 @@ export default function Checker() {
                   style={{
                     background: '#ffffff',
                     border: '1.5px solid rgba(0, 140, 255, 0.18)',
-                    borderRadius: '20px',
-                    padding: '20px',
+                    borderRadius: '18px',
+                    padding: '16px 14px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
@@ -846,14 +849,14 @@ export default function Checker() {
                     transition: 'all 0.15s ease'
                   }}
                 >
-                  <div style={{ fontSize: '0.74rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '10px' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     Upcoming Unlocks
                   </div>
                   <div>
-                    <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '8px' }}>
-                      2 Scheduled
+                    <div style={{ fontSize: '1.18rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
+                      2 Upcoming
                     </div>
-                    <div style={{ fontSize: '0.76rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
                       <span>View Schedule</span> ↓
                     </div>
                   </div>
@@ -865,8 +868,8 @@ export default function Checker() {
                   style={{
                     background: '#ffffff',
                     border: '1.5px solid rgba(16, 185, 129, 0.2)',
-                    borderRadius: '20px',
-                    padding: '20px',
+                    borderRadius: '18px',
+                    padding: '16px 14px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
@@ -875,14 +878,14 @@ export default function Checker() {
                     transition: 'all 0.15s ease'
                   }}
                 >
-                  <div style={{ fontSize: '0.74rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '10px' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     Claim History
                   </div>
                   <div>
-                    <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '8px' }}>
+                    <div style={{ fontSize: '1.18rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
                       {claimedHistory?.length || 0} Claimed
                     </div>
-                    <div style={{ fontSize: '0.76rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
                       <span>View History</span> ↓
                     </div>
                   </div>
