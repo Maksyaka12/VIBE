@@ -1839,4 +1839,7 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
     border: 1.5px solid rgba(0, 140, 255, 0.22) !important;
     box-shadow: 0 4px 18px rgba(0, 82, 255, 0.05) !important;
   }
+  .admin-action-row {
+    grid-template-columns: 1fr !important;
+  }
 }

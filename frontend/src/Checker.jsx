@@ -42,7 +42,8 @@ const DISTRIBUTOR_ABI = parseAbi([
   'function owner() view returns (address)',
   'function setMerkleRoot(uint256 epochId, bytes32 _merkleRoot) external',
   'function claim(uint256 epochId, uint256 amount, bytes32[] merkleProof) external',
-  'function hasClaimed(uint256 epochId, address account) view returns (bool)'
+  'function hasClaimed(uint256 epochId, address account) view returns (bool)',
+  'function emergencyWithdraw(address token, uint256 amount) external'
 ]);
 
 const HOLDER_ROUNDS = [
@@ -146,6 +147,15 @@ export default function Checker() {
   // Admin Panel States
   const [adminEpochId, setAdminEpochId] = useState('1');
   const [adminMerkleRoot, setAdminMerkleRoot] = useState(round1Data?.merkleRoot || '0x33b8e3f1c8abfc06a4692ba0a946e11e314832c826153ad5e0ef9ce990cebb93');
+  const [adminWithdrawAmount, setAdminWithdrawAmount] = useState('');
+  const [adminBurnAmount, setAdminBurnAmount] = useState('');
+  const [adminMetrics, setAdminMetrics] = useState({
+    contractBalance: 0,
+    claimedWalletsCount: 0,
+    totalWalletsCount: 0,
+    claimedTokens: 0,
+    metricsLoading: false
+  });
   const [adminLoading, setAdminLoading] = useState(false);
   const [adminTxHash, setAdminTxHash] = useState('');
   const [adminError, setAdminError] = useState('');
@@ -337,10 +347,113 @@ export default function Checker() {
   const upcomingHolderRound = isHolderRound1Live ? HOLDER_ROUNDS[1] : HOLDER_ROUNDS[0];
   const upcomingVibeClubRound = isVibeClubRoyalty1Live ? VIBECLUB_ROUNDS[1] : VIBECLUB_ROUNDS[0];
 
-  // Set Merkle Root on-chain function (supports Coinbase Smart Wallet & EOA)
+  // Fetch Admin Metrics on-chain
+  const fetchAdminMetrics = async () => {
+    try {
+      setAdminMetrics(prev => ({ ...prev, metricsLoading: true }));
+      const client = createPublicClient({ chain: base, transport: http('https://mainnet.base.org') });
+
+      // 1. Live $VIBE balance of distributor contract
+      const balWei = await client.readContract({
+        address: CA,
+        abi: parseAbi(['function balanceOf(address) view returns (uint256)']),
+        functionName: 'balanceOf',
+        args: [DISTRIBUTOR_CA]
+      });
+      const contractBalance = Number(formatUnits(balWei, 18));
+
+      // 2. Snapshot claims & claimed count
+      const claims = Object.values(round1Data?.claims || {});
+      const totalWalletsCount = claims.length;
+
+      let claimedWalletsCount = 0;
+      let claimedTokens = 0;
+
+      if (totalWalletsCount > 0) {
+        const calls = claims.map(c => ({
+          address: DISTRIBUTOR_CA,
+          abi: parseAbi(['function hasClaimed(uint256, address) view returns (bool)']),
+          functionName: 'hasClaimed',
+          args: [BigInt(adminEpochId || '1'), c.address]
+        }));
+        const results = await client.multicall({ contracts: calls, allowFailure: true });
+        for (let i = 0; i < claims.length; i++) {
+          if (results[i]?.status === 'success' && results[i]?.result === true) {
+            claimedWalletsCount++;
+            claimedTokens += (claims[i].amount || 0);
+          }
+        }
+      }
+
+      setAdminMetrics({
+        contractBalance,
+        claimedWalletsCount,
+        totalWalletsCount,
+        claimedTokens,
+        metricsLoading: false
+      });
+    } catch (e) {
+      console.error('Failed to fetch admin metrics:', e);
+      setAdminMetrics(prev => ({ ...prev, metricsLoading: false }));
+    }
+  };
+
+  useEffect(() => {
+    if (isAdmin) {
+      fetchAdminMetrics();
+    }
+  }, [isAdmin, adminEpochId]);
+
+  // Generic Admin Transaction Sender (supports Smart Wallet batching & EOA)
+  const sendAdminTx = async (to, data) => {
+    const activeWallet = wallets.find(w => w.address.toLowerCase() === address?.toLowerCase()) || wallets[0];
+    const provider = await activeWallet.getEthereumProvider();
+    const calldata = data.includes(BUILDER_CODE_HEX) ? data : (data + BUILDER_CODE_HEX);
+
+    try {
+      const callsRes = await provider.request({
+        method: 'wallet_sendCalls',
+        params: [{
+          version: '1.0',
+          chainId: '0x2105',
+          from: address,
+          calls: [{ to, value: '0x0', data: calldata }],
+          capabilities: { dataSuffix: { value: '0x' + BUILDER_CODE_HEX, optional: true } }
+        }]
+      });
+
+      if (callsRes) {
+        if (typeof callsRes === 'string' && callsRes.startsWith('0x') && callsRes.length === 66) {
+          return callsRes;
+        }
+        const callId = typeof callsRes === 'object' ? (callsRes.id || callsRes) : callsRes;
+        for (let i = 0; i < 30; i++) {
+          await new Promise(r => setTimeout(r, 1000));
+          try {
+            const status = await provider.request({
+              method: 'wallet_getCallsStatus',
+              params: [callId]
+            });
+            if (status?.receipts?.[0]?.transactionHash) {
+              return status.receipts[0].transactionHash;
+            }
+          } catch (e) {}
+        }
+        return typeof callId === 'string' ? callId : 'Confirmed';
+      }
+    } catch (errCalls) {
+      console.warn('wallet_sendCalls not supported, falling back to eth_sendTransaction:', errCalls);
+      return await provider.request({
+        method: 'eth_sendTransaction',
+        params: [{ from: address, to, data: calldata, value: '0x0' }]
+      });
+    }
+  };
+
+  // 1. Set Merkle Root Function
   const handleSetMerkleRoot = async () => {
     if (!wallets || wallets.length === 0) {
-      setAdminError('No connected wallet detected. Please reconnect.');
+      setAdminError('No connected wallet detected.');
       return;
     }
     setAdminLoading(true);
@@ -349,79 +462,99 @@ export default function Checker() {
     setAdminTxHash('');
 
     try {
-      const activeWallet = wallets.find(w => w.address.toLowerCase() === address?.toLowerCase()) || wallets[0];
-      const provider = await activeWallet.getEthereumProvider();
-
-      const calldataRaw = encodeFunctionData({
+      const calldata = encodeFunctionData({
         abi: DISTRIBUTOR_ABI,
         functionName: 'setMerkleRoot',
-        args: [BigInt(adminEpochId), adminMerkleRoot]
+        args: [BigInt(adminEpochId || '1'), adminMerkleRoot]
       });
-      // Append Official ERC-8021 Data Suffix for Base Builder Code
-      const calldata = calldataRaw.includes(BUILDER_CODE_HEX) ? calldataRaw : (calldataRaw + BUILDER_CODE_HEX);
-
-      let txHashResult = null;
-
-      try {
-        const callsRes = await provider.request({
-          method: 'wallet_sendCalls',
-          params: [{
-            version: '1.0',
-            chainId: '0x2105', // Base 8453
-            from: address,
-            calls: [{
-              to: DISTRIBUTOR_CA,
-              value: '0x0',
-              data: calldata
-            }],
-            capabilities: {
-              dataSuffix: {
-                value: '0x' + BUILDER_CODE_HEX,
-                optional: true
-              }
-            }
-          }]
-        });
-
-        if (callsRes) {
-          if (typeof callsRes === 'string' && callsRes.startsWith('0x') && callsRes.length === 66) {
-            txHashResult = callsRes;
-          } else {
-            const callId = typeof callsRes === 'object' ? (callsRes.id || callsRes) : callsRes;
-            for (let i = 0; i < 30; i++) {
-              await new Promise(r => setTimeout(r, 1000));
-              try {
-                const status = await provider.request({
-                  method: 'wallet_getCallsStatus',
-                  params: [callId]
-                });
-                if (status?.receipts?.[0]?.transactionHash) {
-                  txHashResult = status.receipts[0].transactionHash;
-                  break;
-                }
-              } catch (e) {}
-            }
-            if (!txHashResult) txHashResult = typeof callId === 'string' ? callId : 'Confirmed';
-          }
-        }
-      } catch (errCalls) {
-        console.warn('wallet_sendCalls not supported, falling back to eth_sendTransaction:', errCalls);
-        txHashResult = await provider.request({
-          method: 'eth_sendTransaction',
-          params: [{
-            from: address,
-            to: DISTRIBUTOR_CA,
-            data: calldata,
-            value: '0x0'
-          }]
-        });
-      }
-
-      setAdminTxHash(txHashResult || 'Confirmed');
+      const txHash = await sendAdminTx(DISTRIBUTOR_CA, calldata);
+      setAdminTxHash(txHash || 'Confirmed');
       setAdminSuccess(true);
+      setTimeout(fetchAdminMetrics, 3000);
     } catch (err) {
-      console.error('Failed to set Merkle root on-chain:', err);
-      setAdminError(err?.message || 'Transaction rejected or failed.');
+      console.error('Failed to set Merkle root:', err);
+      setAdminError(err?.message || 'Failed to publish Merkle root.');
+    } finally {
+      setAdminLoading(false);
+    }
+  };
+
+  // 2. Withdraw Tokens to Admin Wallet Function
+  const handleWithdrawTokens = async () => {
+    if (!wallets || wallets.length === 0) {
+      setAdminError('No connected wallet detected.');
+      return;
+    }
+    if (!adminWithdrawAmount || Number(adminWithdrawAmount) <= 0) {
+      setAdminError('Please enter a valid amount of $VIBE to withdraw.');
+      return;
+    }
+    setAdminLoading(true);
+    setAdminError('');
+    setAdminSuccess(false);
+    setAdminTxHash('');
+
+    try {
+      const amountWei = parseUnits(adminWithdrawAmount.toString(), 18);
+      const calldata = encodeFunctionData({
+        abi: DISTRIBUTOR_ABI,
+        functionName: 'emergencyWithdraw',
+        args: [CA, amountWei]
+      });
+      const txHash = await sendAdminTx(DISTRIBUTOR_CA, calldata);
+      setAdminTxHash(txHash || 'Confirmed');
+      setAdminSuccess(true);
+      setAdminWithdrawAmount('');
+      setTimeout(fetchAdminMetrics, 3000);
+    } catch (err) {
+      console.error('Failed to withdraw tokens:', err);
+      setAdminError(err?.message || 'Withdraw transaction failed.');
+    } finally {
+      setAdminLoading(false);
+    }
+  };
+
+  // 3. Burn Unclaimed Tokens Function (withdraws to admin and burns to 0x0...dead)
+  const handleBurnTokens = async () => {
+    if (!wallets || wallets.length === 0) {
+      setAdminError('No connected wallet detected.');
+      return;
+    }
+    if (!adminBurnAmount || Number(adminBurnAmount) <= 0) {
+      setAdminError('Please enter a valid amount of $VIBE to burn.');
+      return;
+    }
+    setAdminLoading(true);
+    setAdminError('');
+    setAdminSuccess(false);
+    setAdminTxHash('');
+
+    try {
+      const amountWei = parseUnits(adminBurnAmount.toString(), 18);
+      
+      // Step 1: Withdraw from distributor contract to admin
+      const withdrawCalldata = encodeFunctionData({
+        abi: DISTRIBUTOR_ABI,
+        functionName: 'emergencyWithdraw',
+        args: [CA, amountWei]
+      });
+      await sendAdminTx(DISTRIBUTOR_CA, withdrawCalldata);
+
+      // Step 2: Transfer to Dead address
+      const burnCalldata = encodeFunctionData({
+        abi: parseAbi(['function transfer(address to, uint256 amount) returns (bool)']),
+        functionName: 'transfer',
+        args: ['0x000000000000000000000000000000000000dead', amountWei]
+      });
+      const txHash = await sendAdminTx(CA, burnCalldata);
+
+      setAdminTxHash(txHash || 'Confirmed');
+      setAdminSuccess(true);
+      setAdminBurnAmount('');
+      setTimeout(fetchAdminMetrics, 3000);
+    } catch (err) {
+      console.error('Failed to burn tokens:', err);
+      setAdminError(err?.message || 'Burn transaction failed.');
     } finally {
       setAdminLoading(false);
     }
@@ -1734,175 +1867,316 @@ export default function Checker() {
             </div>
 
             {/* ═════════════════════════════════════════════════════════════════════════ */}
-            {/* 👑 SECTION 4: ADMIN PANEL (Contract Owner Only)                       */}
+            {/* SECTION 4: ADMIN PANEL (Contract Owner Only)                          */}
             {/* ═════════════════════════════════════════════════════════════════════════ */}
             {isAdmin && (
               <div
                 style={{
-                  background: 'linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%)',
-                  borderRadius: '24px',
-                  padding: '28px',
-                  marginTop: '48px',
+                  background: '#0f172a',
+                  borderRadius: '20px',
+                  padding: '24px',
+                  marginTop: '40px',
                   marginBottom: '20px',
                   color: '#ffffff',
-                  border: '2px solid rgba(139, 92, 246, 0.4)',
-                  boxShadow: '0 8px 32px rgba(124, 58, 237, 0.18)'
+                  border: '1px solid #1e293b',
+                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12)'
                 }}
               >
-                {/* Admin Header */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(168, 85, 247, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(168, 85, 247, 0.4)' }}>
-                      <Crown size={22} color="#c084fc" />
-                    </div>
-                    <div>
-                      <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: '#f3e8ff', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        Admin Panel · Merkle Root Publisher
-                        <span style={{ fontSize: '0.7rem', padding: '3px 8px', borderRadius: '99px', background: 'rgba(168, 85, 247, 0.3)', color: '#e9d5ff', fontWeight: 800 }}>OWNER</span>
-                      </h3>
-                      <span style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>
-                        Publish cryptographic snapshot proofs on-chain to enable claims on Base
-                      </span>
-                    </div>
-                  </div>
-
+                {/* Header */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '10px',
+                    marginBottom: '20px',
+                    paddingBottom: '16px',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
+                  }}
+                >
+                  <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em' }}>
+                    Admin Panel
+                  </h3>
                   <a
                     href={`https://basescan.org/address/${DISTRIBUTOR_CA}`}
                     target="_blank"
                     rel="noreferrer"
                     style={{
                       fontSize: '0.78rem',
-                      color: '#c084fc',
+                      color: '#94a3b8',
                       textDecoration: 'none',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      background: 'rgba(255, 255, 255, 0.08)',
-                      padding: '6px 12px',
-                      borderRadius: '10px',
-                      border: '1px solid rgba(168, 85, 247, 0.3)'
+                      fontFamily: 'monospace',
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      padding: '5px 10px',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(255, 255, 255, 0.1)'
                     }}
                   >
-                    Contract: {DISTRIBUTOR_CA.slice(0, 6)}...{DISTRIBUTOR_CA.slice(-4)} <ExternalLink size={12} />
+                    Contract: {DISTRIBUTOR_CA.slice(0, 6)}...{DISTRIBUTOR_CA.slice(-4)} ↗
                   </a>
                 </div>
 
-                {/* Form Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px', marginBottom: '20px' }}>
-                  {/* Epoch / Round Input */}
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#cbd5e1', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                      Epoch / Round ID
-                    </label>
+                {/* 4. Live Metrics */}
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                    gap: '12px',
+                    marginBottom: '24px'
+                  }}
+                >
+                  <div style={{ background: 'rgba(255, 255, 255, 0.03)', borderRadius: '12px', padding: '14px 16px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                    <div style={{ fontSize: '0.70rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em', marginBottom: '4px' }}>
+                      Contract $VIBE Balance
+                    </div>
+                    <div style={{ fontSize: '1.20rem', fontWeight: 800, color: '#38bdf8' }}>
+                      {adminMetrics.metricsLoading ? '...' : (adminMetrics.contractBalance || 0).toLocaleString('en-US') + ' $VIBE'}
+                    </div>
+                  </div>
+
+                  <div style={{ background: 'rgba(255, 255, 255, 0.03)', borderRadius: '12px', padding: '14px 16px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                    <div style={{ fontSize: '0.70rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em', marginBottom: '4px' }}>
+                      Wallets Claimed
+                    </div>
+                    <div style={{ fontSize: '1.20rem', fontWeight: 800, color: '#10b981' }}>
+                      {adminMetrics.metricsLoading ? '...' : `${adminMetrics.claimedWalletsCount} / ${adminMetrics.totalWalletsCount}`}
+                      <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600, marginLeft: '6px' }}>
+                        ({adminMetrics.totalWalletsCount > 0 ? ((adminMetrics.claimedWalletsCount / adminMetrics.totalWalletsCount) * 100).toFixed(1) : 0}%)
+                      </span>
+                    </div>
+                  </div>
+
+                  <div style={{ background: 'rgba(255, 255, 255, 0.03)', borderRadius: '12px', padding: '14px 16px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                    <div style={{ fontSize: '0.70rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em', marginBottom: '4px' }}>
+                      Total Claimed
+                    </div>
+                    <div style={{ fontSize: '1.20rem', fontWeight: 800, color: '#f8fafc' }}>
+                      {adminMetrics.metricsLoading ? '...' : (adminMetrics.claimedTokens || 0).toLocaleString('en-US') + ' $VIBE'}
+                    </div>
+                  </div>
+
+                  <div style={{ background: 'rgba(255, 255, 255, 0.03)', borderRadius: '12px', padding: '14px 16px', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                    <div style={{ fontSize: '0.70rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em', marginBottom: '4px' }}>
+                      Unclaimed in Round
+                    </div>
+                    <div style={{ fontSize: '1.20rem', fontWeight: 800, color: '#fbbf24' }}>
+                      {adminMetrics.metricsLoading ? '...' : Math.max(0, 10000000 - (adminMetrics.claimedTokens || 0)).toLocaleString('en-US') + ' $VIBE'}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 1. Set Merkle Root */}
+                <div style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.06)', borderRadius: '14px', padding: '18px', marginBottom: '14px' }}>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#f8fafc', marginBottom: '12px' }}>
+                    1. Publish Merkle Root Proof
+                  </div>
+                  <div className="admin-action-row" style={{ display: 'grid', gridTemplateColumns: '100px 1fr auto', gap: '10px', alignItems: 'center' }}>
                     <input
                       type="number"
                       value={adminEpochId}
                       onChange={(e) => setAdminEpochId(e.target.value)}
+                      placeholder="Round"
                       style={{
-                        width: '100%',
                         background: 'rgba(15, 23, 42, 0.8)',
-                        border: '1.5px solid rgba(148, 163, 184, 0.25)',
-                        borderRadius: '12px',
-                        padding: '12px 16px',
+                        border: '1px solid rgba(148, 163, 184, 0.25)',
+                        borderRadius: '10px',
+                        padding: '10px 12px',
                         color: '#ffffff',
-                        fontSize: '0.9rem',
-                        fontWeight: 700,
-                        outline: 'none',
-                        boxSizing: 'border-box'
-                      }}
-                      placeholder="1"
-                    />
-                  </div>
-
-                  {/* Merkle Root Input */}
-                  <div style={{ gridColumn: 'span 2' }}>
-                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#cbd5e1', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                      Merkle Root (bytes32)
-                    </label>
-                    <input
-                      type="text"
-                      value={adminMerkleRoot}
-                      onChange={(e) => setAdminMerkleRoot(e.target.value)}
-                      style={{
-                        width: '100%',
-                        background: 'rgba(15, 23, 42, 0.8)',
-                        border: '1.5px solid rgba(148, 163, 184, 0.25)',
-                        borderRadius: '12px',
-                        padding: '12px 16px',
-                        color: '#38bdf8',
-                        fontFamily: 'monospace',
                         fontSize: '0.85rem',
                         fontWeight: 700,
                         outline: 'none',
                         boxSizing: 'border-box'
                       }}
-                      placeholder="0x..."
                     />
+                    <input
+                      type="text"
+                      value={adminMerkleRoot}
+                      onChange={(e) => setAdminMerkleRoot(e.target.value)}
+                      placeholder="0x... Merkle Root"
+                      style={{
+                        background: 'rgba(15, 23, 42, 0.8)',
+                        border: '1px solid rgba(148, 163, 184, 0.25)',
+                        borderRadius: '10px',
+                        padding: '10px 14px',
+                        color: '#38bdf8',
+                        fontFamily: 'monospace',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        outline: 'none',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                    <button
+                      onClick={handleSetMerkleRoot}
+                      disabled={adminLoading}
+                      style={{
+                        background: 'var(--blue)',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '10px',
+                        padding: '10px 18px',
+                        fontSize: '0.82rem',
+                        fontWeight: 800,
+                        cursor: adminLoading ? 'not-allowed' : 'pointer',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      {adminLoading ? 'Processing...' : 'Set Merkle Root'}
+                    </button>
                   </div>
                 </div>
 
-                {/* Submit Action */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-                  <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                    Snapshot details: <strong style={{ color: '#ffffff' }}>42 Eligible Wallets</strong> · <strong style={{ color: '#38bdf8' }}>10,000,000 $VIBE Pool</strong>
+                {/* 2. Withdraw Tokens to Admin Wallet */}
+                <div style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.06)', borderRadius: '14px', padding: '18px', marginBottom: '14px' }}>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#f8fafc', marginBottom: '12px' }}>
+                    2. Withdraw Tokens to Admin Wallet
                   </div>
-
-                  <button
-                    onClick={handleSetMerkleRoot}
-                    disabled={adminLoading}
-                    style={{
-                      background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
-                      color: '#ffffff',
-                      border: 'none',
-                      borderRadius: '14px',
-                      padding: '12px 24px',
-                      fontSize: '0.9rem',
-                      fontWeight: 900,
-                      cursor: adminLoading ? 'not-allowed' : 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      boxShadow: '0 4px 18px rgba(124, 58, 237, 0.4)',
-                      transition: 'all 0.15s'
-                    }}
-                  >
-                    {adminLoading ? (
-                      <>
-                        <Loader2 size={16} className="spin" /> Confirming in Wallet...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles size={16} /> ⚡ Publish Merkle Root On-Chain
-                      </>
-                    )}
-                  </button>
-                </div>
-
-                {/* Success Banner */}
-                {adminSuccess && (
-                  <div style={{ marginTop: '16px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981', borderRadius: '12px', padding: '12px 16px', color: '#a7f3d0', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <CheckCircle2 size={18} color="#10b981" />
-                      <strong>Merkle Root successfully published on Base! Holders can now claim!</strong>
+                  <div className="admin-action-row" style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '10px', alignItems: 'center' }}>
+                    <div style={{ position: 'relative' }}>
+                      <input
+                        type="number"
+                        value={adminWithdrawAmount}
+                        onChange={(e) => setAdminWithdrawAmount(e.target.value)}
+                        placeholder="Amount in $VIBE (e.g. 10000000)"
+                        style={{
+                          width: '100%',
+                          background: 'rgba(15, 23, 42, 0.8)',
+                          border: '1px solid rgba(148, 163, 184, 0.25)',
+                          borderRadius: '10px',
+                          padding: '10px 65px 10px 14px',
+                          color: '#ffffff',
+                          fontSize: '0.85rem',
+                          fontWeight: 700,
+                          outline: 'none',
+                          boxSizing: 'border-box'
+                        }}
+                      />
+                      <button
+                        onClick={() => setAdminWithdrawAmount(String(adminMetrics.contractBalance || 0))}
+                        style={{
+                          position: 'absolute',
+                          right: '8px',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          background: 'rgba(255, 255, 255, 0.1)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          color: '#94a3b8',
+                          fontSize: '0.70rem',
+                          fontWeight: 800,
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        MAX
+                      </button>
                     </div>
+                    <button
+                      onClick={handleWithdrawTokens}
+                      disabled={adminLoading}
+                      style={{
+                        background: '#0284c7',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '10px',
+                        padding: '10px 18px',
+                        fontSize: '0.82rem',
+                        fontWeight: 800,
+                        cursor: adminLoading ? 'not-allowed' : 'pointer',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      {adminLoading ? 'Processing...' : 'Withdraw to Admin'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* 3. Burn Unclaimed Tokens */}
+                <div style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.06)', borderRadius: '14px', padding: '18px', marginBottom: '14px' }}>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#f8fafc', marginBottom: '12px' }}>
+                    3. Burn Unclaimed Tokens (Send to Dead Address)
+                  </div>
+                  <div className="admin-action-row" style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '10px', alignItems: 'center' }}>
+                    <div style={{ position: 'relative' }}>
+                      <input
+                        type="number"
+                        value={adminBurnAmount}
+                        onChange={(e) => setAdminBurnAmount(e.target.value)}
+                        placeholder="Amount in $VIBE to burn"
+                        style={{
+                          width: '100%',
+                          background: 'rgba(15, 23, 42, 0.8)',
+                          border: '1px solid rgba(148, 163, 184, 0.25)',
+                          borderRadius: '10px',
+                          padding: '10px 110px 10px 14px',
+                          color: '#ffffff',
+                          fontSize: '0.85rem',
+                          fontWeight: 700,
+                          outline: 'none',
+                          boxSizing: 'border-box'
+                        }}
+                      />
+                      <button
+                        onClick={() => setAdminBurnAmount(String(Math.max(0, 10000000 - (adminMetrics.claimedTokens || 0))))}
+                        style={{
+                          position: 'absolute',
+                          right: '8px',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          background: 'rgba(239, 68, 68, 0.15)',
+                          border: '1px solid rgba(239, 68, 68, 0.3)',
+                          color: '#f87171',
+                          fontSize: '0.70rem',
+                          fontWeight: 800,
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        ALL UNCLAIMED
+                      </button>
+                    </div>
+                    <button
+                      onClick={handleBurnTokens}
+                      disabled={adminLoading}
+                      style={{
+                        background: '#dc2626',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '10px',
+                        padding: '10px 18px',
+                        fontSize: '0.82rem',
+                        fontWeight: 800,
+                        cursor: adminLoading ? 'not-allowed' : 'pointer',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      {adminLoading ? 'Processing...' : 'Burn Tokens'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Status Feedback */}
+                {adminSuccess && (
+                  <div style={{ marginTop: '14px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981', borderRadius: '10px', padding: '10px 14px', color: '#a7f3d0', fontSize: '0.82rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                    <span>Transaction confirmed successfully on Base!</span>
                     {adminTxHash && adminTxHash.startsWith('0x') && (
                       <a
                         href={`https://basescan.org/tx/${adminTxHash}`}
                         target="_blank"
                         rel="noreferrer"
-                        style={{ color: '#34d399', textDecoration: 'underline', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                        style={{ color: '#34d399', textDecoration: 'underline', fontWeight: 800 }}
                       >
-                        View Tx on Basescan <ExternalLink size={13} />
+                        View on Basescan ↗
                       </a>
                     )}
                   </div>
                 )}
 
-                {/* Error Banner */}
                 {adminError && (
-                  <div style={{ marginTop: '16px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', borderRadius: '12px', padding: '12px 16px', color: '#fca5a5', fontSize: '0.84rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <AlertCircle size={18} color="#ef4444" />
-                    <span>{adminError}</span>
+                  <div style={{ marginTop: '14px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', borderRadius: '10px', padding: '10px 14px', color: '#fca5a5', fontSize: '0.82rem' }}>
+                    {adminError}
                   </div>
                 )}
               </div>
