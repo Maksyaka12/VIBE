@@ -17,7 +17,8 @@ import {
   RefreshCw,
   AlertCircle,
   Lock,
-  Gift
+  Gift,
+  ShieldCheck
 } from 'lucide-react';
 import round1Data from './data/round_1_proofs.json';
 
