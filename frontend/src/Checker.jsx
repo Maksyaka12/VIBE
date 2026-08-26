@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { usePrivy } from '@privy-io/react-auth';
-import { createPublicClient, http, formatUnits, parseAbi } from 'viem';
+import { usePrivy, useWallets } from '@privy-io/react-auth';
+import { createPublicClient, http, formatUnits, parseAbi, encodeFunctionData, parseUnits } from 'viem';
 import { base } from 'viem/chains';
 import {
   CheckCircle2,
@@ -22,16 +22,27 @@ import {
   Lock,
   Gift,
   HelpCircle,
-  ChevronDown
+  ChevronDown,
+  Settings,
+  Database
 } from 'lucide-react';
 import round1Data from './data/round_1_proofs.json';
 
 const CA = '0xb200000000000000000000df24ecb8bf51100a01';
 const NFT_CA = '0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886';
+const DISTRIBUTOR_CA = '0x77e04dd8c45725d2b2b3c8eebac2f3f1708fd089';
+const ADMIN_WALLET = '0x4c91d3bed372c11795b9ce9a9017dfe447bf050a';
 const O1 = 'https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453';
 const VIBECLUB_MINT_URL = 'https://vibeverse.dog/vibeclub';
 
 const MIN_HOLDER_BALANCE = 5000000; // 5M $VIBE
+
+const DISTRIBUTOR_ABI = parseAbi([
+  'function owner() view returns (address)',
+  'function setMerkleRoot(uint256 epochId, bytes32 _merkleRoot) external',
+  'function claim(uint256 epochId, uint256 amount, bytes32[] merkleProof) external',
+  'function hasClaimed(uint256 epochId, address account) view returns (bool)'
+]);
 
 const HOLDER_ROUNDS = [
   { id: 1, name: 'Round 1', pool: '10,000,000 $VIBE', snapshotTime: '26 Aug, 00:00 UTC', unlockDate: '26 Aug, 00:15 UTC', targetDate: '2026-08-26T00:15:00Z' },
@@ -79,6 +90,7 @@ function formatCountdown(targetIso) {
 
 export default function Checker() {
   const { ready, authenticated, user, login, logout } = usePrivy();
+  const { wallets } = useWallets();
   const [balance, setBalance] = useState(null);
   const [nftCount, setNftCount] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -86,6 +98,14 @@ export default function Checker() {
   const [activeTab, setActiveTab] = useState('all'); // 'all' | 'holders' | 'vibeclub'
   const [currentTime, setCurrentTime] = useState(() => new Date());
   const [claimStatus, setClaimStatus] = useState({}); // { [id]: 'idle' | 'claiming' | 'claimed' }
+
+  // Admin Panel States
+  const [adminEpochId, setAdminEpochId] = useState('1');
+  const [adminMerkleRoot, setAdminMerkleRoot] = useState(round1Data?.merkleRoot || '0x33b8e3f1c8abfc06a4692ba0a946e11e314832c826153ad5e0ef9ce990cebb93');
+  const [adminLoading, setAdminLoading] = useState(false);
+  const [adminTxHash, setAdminTxHash] = useState('');
+  const [adminError, setAdminError] = useState('');
+  const [adminSuccess, setAdminSuccess] = useState(false);
 
   // Live Timer Update
   useEffect(() => {
@@ -172,13 +192,129 @@ export default function Checker() {
   const isRoyalty1Live = currentTime >= royalty1Target;
   const isVibeClubEligible = (nftCount !== null && nftCount > 0);
 
-  const handleClaim = (type, roundId, amountStr) => {
+  // Check if connected wallet is Admin / Contract Owner
+  const isAdmin = address && (address.toLowerCase() === ADMIN_WALLET.toLowerCase());
+
+  // Set Merkle Root on-chain function (supports Coinbase Smart Wallet & EOA)
+  const handleSetMerkleRoot = async () => {
+    if (!wallets || wallets.length === 0) {
+      setAdminError('No connected wallet detected. Please reconnect.');
+      return;
+    }
+    setAdminLoading(true);
+    setAdminError('');
+    setAdminSuccess(false);
+    setAdminTxHash('');
+
+    try {
+      const activeWallet = wallets.find(w => w.address.toLowerCase() === address?.toLowerCase()) || wallets[0];
+      const provider = await activeWallet.getEthereumProvider();
+
+      const calldata = encodeFunctionData({
+        abi: DISTRIBUTOR_ABI,
+        functionName: 'setMerkleRoot',
+        args: [BigInt(adminEpochId), adminMerkleRoot.trim()]
+      });
+
+      let txHashResult = null;
+
+      // 1. Try wallet_sendCalls (Coinbase Smart Wallet / EIP-5792)
+      try {
+        const callsRes = await provider.request({
+          method: 'wallet_sendCalls',
+          params: [{
+            version: '1.0',
+            chainId: '0x2105', // Base 8453
+            from: address,
+            calls: [{
+              to: DISTRIBUTOR_CA,
+              value: '0x0',
+              data: calldata
+            }]
+          }]
+        });
+
+        if (callsRes) {
+          if (typeof callsRes === 'string' && callsRes.startsWith('0x') && callsRes.length === 66) {
+            txHashResult = callsRes;
+          } else {
+            const callId = typeof callsRes === 'object' ? (callsRes.id || callsRes) : callsRes;
+            for (let i = 0; i < 30; i++) {
+              await new Promise(r => setTimeout(r, 1000));
+              try {
+                const status = await provider.request({
+                  method: 'wallet_getCallsStatus',
+                  params: [callId]
+                });
+                if (status?.receipts?.[0]?.transactionHash) {
+                  txHashResult = status.receipts[0].transactionHash;
+                  break;
+                }
+              } catch (e) {}
+            }
+            if (!txHashResult) txHashResult = typeof callId === 'string' ? callId : 'Confirmed';
+          }
+        }
+      } catch (errCalls) {
+        console.warn('wallet_sendCalls not supported, falling back to eth_sendTransaction:', errCalls);
+        // 2. Fallback to eth_sendTransaction
+        txHashResult = await provider.request({
+          method: 'eth_sendTransaction',
+          params: [{
+            from: address,
+            to: DISTRIBUTOR_CA,
+            data: calldata,
+            value: '0x0'
+          }]
+        });
+      }
+
+      setAdminTxHash(txHashResult || 'Confirmed');
+      setAdminSuccess(true);
+    } catch (err) {
+      console.error('Failed to set Merkle root on-chain:', err);
+      setAdminError(err?.message || 'Transaction rejected or failed.');
+    } finally {
+      setAdminLoading(false);
+    }
+  };
+
+  const handleClaim = async (type, roundId, amountStr) => {
     setClaimStatus(prev => ({ ...prev, [`${type}-${roundId}`]: 'claiming' }));
     
-    // Web3 Claim simulation / handler
-    setTimeout(() => {
+    try {
+      if (type === 'holder' && userProofData && wallets && wallets.length > 0) {
+        const activeWallet = wallets.find(w => w.address.toLowerCase() === address?.toLowerCase()) || wallets[0];
+        const provider = await activeWallet.getEthereumProvider();
+        const amountWei = parseUnits(userProofData.amount.toString(), 18);
+        const calldata = encodeFunctionData({
+          abi: DISTRIBUTOR_ABI,
+          functionName: 'claim',
+          args: [BigInt(roundId), amountWei, userProofData.proof]
+        });
+
+        try {
+          await provider.request({
+            method: 'wallet_sendCalls',
+            params: [{
+              version: '1.0',
+              chainId: '0x2105',
+              from: address,
+              calls: [{ to: DISTRIBUTOR_CA, value: '0x0', data: calldata }]
+            }]
+          });
+        } catch (e) {
+          await provider.request({
+            method: 'eth_sendTransaction',
+            params: [{ from: address, to: DISTRIBUTOR_CA, data: calldata, value: '0x0' }]
+          });
+        }
+      }
       setClaimStatus(prev => ({ ...prev, [`${type}-${roundId}`]: 'claimed' }));
-    }, 1800);
+    } catch (err) {
+      console.error('Claim transaction error:', err);
+      setClaimStatus(prev => ({ ...prev, [`${type}-${roundId}`]: 'idle' }));
+    }
   };
 
   // Counts for Available Rewards tabs
@@ -378,6 +514,178 @@ export default function Checker() {
                 </button>
               </div>
             </div>
+
+            {/* 👑 ADMIN PANEL (Only visible for Contract Owner) */}
+            {isAdmin && (
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%)',
+                  borderRadius: '24px',
+                  padding: '28px',
+                  marginBottom: '32px',
+                  color: '#ffffff',
+                  border: '2px solid rgba(139, 92, 246, 0.4)',
+                  boxShadow: '0 8px 32px rgba(124, 58, 237, 0.18)'
+                }}
+              >
+                {/* Admin Header */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(168, 85, 247, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(168, 85, 247, 0.4)' }}>
+                      <Crown size={22} color="#c084fc" />
+                    </div>
+                    <div>
+                      <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: '#f3e8ff', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        Admin Panel · Merkle Root Publisher
+                        <span style={{ fontSize: '0.7rem', padding: '3px 8px', borderRadius: '99px', background: 'rgba(168, 85, 247, 0.3)', color: '#e9d5ff', fontWeight: 800 }}>OWNER</span>
+                      </h3>
+                      <span style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>
+                        Publish cryptographic snapshot proofs on-chain to enable claims on Base
+                      </span>
+                    </div>
+                  </div>
+
+                  <a
+                    href={`https://basescan.org/address/${DISTRIBUTOR_CA}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      fontSize: '0.78rem',
+                      color: '#c084fc',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      background: 'rgba(255, 255, 255, 0.08)',
+                      padding: '6px 12px',
+                      borderRadius: '10px',
+                      border: '1px solid rgba(168, 85, 247, 0.3)'
+                    }}
+                  >
+                    Contract: {DISTRIBUTOR_CA.slice(0, 6)}...{DISTRIBUTOR_CA.slice(-4)} <ExternalLink size={12} />
+                  </a>
+                </div>
+
+                {/* Form Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+                  {/* Epoch / Round Input */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#cbd5e1', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Epoch / Round ID
+                    </label>
+                    <input
+                      type="number"
+                      value={adminEpochId}
+                      onChange={(e) => setAdminEpochId(e.target.value)}
+                      style={{
+                        width: '100%',
+                        background: 'rgba(15, 23, 42, 0.8)',
+                        border: '1.5px solid rgba(148, 163, 184, 0.25)',
+                        borderRadius: '12px',
+                        padding: '12px 16px',
+                        color: '#ffffff',
+                        fontSize: '0.9rem',
+                        fontWeight: 700,
+                        outline: 'none',
+                        boxSizing: 'border-box'
+                      }}
+                      placeholder="1"
+                    />
+                  </div>
+
+                  {/* Merkle Root Input */}
+                  <div style={{ gridColumn: 'span 2' }}>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#cbd5e1', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Merkle Root (bytes32)
+                    </label>
+                    <input
+                      type="text"
+                      value={adminMerkleRoot}
+                      onChange={(e) => setAdminMerkleRoot(e.target.value)}
+                      style={{
+                        width: '100%',
+                        background: 'rgba(15, 23, 42, 0.8)',
+                        border: '1.5px solid rgba(148, 163, 184, 0.25)',
+                        borderRadius: '12px',
+                        padding: '12px 16px',
+                        color: '#38bdf8',
+                        fontFamily: 'monospace',
+                        fontSize: '0.85rem',
+                        fontWeight: 700,
+                        outline: 'none',
+                        boxSizing: 'border-box'
+                      }}
+                      placeholder="0x..."
+                    />
+                  </div>
+                </div>
+
+                {/* Submit Action */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+                  <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                    Snapshot details: <strong style={{ color: '#ffffff' }}>42 Eligible Wallets</strong> · <strong style={{ color: '#38bdf8' }}>10,000,000 $VIBE Pool</strong>
+                  </div>
+
+                  <button
+                    onClick={handleSetMerkleRoot}
+                    disabled={adminLoading}
+                    style={{
+                      background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '14px',
+                      padding: '12px 24px',
+                      fontSize: '0.9rem',
+                      fontWeight: 900,
+                      cursor: adminLoading ? 'not-allowed' : 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      boxShadow: '0 4px 18px rgba(124, 58, 237, 0.4)',
+                      transition: 'all 0.15s'
+                    }}
+                  >
+                    {adminLoading ? (
+                      <>
+                        <Loader2 size={16} className="spin" /> Confirming in Wallet...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles size={16} /> ⚡ Publish Merkle Root On-Chain
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Success Banner */}
+                {adminSuccess && (
+                  <div style={{ marginTop: '16px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981', borderRadius: '12px', padding: '12px 16px', color: '#a7f3d0', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <CheckCircle2 size={18} color="#10b981" />
+                      <strong>Merkle Root successfully published on Base! Holders can now claim!</strong>
+                    </div>
+                    {adminTxHash && adminTxHash.startsWith('0x') && (
+                      <a
+                        href={`https://basescan.org/tx/${adminTxHash}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ color: '#34d399', textDecoration: 'underline', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                      >
+                        View Tx on Basescan <ExternalLink size={13} />
+                      </a>
+                    )}
+                  </div>
+                )}
+
+                {/* Error Banner */}
+                {adminError && (
+                  <div style={{ marginTop: '16px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', borderRadius: '12px', padding: '12px 16px', color: '#fca5a5', fontSize: '0.84rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <AlertCircle size={18} color="#ef4444" />
+                    <span>{adminError}</span>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Sub-header: Available Rewards Label + Tabs */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '28px' }}>
