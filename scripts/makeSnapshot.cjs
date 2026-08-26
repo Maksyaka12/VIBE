@@ -1,4 +1,4 @@
-﻿/**
+/**
  * VIBE Tokenomics - Direct On-Chain RPC Snapshot & Merkle Tree Generator
  * 
  * Usage:
@@ -115,45 +115,58 @@ async function runSnapshot() {
 
   console.log('[1/4] 🔍 Scanning 100% of transfer events directly on Base blockchain (Blocks ' + TOKEN_START_BLOCK + ' -> ' + latestBlock + ')...');
   const addresses = new Set();
-  const chunkSize = 8000n;
+  const chunkSize = 9500n;
   let totalLogs = 0;
 
+  const ranges = [];
   for (let from = TOKEN_START_BLOCK; from <= latestBlock; from += chunkSize) {
     const to = from + chunkSize - 1n > latestBlock ? latestBlock : from + chunkSize - 1n;
-    let success = false;
-    for (let retry = 0; retry < 5; retry++) {
-      try {
-        const logs = await client.getLogs({
-          address: TOKEN_ADDRESS,
-          event: tokenAbi[0],
-          fromBlock: from,
-          toBlock: to
-        });
-        totalLogs += logs.length;
-        logs.forEach(l => {
-          if (l.args.to) addresses.add(l.args.to.toLowerCase());
-          if (l.args.from) addresses.add(l.args.from.toLowerCase());
-        });
-        success = true;
-        break;
-      } catch (err) {
-        await sleep(500 * (retry + 1));
-      }
-    }
-    if (!success) {
-      console.error('Failed to get logs for range:', from.toString(), to.toString());
-    }
+    ranges.push({ from, to });
   }
 
-  console.log('Total Transfer Events Indexed: ' + totalLogs);
-  console.log('Total Unique Addresses Discovered on Base: ' + addresses.size);
+  console.log(`Total block ranges to scan: ${ranges.length}`);
+
+  // Fetch in parallel batches of 10
+  const concurrency = 10;
+  for (let i = 0; i < ranges.length; i += concurrency) {
+    const batch = ranges.slice(i, i + concurrency);
+    const results = await Promise.all(batch.map(async ({ from, to }) => {
+      for (let retry = 0; retry < 5; retry++) {
+        try {
+          const logs = await client.getLogs({
+            address: TOKEN_ADDRESS,
+            event: tokenAbi[0],
+            fromBlock: from,
+            toBlock: to
+          });
+          return logs;
+        } catch (err) {
+          await sleep(200 * (retry + 1));
+        }
+      }
+      console.error('Failed to get logs for range:', from.toString(), to.toString());
+      return [];
+    }));
+
+    for (const logs of results) {
+      totalLogs += logs.length;
+      logs.forEach(l => {
+        if (l.args.to) addresses.add(l.args.to.toLowerCase());
+        if (l.args.from) addresses.add(l.args.from.toLowerCase());
+      });
+    }
+    process.stdout.write(`Scanned ${Math.min(i + concurrency, ranges.length)}/${ranges.length} ranges (${addresses.size} addresses found)...\r`);
+  }
+  console.log(`\nTotal Transfer Events Indexed: ${totalLogs}`);
+  console.log(`Total Unique Addresses Discovered on Base: ${addresses.size}`);
 
   const userAddrs = Array.from(addresses).filter(a => !SYSTEM_EXCLUSIONS.includes(a));
   console.log('[2/4] 🔍 Multicalling live balanceOf for all ' + userAddrs.length + ' addresses via Base RPC...');
 
   const eligible = [];
-  for (let i = 0; i < userAddrs.length; i += 100) {
-    const chunk = userAddrs.slice(i, i + 100);
+  const balanceChunkSize = 200;
+  for (let i = 0; i < userAddrs.length; i += balanceChunkSize) {
+    const chunk = userAddrs.slice(i, i + balanceChunkSize);
     const calls = chunk.map(a => ({ address: TOKEN_ADDRESS, abi: tokenAbi, functionName: 'balanceOf', args: [a] }));
     const res = await client.multicall({ contracts: calls });
     for (let j = 0; j < chunk.length; j++) {
