@@ -1377,42 +1377,12 @@ export default function Checker() {
                         {currentTime >= new Date(upcomingHolderRound?.snapshotIso) ? (
                           <>
                             <Check size={12} color="#10b981" strokeWidth={3} />
-                            <span>Snapshot taken:</span>
-                            <span
-                              style={{
-                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-                                fontSize: '0.74rem',
-                                fontWeight: 900,
-                                color: '#059669',
-                                background: '#ecfdf5',
-                                border: '1px solid #a7f3d0',
-                                padding: '2px 6px',
-                                borderRadius: '6px',
-                                letterSpacing: '0.02em'
-                              }}
-                            >
-                              {upcomingHolderRound?.snapshotDate || 'Aug 26, 00:00 UTC'}
-                            </span>
+                            <span>Snapshot taken: {upcomingHolderRound?.snapshotDate || 'Aug 26, 00:00 UTC'}</span>
                           </>
                         ) : (
                           <>
                             <Clock size={12} color="#64748b" />
-                            <span>Snapshot date:</span>
-                            <span
-                              style={{
-                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-                                fontSize: '0.74rem',
-                                fontWeight: 900,
-                                color: '#0284c7',
-                                background: 'rgba(2, 132, 199, 0.08)',
-                                border: '1px solid rgba(2, 132, 199, 0.2)',
-                                padding: '2px 6px',
-                                borderRadius: '6px',
-                                letterSpacing: '0.02em'
-                              }}
-                            >
-                              {upcomingHolderRound?.snapshotDate || 'Aug 26, 00:00 UTC'}
-                            </span>
+                            <span>Snapshot date: {upcomingHolderRound?.snapshotDate || 'Aug 26, 00:00 UTC'}</span>
                           </>
                         )}
                       </div>
@@ -1628,42 +1598,12 @@ export default function Checker() {
                         {currentTime >= new Date(upcomingVibeClubRound?.snapshotIso) ? (
                           <>
                             <Check size={12} color="#10b981" strokeWidth={3} />
-                            <span>Snapshot taken:</span>
-                            <span
-                              style={{
-                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-                                fontSize: '0.74rem',
-                                fontWeight: 900,
-                                color: '#059669',
-                                background: '#ecfdf5',
-                                border: '1px solid #a7f3d0',
-                                padding: '2px 6px',
-                                borderRadius: '6px',
-                                letterSpacing: '0.02em'
-                              }}
-                            >
-                              {upcomingVibeClubRound?.snapshotDate || 'Aug 28, 00:00 UTC'}
-                            </span>
+                            <span>Snapshot taken: {upcomingVibeClubRound?.snapshotDate || 'Aug 28, 00:00 UTC'}</span>
                           </>
                         ) : (
                           <>
                             <Clock size={12} color="#64748b" />
-                            <span>Snapshot date:</span>
-                            <span
-                              style={{
-                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-                                fontSize: '0.74rem',
-                                fontWeight: 900,
-                                color: '#0284c7',
-                                background: 'rgba(2, 132, 199, 0.08)',
-                                border: '1px solid rgba(2, 132, 199, 0.2)',
-                                padding: '2px 6px',
-                                borderRadius: '6px',
-                                letterSpacing: '0.02em'
-                              }}
-                            >
-                              {upcomingVibeClubRound?.snapshotDate || 'Aug 28, 00:00 UTC'}
-                            </span>
+                            <span>Snapshot date: {upcomingVibeClubRound?.snapshotDate || 'Aug 28, 00:00 UTC'}</span>
                           </>
                         )}
                       </div>
