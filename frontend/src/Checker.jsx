@@ -321,21 +321,22 @@ export default function Checker() {
   // Check Claim Status for Round 1 Holder
   const isHolderRound1Claimed = (Array.isArray(claimedHistory) && claimedHistory.some(c => c && c.id === 'holder-1')) || claimStatus['holder-1'] === 'claimed';
   const isHolderRound1Live = currentTime >= new Date(HOLDER_ROUNDS[0].targetDate);
-  const isHolderRound1Available = isHolderRound1Live && !isHolderRound1Claimed;
+  // Snapshot for Round 1 was taken 26 Aug 00:00 UTC and Merkle proof is uploaded, so it is in Available section until claimed
+  const isHolderRound1Available = !isHolderRound1Claimed;
 
   // Check Claim Status for Royalty 1 Vibe Club
   const isVibeClubRoyalty1Claimed = (Array.isArray(claimedHistory) && claimedHistory.some(c => c && c.id === 'vibeclub-1')) || claimStatus['vibeclub-1'] === 'claimed';
   const isVibeClubRoyalty1Live = currentTime >= new Date(VIBECLUB_ROUNDS[0].targetDate);
   const isVibeClubRoyalty1Available = isVibeClubRoyalty1Live && !isVibeClubRoyalty1Claimed;
 
-  // Available claim count (where user is eligible and ready to claim)
+  // Available claim count (where user is eligible and ready/scheduled to claim)
   const availableHolderCount = (isHolderRound1Available && (hasConfirmedHolderClaim || isHolderEligibleLive)) ? 1 : 0;
   const availableVibeClubCount = (isVibeClubRoyalty1Available && isVibeClubEligible) ? 1 : 0;
   const totalAvailableCount = availableHolderCount + availableVibeClubCount;
 
   // Next Upcoming Unlocks to Display
-  const upcomingHolderRound = isHolderRound1Live ? HOLDER_ROUNDS[1] : HOLDER_ROUNDS[0];
-  const upcomingVibeClubRound = isVibeClubRoyalty1Live ? VIBECLUB_ROUNDS[1] : VIBECLUB_ROUNDS[0];
+  const upcomingHolderRound = isHolderRound1Available ? HOLDER_ROUNDS[1] : HOLDER_ROUNDS[0];
+  const upcomingVibeClubRound = isVibeClubRoyalty1Available ? VIBECLUB_ROUNDS[1] : VIBECLUB_ROUNDS[0];
 
   // Set Merkle Root on-chain function (supports Coinbase Smart Wallet & EOA)
   const handleSetMerkleRoot = async () => {
@@ -781,7 +782,7 @@ export default function Checker() {
                     <div style={{ fontSize: '1.22rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
                       {loading || balance === null ? <Loader2 size={15} className="spin" /> : formatCompactBalance(balance)}
                     </div>
-                    <div style={{ fontSize: '0.74rem', color: isHolderEligibleLive ? '#10b981' : '#ef4444', fontWeight: 700, lineHeight: 1.2 }}>
+                    <div style={{ fontSize: '0.67rem', color: isHolderEligibleLive ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', letterSpacing: '-0.02em' }}>
                       {isHolderEligibleLive ? '✓ Eligible for Holder Rewards' : 'Not Eligible for Holder Rewards'}
                     </div>
                   </div>
@@ -832,7 +833,7 @@ export default function Checker() {
                         </a>
                       )}
                     </div>
-                    <div style={{ fontSize: '0.74rem', color: (nftCount && nftCount > 0) ? '#10b981' : '#ef4444', fontWeight: 700, lineHeight: 1.2 }}>
+                    <div style={{ fontSize: '0.67rem', color: (nftCount && nftCount > 0) ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', letterSpacing: '-0.02em' }}>
                       {(nftCount && nftCount > 0) ? '✓ Eligible for NFT Royalties' : 'Not Eligible for NFT Royalties'}
                     </div>
                   </div>
@@ -1002,9 +1003,15 @@ export default function Checker() {
                                 </span>
                               </h4>
                             </div>
-                            <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#059669', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
-                              CLAIM IS LIVE
-                            </span>
+                            {isHolderRound1Live ? (
+                              <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#059669', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
+                                CLAIM IS LIVE
+                              </span>
+                            ) : (
+                              <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
+                                CLAIM OPENS 14:00 UTC
+                              </span>
+                            )}
                           </div>
 
                           {/* Metric Box (Rewards Pool) */}
@@ -1105,48 +1112,78 @@ export default function Checker() {
                         {/* Action Button */}
                         <div>
                           {(hasConfirmedHolderClaim || isHolderEligibleLive) ? (
-                            <button
-                              onClick={() => handleClaim('holder', 1, holderRewardAmount)}
-                              disabled={claimStatus['holder-1'] === 'claiming'}
+                            isHolderRound1Live ? (
+                              <button
+                                onClick={() => handleClaim('holder', 1, holderRewardAmount)}
+                                disabled={claimStatus['holder-1'] === 'claiming'}
+                                className="btn-fill"
+                                style={{
+                                  width: '100%',
+                                  padding: '13px 20px',
+                                  borderRadius: '14px',
+                                  fontSize: '0.94rem',
+                                  fontWeight: 900,
+                                  justifyContent: 'center',
+                                  boxShadow: '0 4px 18px rgba(0, 82, 255, 0.32)',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                {claimStatus['holder-1'] === 'claiming' ? (
+                                  <>
+                                    <Loader2 size={18} className="spin" /> Confirming Claim on Base...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Gift size={18} /> Claim {(holderRewardAmount || 0).toLocaleString('en-US')} $VIBE
+                                  </>
+                                )}
+                              </button>
+                            ) : (
+                              <button
+                                disabled
+                                style={{
+                                  width: '100%',
+                                  padding: '13px 20px',
+                                  borderRadius: '14px',
+                                  fontSize: '0.92rem',
+                                  fontWeight: 900,
+                                  background: '#f1f5f9',
+                                  border: '1.5px solid #cbd5e1',
+                                  color: '#64748b',
+                                  cursor: 'not-allowed',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: '8px'
+                                }}
+                              >
+                                <Lock size={16} /> Claim opens 14:00 UTC
+                              </button>
+                            )
+                          ) : (
+                            <a
+                              href={O1}
+                              target="_blank"
+                              rel="noreferrer"
                               className="btn-fill"
                               style={{
                                 width: '100%',
                                 padding: '13px 20px',
                                 borderRadius: '14px',
-                                fontSize: '0.94rem',
+                                background: '#ef4444',
+                                color: '#ffffff',
                                 fontWeight: 900,
+                                fontSize: '0.92rem',
+                                display: 'flex',
+                                alignItems: 'center',
                                 justifyContent: 'center',
-                                boxShadow: '0 4px 18px rgba(0, 82, 255, 0.32)',
-                                cursor: 'pointer'
+                                gap: '6px',
+                                textDecoration: 'none',
+                                boxShadow: '0 4px 14px rgba(239, 68, 68, 0.25)'
                               }}
                             >
-                              {claimStatus['holder-1'] === 'claiming' ? (
-                                <>
-                                  <Loader2 size={18} className="spin" /> Confirming Claim on Base...
-                                </>
-                              ) : (
-                                <>
-                                  <Gift size={18} /> Claim {(holderRewardAmount || 0).toLocaleString('en-US')} $VIBE
-                                </>
-                              )}
-                            </button>
-                          ) : (
-                            <button
-                              disabled
-                              style={{
-                                width: '100%',
-                                padding: '12px 20px',
-                                borderRadius: '14px',
-                                background: '#f1f5f9',
-                                border: '1px solid #cbd5e1',
-                                color: '#94a3b8',
-                                fontWeight: 800,
-                                fontSize: '0.86rem',
-                                cursor: 'not-allowed'
-                              }}
-                            >
-                              Not Eligible for this Round
-                            </button>
+                              Buy & Hold 5M+ $VIBE <ArrowUpRight size={16} />
+                            </a>
                           )}
 
                           {/* Claim window ends caption with countdown */}
@@ -1163,22 +1200,45 @@ export default function Checker() {
                             }}
                           >
                             <Clock size={13} color="#64748b" />
-                            <span>Claim window ends:</span>
-                            <span
-                              style={{
-                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                                fontSize: '0.78rem',
-                                fontWeight: 900,
-                                color: '#0284c7',
-                                background: 'rgba(2, 132, 199, 0.08)',
-                                border: '1px solid rgba(2, 132, 199, 0.2)',
-                                padding: '2px 7px',
-                                borderRadius: '6px',
-                                letterSpacing: '0.04em'
-                              }}
-                            >
-                              {formatDigitalCountdown(upcomingHolderRound?.targetDate)}
-                            </span>
+                            {isHolderRound1Live ? (
+                              <>
+                                <span>Claim window ends:</span>
+                                <span
+                                  style={{
+                                    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                                    fontSize: '0.78rem',
+                                    fontWeight: 900,
+                                    color: '#0284c7',
+                                    background: 'rgba(2, 132, 199, 0.08)',
+                                    border: '1px solid rgba(2, 132, 199, 0.2)',
+                                    padding: '2px 7px',
+                                    borderRadius: '6px',
+                                    letterSpacing: '0.04em'
+                                  }}
+                                >
+                                  {formatDigitalCountdown(upcomingHolderRound?.targetDate)}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <span>Claim opens in:</span>
+                                <span
+                                  style={{
+                                    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                                    fontSize: '0.78rem',
+                                    fontWeight: 900,
+                                    color: '#0284c7',
+                                    background: 'rgba(2, 132, 199, 0.08)',
+                                    border: '1px solid rgba(2, 132, 199, 0.2)',
+                                    padding: '2px 7px',
+                                    borderRadius: '6px',
+                                    letterSpacing: '0.04em'
+                                  }}
+                                >
+                                  {formatDigitalCountdown(HOLDER_ROUNDS[0]?.targetDate)}
+                                </span>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
