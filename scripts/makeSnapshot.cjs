@@ -111,16 +111,49 @@ async function runSnapshot() {
   ]);
 
   const client = createPublicClient({ chain: base, transport });
-  const latestBlock = await client.getBlockNumber();
+  
+  // Find exact historical block on Base at target snapshot time (00:00:00 UTC)
+  const SNAPSHOT_TIMESTAMPS = {
+    1: '2026-08-26T00:00:00Z',
+    2: '2026-09-25T00:00:00Z',
+    3: '2026-10-25T00:00:00Z',
+    4: '2026-11-24T00:00:00Z'
+  };
+  const targetIso = SNAPSHOT_TIMESTAMPS[roundNumber] || '2026-08-26T00:00:00Z';
+  const targetTs = Math.floor(new Date(targetIso).getTime() / 1000);
 
-  console.log('[1/4] 🔍 Scanning 100% of transfer events directly on Base blockchain (Blocks ' + TOKEN_START_BLOCK + ' -> ' + latestBlock + ')...');
+  console.log(`🔍 Finding exact historical block on Base for ${targetIso} (00:00:00 UTC)...`);
+  const latestBlockData = await client.getBlock({ blockTag: 'latest' });
+  let snapshotBlock = latestBlockData.number;
+
+  if (Number(latestBlockData.timestamp) > targetTs) {
+    let low = TOKEN_START_BLOCK;
+    let high = latestBlockData.number;
+    while (low <= high) {
+      const mid = (low + high) / 2n;
+      const b = await client.getBlock({ blockNumber: mid });
+      const bTs = Number(b.timestamp);
+      if (bTs <= targetTs) {
+        snapshotBlock = mid;
+        low = mid + 1n;
+      } else {
+        high = mid - 1n;
+      }
+    }
+  }
+
+  const snapshotBlockInfo = await client.getBlock({ blockNumber: snapshotBlock });
+  console.log(`📌 Exact Snapshot Block: ${snapshotBlock.toString()}`);
+  console.log(`📌 Block Timestamp:      ${new Date(Number(snapshotBlockInfo.timestamp) * 1000).toISOString()}`);
+
+  console.log('[1/4] 🔍 Scanning 100% of transfer events directly on Base blockchain (Blocks ' + TOKEN_START_BLOCK + ' -> ' + snapshotBlock + ')...');
   const addresses = new Set();
   const chunkSize = 9500n;
   let totalLogs = 0;
 
   const ranges = [];
-  for (let from = TOKEN_START_BLOCK; from <= latestBlock; from += chunkSize) {
-    const to = from + chunkSize - 1n > latestBlock ? latestBlock : from + chunkSize - 1n;
+  for (let from = TOKEN_START_BLOCK; from <= snapshotBlock; from += chunkSize) {
+    const to = from + chunkSize - 1n > snapshotBlock ? snapshotBlock : from + chunkSize - 1n;
     ranges.push({ from, to });
   }
 
@@ -161,14 +194,14 @@ async function runSnapshot() {
   console.log(`Total Unique Addresses Discovered on Base: ${addresses.size}`);
 
   const userAddrs = Array.from(addresses).filter(a => !SYSTEM_EXCLUSIONS.includes(a));
-  console.log('[2/4] 🔍 Multicalling live balanceOf for all ' + userAddrs.length + ' addresses via Base RPC...');
+  console.log('[2/4] 🔍 Multicalling historical balanceOf for all ' + userAddrs.length + ' addresses at 00:00 UTC Block (' + snapshotBlock.toString() + ')...');
 
   const eligible = [];
   const balanceChunkSize = 200;
   for (let i = 0; i < userAddrs.length; i += balanceChunkSize) {
     const chunk = userAddrs.slice(i, i + balanceChunkSize);
     const calls = chunk.map(a => ({ address: TOKEN_ADDRESS, abi: tokenAbi, functionName: 'balanceOf', args: [a] }));
-    const res = await client.multicall({ contracts: calls });
+    const res = await client.multicall({ contracts: calls, blockNumber: snapshotBlock });
     for (let j = 0; j < chunk.length; j++) {
       const balWei = res[j].result || 0n;
       const bal = Number(formatUnits(balWei, 18));
@@ -257,8 +290,8 @@ async function runSnapshot() {
     round: roundNumber,
     token: TOKEN_ADDRESS,
     vestingContract: VESTING_CONTRACT,
-    snapshotBlock: latestBlock.toString(),
-    snapshotDate: new Date().toISOString(),
+    snapshotBlock: snapshotBlock.toString(),
+    snapshotDate: targetIso,
     merkleRoot: root,
     totalHolders: elements.length,
     totalEligibleSupply: totalEligibleSum,

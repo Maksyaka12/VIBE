@@ -146,7 +146,7 @@ export default function Checker() {
 
   // Admin Panel States
   const [adminEpochId, setAdminEpochId] = useState('1');
-  const [adminMerkleRoot, setAdminMerkleRoot] = useState(round1Data?.merkleRoot || '0xde26cf00d898dccd1b8fc20204c0de6de547d2dea82593cc531a27ad11d365e0');
+  const [adminMerkleRoot, setAdminMerkleRoot] = useState(round1Data?.merkleRoot || '0x3a826beecced56e245144cdd7b7924ecf7c7d3aa23528b067086c2f25c1b3863');
   const [adminWithdrawAmount, setAdminWithdrawAmount] = useState('');
   const [adminBurnAmount, setAdminBurnAmount] = useState('');
   const [adminMetrics, setAdminMetrics] = useState({

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { Copy, Check, Menu, X, ArrowRight, ArrowUpRight, ArrowRightCircle, TrendingUp, Clock, Rocket, Globe, Star, Crown, Laptop, Loader2, Flame, Gift, Users, ShieldCheck, Calculator, Calendar, RotateCcw, Gamepad2, Coins, Sparkles, Lock, ChevronDown, HelpCircle } from 'lucide-react';
 import { PrivyProvider } from '@privy-io/react-auth';
 import { WagmiProvider as PrivyWagmiProvider } from '@privy-io/wagmi';
@@ -86,7 +86,7 @@ function Nav() {
     { id: 'about', label: 'About' },
     { id: 'tokenomics', label: 'Tokenomics' },
     { id: 'hub', label: 'Rewards Hub' },
-    { id: 'checker', label: 'Claim Portal' },
+    { id: 'claim', label: 'Claim Portal' },
     { id: 'roadmap', label: 'Roadmap' },
     { id: 'chart', label: 'Chart' },
     { id: 'trade', label: 'Trade' }
@@ -113,7 +113,7 @@ function Nav() {
                     ...(id === 'hub' ? {
                       color: '#ff6600',
                       fontWeight: 800
-                    } : id === 'checker' ? {
+                    } : (id === 'claim' || id === 'checker') ? {
                       color: 'var(--blue)',
                       fontWeight: 800
                     } : {})
@@ -152,7 +152,7 @@ function Nav() {
                 ...(id === 'hub' || id === 'rewards' ? {
                   color: '#ff6600',
                   fontWeight: 800
-                } : id === 'checker' ? {
+                } : (id === 'claim' || id === 'checker') ? {
                   color: 'var(--blue)',
                   fontWeight: 800
                 } : {})
@@ -931,7 +931,7 @@ function Tokenomics() {
                   <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Flame color="#ef4444" size={20}/></div>
                   <div className="who-t">Unclaimed Tokens<span>Permanently burned</span></div>
                 </div>
-                <Link to="/checker" className="who-r" style={{textDecoration:'none', cursor:'pointer', background:'var(--blue)'}}>
+                <Link to="/claim" className="who-r" style={{textDecoration:'none', cursor:'pointer', background:'var(--blue)'}}>
                   <div className="who-ico" style={{display:'flex', alignItems:'center', justifyContent:'center'}}><Check color="#fff" size={20}/></div>
                   <div className="who-t" style={{color:'#fff'}}>Check your eligibility<span style={{color:'rgba(255,255,255,0.8)'}}>Qualify for the next distribution <ArrowRightCircle size={14} style={{verticalAlign:'middle', marginLeft:4}}/></span></div>
                 </Link>
@@ -2760,7 +2760,7 @@ function Rewards() {
                       {/* Action Button: Claim redirect or Locked */}
                       {isUnlocked ? (
                         <Link
-                          to="/checker"
+                          to="/claim"
                           className="btn-fill"
                           style={{
                             background: 'var(--blue)',
@@ -3190,9 +3190,9 @@ function DomainRouter() {
       <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} />
       <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
       <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
-      <Route path="/checker" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
       <Route path="/claim" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
-      <Route path="/portal" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
+      <Route path="/checker" element={<Navigate to="/claim" replace />} />
+      <Route path="/portal" element={<Navigate to="/claim" replace />} />
       <Route
         path="/verse"
         element={isDevPreview ? <VibeVerse /> : <VibeVerseLockScreen />}
