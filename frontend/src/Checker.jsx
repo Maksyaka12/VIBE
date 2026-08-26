@@ -19,9 +19,11 @@ import {
   Lock,
   Gift,
   ShieldCheck,
-  ChevronDown
+  ChevronDown,
+  User
 } from 'lucide-react';
 import round1Data from './data/round_1_proofs.json';
+import nftNames from './data/nftNames.json';
 
 const CA = '0xb200000000000000000000df24ecb8bf51100a01';
 const NFT_CA = '0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886';
@@ -117,6 +119,7 @@ export default function Checker() {
   const { wallets } = useWallets();
   const [balance, setBalance] = useState(null);
   const [nftCount, setNftCount] = useState(null);
+  const [userNft, setUserNft] = useState(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [currentTime, setCurrentTime] = useState(() => new Date());
@@ -146,6 +149,17 @@ export default function Checker() {
 
   const address = user?.wallet?.address;
 
+  // Smooth Scroll Helper
+  const scrollToSection = (sectionId, setOpenState) => {
+    if (setOpenState) setOpenState(true);
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 60);
+  };
+
   // Load Claim History from localStorage for Connected Wallet
   useEffect(() => {
     if (address) {
@@ -170,6 +184,48 @@ export default function Checker() {
     }
   }, [address]);
 
+  // Fetch user specific Vibe Club NFT for avatar & name
+  const fetchUserNft = async (userAddress, count) => {
+    if (!userAddress || !count || count <= 0) {
+      setUserNft(null);
+      return;
+    }
+    try {
+      const client = createPublicClient({ chain: base, transport: http('https://mainnet.base.org') });
+      const calls = [];
+      const checkLimit = 120;
+      for (let i = 1; i <= checkLimit; i++) {
+        calls.push({
+          address: NFT_CA,
+          abi: parseAbi(['function ownerOf(uint256) view returns (address)']),
+          functionName: 'ownerOf',
+          args: [BigInt(i)]
+        });
+      }
+      const results = await client.multicall({ contracts: calls, allowFailure: true });
+      for (let i = 0; i < results.length; i++) {
+        if (results[i].status === 'success' && results[i].result && results[i].result.toLowerCase() === userAddress.toLowerCase()) {
+          const tokenId = i + 1;
+          const name = nftNames[String(tokenId)] || `Vibe Club #${tokenId}`;
+          setUserNft({
+            id: tokenId,
+            name,
+            image: `/nft/images/${tokenId}.png`
+          });
+          return;
+        }
+      }
+      setUserNft({
+        id: 1,
+        name: 'Vibe Club Member',
+        image: '/new-logo-vibe.png'
+      });
+    } catch (err) {
+      console.error("Error finding user NFT:", err);
+      setUserNft(null);
+    }
+  };
+
   // Fetch balances from on-chain RPC
   const fetchBalances = async () => {
     if (!address) return;
@@ -187,6 +243,7 @@ export default function Checker() {
       setBalance(Number(formatUnits(bal, 18)));
 
       // 2. Fetch Vibe Club NFT balance
+      let currentNfts = 0;
       try {
         const nfts = await client.readContract({
           address: NFT_CA,
@@ -194,7 +251,8 @@ export default function Checker() {
           functionName: 'balanceOf',
           args: [address]
         });
-        setNftCount(Number(nfts));
+        currentNfts = Number(nfts);
+        setNftCount(currentNfts);
       } catch (nftErr) {
         const minted = await client.readContract({
           address: NFT_CA,
@@ -202,12 +260,20 @@ export default function Checker() {
           functionName: 'walletMintCount',
           args: [address]
         });
-        setNftCount(Number(minted));
+        currentNfts = Number(minted);
+        setNftCount(currentNfts);
+      }
+
+      if (currentNfts > 0) {
+        fetchUserNft(address, currentNfts);
+      } else {
+        setUserNft(null);
       }
     } catch (e) {
       console.error("Failed to read balances:", e);
       if (balance === null) setBalance(0);
       if (nftCount === null) setNftCount(0);
+      setUserNft(null);
     } finally {
       setLoading(false);
     }
@@ -472,144 +538,307 @@ export default function Checker() {
           /* ── AUTHENTICATED PORTAL VIEW ── */
           <div>
             
-            {/* Top Connected Wallet Info Bar */}
+            {/* 👤 STYLISH WEB3 USER PROFILE CARD */}
             <div
               style={{
-                background: 'rgba(255, 255, 255, 0.85)',
-                backdropFilter: 'blur(16px)',
-                WebkitBackdropFilter: 'blur(16px)',
-                border: '1.5px solid rgba(0, 160, 255, 0.22)',
-                borderRadius: '22px',
-                padding: '16px 24px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '16px',
-                marginBottom: '32px',
-                boxShadow: '0 4px 20px rgba(0, 82, 255, 0.05)'
+                background: 'rgba(255, 255, 255, 0.82)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                border: '1.5px solid rgba(0, 140, 255, 0.22)',
+                borderRadius: '24px',
+                padding: '22px 28px',
+                boxShadow: '0 8px 32px rgba(0, 82, 255, 0.06)',
+                marginBottom: '36px'
               }}
             >
-              {/* Left: User Address & Status */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ width: '42px', height: '42px', borderRadius: '50%', overflow: 'hidden', border: '2px solid var(--blue)', flexShrink: 0, boxShadow: '0 2px 10px rgba(0, 82, 255, 0.15)' }}>
-                  <img src="/new-logo-vibe.png" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="VIBE" />
+              {/* Top Row: User Avatar & Info (Left) + Balances & Action Buttons (Right) */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: '20px'
+                }}
+              >
+                {/* Left: Avatar + Identity + Wallet Address */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  {/* Avatar Container */}
+                  <div
+                    style={{
+                      width: '62px',
+                      height: '62px',
+                      borderRadius: '18px',
+                      overflow: 'hidden',
+                      border: userNft ? '2px solid var(--blue)' : '2px solid #cbd5e1',
+                      background: userNft ? '#ffffff' : '#f1f5f9',
+                      boxShadow: userNft ? '0 4px 16px rgba(0, 82, 255, 0.18)' : '0 2px 8px rgba(0,0,0,0.04)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}
+                  >
+                    {userNft ? (
+                      <img
+                        src={userNft.image}
+                        alt={userNft.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={(e) => { e.target.src = '/new-logo-vibe.png'; }}
+                      />
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '2px', color: '#94a3b8' }}>
+                        <User size={26} color="#64748b" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Name and Address */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <h3
+                        style={{
+                          margin: 0,
+                          fontSize: '1.25rem',
+                          fontWeight: 700,
+                          color: 'var(--ink)',
+                          letterSpacing: '-0.01em',
+                          lineHeight: 1.2
+                        }}
+                      >
+                        {userNft ? userNft.name : 'Unknown Dog'}
+                      </h3>
+                      {userNft && (
+                        <span
+                          style={{
+                            fontSize: '0.68rem',
+                            fontWeight: 700,
+                            color: '#10b981',
+                            background: 'rgba(16, 185, 129, 0.1)',
+                            border: '1px solid rgba(16, 185, 129, 0.25)',
+                            padding: '2px 8px',
+                            borderRadius: '99px',
+                            lineHeight: 1.2
+                          }}
+                        >
+                          Vibe Club
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Connected Wallet Row */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }} />
+                      <span style={{ fontFamily: 'ui-monospace, monospace', fontSize: '0.84rem', color: '#64748b', fontWeight: 500 }}>
+                        {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : ''}
+                      </span>
+                      <button
+                        onClick={copyAddress}
+                        title="Copy Address"
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
+                          color: copied ? '#10b981' : 'var(--blue)',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          padding: '2px',
+                          marginLeft: '2px'
+                        }}
+                      >
+                        {copied ? <Check size={14} strokeWidth={2.5} /> : <Copy size={14} />}
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
-                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981', display: 'inline-block' }} />
-                    <span style={{ fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--muted)', fontWeight: 800, lineHeight: 1 }}>
-                      Connected Wallet
-                    </span>
+
+                {/* Right: Balance Badges & Actions */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                  {/* $VIBE Balance Box */}
+                  <div
+                    style={{
+                      background: '#ffffff',
+                      borderRadius: '16px',
+                      border: '1px solid rgba(0, 140, 255, 0.18)',
+                      padding: '8px 16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      boxShadow: '0 2px 8px rgba(0, 82, 255, 0.03)'
+                    }}
+                  >
+                    <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(0, 82, 255, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Coins size={16} color="var(--blue)" />
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 600, lineHeight: 1.1, marginBottom: '2px' }}>
+                        $VIBE Balance
+                      </span>
+                      <span style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--ink)', lineHeight: 1 }}>
+                        {loading || balance === null ? <Loader2 size={13} className="spin" /> : `${(balance || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE`}
+                      </span>
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <strong style={{ fontSize: '0.96rem', color: 'var(--ink)', fontFamily: 'monospace', fontWeight: 800, lineHeight: 1 }}>
-                      {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : ''}
-                    </strong>
-                    <button
-                      onClick={copyAddress}
-                      title="Copy Address"
-                      style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: copied ? '#10b981' : 'var(--blue)', display: 'inline-flex', alignItems: 'center', padding: '2px' }}
-                    >
-                      {copied ? <Check size={15} strokeWidth={3} /> : <Copy size={15} />}
-                    </button>
+
+                  {/* Vibe Club NFTs Box */}
+                  <div
+                    style={{
+                      background: '#ffffff',
+                      borderRadius: '16px',
+                      border: '1px solid rgba(16, 185, 129, 0.22)',
+                      padding: '8px 16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      boxShadow: '0 2px 8px rgba(16, 185, 129, 0.03)'
+                    }}
+                  >
+                    <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Crown size={16} color="#10b981" />
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 600, lineHeight: 1.1, marginBottom: '2px' }}>
+                        Vibe Club
+                      </span>
+                      <span style={{ fontSize: '0.98rem', fontWeight: 700, color: '#059669', lineHeight: 1 }}>
+                        {loading || nftCount === null ? <Loader2 size={13} className="spin" /> : `${nftCount || 0} NFT${nftCount === 1 ? '' : 's'}`}
+                      </span>
+                    </div>
                   </div>
+
+                  {/* Refresh Button */}
+                  <button
+                    onClick={fetchBalances}
+                    disabled={loading}
+                    title="Refresh Balances"
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid rgba(0, 140, 255, 0.22)',
+                      padding: '10px',
+                      borderRadius: '12px',
+                      cursor: 'pointer',
+                      color: 'var(--blue)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 2px 6px rgba(0, 82, 255, 0.04)',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <RefreshCw size={15} className={loading ? 'spin' : ''} />
+                  </button>
+
+                  {/* Disconnect Button */}
+                  <button
+                    onClick={logout}
+                    style={{
+                      background: 'rgba(239, 68, 68, 0.06)',
+                      border: '1px solid rgba(239, 68, 68, 0.2)',
+                      color: '#ef4444',
+                      fontWeight: 600,
+                      fontSize: '0.84rem',
+                      padding: '9px 16px',
+                      borderRadius: '12px',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    Disconnect
+                  </button>
                 </div>
               </div>
 
-              {/* Right: Live Balances + Actions */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                {/* $VIBE Balance */}
-                <div
-                  style={{
-                    background: '#ffffff',
-                    padding: '8px 16px',
-                    borderRadius: '14px',
-                    border: '1px solid rgba(0, 160, 255, 0.18)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)'
-                  }}
-                >
-                  <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(0, 82, 255, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Coins size={16} color="var(--blue)" />
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <span style={{ fontSize: '0.62rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, lineHeight: 1.1, letterSpacing: '0.04em', marginBottom: '2px' }}>$VIBE Balance</span>
-                    <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 900, lineHeight: 1 }}>
-                      {loading || balance === null ? <Loader2 size={13} className="spin" style={{ display: 'inline' }} /> : `${(balance || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE`}
-                    </strong>
-                  </div>
+              {/* Bottom Row: Quick Navigation & Stats Bar */}
+              <div
+                style={{
+                  borderTop: '1px solid rgba(0, 140, 255, 0.12)',
+                  marginTop: '18px',
+                  paddingTop: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: '10px'
+                }}
+              >
+                <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span>Quick Jump:</span>
                 </div>
 
-                {/* Vibe Club NFTs */}
-                <div
-                  style={{
-                    background: '#ffffff',
-                    padding: '8px 16px',
-                    borderRadius: '14px',
-                    border: '1px solid rgba(16, 185, 129, 0.22)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    boxShadow: '0 2px 8px rgba(16, 185, 129, 0.04)'
-                  }}
-                >
-                  <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Crown size={16} color="#10b981" />
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <span style={{ fontSize: '0.62rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, lineHeight: 1.1, letterSpacing: '0.04em', marginBottom: '2px' }}>Vibe Club</span>
-                    <strong style={{ fontSize: '0.92rem', color: '#10b981', fontWeight: 900, lineHeight: 1 }}>
-                      {loading || nftCount === null ? <Loader2 size={13} className="spin" style={{ display: 'inline' }} /> : `${nftCount || 0} NFT${nftCount === 1 ? '' : 's'}`}
-                    </strong>
-                  </div>
-                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                  {/* Jump to Available Rewards */}
+                  <button
+                    onClick={() => scrollToSection('available-rewards-section', setIsAvailableOpen)}
+                    style={{
+                      background: isHolderRound1Available ? 'rgba(0, 82, 255, 0.08)' : '#ffffff',
+                      border: isHolderRound1Available ? '1px solid rgba(0, 82, 255, 0.28)' : '1px solid rgba(0, 140, 255, 0.16)',
+                      borderRadius: '10px',
+                      padding: '6px 14px',
+                      fontSize: '0.82rem',
+                      fontWeight: 600,
+                      color: isHolderRound1Available ? 'var(--blue)' : '#475569',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: isHolderRound1Available ? '#059669' : '#94a3b8' }} />
+                    Available ({totalAvailableCount})
+                  </button>
 
-                {/* Refresh & Disconnect */}
-                <button
-                  onClick={fetchBalances}
-                  disabled={loading}
-                  title="Refresh On-Chain Balances"
-                  style={{
-                    background: '#ffffff',
-                    border: '1px solid rgba(0, 160, 255, 0.25)',
-                    padding: '9px',
-                    borderRadius: '11px',
-                    cursor: 'pointer',
-                    color: 'var(--blue)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.15s'
-                  }}
-                >
-                  <RefreshCw size={15} className={loading ? 'spin' : ''} />
-                </button>
-                <button
-                  onClick={logout}
-                  style={{
-                    background: 'rgba(239, 68, 68, 0.08)',
-                    border: '1px solid rgba(239, 68, 68, 0.2)',
-                    color: '#ef4444',
-                    fontWeight: 800,
-                    fontSize: '0.8rem',
-                    padding: '9px 16px',
-                    borderRadius: '11px',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s'
-                  }}
-                >
-                  Disconnect
-                </button>
+                  {/* Jump to Upcoming Rewards */}
+                  <button
+                    onClick={() => scrollToSection('upcoming-rewards-section', setIsUpcomingOpen)}
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid rgba(0, 140, 255, 0.16)',
+                      borderRadius: '10px',
+                      padding: '6px 14px',
+                      fontSize: '0.82rem',
+                      fontWeight: 600,
+                      color: '#475569',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <Clock size={13} color="#0284c7" />
+                    Upcoming (2)
+                  </button>
+
+                  {/* Jump to History */}
+                  <button
+                    onClick={() => scrollToSection('claimed-rewards-section', setIsHistoryOpen)}
+                    style={{
+                      background: '#ffffff',
+                      border: '1px solid rgba(16, 185, 129, 0.2)',
+                      borderRadius: '10px',
+                      padding: '6px 14px',
+                      fontSize: '0.82rem',
+                      fontWeight: 600,
+                      color: '#059669',
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <CheckCircle2 size={13} color="#10b981" />
+                    Claim History ({claimedHistory?.length || 0})
+                  </button>
+                </div>
               </div>
             </div>
 
             {/* ═════════════════════════════════════════════════════════════════════════ */}
             {/* 🟢 SECTION 1: AVAILABLE TO CLAIM (Active Unclaimed Rewards)            */}
             {/* ═════════════════════════════════════════════════════════════════════════ */}
-            <div style={{ marginBottom: '40px' }}>
+            <div id="available-rewards-section" style={{ marginBottom: '40px' }}>
               {/* Section Header (Outside Panel) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
                 <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -773,7 +1002,7 @@ export default function Checker() {
                                     textDecoration: 'none'
                                   }}
                                 >
-                                  Buy 5M+ on o1 <ArrowUpRight size={14} />
+                                  Buy & Hold 5M+ $VIBE <ArrowUpRight size={14} />
                                 </a>
                               </div>
                             )}
@@ -886,7 +1115,7 @@ export default function Checker() {
             {/* ═════════════════════════════════════════════════════════════════════════ */}
             {/* ⏳ SECTION 2: UPCOMING REWARDS (Next Scheduled Unlocks & Royalties)    */}
             {/* ═════════════════════════════════════════════════════════════════════════ */}
-            <div style={{ marginBottom: '40px' }}>
+            <div id="upcoming-rewards-section" style={{ marginBottom: '40px' }}>
               {/* Section Header (Outside Panel) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
                 <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -1048,7 +1277,7 @@ export default function Checker() {
                                   background: '#ef4444'
                                 }}
                               >
-                                Buy 5M+ on o1 <ArrowUpRight size={14} />
+                                Buy & Hold 5M+ $VIBE <ArrowUpRight size={14} />
                               </a>
                             </div>
                           )}
@@ -1268,7 +1497,7 @@ export default function Checker() {
             {/* ═════════════════════════════════════════════════════════════════════════ */}
             {/* ✅ SECTION 3: CLAIMED REWARDS HISTORY                                 */}
             {/* ═════════════════════════════════════════════════════════════════════════ */}
-            <div style={{ marginBottom: '40px' }}>
+            <div id="claimed-rewards-section" style={{ marginBottom: '40px' }}>
               {/* Section Header (Outside Panel) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
                 <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
