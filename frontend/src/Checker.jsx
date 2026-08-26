@@ -569,31 +569,50 @@ export default function Checker() {
             {/* 🟢 SECTION 1: AVAILABLE TO CLAIM (Active Unclaimed Rewards)            */}
             {/* ═════════════════════════════════════════════════════════════════════════ */}
             {isHolderRound1Available && (
-              <div style={{ marginBottom: '28px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                  <h3 style={{ fontSize: '1.18rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Sparkles size={18} color="var(--blue)" /> Available Rewards ({totalAvailableCount})
-                  </h3>
-                  <button
-                    onClick={() => setIsAvailableOpen(!isAvailableOpen)}
+              <div style={{ marginBottom: '24px' }}>
+                <div
+                  onClick={() => setIsAvailableOpen(!isAvailableOpen)}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.85)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                    border: '1.5px solid rgba(0, 160, 255, 0.22)',
+                    borderRadius: '16px',
+                    padding: '12px 18px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                    marginBottom: isAvailableOpen ? '14px' : '0px',
+                    boxShadow: '0 2px 10px rgba(0, 82, 255, 0.04)',
+                    transition: 'all 0.15s ease',
+                    userSelect: 'none'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Sparkles size={16} color="var(--blue)" />
+                    </div>
+                    <h3 style={{ fontSize: '1.05rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0 }}>
+                      Available Rewards ({totalAvailableCount})
+                    </h3>
+                  </div>
+                  <div
                     style={{
-                      background: 'rgba(255, 255, 255, 0.85)',
-                      border: '1.5px solid rgba(0, 160, 255, 0.25)',
-                      borderRadius: '8px',
-                      padding: '3px 7px',
-                      cursor: 'pointer',
-                      display: 'inline-flex',
+                      width: '26px',
+                      height: '26px',
+                      borderRadius: '7px',
+                      background: 'rgba(0, 82, 255, 0.08)',
+                      display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       color: 'var(--blue)',
                       transition: 'all 0.2s ease',
-                      transform: isAvailableOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
-                      boxShadow: '0 2px 6px rgba(0, 82, 255, 0.05)'
+                      transform: isAvailableOpen ? 'rotate(0deg)' : 'rotate(-90deg)'
                     }}
-                    title={isAvailableOpen ? "Collapse section" : "Expand section"}
                   >
                     <ChevronDown size={15} />
-                  </button>
+                  </div>
                 </div>
 
                 {isAvailableOpen && (
@@ -782,31 +801,50 @@ export default function Checker() {
             {/* ═════════════════════════════════════════════════════════════════════════ */}
             {/* ⏳ SECTION 2: UPCOMING REWARDS (Next Scheduled Unlocks & Royalties)    */}
             {/* ═════════════════════════════════════════════════════════════════════════ */}
-            <div style={{ marginBottom: '28px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                <h3 style={{ fontSize: '1.18rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Clock size={18} color="#0284c7" /> Upcoming Rewards (2)
-                </h3>
-                <button
-                  onClick={() => setIsUpcomingOpen(!isUpcomingOpen)}
+            <div style={{ marginBottom: '24px' }}>
+              <div
+                onClick={() => setIsUpcomingOpen(!isUpcomingOpen)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.85)',
+                  backdropFilter: 'blur(16px)',
+                  WebkitBackdropFilter: 'blur(16px)',
+                  border: '1.5px solid rgba(0, 160, 255, 0.22)',
+                  borderRadius: '16px',
+                  padding: '12px 18px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  marginBottom: isUpcomingOpen ? '14px' : '0px',
+                  boxShadow: '0 2px 10px rgba(0, 82, 255, 0.04)',
+                  transition: 'all 0.15s ease',
+                  userSelect: 'none'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'rgba(2, 132, 199, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Clock size={16} color="#0284c7" />
+                  </div>
+                  <h3 style={{ fontSize: '1.05rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0 }}>
+                    Upcoming Rewards (2)
+                  </h3>
+                </div>
+                <div
                   style={{
-                    background: 'rgba(255, 255, 255, 0.85)',
-                    border: '1.5px solid rgba(0, 160, 255, 0.25)',
-                    borderRadius: '8px',
-                    padding: '3px 7px',
-                    cursor: 'pointer',
-                    display: 'inline-flex',
+                    width: '26px',
+                    height: '26px',
+                    borderRadius: '7px',
+                    background: 'rgba(2, 132, 199, 0.08)',
+                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: '#0284c7',
                     transition: 'all 0.2s ease',
-                    transform: isUpcomingOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
-                    boxShadow: '0 2px 6px rgba(0, 82, 255, 0.05)'
+                    transform: isUpcomingOpen ? 'rotate(0deg)' : 'rotate(-90deg)'
                   }}
-                  title={isUpcomingOpen ? "Collapse section" : "Expand section"}
                 >
                   <ChevronDown size={15} />
-                </button>
+                </div>
               </div>
 
               {isUpcomingOpen && (
@@ -1110,31 +1148,50 @@ export default function Checker() {
             {/* ✅ SECTION 3: CLAIMED REWARDS HISTORY                                 */}
             {/* ═════════════════════════════════════════════════════════════════════════ */}
             {Array.isArray(claimedHistory) && claimedHistory.length > 0 && (
-              <div style={{ marginBottom: '28px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                  <h3 style={{ fontSize: '1.18rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <CheckCircle2 size={18} color="#10b981" /> Claim History ({claimedHistory.length})
-                  </h3>
-                  <button
-                    onClick={() => setIsHistoryOpen(!isHistoryOpen)}
+              <div style={{ marginBottom: '24px' }}>
+                <div
+                  onClick={() => setIsHistoryOpen(!isHistoryOpen)}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.85)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                    border: '1.5px solid rgba(16, 185, 129, 0.25)',
+                    borderRadius: '16px',
+                    padding: '12px 18px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                    marginBottom: isHistoryOpen ? '14px' : '0px',
+                    boxShadow: '0 2px 10px rgba(16, 185, 129, 0.04)',
+                    transition: 'all 0.15s ease',
+                    userSelect: 'none'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <CheckCircle2 size={16} color="#10b981" />
+                    </div>
+                    <h3 style={{ fontSize: '1.05rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0 }}>
+                      Claim History ({claimedHistory.length})
+                    </h3>
+                  </div>
+                  <div
                     style={{
-                      background: 'rgba(255, 255, 255, 0.85)',
-                      border: '1.5px solid rgba(16, 185, 129, 0.25)',
-                      borderRadius: '8px',
-                      padding: '3px 7px',
-                      cursor: 'pointer',
-                      display: 'inline-flex',
+                      width: '26px',
+                      height: '26px',
+                      borderRadius: '7px',
+                      background: 'rgba(16, 185, 129, 0.08)',
+                      display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       color: '#10b981',
                       transition: 'all 0.2s ease',
-                      transform: isHistoryOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
-                      boxShadow: '0 2px 6px rgba(16, 185, 129, 0.05)'
+                      transform: isHistoryOpen ? 'rotate(0deg)' : 'rotate(-90deg)'
                     }}
-                    title={isHistoryOpen ? "Collapse section" : "Expand section"}
                   >
                     <ChevronDown size={15} />
-                  </button>
+                  </div>
                 </div>
 
                 {isHistoryOpen && (
