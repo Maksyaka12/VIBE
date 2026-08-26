@@ -223,7 +223,7 @@ async function runSnapshot() {
     const rewardAmount = capInfo.amount;
     totalDistributed += rewardAmount;
     const amountWei = parseUnits(rewardAmount.toString(), 18);
-    const leaf = keccak256(encodePacked(['address', 'uint256'], [h.address, amountWei]));
+    const leaf = keccak256(encodePacked(['address', 'uint256', 'uint256'], [h.address, BigInt(roundNumber), amountWei]));
     return {
       address: h.address,
       balance: Math.round(h.balance),
