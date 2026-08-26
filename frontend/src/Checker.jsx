@@ -91,6 +91,27 @@ function formatCountdown(targetIso) {
   }
 }
 
+function formatDigitalCountdown(targetIso) {
+  if (!targetIso) return '';
+  try {
+    const now = new Date().getTime();
+    const target = new Date(targetIso).getTime();
+    const diff = target - now;
+
+    if (diff <= 0) return '00D:00H:00M';
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+    const pad = (n) => String(n).padStart(2, '0');
+
+    return `${pad(days)}D:${pad(hours)}H:${pad(minutes)}M`;
+  } catch (e) {
+    return '';
+  }
+}
+
 export default function Checker() {
   const { ready, authenticated, user, login, logout } = usePrivy();
   const { wallets } = useWallets();
@@ -642,13 +663,13 @@ export default function Checker() {
                             </div>
                             <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                               Holder Rewards
-                              <span style={{ fontSize: '0.72rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '2px 8px', borderRadius: '8px', lineHeight: 1.2 }}>
+                              <span style={{ fontSize: '0.72rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '4px 10px', borderRadius: '99px', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
                                 Unlock 1
                               </span>
                             </h3>
                           </div>
-                          <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#059669', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                            Live Now
+                          <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#059669', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
+                            CLAIM IS LIVE
                           </span>
                         </div>
 
@@ -794,6 +815,38 @@ export default function Checker() {
                           Not Eligible for this Round
                         </button>
                       )}
+
+                      {/* Claim window ends caption with countdown */}
+                      <div
+                        style={{
+                          marginTop: '12px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '6px',
+                          fontSize: '0.78rem',
+                          color: '#64748b',
+                          fontWeight: 700
+                        }}
+                      >
+                        <Clock size={13} color="#64748b" />
+                        <span>Claim window ends:</span>
+                        <span
+                          style={{
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                            fontSize: '0.78rem',
+                            fontWeight: 900,
+                            color: '#0284c7',
+                            background: 'rgba(2, 132, 199, 0.08)',
+                            border: '1px solid rgba(2, 132, 199, 0.2)',
+                            padding: '2px 7px',
+                            borderRadius: '6px',
+                            letterSpacing: '0.04em'
+                          }}
+                        >
+                          {formatDigitalCountdown(upcomingHolderRound?.targetDate)}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
@@ -858,12 +911,12 @@ export default function Checker() {
                           </div>
                           <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                             Holder Rewards
-                            <span style={{ fontSize: '0.72rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '2px 8px', borderRadius: '8px', lineHeight: 1.2 }}>
+                            <span style={{ fontSize: '0.72rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '4px 10px', borderRadius: '99px', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
                               {upcomingHolderRound?.name || 'Unlock 2'}
                             </span>
                           </h3>
                         </div>
-                        <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
                           Upcoming
                         </span>
                       </div>
@@ -968,18 +1021,37 @@ export default function Checker() {
                         width: '100%',
                         padding: '12px 18px',
                         borderRadius: '14px',
-                        background: 'rgba(255, 255, 255, 0.75)',
+                        background: 'rgba(255, 255, 255, 0.85)',
                         border: '1.5px solid rgba(0, 160, 255, 0.2)',
-                        color: '#64748b',
+                        color: '#475569',
                         fontWeight: 800,
-                        fontSize: '0.84rem',
+                        fontSize: '0.86rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '6px'
+                        gap: '8px',
+                        flexWrap: 'wrap',
+                        boxShadow: '0 2px 8px rgba(0, 82, 255, 0.03)'
                       }}
                     >
-                      <Lock size={14} /> Claim opens {upcomingHolderRound?.unlockDate || 'Sep 25'} ({formatCountdown(upcomingHolderRound?.targetDate)})
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#64748b' }}>
+                        <Lock size={14} /> Claim opens {upcomingHolderRound?.unlockDate || 'Sep 25'}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                          fontSize: '0.80rem',
+                          fontWeight: 900,
+                          background: 'rgba(0, 82, 255, 0.08)',
+                          color: 'var(--blue)',
+                          border: '1px solid rgba(0, 82, 255, 0.2)',
+                          padding: '3px 8px',
+                          borderRadius: '8px',
+                          letterSpacing: '0.04em'
+                        }}
+                      >
+                        {formatDigitalCountdown(upcomingHolderRound?.targetDate)}
+                      </span>
                     </div>
                   </div>
 
@@ -1006,12 +1078,12 @@ export default function Checker() {
                           </div>
                           <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                             Vibe Club
-                            <span style={{ fontSize: '0.72rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '2px 8px', borderRadius: '8px', lineHeight: 1.2 }}>
+                            <span style={{ fontSize: '0.72rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '4px 10px', borderRadius: '99px', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
                               {upcomingVibeClubRound?.name || 'Royalty 1'}
                             </span>
                           </h3>
                         </div>
-                        <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
                           Upcoming
                         </span>
                       </div>
@@ -1116,18 +1188,37 @@ export default function Checker() {
                         width: '100%',
                         padding: '12px 18px',
                         borderRadius: '14px',
-                        background: 'rgba(255, 255, 255, 0.75)',
+                        background: 'rgba(255, 255, 255, 0.85)',
                         border: '1.5px solid rgba(0, 160, 255, 0.2)',
-                        color: '#64748b',
+                        color: '#475569',
                         fontWeight: 800,
-                        fontSize: '0.84rem',
+                        fontSize: '0.86rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '6px'
+                        gap: '8px',
+                        flexWrap: 'wrap',
+                        boxShadow: '0 2px 8px rgba(0, 82, 255, 0.03)'
                       }}
                     >
-                      <Lock size={14} /> Claim opens {upcomingVibeClubRound?.claimDate || 'Aug 28'} ({formatCountdown(upcomingVibeClubRound?.targetDate)})
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#64748b' }}>
+                        <Lock size={14} /> Claim opens {upcomingVibeClubRound?.claimDate || 'Aug 28'}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                          fontSize: '0.80rem',
+                          fontWeight: 900,
+                          background: 'rgba(0, 82, 255, 0.08)',
+                          color: 'var(--blue)',
+                          border: '1px solid rgba(0, 82, 255, 0.2)',
+                          padding: '3px 8px',
+                          borderRadius: '8px',
+                          letterSpacing: '0.04em'
+                        }}
+                      >
+                        {formatDigitalCountdown(upcomingVibeClubRound?.targetDate)}
+                      </span>
                     </div>
                   </div>
 
@@ -1138,101 +1229,123 @@ export default function Checker() {
             {/* ═════════════════════════════════════════════════════════════════════════ */}
             {/* ✅ SECTION 3: CLAIMED REWARDS HISTORY                                 */}
             {/* ═════════════════════════════════════════════════════════════════════════ */}
-            {Array.isArray(claimedHistory) && claimedHistory.length > 0 && (
-              <div style={{ marginBottom: '44px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
-                  <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <CheckCircle2 size={20} color="#10b981" /> Claim History ({claimedHistory.length})
-                  </h3>
-                  <button
-                    onClick={() => setIsHistoryOpen(!isHistoryOpen)}
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.85)',
-                      border: '1.5px solid rgba(16, 185, 129, 0.25)',
-                      borderRadius: '10px',
-                      padding: '5px 9px',
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#10b981',
-                      transition: 'all 0.2s ease',
-                      transform: isHistoryOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
-                      boxShadow: '0 2px 6px rgba(16, 185, 129, 0.05)'
-                    }}
-                    title={isHistoryOpen ? "Collapse section" : "Expand section"}
-                  >
-                    <ChevronDown size={18} />
-                  </button>
-                </div>
-
-                {isHistoryOpen && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {claimedHistory.map((item) => (
-                      <div
-                        key={item?.id || Math.random()}
-                        style={{
-                          background: '#ffffff',
-                          border: '1.5px solid #a7f3d0',
-                          borderRadius: '18px',
-                          padding: '16px 24px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          flexWrap: 'wrap',
-                          gap: '14px',
-                          boxShadow: '0 4px 16px rgba(16, 185, 129, 0.06)'
-                        }}
-                      >
-                        {/* Left: Event info */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#ecfdf5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <Check size={20} color="#10b981" strokeWidth={3} />
-                          </div>
-                          <div>
-                            <strong style={{ fontSize: '1rem', color: 'var(--ink)', fontWeight: 900, display: 'block' }}>
-                              {item?.title || 'Rewards Claim'}
-                            </strong>
-                            <span style={{ fontSize: '0.74rem', color: '#059669', fontWeight: 700 }}>
-                              Successfully Claimed on Base
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Middle: Amount */}
-                        <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#10b981' }}>
-                          +{typeof item?.amount === 'number' ? item.amount.toLocaleString('en-US') : (item?.amount || '0')} <span style={{ fontSize: '0.85rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
-                        </div>
-
-                        {/* Right: Tx link */}
-                        {item?.txHash && item.txHash.startsWith('0x') && (
-                          <a
-                            href={`https://basescan.org/tx/${item.txHash}`}
-                            target="_blank"
-                            rel="noreferrer"
-                            style={{
-                              fontSize: '0.82rem',
-                              fontWeight: 800,
-                              color: '#0284c7',
-                              textDecoration: 'none',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '4px',
-                              background: 'rgba(2, 132, 199, 0.08)',
-                              padding: '7px 14px',
-                              borderRadius: '10px',
-                              border: '1px solid rgba(2, 132, 199, 0.2)'
-                            }}
-                          >
-                            View on Basescan <ExternalLink size={13} />
-                          </a>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
+            <div style={{ marginBottom: '44px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
+                <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <CheckCircle2 size={20} color="#10b981" /> Claimed Rewards ({claimedHistory?.length || 0})
+                </h3>
+                <button
+                  onClick={() => setIsHistoryOpen(!isHistoryOpen)}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.85)',
+                    border: '1.5px solid rgba(16, 185, 129, 0.25)',
+                    borderRadius: '10px',
+                    padding: '5px 9px',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#10b981',
+                    transition: 'all 0.2s ease',
+                    transform: isHistoryOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+                    boxShadow: '0 2px 6px rgba(16, 185, 129, 0.05)'
+                  }}
+                  title={isHistoryOpen ? "Collapse section" : "Expand section"}
+                >
+                  <ChevronDown size={18} />
+                </button>
               </div>
-            )}
+
+              {isHistoryOpen && (
+                <div>
+                  {Array.isArray(claimedHistory) && claimedHistory.length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      {claimedHistory.map((item) => (
+                        <div
+                          key={item?.id || Math.random()}
+                          style={{
+                            background: '#ffffff',
+                            border: '1.5px solid #a7f3d0',
+                            borderRadius: '18px',
+                            padding: '16px 24px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            flexWrap: 'wrap',
+                            gap: '14px',
+                            boxShadow: '0 4px 16px rgba(16, 185, 129, 0.06)'
+                          }}
+                        >
+                          {/* Left: Event info */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#ecfdf5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                              <Check size={20} color="#10b981" strokeWidth={3} />
+                            </div>
+                            <div>
+                              <strong style={{ fontSize: '1rem', color: 'var(--ink)', fontWeight: 900, display: 'block' }}>
+                                {item?.title || 'Rewards Claim'}
+                              </strong>
+                              <span style={{ fontSize: '0.74rem', color: '#059669', fontWeight: 700 }}>
+                                Successfully Claimed on Base
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Middle: Amount */}
+                          <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#10b981' }}>
+                            +{typeof item?.amount === 'number' ? item.amount.toLocaleString('en-US') : (item?.amount || '0')} <span style={{ fontSize: '0.85rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
+                          </div>
+
+                          {/* Right: Tx link */}
+                          {item?.txHash && item.txHash.startsWith('0x') && (
+                            <a
+                              href={`https://basescan.org/tx/${item.txHash}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{
+                                fontSize: '0.82rem',
+                                fontWeight: 800,
+                                color: '#0284c7',
+                                textDecoration: 'none',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                background: 'rgba(2, 132, 199, 0.08)',
+                                padding: '7px 14px',
+                                borderRadius: '10px',
+                                border: '1px solid rgba(2, 132, 199, 0.2)'
+                              }}
+                            >
+                              View on Basescan <ExternalLink size={13} />
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        background: 'var(--surface)',
+                        border: '1.5px solid var(--border)',
+                        borderRadius: '20px',
+                        padding: '28px 24px',
+                        textAlign: 'center',
+                        color: '#64748b',
+                        fontSize: '0.92rem',
+                        fontWeight: 700,
+                        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.02)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px'
+                      }}
+                    >
+                      No claimed rewards yet. Your claim history will appear here once you claim rewards.
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* ═════════════════════════════════════════════════════════════════════════ */}
             {/* 👑 SECTION 4: ADMIN PANEL (Contract Owner Only)                       */}
