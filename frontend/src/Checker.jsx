@@ -30,6 +30,10 @@ const ADMIN_WALLET = '0x4c91d3bed372c11795b9ce9a9017dfe447bf050a';
 const O1 = 'https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453';
 const VIBECLUB_MINT_URL = 'https://vibeverse.dog/vibeclub';
 
+const BUILDER_CODE = 'bc_wsbqqe2u';
+// Official ERC-8021 Data Suffix for Base Builder Code bc_wsbqqe2u:
+const BUILDER_CODE_HEX = '62635f77736271716532750b0080218021802180218021802180218021';
+
 const MIN_HOLDER_BALANCE = 5000000; // 5M $VIBE
 
 const DISTRIBUTOR_ABI = parseAbi([
@@ -249,11 +253,13 @@ export default function Checker() {
       const activeWallet = wallets.find(w => w.address.toLowerCase() === address?.toLowerCase()) || wallets[0];
       const provider = await activeWallet.getEthereumProvider();
 
-      const calldata = encodeFunctionData({
+      const calldataRaw = encodeFunctionData({
         abi: DISTRIBUTOR_ABI,
         functionName: 'setMerkleRoot',
-        args: [BigInt(adminEpochId), adminMerkleRoot.trim()]
+        args: [BigInt(adminEpochId), adminMerkleRoot]
       });
+      // Append Official ERC-8021 Data Suffix for Base Builder Code
+      const calldata = calldataRaw.includes(BUILDER_CODE_HEX) ? calldataRaw : (calldataRaw + BUILDER_CODE_HEX);
 
       let txHashResult = null;
 
@@ -268,7 +274,13 @@ export default function Checker() {
               to: DISTRIBUTOR_CA,
               value: '0x0',
               data: calldata
-            }]
+            }],
+            capabilities: {
+              dataSuffix: {
+                value: '0x' + BUILDER_CODE_HEX,
+                optional: true
+              }
+            }
           }]
         });
 
@@ -326,11 +338,13 @@ export default function Checker() {
         const activeWallet = wallets.find(w => w.address.toLowerCase() === address?.toLowerCase()) || wallets[0];
         const provider = await activeWallet.getEthereumProvider();
         const amountWei = parseUnits(userProofData.amount.toString(), 18);
-        const calldata = encodeFunctionData({
+        const calldataRaw = encodeFunctionData({
           abi: DISTRIBUTOR_ABI,
           functionName: 'claim',
           args: [BigInt(roundId), amountWei, userProofData.proof]
         });
+        // Append Official ERC-8021 Data Suffix for Base Builder Code
+        const calldata = calldataRaw.includes(BUILDER_CODE_HEX) ? calldataRaw : (calldataRaw + BUILDER_CODE_HEX);
 
         try {
           const callsRes = await provider.request({
@@ -339,7 +353,13 @@ export default function Checker() {
               version: '1.0',
               chainId: '0x2105',
               from: address,
-              calls: [{ to: DISTRIBUTOR_CA, value: '0x0', data: calldata }]
+              calls: [{ to: DISTRIBUTOR_CA, value: '0x0', data: calldata }],
+              capabilities: {
+                dataSuffix: {
+                  value: '0x' + BUILDER_CODE_HEX,
+                  optional: true
+                }
+              }
             }]
           });
           if (callsRes) {
