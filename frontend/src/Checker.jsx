@@ -515,182 +515,10 @@ export default function Checker() {
               </div>
             </div>
 
-            {/* 👑 ADMIN PANEL (Only visible for Contract Owner) */}
-            {isAdmin && (
-              <div
-                style={{
-                  background: 'linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%)',
-                  borderRadius: '24px',
-                  padding: '28px',
-                  marginBottom: '32px',
-                  color: '#ffffff',
-                  border: '2px solid rgba(139, 92, 246, 0.4)',
-                  boxShadow: '0 8px 32px rgba(124, 58, 237, 0.18)'
-                }}
-              >
-                {/* Admin Header */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(168, 85, 247, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(168, 85, 247, 0.4)' }}>
-                      <Crown size={22} color="#c084fc" />
-                    </div>
-                    <div>
-                      <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: '#f3e8ff', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        Admin Panel · Merkle Root Publisher
-                        <span style={{ fontSize: '0.7rem', padding: '3px 8px', borderRadius: '99px', background: 'rgba(168, 85, 247, 0.3)', color: '#e9d5ff', fontWeight: 800 }}>OWNER</span>
-                      </h3>
-                      <span style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>
-                        Publish cryptographic snapshot proofs on-chain to enable claims on Base
-                      </span>
-                    </div>
-                  </div>
-
-                  <a
-                    href={`https://basescan.org/address/${DISTRIBUTOR_CA}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{
-                      fontSize: '0.78rem',
-                      color: '#c084fc',
-                      textDecoration: 'none',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      background: 'rgba(255, 255, 255, 0.08)',
-                      padding: '6px 12px',
-                      borderRadius: '10px',
-                      border: '1px solid rgba(168, 85, 247, 0.3)'
-                    }}
-                  >
-                    Contract: {DISTRIBUTOR_CA.slice(0, 6)}...{DISTRIBUTOR_CA.slice(-4)} <ExternalLink size={12} />
-                  </a>
-                </div>
-
-                {/* Form Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px', marginBottom: '20px' }}>
-                  {/* Epoch / Round Input */}
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#cbd5e1', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                      Epoch / Round ID
-                    </label>
-                    <input
-                      type="number"
-                      value={adminEpochId}
-                      onChange={(e) => setAdminEpochId(e.target.value)}
-                      style={{
-                        width: '100%',
-                        background: 'rgba(15, 23, 42, 0.8)',
-                        border: '1.5px solid rgba(148, 163, 184, 0.25)',
-                        borderRadius: '12px',
-                        padding: '12px 16px',
-                        color: '#ffffff',
-                        fontSize: '0.9rem',
-                        fontWeight: 700,
-                        outline: 'none',
-                        boxSizing: 'border-box'
-                      }}
-                      placeholder="1"
-                    />
-                  </div>
-
-                  {/* Merkle Root Input */}
-                  <div style={{ gridColumn: 'span 2' }}>
-                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#cbd5e1', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                      Merkle Root (bytes32)
-                    </label>
-                    <input
-                      type="text"
-                      value={adminMerkleRoot}
-                      onChange={(e) => setAdminMerkleRoot(e.target.value)}
-                      style={{
-                        width: '100%',
-                        background: 'rgba(15, 23, 42, 0.8)',
-                        border: '1.5px solid rgba(148, 163, 184, 0.25)',
-                        borderRadius: '12px',
-                        padding: '12px 16px',
-                        color: '#38bdf8',
-                        fontFamily: 'monospace',
-                        fontSize: '0.85rem',
-                        fontWeight: 700,
-                        outline: 'none',
-                        boxSizing: 'border-box'
-                      }}
-                      placeholder="0x..."
-                    />
-                  </div>
-                </div>
-
-                {/* Submit Action */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-                  <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                    Snapshot details: <strong style={{ color: '#ffffff' }}>42 Eligible Wallets</strong> · <strong style={{ color: '#38bdf8' }}>10,000,000 $VIBE Pool</strong>
-                  </div>
-
-                  <button
-                    onClick={handleSetMerkleRoot}
-                    disabled={adminLoading}
-                    style={{
-                      background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
-                      color: '#ffffff',
-                      border: 'none',
-                      borderRadius: '14px',
-                      padding: '12px 24px',
-                      fontSize: '0.9rem',
-                      fontWeight: 900,
-                      cursor: adminLoading ? 'not-allowed' : 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      boxShadow: '0 4px 18px rgba(124, 58, 237, 0.4)',
-                      transition: 'all 0.15s'
-                    }}
-                  >
-                    {adminLoading ? (
-                      <>
-                        <Loader2 size={16} className="spin" /> Confirming in Wallet...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles size={16} /> ⚡ Publish Merkle Root On-Chain
-                      </>
-                    )}
-                  </button>
-                </div>
-
-                {/* Success Banner */}
-                {adminSuccess && (
-                  <div style={{ marginTop: '16px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981', borderRadius: '12px', padding: '12px 16px', color: '#a7f3d0', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <CheckCircle2 size={18} color="#10b981" />
-                      <strong>Merkle Root successfully published on Base! Holders can now claim!</strong>
-                    </div>
-                    {adminTxHash && adminTxHash.startsWith('0x') && (
-                      <a
-                        href={`https://basescan.org/tx/${adminTxHash}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        style={{ color: '#34d399', textDecoration: 'underline', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-                      >
-                        View Tx on Basescan <ExternalLink size={13} />
-                      </a>
-                    )}
-                  </div>
-                )}
-
-                {/* Error Banner */}
-                {adminError && (
-                  <div style={{ marginTop: '16px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', borderRadius: '12px', padding: '12px 16px', color: '#fca5a5', fontSize: '0.84rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <AlertCircle size={18} color="#ef4444" />
-                    <span>{adminError}</span>
-                  </div>
-                )}
-              </div>
-            )}
-
             {/* Sub-header: Available Rewards Label + Tabs */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '28px' }}>
               <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0 }}>
-                Available Rewards
+                Available Rewards ({totalReadyCount})
               </h3>
 
               <div style={{ display: 'flex', gap: '6px', background: 'rgba(255, 255, 255, 0.75)', padding: '5px', borderRadius: '16px', border: '1px solid rgba(0, 160, 255, 0.18)', boxShadow: '0 2px 10px rgba(0, 82, 255, 0.04)' }}>
@@ -848,26 +676,21 @@ export default function Checker() {
                               background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
                               border: '1.5px solid #a7f3d0',
                               borderRadius: '20px',
-                              padding: '22px 20px',
-                              textAlign: 'left'
+                              padding: '28px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '12px'
                             }}
                           >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#059669', fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
-                              <CheckCircle2 size={16} /> Eligible for Claim
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#059669', fontSize: '0.82rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                              <CheckCircle2 size={18} color="#10b981" /> Eligible for Claim
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-                              <div>
-                                <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                                  {holderRewardAmount.toLocaleString()} <span style={{ fontSize: '0.95rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
-                                </div>
-                                <span style={{ fontSize: '0.78rem', color: '#047857', fontWeight: 700 }}>
-                                  {userProofData ? `Snapshot Verified (Share: ${userProofData.sharePercent})` : 'Live Balance Verified (≥5M)'}
-                                </span>
-                              </div>
-                              <div style={{ textAlign: 'right' }}>
-                                <span style={{ fontSize: '0.72rem', color: 'var(--muted)', display: 'block' }}>Your Balance</span>
-                                <strong style={{ fontSize: '0.88rem', color: 'var(--ink)' }}>{balance !== null ? `${balance.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : '...'} $VIBE</strong>
-                              </div>
+                            
+                            <div style={{ fontSize: '2.4rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: '4px 0' }}>
+                              {holderRewardAmount.toLocaleString()} <span style={{ fontSize: '1.25rem', color: 'var(--blue)', fontWeight: 900 }}>$VIBE</span>
                             </div>
                           </div>
                         ) : (
@@ -951,9 +774,9 @@ export default function Checker() {
                             className="btn-fill"
                             style={{
                               width: '100%',
-                              padding: '13px 20px',
+                              padding: '14px 20px',
                               borderRadius: '14px',
-                              fontSize: '0.94rem',
+                              fontSize: '0.96rem',
                               fontWeight: 900,
                               justifyContent: 'center',
                               boxShadow: '0 4px 20px rgba(0, 82, 255, 0.35)',
@@ -966,7 +789,7 @@ export default function Checker() {
                               </>
                             ) : (
                               <>
-                                <Gift size={18} /> Claim {holderRewardAmount.toLocaleString()} $VIBE Rewards
+                                <Gift size={18} /> Claim {holderRewardAmount.toLocaleString()} $VIBE
                               </>
                             )}
                           </button>
@@ -1300,6 +1123,179 @@ export default function Checker() {
               )}
 
             </div>
+
+            {/* 👑 ADMIN PANEL (Placed at the very bottom of the page for Contract Owner) */}
+            {isAdmin && (
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%)',
+                  borderRadius: '24px',
+                  padding: '28px',
+                  marginTop: '40px',
+                  marginBottom: '20px',
+                  color: '#ffffff',
+                  border: '2px solid rgba(139, 92, 246, 0.4)',
+                  boxShadow: '0 8px 32px rgba(124, 58, 237, 0.18)'
+                }}
+              >
+                {/* Admin Header */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(168, 85, 247, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(168, 85, 247, 0.4)' }}>
+                      <Crown size={22} color="#c084fc" />
+                    </div>
+                    <div>
+                      <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: '#f3e8ff', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        Admin Panel · Merkle Root Publisher
+                        <span style={{ fontSize: '0.7rem', padding: '3px 8px', borderRadius: '99px', background: 'rgba(168, 85, 247, 0.3)', color: '#e9d5ff', fontWeight: 800 }}>OWNER</span>
+                      </h3>
+                      <span style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>
+                        Publish cryptographic snapshot proofs on-chain to enable claims on Base
+                      </span>
+                    </div>
+                  </div>
+
+                  <a
+                    href={`https://basescan.org/address/${DISTRIBUTOR_CA}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      fontSize: '0.78rem',
+                      color: '#c084fc',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      background: 'rgba(255, 255, 255, 0.08)',
+                      padding: '6px 12px',
+                      borderRadius: '10px',
+                      border: '1px solid rgba(168, 85, 247, 0.3)'
+                    }}
+                  >
+                    Contract: {DISTRIBUTOR_CA.slice(0, 6)}...{DISTRIBUTOR_CA.slice(-4)} <ExternalLink size={12} />
+                  </a>
+                </div>
+
+                {/* Form Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+                  {/* Epoch / Round Input */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#cbd5e1', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Epoch / Round ID
+                    </label>
+                    <input
+                      type="number"
+                      value={adminEpochId}
+                      onChange={(e) => setAdminEpochId(e.target.value)}
+                      style={{
+                        width: '100%',
+                        background: 'rgba(15, 23, 42, 0.8)',
+                        border: '1.5px solid rgba(148, 163, 184, 0.25)',
+                        borderRadius: '12px',
+                        padding: '12px 16px',
+                        color: '#ffffff',
+                        fontSize: '0.9rem',
+                        fontWeight: 700,
+                        outline: 'none',
+                        boxSizing: 'border-box'
+                      }}
+                      placeholder="1"
+                    />
+                  </div>
+
+                  {/* Merkle Root Input */}
+                  <div style={{ gridColumn: 'span 2' }}>
+                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#cbd5e1', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Merkle Root (bytes32)
+                    </label>
+                    <input
+                      type="text"
+                      value={adminMerkleRoot}
+                      onChange={(e) => setAdminMerkleRoot(e.target.value)}
+                      style={{
+                        width: '100%',
+                        background: 'rgba(15, 23, 42, 0.8)',
+                        border: '1.5px solid rgba(148, 163, 184, 0.25)',
+                        borderRadius: '12px',
+                        padding: '12px 16px',
+                        color: '#38bdf8',
+                        fontFamily: 'monospace',
+                        fontSize: '0.85rem',
+                        fontWeight: 700,
+                        outline: 'none',
+                        boxSizing: 'border-box'
+                      }}
+                      placeholder="0x..."
+                    />
+                  </div>
+                </div>
+
+                {/* Submit Action */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+                  <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                    Snapshot details: <strong style={{ color: '#ffffff' }}>42 Eligible Wallets</strong> · <strong style={{ color: '#38bdf8' }}>10,000,000 $VIBE Pool</strong>
+                  </div>
+
+                  <button
+                    onClick={handleSetMerkleRoot}
+                    disabled={adminLoading}
+                    style={{
+                      background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '14px',
+                      padding: '12px 24px',
+                      fontSize: '0.9rem',
+                      fontWeight: 900,
+                      cursor: adminLoading ? 'not-allowed' : 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      boxShadow: '0 4px 18px rgba(124, 58, 237, 0.4)',
+                      transition: 'all 0.15s'
+                    }}
+                  >
+                    {adminLoading ? (
+                      <>
+                        <Loader2 size={16} className="spin" /> Confirming in Wallet...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles size={16} /> ⚡ Publish Merkle Root On-Chain
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Success Banner */}
+                {adminSuccess && (
+                  <div style={{ marginTop: '16px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid #10b981', borderRadius: '12px', padding: '12px 16px', color: '#a7f3d0', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <CheckCircle2 size={18} color="#10b981" />
+                      <strong>Merkle Root successfully published on Base! Holders can now claim!</strong>
+                    </div>
+                    {adminTxHash && adminTxHash.startsWith('0x') && (
+                      <a
+                        href={`https://basescan.org/tx/${adminTxHash}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{ color: '#34d399', textDecoration: 'underline', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                      >
+                        View Tx on Basescan <ExternalLink size={13} />
+                      </a>
+                    )}
+                  </div>
+                )}
+
+                {/* Error Banner */}
+                {adminError && (
+                  <div style={{ marginTop: '16px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', borderRadius: '12px', padding: '12px 16px', color: '#fca5a5', fontSize: '0.84rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <AlertCircle size={18} color="#ef4444" />
+                    <span>{adminError}</span>
+                  </div>
+                )}
+              </div>
+            )}
 
           </div>
         )}
