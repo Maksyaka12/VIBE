@@ -744,7 +744,7 @@ export default function Checker() {
                     <div style={{ fontSize: '1.20rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '4px', whiteSpace: 'nowrap' }}>
                       {loading || balance === null ? <Loader2 size={15} className="spin" /> : formatCompactBalance(balance)}
                     </div>
-                    <div style={{ fontSize: '0.67rem', color: isHolderEligibleLive ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', letterSpacing: '-0.02em' }}>
+                    <div className="checker-tile-eligibility" style={{ fontSize: '0.67rem', color: isHolderEligibleLive ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', letterSpacing: '-0.02em' }}>
                       {isHolderEligibleLive ? '✓ Eligible for Holder Rewards' : 'Not Eligible for Holder Rewards'}
                     </div>
                   </div>
@@ -764,7 +764,7 @@ export default function Checker() {
                     <div style={{ fontSize: '1.20rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '4px', whiteSpace: 'nowrap' }}>
                       {loading || nftCount === null ? <Loader2 size={15} className="spin" /> : `${nftCount || 0} NFT${nftCount === 1 ? '' : 's'}`}
                     </div>
-                    <div style={{ fontSize: '0.67rem', color: (nftCount && nftCount > 0) ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', letterSpacing: '-0.02em' }}>
+                    <div className="checker-tile-eligibility" style={{ fontSize: '0.67rem', color: (nftCount && nftCount > 0) ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', letterSpacing: '-0.02em' }}>
                       {(nftCount && nftCount > 0) ? '✓ Eligible for NFT Royalties' : 'Not Eligible for NFT Royalties'}
                     </div>
                   </div>
@@ -882,27 +882,53 @@ export default function Checker() {
                       <div
                         className="checker-reward-card"
                         style={{
-                          border: '2px solid rgba(0, 82, 255, 0.38)',
+                          border: '2px solid var(--blue)',
                           boxShadow: '0 10px 32px rgba(0, 82, 255, 0.12), 0 2px 6px rgba(0, 0, 0, 0.03)',
                           position: 'relative'
                         }}
                       >
                         <div>
-                          {/* Header */}
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', gap: '8px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                <Coins size={20} color="var(--blue)" />
-                              </div>
-                              <h4 style={{ margin: 0, fontSize: '1.18rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                                <span>Holder Rewards</span>
-                                <span style={{ fontSize: '0.70rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '3px 8px', borderRadius: '99px', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
-                                  Unlock 1
-                                </span>
+                          {/* Header (Matching Rewards Hub) */}
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+                              <img
+                                src="/new-logo-vibe.png"
+                                alt="VIBE"
+                                style={{
+                                  width: '38px',
+                                  height: '38px',
+                                  borderRadius: '50%',
+                                  objectFit: 'cover',
+                                  border: '2px solid var(--blue)',
+                                  boxShadow: '0 2px 8px rgba(0, 82, 255, 0.15)',
+                                  flexShrink: 0
+                                }}
+                              />
+                              <h4 style={{ margin: 0, fontSize: '1.10rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                                Unlock 1
                               </h4>
                             </div>
-                            <span style={{ fontSize: '0.70rem', fontWeight: 900, color: '#059669', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '3px 9px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
-                              CLAIM IS LIVE
+                            <span
+                              style={{
+                                padding: '4px 10px',
+                                borderRadius: '99px',
+                                fontSize: '0.66rem',
+                                fontWeight: 900,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.04em',
+                                background: '#ecfdf5',
+                                color: '#059669',
+                                border: '1px solid #a7f3d0',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '5px',
+                                whiteSpace: 'nowrap',
+                                flexShrink: 0,
+                                boxShadow: '0 2px 8px rgba(16, 185, 129, 0.15)'
+                              }}
+                            >
+                              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981', flexShrink: 0 }} />
+                              Claim Live
                             </span>
                           </div>
 
@@ -911,45 +937,45 @@ export default function Checker() {
                             style={{
                               background: '#f8fafc',
                               borderRadius: '16px',
-                              padding: '13px 18px',
+                              padding: '12px 16px',
                               border: '1px solid rgba(0, 140, 255, 0.18)',
                               boxShadow: '0 2px 8px rgba(0, 82, 255, 0.03)',
-                              marginBottom: '18px'
+                              marginBottom: '14px'
                             }}
                           >
-                            <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
-                              <Coins size={13} color="var(--blue)" /> Rewards Pool
+                            <div style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                              <Coins size={12} color="var(--blue)" /> Rewards Pool
                             </div>
-                            <div style={{ fontSize: '1.38rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
-                              10,000,000 <span style={{ fontSize: '0.9rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
+                            <div style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                              10,000,000 <span style={{ fontSize: '0.86rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
                             </div>
                           </div>
 
                           {/* Allocation / Eligibility Box */}
-                          <div style={{ marginBottom: '22px' }}>
+                          <div style={{ marginBottom: '18px' }}>
                             {(hasConfirmedHolderClaim || isHolderEligibleLive) ? (
                               <div
                                 style={{
                                   background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
                                   border: '1.5px solid #a7f3d0',
                                   borderRadius: '18px',
-                                  padding: '20px 16px',
+                                  padding: '16px 14px',
                                   textAlign: 'center',
                                   display: 'flex',
                                   flexDirection: 'column',
                                   alignItems: 'center',
                                   justifyContent: 'center',
-                                  minHeight: '160px',
+                                  minHeight: '145px',
                                   boxSizing: 'border-box',
-                                  gap: '10px'
+                                  gap: '8px'
                                 }}
                               >
-                                <h5 style={{ fontSize: '1.20rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                                <h5 style={{ fontSize: '1.10rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
                                   You're eligible for claim
                                 </h5>
                                 
-                                <div style={{ fontSize: '2.2rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: 0 }}>
-                                  {(holderRewardAmount || 0).toLocaleString('en-US')} <span style={{ fontSize: '1.1rem', color: 'var(--blue)', fontWeight: 900 }}>$VIBE</span>
+                                <div style={{ fontSize: '2.0rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: 0 }}>
+                                  {(holderRewardAmount || 0).toLocaleString('en-US')} <span style={{ fontSize: '1.0rem', color: 'var(--blue)', fontWeight: 900 }}>$VIBE</span>
                                 </div>
                               </div>
                             ) : (
@@ -958,23 +984,23 @@ export default function Checker() {
                                   background: '#fef2f2',
                                   border: '1.5px solid #fecaca',
                                   borderRadius: '18px',
-                                  padding: '20px 16px',
+                                  padding: '16px 14px',
                                   textAlign: 'center',
                                   display: 'flex',
                                   flexDirection: 'column',
                                   alignItems: 'center',
                                   justifyContent: 'center',
-                                  minHeight: '160px',
+                                  minHeight: '145px',
                                   boxSizing: 'border-box',
-                                  gap: '10px'
+                                  gap: '8px'
                                 }}
                               >
                                 <img
                                   src="/vibe-sad-logo-nobg.png"
                                   alt="Sad VIBE"
-                                  style={{ width: 75, height: 75, objectFit: 'contain' }}
+                                  style={{ width: 70, height: 70, objectFit: 'contain' }}
                                 />
-                                <h5 style={{ fontSize: '1.15rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                                <h5 style={{ fontSize: '1.05rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
                                   Not Eligible for Round 1
                                 </h5>
                                 <a
@@ -984,17 +1010,17 @@ export default function Checker() {
                                   style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
-                                    gap: '5px',
+                                    gap: '4px',
                                     background: '#ef4444',
                                     color: '#ffffff',
-                                    padding: '8px 16px',
+                                    padding: '7px 14px',
                                     borderRadius: '10px',
-                                    fontSize: '0.8rem',
+                                    fontSize: '0.78rem',
                                     fontWeight: 800,
                                     textDecoration: 'none'
                                   }}
                                 >
-                                  Buy & Hold 5M+ $VIBE <ArrowUpRight size={14} />
+                                  Buy & Hold 5M+ $VIBE <ArrowUpRight size={13} />
                                 </a>
                               </div>
                             )}
@@ -1010,9 +1036,9 @@ export default function Checker() {
                               className="btn-fill"
                               style={{
                                 width: '100%',
-                                padding: '13px 20px',
-                                borderRadius: '14px',
-                                fontSize: '0.94rem',
+                                padding: '12px 18px',
+                                borderRadius: '12px',
+                                fontSize: '0.90rem',
                                 fontWeight: 900,
                                 justifyContent: 'center',
                                 boxShadow: '0 4px 18px rgba(0, 82, 255, 0.32)',
@@ -1021,11 +1047,11 @@ export default function Checker() {
                             >
                               {claimStatus['holder-1'] === 'claiming' ? (
                                 <>
-                                  <Loader2 size={18} className="spin" /> Confirming Claim on Base...
+                                  <Loader2 size={16} className="spin" /> Confirming Claim...
                                 </>
                               ) : (
                                 <>
-                                  <Gift size={18} /> Claim {(holderRewardAmount || 0).toLocaleString('en-US')} $VIBE
+                                  <Gift size={16} /> Claim {(holderRewardAmount || 0).toLocaleString('en-US')} $VIBE
                                 </>
                               )}
                             </button>
@@ -1034,13 +1060,13 @@ export default function Checker() {
                               disabled
                               style={{
                                 width: '100%',
-                                padding: '12px 20px',
-                                borderRadius: '14px',
+                                padding: '11px 16px',
+                                borderRadius: '12px',
                                 background: '#f1f5f9',
                                 border: '1px solid #cbd5e1',
                                 color: '#94a3b8',
                                 fontWeight: 800,
-                                fontSize: '0.86rem',
+                                fontSize: '0.84rem',
                                 cursor: 'not-allowed'
                               }}
                             >
@@ -1051,29 +1077,29 @@ export default function Checker() {
                           {/* Claim window ends caption with countdown */}
                           <div
                             style={{
-                              marginTop: '12px',
+                              marginTop: '10px',
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'center',
                               gap: '6px',
-                              fontSize: '0.78rem',
+                              fontSize: '0.74rem',
                               color: '#64748b',
                               fontWeight: 700
                             }}
                           >
-                            <Clock size={13} color="#64748b" />
+                            <Clock size={12} color="#64748b" />
                             <span>Claim window ends:</span>
                             <span
                               style={{
-                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                                fontSize: '0.78rem',
+                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                fontSize: '0.74rem',
                                 fontWeight: 900,
                                 color: '#0284c7',
                                 background: 'rgba(2, 132, 199, 0.08)',
                                 border: '1px solid rgba(2, 132, 199, 0.2)',
-                                padding: '2px 7px',
+                                padding: '2px 6px',
                                 borderRadius: '6px',
-                                letterSpacing: '0.04em'
+                                letterSpacing: '0.03em'
                               }}
                             >
                               {formatDigitalCountdown(upcomingHolderRound?.targetDate)}
@@ -1143,27 +1169,52 @@ export default function Checker() {
                     <div
                       className="checker-reward-card"
                       style={{
-                        border: '1.5px solid rgba(0, 100, 255, 0.25)',
-                        boxShadow: '0 8px 28px rgba(0, 82, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03)',
+                        border: '1.5px solid rgba(0, 160, 255, 0.25)',
+                        boxShadow: '0 6px 24px rgba(0, 82, 255, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03)',
                         position: 'relative'
                       }}
                     >
                       <div>
-                        {/* Header */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', gap: '8px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-                            <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                              <Coins size={20} color="var(--blue)" />
-                            </div>
-                            <h4 style={{ margin: 0, fontSize: '1.18rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                              <span>Holder Rewards</span>
-                              <span style={{ fontSize: '0.70rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '3px 8px', borderRadius: '99px', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
-                                {upcomingHolderRound?.name || 'Unlock 2'}
-                              </span>
+                        {/* Header (Matching Rewards Hub) */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+                            <img
+                              src="/new-logo-vibe.png"
+                              alt="VIBE"
+                              style={{
+                                width: '38px',
+                                height: '38px',
+                                borderRadius: '50%',
+                                objectFit: 'cover',
+                                border: '1.5px solid rgba(0, 160, 255, 0.3)',
+                                boxShadow: '0 2px 8px rgba(0, 82, 255, 0.15)',
+                                flexShrink: 0
+                              }}
+                            />
+                            <h4 style={{ margin: 0, fontSize: '1.10rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                              {upcomingHolderRound?.name || 'Unlock 1'}
                             </h4>
                           </div>
-                          <span style={{ fontSize: '0.70rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '3px 9px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
-                            Upcoming
+                          <span
+                            style={{
+                              padding: '4px 10px',
+                              borderRadius: '99px',
+                              fontSize: '0.66rem',
+                              fontWeight: 900,
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.04em',
+                              background: 'rgba(255, 255, 255, 0.9)',
+                              color: '#64748b',
+                              border: '1px solid rgba(0, 160, 255, 0.25)',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              whiteSpace: 'nowrap',
+                              flexShrink: 0
+                            }}
+                          >
+                            <Lock size={11} color="#64748b" style={{ flexShrink: 0 }} />
+                            Locked
                           </span>
                         </div>
 
@@ -1172,45 +1223,45 @@ export default function Checker() {
                           style={{
                             background: '#f8fafc',
                             borderRadius: '16px',
-                            padding: '13px 18px',
+                            padding: '12px 16px',
                             border: '1px solid rgba(0, 140, 255, 0.18)',
                             boxShadow: '0 2px 8px rgba(0, 82, 255, 0.03)',
-                            marginBottom: '18px'
+                            marginBottom: '14px'
                           }}
                         >
-                          <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
-                            <Coins size={13} color="var(--blue)" /> Rewards Pool
+                          <div style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                            <Coins size={12} color="var(--blue)" /> Rewards Pool
                           </div>
-                          <div style={{ fontSize: '1.38rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                          <div style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
                             {upcomingHolderRound?.pool || '10,000,000 $VIBE'}
                           </div>
                         </div>
 
                         {/* Eligibility Box with Mascot */}
-                        <div style={{ marginBottom: '22px' }}>
+                        <div style={{ marginBottom: '18px' }}>
                           {isHolderEligibleLive ? (
                             <div
                               style={{
                                 background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
                                 border: '1.5px solid #a7f3d0',
                                 borderRadius: '18px',
-                                padding: '20px 16px',
+                                padding: '16px 14px',
                                 textAlign: 'center',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                minHeight: '160px',
+                                minHeight: '145px',
                                 boxSizing: 'border-box',
-                                gap: '8px'
+                                gap: '6px'
                               }}
                             >
                               <img
                                 src="/vibe-logo-nobg.png"
                                 alt="Eligible VIBE"
-                                style={{ width: 80, height: 80, objectFit: 'contain', margin: '-4px 0 -4px 0' }}
+                                style={{ width: 72, height: 72, objectFit: 'contain', margin: '-2px 0' }}
                               />
-                              <h5 style={{ fontSize: '1.20rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                              <h5 style={{ fontSize: '1.10rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
                                 You are Eligible!
                               </h5>
                             </div>
@@ -1220,23 +1271,23 @@ export default function Checker() {
                                 background: '#fef2f2',
                                 border: '1.5px solid #fecaca',
                                 borderRadius: '18px',
-                                padding: '20px 16px',
+                                padding: '16px 14px',
                                 textAlign: 'center',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                minHeight: '160px',
+                                minHeight: '145px',
                                 boxSizing: 'border-box',
-                                gap: '8px'
+                                gap: '6px'
                               }}
                             >
                               <img
                                 src="/vibe-sad-logo-nobg.png"
                                 alt="Sad VIBE"
-                                style={{ width: 75, height: 75, objectFit: 'contain', margin: '-4px 0 -4px 0' }}
+                                style={{ width: 68, height: 68, objectFit: 'contain', margin: '-2px 0' }}
                               />
-                              <h5 style={{ fontSize: '1.15rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                              <h5 style={{ fontSize: '1.05rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
                                 Not Eligible Yet
                               </h5>
                               <a
@@ -1246,15 +1297,15 @@ export default function Checker() {
                                 className="btn-fill"
                                 style={{
                                   marginTop: '2px',
-                                  padding: '8px 16px',
-                                  fontSize: '0.82rem',
+                                  padding: '7px 14px',
+                                  fontSize: '0.78rem',
                                   fontWeight: 800,
                                   borderRadius: '10px',
                                   textDecoration: 'none',
                                   background: '#ef4444'
                                 }}
                               >
-                                Buy & Hold 5M+ $VIBE <ArrowUpRight size={14} />
+                                Buy & Hold 5M+ $VIBE <ArrowUpRight size={13} />
                               </a>
                             </div>
                           )}
@@ -1265,34 +1316,35 @@ export default function Checker() {
                       <div
                         style={{
                           width: '100%',
-                          padding: '12px 16px',
-                          borderRadius: '14px',
+                          padding: '11px 14px',
+                          borderRadius: '12px',
                           background: '#f8fafc',
                           border: '1.5px solid rgba(0, 140, 255, 0.18)',
                           color: '#475569',
                           fontWeight: 800,
-                          fontSize: '0.86rem',
+                          fontSize: '0.84rem',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           gap: '8px',
-                          flexWrap: 'wrap'
+                          boxSizing: 'border-box'
                         }}
                       >
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#64748b' }}>
-                          <Lock size={14} /> Claim opens {upcomingHolderRound?.unlockDate || 'Sep 25'}
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', color: '#64748b', fontSize: '0.80rem', whiteSpace: 'nowrap' }}>
+                          <Lock size={13} /> Claim opens {upcomingHolderRound?.unlockDate || 'Sep 25'}
                         </span>
                         <span
                           style={{
-                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                            fontSize: '0.80rem',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '0.76rem',
                             fontWeight: 900,
                             background: 'rgba(0, 82, 255, 0.08)',
                             color: 'var(--blue)',
                             border: '1px solid rgba(0, 82, 255, 0.2)',
-                            padding: '3px 8px',
-                            borderRadius: '8px',
-                            letterSpacing: '0.04em'
+                            padding: '2px 6px',
+                            borderRadius: '6px',
+                            letterSpacing: '0.03em',
+                            whiteSpace: 'nowrap'
                           }}
                         >
                           {formatDigitalCountdown(upcomingHolderRound?.targetDate)}
@@ -1304,27 +1356,55 @@ export default function Checker() {
                     <div
                       className="checker-reward-card"
                       style={{
-                        border: '1.5px solid rgba(0, 100, 255, 0.25)',
-                        boxShadow: '0 8px 28px rgba(0, 82, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03)',
+                        border: '1.5px solid rgba(0, 160, 255, 0.25)',
+                        boxShadow: '0 6px 24px rgba(0, 82, 255, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03)',
                         position: 'relative'
                       }}
                     >
                       <div>
-                        {/* Header */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', gap: '8px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-                            <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                              <Crown size={20} color="var(--blue)" />
+                        {/* Header (Matching Rewards Hub) */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+                            <div
+                              style={{
+                                width: '38px',
+                                height: '38px',
+                                borderRadius: '50%',
+                                background: 'rgba(0, 82, 255, 0.1)',
+                                border: '1.5px solid rgba(0, 160, 255, 0.3)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxShadow: '0 2px 8px rgba(0, 82, 255, 0.15)',
+                                flexShrink: 0
+                              }}
+                            >
+                              <Crown size={18} color="var(--blue)" />
                             </div>
-                            <h4 style={{ margin: 0, fontSize: '1.18rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                              <span>Vibe Club</span>
-                              <span style={{ fontSize: '0.70rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '3px 8px', borderRadius: '99px', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
-                                {upcomingVibeClubRound?.name || 'Royalty 1'}
-                              </span>
+                            <h4 style={{ margin: 0, fontSize: '1.10rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                              {upcomingVibeClubRound?.name || 'Royalty 1'}
                             </h4>
                           </div>
-                          <span style={{ fontSize: '0.70rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '3px 9px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
-                            Upcoming
+                          <span
+                            style={{
+                              padding: '4px 10px',
+                              borderRadius: '99px',
+                              fontSize: '0.66rem',
+                              fontWeight: 900,
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.04em',
+                              background: 'rgba(255, 255, 255, 0.9)',
+                              color: '#64748b',
+                              border: '1px solid rgba(0, 160, 255, 0.25)',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '5px',
+                              whiteSpace: 'nowrap',
+                              flexShrink: 0
+                            }}
+                          >
+                            <Lock size={11} color="#64748b" style={{ flexShrink: 0 }} />
+                            Locked
                           </span>
                         </div>
 
@@ -1333,46 +1413,46 @@ export default function Checker() {
                           style={{
                             background: '#f8fafc',
                             borderRadius: '16px',
-                            padding: '13px 18px',
+                            padding: '12px 16px',
                             border: '1px solid rgba(0, 140, 255, 0.18)',
                             boxShadow: '0 2px 8px rgba(0, 82, 255, 0.03)',
-                            marginBottom: '18px'
+                            marginBottom: '14px'
                           }}
                         >
-                          <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
-                            <Crown size={13} color="var(--blue)" /> Royalty Pool
+                          <div style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                            <Crown size={12} color="var(--blue)" /> Royalty Pool
                           </div>
-                          <div style={{ fontSize: '1.38rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                          <div style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
                             TBA
                           </div>
                         </div>
 
                         {/* Eligibility Box with Mascot */}
-                        <div style={{ marginBottom: '22px' }}>
+                        <div style={{ marginBottom: '18px' }}>
                           {isVibeClubEligible ? (
                             <div
                               style={{
                                 background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
                                 border: '1.5px solid #a7f3d0',
                                 borderRadius: '18px',
-                                padding: '20px 16px',
+                                padding: '16px 14px',
                                 textAlign: 'center',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                minHeight: '160px',
+                                minHeight: '145px',
                                 boxSizing: 'border-box',
-                                gap: '8px'
+                                gap: '6px'
                               }}
                             >
                               <img
                                 src="/vibe-logo-nobg.png"
                                 alt="Eligible NFT"
-                                style={{ width: 80, height: 80, objectFit: 'contain', margin: '-4px 0 -4px 0' }}
+                                style={{ width: 72, height: 72, objectFit: 'contain', margin: '-2px 0' }}
                               />
-                              <h5 style={{ fontSize: '1.20rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
-                                Eligible Vibe Club Member!
+                              <h5 style={{ fontSize: '1.10rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                                Eligible Member!
                               </h5>
                             </div>
                           ) : (
@@ -1381,23 +1461,23 @@ export default function Checker() {
                                 background: '#fef2f2',
                                 border: '1.5px solid #fecaca',
                                 borderRadius: '18px',
-                                padding: '20px 16px',
+                                padding: '16px 14px',
                                 textAlign: 'center',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                minHeight: '160px',
+                                minHeight: '145px',
                                 boxSizing: 'border-box',
-                                gap: '8px'
+                                gap: '6px'
                               }}
                             >
                               <img
                                 src="/vibe-sad-logo-nobg.png"
                                 alt="Sad VIBE"
-                                style={{ width: 75, height: 75, objectFit: 'contain', margin: '-4px 0 -4px 0' }}
+                                style={{ width: 68, height: 68, objectFit: 'contain', margin: '-2px 0' }}
                               />
-                              <h5 style={{ fontSize: '1.15rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                              <h5 style={{ fontSize: '1.05rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
                                 Not Eligible Yet
                               </h5>
                               <a
@@ -1407,8 +1487,8 @@ export default function Checker() {
                                 className="btn-fill"
                                 style={{
                                   marginTop: '2px',
-                                  padding: '8px 16px',
-                                  fontSize: '0.82rem',
+                                  padding: '7px 14px',
+                                  fontSize: '0.78rem',
                                   fontWeight: 800,
                                   borderRadius: '10px',
                                   textDecoration: 'none',
@@ -1426,34 +1506,35 @@ export default function Checker() {
                       <div
                         style={{
                           width: '100%',
-                          padding: '12px 16px',
-                          borderRadius: '14px',
+                          padding: '11px 14px',
+                          borderRadius: '12px',
                           background: '#f8fafc',
                           border: '1.5px solid rgba(0, 140, 255, 0.18)',
                           color: '#475569',
                           fontWeight: 800,
-                          fontSize: '0.86rem',
+                          fontSize: '0.84rem',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           gap: '8px',
-                          flexWrap: 'wrap'
+                          boxSizing: 'border-box'
                         }}
                       >
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#64748b' }}>
-                          <Lock size={14} /> Claim opens {upcomingVibeClubRound?.claimDate || 'Aug 28'}
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', color: '#64748b', fontSize: '0.80rem', whiteSpace: 'nowrap' }}>
+                          <Lock size={13} /> Claim opens {upcomingVibeClubRound?.claimDate || 'Aug 28'}
                         </span>
                         <span
                           style={{
-                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                            fontSize: '0.80rem',
+                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                            fontSize: '0.76rem',
                             fontWeight: 900,
                             background: 'rgba(0, 82, 255, 0.08)',
                             color: 'var(--blue)',
                             border: '1px solid rgba(0, 82, 255, 0.2)',
-                            padding: '3px 8px',
-                            borderRadius: '8px',
-                            letterSpacing: '0.04em'
+                            padding: '2px 6px',
+                            borderRadius: '6px',
+                            letterSpacing: '0.03em',
+                            whiteSpace: 'nowrap'
                           }}
                         >
                           {formatDigitalCountdown(upcomingVibeClubRound?.targetDate)}
