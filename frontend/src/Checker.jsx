@@ -157,29 +157,10 @@ export default function Checker() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Holder Rewards Round 1 Status
-  const round1Target = new Date(HOLDER_ROUNDS[0].targetDate);
-  const isHolderRound1Live = currentTime >= round1Target;
-  
-  // Check Proofs data for Round 1
-  const userProofData = address && round1Data?.claims ? round1Data.claims[address.toLowerCase()] : null;
-  const isHolderEligibleLive = (balance !== null && balance >= MIN_HOLDER_BALANCE);
-  const hasConfirmedHolderClaim = !!userProofData;
-  const holderRewardAmount = userProofData ? userProofData.amount : (isHolderEligibleLive ? 500000 : 0);
-
-  // Vibe Club Royalty 1 Status
-  const royalty1Target = new Date(VIBECLUB_ROUNDS[0].targetDate);
-  const isRoyalty1Live = currentTime >= royalty1Target;
-  const isVibeClubEligible = (nftCount !== null && nftCount > 0);
-
-  const handleClaim = (type, roundId, amountStr) => {
-    setClaimStatus(prev => ({ ...prev, [`${type}-${roundId}`]: 'claiming' }));
-    
-    // Web3 Claim simulation / handler
-    setTimeout(() => {
-      setClaimStatus(prev => ({ ...prev, [`${type}-${roundId}`]: 'claimed' }));
-    }, 1800);
-  };
+  // Counts for Available Rewards tabs
+  const holderReadyCount = (isHolderRound1Live && (hasConfirmedHolderClaim || isHolderEligibleLive)) ? 1 : 0;
+  const vibeClubReadyCount = (isRoyalty1Live && isVibeClubEligible) ? 1 : 0;
+  const totalReadyCount = holderReadyCount + vibeClubReadyCount;
 
   return (
     <section id="claim-portal" style={{ minHeight: '80vh', padding: '130px 0 100px 0', background: 'var(--bg)' }}>
@@ -374,13 +355,17 @@ export default function Checker() {
               </div>
             </div>
 
-            {/* Category Filter Tabs */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '28px' }}>
+            {/* Sub-header: Available Rewards Label + Tabs */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '28px' }}>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0 }}>
+                Available Rewards
+              </h3>
+
               <div style={{ display: 'flex', gap: '6px', background: 'rgba(255, 255, 255, 0.75)', padding: '5px', borderRadius: '16px', border: '1px solid rgba(0, 160, 255, 0.18)', boxShadow: '0 2px 10px rgba(0, 82, 255, 0.04)' }}>
                 {[
-                  { id: 'all', label: 'All Claim Pools' },
-                  { id: 'holders', label: 'Holder Rewards' },
-                  { id: 'vibeclub', label: 'Vibe Club Royalties' }
+                  { id: 'all', label: `All Available (${totalReadyCount})` },
+                  { id: 'holders', label: `Holder Rewards (${holderReadyCount})` },
+                  { id: 'vibeclub', label: `Vibe Club (${vibeClubReadyCount})` }
                 ].map(t => (
                   <button
                     key={t.id}
@@ -406,7 +391,7 @@ export default function Checker() {
             </div>
 
             {/* ── REWARDS CLAIM GRID ── */}
-            <div style={{ display: 'grid', gridTemplateColumns: activeTab === 'all' ? 'repeat(auto-fit, minmax(min(100%, 440px), 1fr))' : '1fr', gap: '24px', marginBottom: '40px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: activeTab === 'all' ? 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))' : '1fr', gap: '24px', marginBottom: '40px' }}>
               
               {/* ═════════ 1. HOLDER REWARDS CARD ═════════ */}
               {(activeTab === 'all' || activeTab === 'holders') && (
@@ -426,137 +411,182 @@ export default function Checker() {
                 >
                   <div>
                     {/* Header */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', gap: '10px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <Coins size={22} color="var(--blue)" />
-                        </div>
-                        <div>
-                          <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                            Holder Rewards
-                          </h3>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 700 }}>
-                            Round 1 · 10,000,000 $VIBE Pool
-                          </span>
-                        </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '22px' }}>
+                      <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <Coins size={22} color="var(--blue)" />
                       </div>
-
-                      {/* Status Badge */}
-                      <span
-                        style={{
-                          padding: '5px 12px',
-                          borderRadius: '99px',
-                          fontSize: '0.7rem',
-                          fontWeight: 900,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.04em',
-                          background: isHolderRound1Live ? '#ecfdf5' : '#eff6ff',
-                          color: isHolderRound1Live ? '#059669' : 'var(--blue)',
-                          border: isHolderRound1Live ? '1px solid #a7f3d0' : '1px solid rgba(0, 160, 255, 0.25)',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '6px'
-                        }}
-                      >
-                        {isHolderRound1Live ? (
-                          <>
-                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }} />
-                            Claim Live
-                          </>
-                        ) : (
-                          <>
-                            <Clock size={12} />
-                            Upcoming ({formatCountdown(HOLDER_ROUNDS[0].targetDate)})
-                          </>
-                        )}
-                      </span>
-                    </div>
-
-                    {/* Schedule Info Box */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '18px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '8px 12px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)' }}>
-                        <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.76rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                          <ShieldCheck size={13} color="#0284c7" /> Requirement
+                      <div>
+                        <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                          Holder Rewards · 1 Unlock
+                        </h3>
+                        <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 700 }}>
+                          10,000,000 $VIBE Pool
                         </span>
-                        <strong style={{ color: 'var(--ink)', fontWeight: 800, fontSize: '0.78rem' }}>5M+ $VIBE Balance</strong>
-                      </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '8px 12px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)' }}>
-                        <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.76rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                          <Clock size={13} color="#0284c7" /> Balance Snapshot
-                        </span>
-                        <strong style={{ color: 'var(--ink)', fontWeight: 800, fontSize: '0.78rem' }}>26 Aug, 00:00 UTC</strong>
-                      </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '8px 12px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)' }}>
-                        <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.76rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                          <Calendar size={13} color="#0284c7" /> Unlock Date
-                        </span>
-                        <strong style={{ color: 'var(--ink)', fontWeight: 800, fontSize: '0.78rem' }}>26 Aug, 00:15 UTC</strong>
                       </div>
                     </div>
 
-                    {/* Dynamic User Allocation Box */}
-                    <div
-                      style={{
-                        background: (hasConfirmedHolderClaim || isHolderEligibleLive) ? 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)' : '#fef2f2',
-                        border: (hasConfirmedHolderClaim || isHolderEligibleLive) ? '1.5px solid #a7f3d0' : '1.5px solid #fecaca',
-                        borderRadius: '16px',
-                        padding: '16px',
-                        marginBottom: '20px',
-                        textAlign: 'left'
-                      }}
-                    >
-                      {(hasConfirmedHolderClaim || isHolderEligibleLive) ? (
-                        <div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#059669', fontSize: '0.76rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '4px' }}>
-                            <CheckCircle2 size={16} /> Eligible for Distribution
-                          </div>
-                          
-                          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-                            <div>
-                              <div style={{ fontSize: '1.45rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                                {holderRewardAmount.toLocaleString()} <span style={{ fontSize: '0.9rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
-                              </div>
-                              <span style={{ fontSize: '0.75rem', color: '#047857', fontWeight: 700 }}>
-                                {userProofData ? `Snapshot Verified (Share: ${userProofData.sharePercent})` : 'Live Balance Verified (≥5M)'}
-                              </span>
-                            </div>
-
-                            <div style={{ textAlign: 'right' }}>
-                              <span style={{ fontSize: '0.72rem', color: 'var(--muted)', display: 'block' }}>Your Balance</span>
-                              <strong style={{ fontSize: '0.86rem', color: 'var(--ink)' }}>{balance !== null ? `${balance.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : '...'} $VIBE</strong>
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#b91c1c', fontSize: '0.76rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '4px' }}>
-                            <AlertCircle size={16} /> Not Eligible for Round 1
-                          </div>
-                          <p style={{ margin: '0 0 10px 0', fontSize: '0.82rem', color: '#991b1b', lineHeight: 1.4 }}>
-                            Your balance is below 5,000,000 $VIBE. Hold 5M+ tokens to qualify for the next snapshot round.
-                          </p>
-                          <a
-                            href={O1}
-                            target="_blank"
-                            rel="noreferrer"
+                    {/* ── Body: BEFORE LIVE CLAIM (UPCOMING / SNAPSHOT CHECK) ── */}
+                    {!isHolderRound1Live && (
+                      <div style={{ marginBottom: '24px' }}>
+                        {isHolderEligibleLive ? (
+                          <div
                             style={{
-                              display: 'inline-flex',
+                              background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
+                              border: '1.5px solid #a7f3d0',
+                              borderRadius: '20px',
+                              padding: '24px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
                               alignItems: 'center',
-                              gap: '6px',
-                              background: '#ef4444',
-                              color: '#ffffff',
-                              padding: '8px 14px',
-                              borderRadius: '10px',
-                              fontSize: '0.78rem',
-                              fontWeight: 800,
-                              textDecoration: 'none'
+                              gap: '10px'
                             }}
                           >
-                            Buy $VIBE on o1.exchange <ArrowUpRight size={14} />
-                          </a>
-                        </div>
-                      )}
-                    </div>
+                            <img
+                              src="/vibe-logo-nobg.png"
+                              alt="Eligible VIBE"
+                              style={{ width: 100, height: 100, objectFit: 'contain', margin: '-6px 0 -10px 0' }}
+                            />
+                            <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                              You are Eligible!
+                            </h4>
+                            <p style={{ fontSize: '0.88rem', color: 'var(--ink)', margin: 0, fontWeight: 600 }}>
+                              Your wallet qualifies for the 10M $VIBE distribution.
+                            </p>
+                            <div style={{ background: '#ffffff', padding: '10px 18px', borderRadius: '12px', color: '#047857', fontWeight: 800, fontSize: '0.84rem', border: '1px solid #a7f3d0', marginTop: '4px' }}>
+                              Your Balance: {balance !== null ? `${balance.toLocaleString(undefined, { maximumFractionDigits: 0 })} $VIBE` : '...'}
+                            </div>
+                          </div>
+                        ) : (
+                          <div
+                            style={{
+                              background: '#fef2f2',
+                              border: '1.5px solid #fecaca',
+                              borderRadius: '20px',
+                              padding: '24px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              gap: '10px'
+                            }}
+                          >
+                            <img
+                              src="/vibe-sad-logo-nobg.png"
+                              alt="Sad VIBE"
+                              style={{ width: 100, height: 100, objectFit: 'contain', margin: '-6px 0 -10px 0' }}
+                            />
+                            <h4 style={{ fontSize: '1.3rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                              Not Eligible Yet
+                            </h4>
+                            <p style={{ fontSize: '0.88rem', color: 'var(--muted)', margin: 0, fontWeight: 700 }}>
+                              Hold 5M+ to become eligible.
+                            </p>
+                            <div style={{ background: '#ffffff', padding: '10px 18px', borderRadius: '12px', color: '#b91c1c', fontWeight: 800, fontSize: '0.84rem', border: '1px solid #fecaca', width: '100%', maxWidth: '320px' }}>
+                              Your Balance: {balance !== null ? `${balance.toLocaleString(undefined, { maximumFractionDigits: 0 })} $VIBE` : '0 $VIBE'}
+                            </div>
+                            <a
+                              href={O1}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="btn-fill"
+                              style={{
+                                marginTop: '6px',
+                                padding: '10px 20px',
+                                fontSize: '0.84rem',
+                                fontWeight: 800,
+                                borderRadius: '12px',
+                                textDecoration: 'none',
+                                background: '#ef4444'
+                              }}
+                            >
+                              Buy 5M+ on o1.exchange <ArrowUpRight size={15} />
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* ── Body: WHEN CLAIM IS LIVE ── */}
+                    {isHolderRound1Live && (
+                      <div style={{ marginBottom: '24px' }}>
+                        {(hasConfirmedHolderClaim || isHolderEligibleLive) ? (
+                          <div
+                            style={{
+                              background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
+                              border: '1.5px solid #a7f3d0',
+                              borderRadius: '20px',
+                              padding: '22px 20px',
+                              textAlign: 'left'
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#059669', fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
+                              <CheckCircle2 size={16} /> Eligible for Claim
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                              <div>
+                                <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                                  {holderRewardAmount.toLocaleString()} <span style={{ fontSize: '0.95rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
+                                </div>
+                                <span style={{ fontSize: '0.78rem', color: '#047857', fontWeight: 700 }}>
+                                  {userProofData ? `Snapshot Verified (Share: ${userProofData.sharePercent})` : 'Live Balance Verified (≥5M)'}
+                                </span>
+                              </div>
+                              <div style={{ textAlign: 'right' }}>
+                                <span style={{ fontSize: '0.72rem', color: 'var(--muted)', display: 'block' }}>Your Balance</span>
+                                <strong style={{ fontSize: '0.88rem', color: 'var(--ink)' }}>{balance !== null ? `${balance.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : '...'} $VIBE</strong>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div
+                            style={{
+                              background: '#fef2f2',
+                              border: '1.5px solid #fecaca',
+                              borderRadius: '20px',
+                              padding: '24px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              gap: '10px'
+                            }}
+                          >
+                            <img
+                              src="/vibe-sad-logo-nobg.png"
+                              alt="Sad VIBE"
+                              style={{ width: 90, height: 90, objectFit: 'contain' }}
+                            />
+                            <h4 style={{ fontSize: '1.25rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                              Not Eligible for Round 1
+                            </h4>
+                            <p style={{ fontSize: '0.85rem', color: '#991b1b', margin: 0 }}>
+                              Your balance was below 5,000,000 $VIBE at the snapshot.
+                            </p>
+                            <a
+                              href={O1}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                background: '#ef4444',
+                                color: '#ffffff',
+                                padding: '8px 16px',
+                                borderRadius: '10px',
+                                fontSize: '0.8rem',
+                                fontWeight: 800,
+                                textDecoration: 'none',
+                                marginTop: '4px'
+                              }}
+                            >
+                              Buy 5M+ on o1.exchange <ArrowUpRight size={14} />
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   {/* Action Button: Claim or Lock State */}
@@ -669,137 +699,179 @@ export default function Checker() {
                 >
                   <div>
                     {/* Header */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', gap: '10px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <Crown size={22} color="#10b981" />
-                        </div>
-                        <div>
-                          <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                            Vibe Club Royalties
-                          </h3>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 700 }}>
-                            Royalty 1 · 15% Revenue Royalties Pool
-                          </span>
-                        </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '22px' }}>
+                      <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <Crown size={22} color="#10b981" />
                       </div>
-
-                      {/* Status Badge */}
-                      <span
-                        style={{
-                          padding: '5px 12px',
-                          borderRadius: '99px',
-                          fontSize: '0.7rem',
-                          fontWeight: 900,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.04em',
-                          background: isRoyalty1Live ? '#ecfdf5' : '#eff6ff',
-                          color: isRoyalty1Live ? '#059669' : 'var(--blue)',
-                          border: isRoyalty1Live ? '1px solid #a7f3d0' : '1px solid rgba(0, 160, 255, 0.25)',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '6px'
-                        }}
-                      >
-                        {isRoyalty1Live ? (
-                          <>
-                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }} />
-                            Claim Live
-                          </>
-                        ) : (
-                          <>
-                            <Clock size={12} />
-                            Upcoming ({formatCountdown(VIBECLUB_ROUNDS[0].targetDate)})
-                          </>
-                        )}
-                      </span>
-                    </div>
-
-                    {/* Schedule Info Box */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '18px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '8px 12px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)' }}>
-                        <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.76rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                          <ShieldCheck size={13} color="#0284c7" /> Requirement
+                      <div>
+                        <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                          Vibe Club Royalties · Royalty 1
+                        </h3>
+                        <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 700 }}>
+                          15% Revenue Royalties Pool
                         </span>
-                        <strong style={{ color: 'var(--ink)', fontWeight: 800, fontSize: '0.78rem' }}>NFT Holder</strong>
-                      </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '8px 12px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)' }}>
-                        <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.76rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                          <Clock size={13} color="#0284c7" /> Holder Snapshot
-                        </span>
-                        <strong style={{ color: 'var(--ink)', fontWeight: 800, fontSize: '0.78rem' }}>28 Aug, 00:00 UTC</strong>
-                      </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '8px 12px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)' }}>
-                        <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.76rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                          <Calendar size={13} color="#0284c7" /> Claim Date
-                        </span>
-                        <strong style={{ color: 'var(--ink)', fontWeight: 800, fontSize: '0.78rem' }}>28 Aug 2026</strong>
                       </div>
                     </div>
 
-                    {/* Dynamic User Allocation Box */}
-                    <div
-                      style={{
-                        background: isVibeClubEligible ? 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)' : '#fef2f2',
-                        border: isVibeClubEligible ? '1.5px solid #a7f3d0' : '1.5px solid #fecaca',
-                        borderRadius: '16px',
-                        padding: '16px',
-                        marginBottom: '20px',
-                        textAlign: 'left'
-                      }}
-                    >
-                      {isVibeClubEligible ? (
-                        <div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#059669', fontSize: '0.76rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '4px' }}>
-                            <Crown size={16} /> Eligible Vibe Club Member
-                          </div>
-                          
-                          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-                            <div>
-                              <div style={{ fontSize: '1.45rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                                Equal Pool Share <span style={{ fontSize: '0.9rem', color: '#10b981', fontWeight: 800 }}>({nftCount} NFT{nftCount > 1 ? 's' : ''})</span>
-                              </div>
-                              <span style={{ fontSize: '0.75rem', color: '#047857', fontWeight: 700 }}>
-                                All 333 NFTs receive equal royalty distributions
-                              </span>
-                            </div>
-
-                            <div style={{ textAlign: 'right' }}>
-                              <span style={{ fontSize: '0.72rem', color: 'var(--muted)', display: 'block' }}>Holding</span>
-                              <strong style={{ fontSize: '0.86rem', color: '#10b981' }}>{nftCount} Vibe Club NFT{nftCount > 1 ? 's' : ''}</strong>
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#b91c1c', fontSize: '0.76rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '4px' }}>
-                            <AlertCircle size={16} /> No Vibe Club NFTs Detected
-                          </div>
-                          <p style={{ margin: '0 0 10px 0', fontSize: '0.82rem', color: '#991b1b', lineHeight: 1.4 }}>
-                            Mint or hold at least 1 Vibe Club NFT before the Aug 28 snapshot to receive lifetime royalties.
-                          </p>
-                          <a
-                            href={VIBECLUB_MINT_URL}
-                            target="_blank"
-                            rel="noreferrer"
+                    {/* ── Body: BEFORE LIVE CLAIM (UPCOMING / SNAPSHOT CHECK) ── */}
+                    {!isRoyalty1Live && (
+                      <div style={{ marginBottom: '24px' }}>
+                        {isVibeClubEligible ? (
+                          <div
                             style={{
-                              display: 'inline-flex',
+                              background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
+                              border: '1.5px solid #a7f3d0',
+                              borderRadius: '20px',
+                              padding: '24px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
                               alignItems: 'center',
-                              gap: '6px',
-                              background: '#10b981',
-                              color: '#ffffff',
-                              padding: '8px 14px',
-                              borderRadius: '10px',
-                              fontSize: '0.78rem',
-                              fontWeight: 800,
-                              textDecoration: 'none'
+                              gap: '10px'
                             }}
                           >
-                            Mint Vibe Club NFT ↗
-                          </a>
-                        </div>
-                      )}
-                    </div>
+                            <img
+                              src="/vibe-logo-nobg.png"
+                              alt="Eligible NFT"
+                              style={{ width: 100, height: 100, objectFit: 'contain', margin: '-6px 0 -10px 0' }}
+                            />
+                            <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                              Eligible Vibe Club Member!
+                            </h4>
+                            <p style={{ fontSize: '0.88rem', color: 'var(--ink)', margin: 0, fontWeight: 600 }}>
+                              All 333 NFTs receive equal royalty pool distributions.
+                            </p>
+                            <div style={{ background: '#ffffff', padding: '10px 18px', borderRadius: '12px', color: '#047857', fontWeight: 800, fontSize: '0.84rem', border: '1px solid #a7f3d0', marginTop: '4px' }}>
+                              Holding: {nftCount} Vibe Club NFT{nftCount > 1 ? 's' : ''}
+                            </div>
+                          </div>
+                        ) : (
+                          <div
+                            style={{
+                              background: '#fef2f2',
+                              border: '1.5px solid #fecaca',
+                              borderRadius: '20px',
+                              padding: '24px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              gap: '10px'
+                            }}
+                          >
+                            <img
+                              src="/vibe-sad-logo-nobg.png"
+                              alt="Sad NFT"
+                              style={{ width: 100, height: 100, objectFit: 'contain', margin: '-6px 0 -10px 0' }}
+                            />
+                            <h4 style={{ fontSize: '1.3rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                              No NFTs Detected
+                            </h4>
+                            <p style={{ fontSize: '0.88rem', color: 'var(--muted)', margin: 0, fontWeight: 700 }}>
+                              Hold at least 1 Vibe Club NFT to become eligible.
+                            </p>
+                            <a
+                              href={VIBECLUB_MINT_URL}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="btn-fill"
+                              style={{
+                                marginTop: '6px',
+                                padding: '10px 20px',
+                                fontSize: '0.84rem',
+                                fontWeight: 800,
+                                borderRadius: '12px',
+                                textDecoration: 'none',
+                                background: '#10b981'
+                              }}
+                            >
+                              Mint Vibe Club NFT ↗
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* ── Body: WHEN CLAIM IS LIVE ── */}
+                    {isRoyalty1Live && (
+                      <div style={{ marginBottom: '24px' }}>
+                        {isVibeClubEligible ? (
+                          <div
+                            style={{
+                              background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
+                              border: '1.5px solid #a7f3d0',
+                              borderRadius: '20px',
+                              padding: '22px 20px',
+                              textAlign: 'left'
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#059669', fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
+                              <Crown size={16} /> Eligible Vibe Club Member
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                              <div>
+                                <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                                  Equal Pool Share <span style={{ fontSize: '0.95rem', color: '#10b981', fontWeight: 800 }}>({nftCount} NFT{nftCount > 1 ? 's' : ''})</span>
+                                </div>
+                                <span style={{ fontSize: '0.78rem', color: '#047857', fontWeight: 700 }}>
+                                  All 333 NFTs receive equal royalty distributions
+                                </span>
+                              </div>
+                              <div style={{ textAlign: 'right' }}>
+                                <span style={{ fontSize: '0.72rem', color: 'var(--muted)', display: 'block' }}>Holding</span>
+                                <strong style={{ fontSize: '0.88rem', color: '#10b981' }}>{nftCount} Vibe Club NFT{nftCount > 1 ? 's' : ''}</strong>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div
+                            style={{
+                              background: '#fef2f2',
+                              border: '1.5px solid #fecaca',
+                              borderRadius: '20px',
+                              padding: '24px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              gap: '10px'
+                            }}
+                          >
+                            <img
+                              src="/vibe-sad-logo-nobg.png"
+                              alt="Sad NFT"
+                              style={{ width: 90, height: 90, objectFit: 'contain' }}
+                            />
+                            <h4 style={{ fontSize: '1.25rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                              No NFTs Detected
+                            </h4>
+                            <p style={{ fontSize: '0.85rem', color: '#991b1b', margin: 0 }}>
+                              You did not hold a Vibe Club NFT at the snapshot time.
+                            </p>
+                            <a
+                              href={VIBECLUB_MINT_URL}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                background: '#10b981',
+                                color: '#ffffff',
+                                padding: '8px 16px',
+                                borderRadius: '10px',
+                                fontSize: '0.8rem',
+                                fontWeight: 800,
+                                textDecoration: 'none',
+                                marginTop: '4px'
+                              }}
+                            >
+                              Mint Vibe Club NFT ↗
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   {/* Action Button */}
