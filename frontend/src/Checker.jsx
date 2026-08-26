@@ -402,15 +402,15 @@ export default function Checker() {
                 <div style={{ width: '42px', height: '42px', borderRadius: '50%', overflow: 'hidden', border: '2px solid var(--blue)', flexShrink: 0, boxShadow: '0 2px 10px rgba(0, 82, 255, 0.15)' }}>
                   <img src="/new-logo-vibe.png" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="VIBE" />
                 </div>
-                <div>
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
                     <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981', display: 'inline-block' }} />
-                    <span style={{ fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--muted)', fontWeight: 800 }}>
+                    <span style={{ fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--muted)', fontWeight: 800, lineHeight: 1 }}>
                       Connected Wallet
                     </span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <strong style={{ fontSize: '0.96rem', color: 'var(--ink)', fontFamily: 'monospace', fontWeight: 800 }}>
+                    <strong style={{ fontSize: '0.96rem', color: 'var(--ink)', fontFamily: 'monospace', fontWeight: 800, lineHeight: 1 }}>
                       {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : ''}
                     </strong>
                     <button
@@ -424,13 +424,13 @@ export default function Checker() {
                 </div>
               </div>
 
-              {/* Middle: Live Balances */}
+              {/* Right: Live Balances + Actions */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
                 {/* $VIBE Balance */}
                 <div
                   style={{
                     background: '#ffffff',
-                    padding: '9px 16px',
+                    padding: '8px 16px',
                     borderRadius: '14px',
                     border: '1px solid rgba(0, 160, 255, 0.18)',
                     display: 'flex',
@@ -439,13 +439,13 @@ export default function Checker() {
                     boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)'
                   }}
                 >
-                  <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(0, 82, 255, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(0, 82, 255, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Coins size={16} color="var(--blue)" />
                   </div>
-                  <div>
-                    <span style={{ fontSize: '0.62rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, display: 'block', letterSpacing: '0.04em' }}>$VIBE Balance</span>
-                    <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 900 }}>
-                      {loading || balance === null ? <Loader2 size={13} className="spin" style={{ display: 'inline' }} /> : `${balance.toLocaleString(undefined, { maximumFractionDigits: 0 })} $VIBE`}
+                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <span style={{ fontSize: '0.62rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, lineHeight: 1.1, letterSpacing: '0.04em', marginBottom: '2px' }}>$VIBE Balance</span>
+                    <strong style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 900, lineHeight: 1 }}>
+                      {loading || balance === null ? <Loader2 size={13} className="spin" style={{ display: 'inline' }} /> : `${balance.toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE`}
                     </strong>
                   </div>
                 </div>
@@ -454,7 +454,7 @@ export default function Checker() {
                 <div
                   style={{
                     background: '#ffffff',
-                    padding: '9px 16px',
+                    padding: '8px 16px',
                     borderRadius: '14px',
                     border: '1px solid rgba(16, 185, 129, 0.22)',
                     display: 'flex',
@@ -463,20 +463,18 @@ export default function Checker() {
                     boxShadow: '0 2px 8px rgba(16, 185, 129, 0.04)'
                   }}
                 >
-                  <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Crown size={16} color="#10b981" />
                   </div>
-                  <div>
-                    <span style={{ fontSize: '0.62rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, display: 'block', letterSpacing: '0.04em' }}>Vibe Club</span>
-                    <strong style={{ fontSize: '0.92rem', color: '#10b981', fontWeight: 900 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <span style={{ fontSize: '0.62rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800, lineHeight: 1.1, letterSpacing: '0.04em', marginBottom: '2px' }}>Vibe Club</span>
+                    <strong style={{ fontSize: '0.92rem', color: '#10b981', fontWeight: 900, lineHeight: 1 }}>
                       {loading || nftCount === null ? <Loader2 size={13} className="spin" style={{ display: 'inline' }} /> : `${nftCount} NFT${nftCount === 1 ? '' : 's'}`}
                     </strong>
                   </div>
                 </div>
-              </div>
 
-              {/* Right: Refresh & Disconnect */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {/* Refresh & Disconnect */}
                 <button
                   onClick={fetchBalances}
                   disabled={loading}
@@ -575,11 +573,11 @@ export default function Checker() {
                       <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <Coins size={22} color="var(--blue)" />
                       </div>
-                      <div>
-                        <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', lineHeight: 1.15, marginBottom: '2px' }}>
                           Holder Rewards · 1 Unlock
                         </h3>
-                        <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 700 }}>
+                        <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 700, lineHeight: 1 }}>
                           10,000,000 $VIBE Pool
                         </span>
                       </div>
@@ -614,7 +612,7 @@ export default function Checker() {
                               Your wallet qualifies for the 10M $VIBE distribution.
                             </p>
                             <div style={{ background: '#ffffff', padding: '10px 18px', borderRadius: '12px', color: '#047857', fontWeight: 800, fontSize: '0.84rem', border: '1px solid #a7f3d0', marginTop: '4px' }}>
-                              Your Balance: {balance !== null ? `${balance.toLocaleString(undefined, { maximumFractionDigits: 0 })} $VIBE` : '...'}
+                              Your Balance: {balance !== null ? `${balance.toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE` : '...'}
                             </div>
                           </div>
                         ) : (
@@ -643,7 +641,7 @@ export default function Checker() {
                               Hold 5M+ to become eligible.
                             </p>
                             <div style={{ background: '#ffffff', padding: '10px 18px', borderRadius: '12px', color: '#b91c1c', fontWeight: 800, fontSize: '0.84rem', border: '1px solid #fecaca', width: '100%', maxWidth: '320px' }}>
-                              Your Balance: {balance !== null ? `${balance.toLocaleString(undefined, { maximumFractionDigits: 0 })} $VIBE` : '0 $VIBE'}
+                              Your Balance: {balance !== null ? `${balance.toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE` : '0 $VIBE'}
                             </div>
                             <a
                               href={O1}
@@ -676,21 +674,23 @@ export default function Checker() {
                               background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
                               border: '1.5px solid #a7f3d0',
                               borderRadius: '20px',
-                              padding: '28px 20px',
+                              padding: '24px 20px',
                               textAlign: 'center',
                               display: 'flex',
                               flexDirection: 'column',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              gap: '12px'
+                              minHeight: '228px',
+                              boxSizing: 'border-box',
+                              gap: '14px'
                             }}
                           >
-                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#059669', fontSize: '0.82rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                              <CheckCircle2 size={18} color="#10b981" /> Eligible for Claim
-                            </div>
+                            <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                              You're eligible for claim
+                            </h4>
                             
-                            <div style={{ fontSize: '2.4rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: '4px 0' }}>
-                              {holderRewardAmount.toLocaleString()} <span style={{ fontSize: '1.25rem', color: 'var(--blue)', fontWeight: 900 }}>$VIBE</span>
+                            <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: 0 }}>
+                              {holderRewardAmount.toLocaleString('en-US')} <span style={{ fontSize: '1.25rem', color: 'var(--blue)', fontWeight: 900 }}>$VIBE</span>
                             </div>
                           </div>
                         ) : (
@@ -789,7 +789,7 @@ export default function Checker() {
                               </>
                             ) : (
                               <>
-                                <Gift size={18} /> Claim {holderRewardAmount.toLocaleString()} $VIBE
+                                <Gift size={18} /> Claim {holderRewardAmount.toLocaleString('en-US')} $VIBE
                               </>
                             )}
                           </button>
@@ -858,11 +858,11 @@ export default function Checker() {
                       <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <Crown size={22} color="#10b981" />
                       </div>
-                      <div>
-                        <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', lineHeight: 1.15, marginBottom: '2px' }}>
                           Vibe Club Royalties · Royalty 1
                         </h3>
-                        <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 700 }}>
+                        <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 700, lineHeight: 1 }}>
                           15% Revenue Royalties Pool
                         </span>
                       </div>
