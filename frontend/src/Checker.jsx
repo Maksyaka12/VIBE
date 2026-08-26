@@ -39,17 +39,17 @@ const DISTRIBUTOR_ABI = parseAbi([
 ]);
 
 const HOLDER_ROUNDS = [
-  { id: 1, name: 'Unlock 1', pool: '10,000,000 $VIBE', snapshotTime: '26 Aug, 00:00 UTC', unlockDate: '26 Aug, 00:15 UTC', targetDate: '2026-08-26T00:15:00Z' },
-  { id: 2, name: 'Unlock 2', pool: '10,000,000 $VIBE', snapshotTime: '25 Sep, 00:00 UTC', unlockDate: '25 Sep, 00:15 UTC', targetDate: '2026-09-25T00:15:00Z' },
-  { id: 3, name: 'Unlock 3', pool: '10,000,000 $VIBE', snapshotTime: '25 Oct, 00:00 UTC', unlockDate: '25 Oct, 00:15 UTC', targetDate: '2026-10-25T00:15:00Z' },
-  { id: 4, name: 'Unlock 4', pool: '10,000,000 $VIBE', snapshotTime: '24 Nov, 00:00 UTC', unlockDate: '24 Nov, 00:15 UTC', targetDate: '2026-11-24T00:15:00Z' },
+  { id: 1, name: 'Unlock 1', pool: '10,000,000 $VIBE', snapshotTime: '26 Aug, 00:00 UTC', unlockDate: 'Aug 26, 00:15 UTC', targetDate: '2026-08-26T00:15:00Z' },
+  { id: 2, name: 'Unlock 2', pool: '10,000,000 $VIBE', snapshotTime: '25 Sep, 00:00 UTC', unlockDate: 'Sep 25, 00:15 UTC', targetDate: '2026-09-25T00:15:00Z' },
+  { id: 3, name: 'Unlock 3', pool: '10,000,000 $VIBE', snapshotTime: '25 Oct, 00:00 UTC', unlockDate: 'Oct 25, 00:15 UTC', targetDate: '2026-10-25T00:15:00Z' },
+  { id: 4, name: 'Unlock 4', pool: '10,000,000 $VIBE', snapshotTime: '24 Nov, 00:00 UTC', unlockDate: 'Nov 24, 00:15 UTC', targetDate: '2026-11-24T00:15:00Z' },
 ];
 
 const VIBECLUB_ROUNDS = [
-  { id: 1, name: 'Royalty 1', pool: '15% Revenue Share', snapshotTime: '28 Aug, 00:00 UTC', claimDate: '28 Aug, 00:00 UTC', targetDate: '2026-08-28T00:00:00Z' },
-  { id: 2, name: 'Royalty 2', pool: '15% Revenue Share', snapshotTime: '3 Sep, 00:00 UTC', claimDate: '3 Sep, 00:00 UTC', targetDate: '2026-09-03T00:00:00Z' },
-  { id: 3, name: 'Royalty 3', pool: '15% Revenue Share', snapshotTime: '13 Sep, 00:00 UTC', claimDate: '13 Sep, 00:00 UTC', targetDate: '2026-09-13T00:00:00Z' },
-  { id: 4, name: 'Royalty 4', pool: '15% Revenue Share', snapshotTime: '23 Sep, 00:00 UTC', claimDate: '23 Sep, 00:00 UTC', targetDate: '2026-09-23T00:00:00Z' },
+  { id: 1, name: 'Royalty 1', pool: 'TBA', snapshotTime: '28 Aug, 00:00 UTC', claimDate: 'Aug 28, 00:00 UTC', targetDate: '2026-08-28T00:00:00Z' },
+  { id: 2, name: 'Royalty 2', pool: 'TBA', snapshotTime: '3 Sep, 00:00 UTC', claimDate: 'Sep 3, 00:00 UTC', targetDate: '2026-09-03T00:00:00Z' },
+  { id: 3, name: 'Royalty 3', pool: 'TBA', snapshotTime: '13 Sep, 00:00 UTC', claimDate: 'Sep 13, 00:00 UTC', targetDate: '2026-09-13T00:00:00Z' },
+  { id: 4, name: 'Royalty 4', pool: 'TBA', snapshotTime: '23 Sep, 00:00 UTC', claimDate: 'Sep 23, 00:00 UTC', targetDate: '2026-09-23T00:00:00Z' },
 ];
 
 const ERC20_ABI = parseAbi([
@@ -570,7 +570,7 @@ export default function Checker() {
                   </h3>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))', gap: '24px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 480px), 1fr))', gap: '24px' }}>
                   
                   {/* Holder Rewards Active Claim Card */}
                   <div
@@ -757,11 +757,11 @@ export default function Checker() {
             <div style={{ marginBottom: '44px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
                 <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Clock size={20} color="#0284c7" /> Upcoming Rewards
+                  <Clock size={20} color="#0284c7" /> Upcoming Rewards (2)
                 </h3>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 460px), 1fr))', gap: '24px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 480px), 1fr))', gap: '24px' }}>
                 
                 {/* 1. Next Holder Rewards Unlock Card */}
                 <div
@@ -904,7 +904,7 @@ export default function Checker() {
                       gap: '6px'
                     }}
                   >
-                    <Lock size={14} /> Snapshot on {upcomingHolderRound?.snapshotTime || '25 Sep, 00:00 UTC'} ({formatCountdown(upcomingHolderRound?.targetDate)})
+                    <Lock size={14} /> Claim opens {upcomingHolderRound?.unlockDate || 'Sep 25, 00:15 UTC'} ({formatCountdown(upcomingHolderRound?.targetDate)})
                   </div>
                 </div>
 
@@ -926,14 +926,14 @@ export default function Checker() {
                     {/* Header */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <Crown size={22} color="#10b981" />
+                        <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <Crown size={22} color="var(--blue)" />
                         </div>
                         <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
                           Vibe Club · {upcomingVibeClubRound?.name || 'Royalty 1'}
                         </h3>
                       </div>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#10b981', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                         Upcoming
                       </span>
                     </div>
@@ -944,16 +944,16 @@ export default function Checker() {
                         background: '#ffffff',
                         borderRadius: '16px',
                         padding: '14px 18px',
-                        border: '1px solid rgba(16, 185, 129, 0.2)',
-                        boxShadow: '0 3px 12px rgba(16, 185, 129, 0.04)',
+                        border: '1px solid rgba(0, 160, 255, 0.2)',
+                        boxShadow: '0 3px 12px rgba(0, 82, 255, 0.04)',
                         marginBottom: '20px'
                       }}
                     >
                       <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
-                        <Crown size={13} color="#10b981" /> Royalty Pool
+                        <Crown size={13} color="var(--blue)" /> Royalty Pool
                       </div>
                       <div style={{ fontSize: '1.42rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
-                        15% <span style={{ fontSize: '0.9rem', color: '#10b981', fontWeight: 800 }}>Revenue Share</span>
+                        TBA
                       </div>
                     </div>
 
@@ -1049,7 +1049,7 @@ export default function Checker() {
                       gap: '6px'
                     }}
                   >
-                    <Lock size={14} /> Snapshot on {upcomingVibeClubRound?.snapshotTime || '28 Aug, 00:00 UTC'} ({formatCountdown(upcomingVibeClubRound?.targetDate)})
+                    <Lock size={14} /> Claim opens {upcomingVibeClubRound?.claimDate || 'Aug 28, 00:00 UTC'} ({formatCountdown(upcomingVibeClubRound?.targetDate)})
                   </div>
                 </div>
 
