@@ -18,7 +18,8 @@ import {
   AlertCircle,
   Lock,
   Gift,
-  ShieldCheck
+  ShieldCheck,
+  ChevronDown
 } from 'lucide-react';
 import round1Data from './data/round_1_proofs.json';
 
@@ -96,6 +97,11 @@ export default function Checker() {
   const [currentTime, setCurrentTime] = useState(() => new Date());
   const [claimStatus, setClaimStatus] = useState({});
   const [claimedHistory, setClaimedHistory] = useState([]);
+
+  // Collapsible Section States
+  const [isAvailableOpen, setIsAvailableOpen] = useState(true);
+  const [isUpcomingOpen, setIsUpcomingOpen] = useState(true);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(true);
 
   // Admin Panel States
   const [adminEpochId, setAdminEpochId] = useState('1');
@@ -568,116 +574,137 @@ export default function Checker() {
                   <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <Sparkles size={20} color="var(--blue)" /> Available Rewards ({totalAvailableCount})
                   </h3>
+                  <button
+                    onClick={() => setIsAvailableOpen(!isAvailableOpen)}
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.85)',
+                      border: '1.5px solid rgba(0, 160, 255, 0.25)',
+                      borderRadius: '10px',
+                      padding: '5px 9px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'var(--blue)',
+                      transition: 'all 0.2s ease',
+                      transform: isAvailableOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+                      boxShadow: '0 2px 6px rgba(0, 82, 255, 0.05)'
+                    }}
+                    title={isAvailableOpen ? "Collapse section" : "Expand section"}
+                  >
+                    <ChevronDown size={18} />
+                  </button>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 480px), 1fr))', gap: '24px' }}>
-                  
-                  {/* Holder Rewards Active Claim Card */}
-                  <div
-                    style={{
-                      background: 'var(--surface)',
-                      border: '2px solid rgba(0, 82, 255, 0.35)',
-                      borderRadius: '24px',
-                      padding: '28px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      boxShadow: '0 8px 32px rgba(0, 82, 255, 0.08)',
-                      position: 'relative'
-                    }}
-                  >
-                    <div>
-                      {/* Header */}
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <Coins size={22} color="var(--blue)" />
-                          </div>
-                          <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                            Holder Rewards · Unlock 1
-                          </h3>
-                        </div>
-                        <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#059669', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                          Live Now
-                        </span>
-                      </div>
-
-                      {/* Metric Box (Rewards Pool) */}
-                      <div
-                        style={{
-                          background: '#ffffff',
-                          borderRadius: '16px',
-                          padding: '14px 18px',
-                          border: '1px solid rgba(0, 160, 255, 0.2)',
-                          boxShadow: '0 3px 12px rgba(0, 82, 255, 0.04)',
-                          marginBottom: '20px'
-                        }}
-                      >
-                        <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
-                          <Coins size={13} color="var(--blue)" /> Rewards Pool
-                        </div>
-                        <div style={{ fontSize: '1.42rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
-                          10,000,000 <span style={{ fontSize: '0.9rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
-                        </div>
-                      </div>
-
-                      {/* Allocation / Eligibility Box */}
-                      <div style={{ marginBottom: '24px' }}>
-                        {(hasConfirmedHolderClaim || isHolderEligibleLive) ? (
-                          <div
-                            style={{
-                              background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
-                              border: '1.5px solid #a7f3d0',
-                              borderRadius: '20px',
-                              padding: '24px 20px',
-                              textAlign: 'center',
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              minHeight: '190px',
-                              boxSizing: 'border-box',
-                              gap: '14px'
-                            }}
-                          >
-                            <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
-                              You're eligible for claim
-                            </h4>
-                            
-                            <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: 0 }}>
-                              {(holderRewardAmount || 0).toLocaleString('en-US')} <span style={{ fontSize: '1.25rem', color: 'var(--blue)', fontWeight: 900 }}>$VIBE</span>
+                {isAvailableOpen && (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 480px), 1fr))', gap: '24px' }}>
+                    
+                    {/* Holder Rewards Active Claim Card */}
+                    <div
+                      style={{
+                        background: 'var(--surface)',
+                        border: '2px solid rgba(0, 82, 255, 0.35)',
+                        borderRadius: '24px',
+                        padding: '28px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        boxShadow: '0 8px 32px rgba(0, 82, 255, 0.08)',
+                        position: 'relative'
+                      }}
+                    >
+                      <div>
+                        {/* Header */}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                              <Coins size={22} color="var(--blue)" />
                             </div>
+                            <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                              Holder Rewards · Unlock 1
+                            </h3>
                           </div>
-                        ) : (
-                          <div
-                            style={{
-                              background: '#fef2f2',
-                              border: '1.5px solid #fecaca',
-                              borderRadius: '20px',
-                              padding: '24px 20px',
-                              textAlign: 'center',
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              minHeight: '190px',
-                              boxSizing: 'border-box',
-                              gap: '10px'
-                            }}
-                          >
-                            <img
-                              src="/vibe-sad-logo-nobg.png"
-                              alt="Sad VIBE"
-                              style={{ width: 85, height: 85, objectFit: 'contain' }}
-                            />
-                            <h4 style={{ fontSize: '1.25rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
-                              Not Eligible for Round 1
-                            </h4>
-                            <a
-                              href={O1}
-                              target="_blank"
-                              rel="noreferrer"
+                          <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#059669', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                            Live Now
+                          </span>
+                        </div>
+
+                        {/* Metric Box (Rewards Pool) */}
+                        <div
+                          style={{
+                            background: '#ffffff',
+                            borderRadius: '16px',
+                            padding: '14px 18px',
+                            border: '1px solid rgba(0, 160, 255, 0.2)',
+                            boxShadow: '0 3px 12px rgba(0, 82, 255, 0.04)',
+                            marginBottom: '20px'
+                          }}
+                        >
+                          <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
+                            <Coins size={13} color="var(--blue)" /> Rewards Pool
+                          </div>
+                          <div style={{ fontSize: '1.42rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                            10,000,000 <span style={{ fontSize: '0.9rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
+                          </div>
+                        </div>
+
+                        {/* Allocation / Eligibility Box */}
+                        <div style={{ marginBottom: '24px' }}>
+                          {(hasConfirmedHolderClaim || isHolderEligibleLive) ? (
+                            <div
                               style={{
+                                background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
+                                border: '1.5px solid #a7f3d0',
+                                borderRadius: '20px',
+                                padding: '24px 20px',
+                                textAlign: 'center',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                minHeight: '190px',
+                                boxSizing: 'border-box',
+                                gap: '14px'
+                              }}
+                            >
+                              <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                                You're eligible for claim
+                              </h4>
+                              
+                              <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: 0 }}>
+                                {(holderRewardAmount || 0).toLocaleString('en-US')} <span style={{ fontSize: '1.25rem', color: 'var(--blue)', fontWeight: 900 }}>$VIBE</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div
+                              style={{
+                                background: '#fef2f2',
+                                border: '1.5px solid #fecaca',
+                                borderRadius: '20px',
+                                padding: '24px 20px',
+                                textAlign: 'center',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                minHeight: '190px',
+                                boxSizing: 'border-box',
+                                gap: '10px'
+                              }}
+                            >
+                              <img
+                                src="/vibe-sad-logo-nobg.png"
+                                alt="Sad VIBE"
+                                style={{ width: 85, height: 85, objectFit: 'contain' }}
+                              />
+                              <h4 style={{ fontSize: '1.25rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                                Not Eligible for Round 1
+                              </h4>
+                              <a
+                                href={O1}
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
                                 gap: '6px',
@@ -748,6 +775,7 @@ export default function Checker() {
                   </div>
 
                 </div>
+                )}
               </div>
             )}
 
@@ -759,301 +787,323 @@ export default function Checker() {
                 <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Clock size={20} color="#0284c7" /> Upcoming Rewards (2)
                 </h3>
+                <button
+                  onClick={() => setIsUpcomingOpen(!isUpcomingOpen)}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.85)',
+                    border: '1.5px solid rgba(0, 160, 255, 0.25)',
+                    borderRadius: '10px',
+                    padding: '5px 9px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#0284c7',
+                    transition: 'all 0.2s ease',
+                    transform: isUpcomingOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+                    boxShadow: '0 2px 6px rgba(0, 82, 255, 0.05)'
+                  }}
+                  title={isUpcomingOpen ? "Collapse section" : "Expand section"}
+                >
+                  <ChevronDown size={18} />
+                </button>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 480px), 1fr))', gap: '24px' }}>
-                
-                {/* 1. Next Holder Rewards Unlock Card */}
-                <div
-                  style={{
-                    background: 'var(--surface)',
-                    border: '1.5px solid var(--border)',
-                    borderRadius: '24px',
-                    padding: '28px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 6px 28px rgba(0, 82, 255, 0.05)',
-                    position: 'relative'
-                  }}
-                >
-                  <div>
-                    {/* Header */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <Coins size={22} color="var(--blue)" />
-                        </div>
-                        <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                          Holder Rewards · {upcomingHolderRound?.name || 'Unlock 2'}
-                        </h3>
-                      </div>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                        Upcoming
-                      </span>
-                    </div>
-
-                    {/* Metric Box (Rewards Pool) */}
-                    <div
-                      style={{
-                        background: '#ffffff',
-                        borderRadius: '16px',
-                        padding: '14px 18px',
-                        border: '1px solid rgba(0, 160, 255, 0.2)',
-                        boxShadow: '0 3px 12px rgba(0, 82, 255, 0.04)',
-                        marginBottom: '20px'
-                      }}
-                    >
-                      <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
-                        <Coins size={13} color="var(--blue)" /> Rewards Pool
-                      </div>
-                      <div style={{ fontSize: '1.42rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
-                        {upcomingHolderRound?.pool || '10,000,000 $VIBE'}
-                      </div>
-                    </div>
-
-                    {/* Eligibility Box with Mascot */}
-                    <div style={{ marginBottom: '24px' }}>
-                      {isHolderEligibleLive ? (
-                        <div
-                          style={{
-                            background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
-                            border: '1.5px solid #a7f3d0',
-                            borderRadius: '20px',
-                            padding: '24px 20px',
-                            textAlign: 'center',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            minHeight: '190px',
-                            boxSizing: 'border-box',
-                            gap: '12px'
-                          }}
-                        >
-                          <img
-                            src="/vibe-logo-nobg.png"
-                            alt="Eligible VIBE"
-                            style={{ width: 95, height: 95, objectFit: 'contain', margin: '-4px 0 -8px 0' }}
-                          />
-                          <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
-                            You are Eligible!
-                          </h4>
-                        </div>
-                      ) : (
-                        <div
-                          style={{
-                            background: '#fef2f2',
-                            border: '1.5px solid #fecaca',
-                            borderRadius: '20px',
-                            padding: '24px 20px',
-                            textAlign: 'center',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            minHeight: '190px',
-                            boxSizing: 'border-box',
-                            gap: '10px'
-                          }}
-                        >
-                          <img
-                            src="/vibe-sad-logo-nobg.png"
-                            alt="Sad VIBE"
-                            style={{ width: 85, height: 85, objectFit: 'contain', margin: '-4px 0 -6px 0' }}
-                          />
-                          <h4 style={{ fontSize: '1.3rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
-                            Not Eligible Yet
-                          </h4>
-                          <a
-                            href={O1}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="btn-fill"
-                            style={{
-                              marginTop: '4px',
-                              padding: '9px 18px',
-                              fontSize: '0.84rem',
-                              fontWeight: 800,
-                              borderRadius: '12px',
-                              textDecoration: 'none',
-                              background: '#ef4444'
-                            }}
-                          >
-                            Buy 5M+ on o1.exchange <ArrowUpRight size={14} />
-                          </a>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Countdown Status Pill */}
+              {isUpcomingOpen && (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 480px), 1fr))', gap: '24px' }}>
+                  
+                  {/* 1. Next Holder Rewards Unlock Card */}
                   <div
                     style={{
-                      width: '100%',
-                      padding: '12px 18px',
-                      borderRadius: '14px',
-                      background: 'rgba(255, 255, 255, 0.75)',
-                      border: '1.5px solid rgba(0, 160, 255, 0.2)',
-                      color: '#64748b',
-                      fontWeight: 800,
-                      fontSize: '0.84rem',
+                      background: 'var(--surface)',
+                      border: '1.5px solid var(--border)',
+                      borderRadius: '24px',
+                      padding: '28px',
                       display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px'
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      boxShadow: '0 6px 28px rgba(0, 82, 255, 0.05)',
+                      position: 'relative'
                     }}
                   >
-                    <Lock size={14} /> Claim opens {upcomingHolderRound?.unlockDate || 'Sep 25, 00:15 UTC'} ({formatCountdown(upcomingHolderRound?.targetDate)})
-                  </div>
-                </div>
-
-                {/* 2. Next Vibe Club Royalty Card */}
-                <div
-                  style={{
-                    background: 'var(--surface)',
-                    border: '1.5px solid var(--border)',
-                    borderRadius: '24px',
-                    padding: '28px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 6px 28px rgba(0, 82, 255, 0.05)',
-                    position: 'relative'
-                  }}
-                >
-                  <div>
-                    {/* Header */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <Crown size={22} color="var(--blue)" />
+                    <div>
+                      {/* Header */}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <Coins size={22} color="var(--blue)" />
+                          </div>
+                          <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                            Holder Rewards · {upcomingHolderRound?.name || 'Unlock 2'}
+                          </h3>
                         </div>
-                        <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                          Vibe Club · {upcomingVibeClubRound?.name || 'Royalty 1'}
-                        </h3>
+                        <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          Upcoming
+                        </span>
                       </div>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                        Upcoming
-                      </span>
-                    </div>
 
-                    {/* Metric Box (Royalty Pool) */}
-                    <div
-                      style={{
-                        background: '#ffffff',
-                        borderRadius: '16px',
-                        padding: '14px 18px',
-                        border: '1px solid rgba(0, 160, 255, 0.2)',
-                        boxShadow: '0 3px 12px rgba(0, 82, 255, 0.04)',
-                        marginBottom: '20px'
-                      }}
-                    >
-                      <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
-                        <Crown size={13} color="var(--blue)" /> Royalty Pool
-                      </div>
-                      <div style={{ fontSize: '1.42rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
-                        TBA
-                      </div>
-                    </div>
-
-                    {/* Eligibility Box with Mascot */}
-                    <div style={{ marginBottom: '24px' }}>
-                      {isVibeClubEligible ? (
-                        <div
-                          style={{
-                            background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
-                            border: '1.5px solid #a7f3d0',
-                            borderRadius: '20px',
-                            padding: '24px 20px',
-                            textAlign: 'center',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            minHeight: '190px',
-                            boxSizing: 'border-box',
-                            gap: '12px'
-                          }}
-                        >
-                          <img
-                            src="/vibe-logo-nobg.png"
-                            alt="Eligible NFT"
-                            style={{ width: 95, height: 95, objectFit: 'contain', margin: '-4px 0 -8px 0' }}
-                          />
-                          <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
-                            Eligible Vibe Club Member!
-                          </h4>
+                      {/* Metric Box (Rewards Pool) */}
+                      <div
+                        style={{
+                          background: '#ffffff',
+                          borderRadius: '16px',
+                          padding: '14px 18px',
+                          border: '1px solid rgba(0, 160, 255, 0.2)',
+                          boxShadow: '0 3px 12px rgba(0, 82, 255, 0.04)',
+                          marginBottom: '20px'
+                        }}
+                      >
+                        <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
+                          <Coins size={13} color="var(--blue)" /> Rewards Pool
                         </div>
-                      ) : (
-                        <div
-                          style={{
-                            background: '#fef2f2',
-                            border: '1.5px solid #fecaca',
-                            borderRadius: '20px',
-                            padding: '24px 20px',
-                            textAlign: 'center',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            minHeight: '190px',
-                            boxSizing: 'border-box',
-                            gap: '10px'
-                          }}
-                        >
-                          <img
-                            src="/vibe-sad-logo-nobg.png"
-                            alt="Sad NFT"
-                            style={{ width: 85, height: 85, objectFit: 'contain', margin: '-4px 0 -6px 0' }}
-                          />
-                          <h4 style={{ fontSize: '1.3rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
-                            No NFTs Detected
-                          </h4>
-                          <a
-                            href={VIBECLUB_MINT_URL}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="btn-fill"
+                        <div style={{ fontSize: '1.42rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                          {upcomingHolderRound?.pool || '10,000,000 $VIBE'}
+                        </div>
+                      </div>
+
+                      {/* Eligibility Box with Mascot */}
+                      <div style={{ marginBottom: '24px' }}>
+                        {isHolderEligibleLive ? (
+                          <div
                             style={{
-                              marginTop: '4px',
-                              padding: '9px 18px',
-                              fontSize: '0.84rem',
-                              fontWeight: 800,
-                              borderRadius: '12px',
-                              textDecoration: 'none',
-                              background: '#10b981'
+                              background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
+                              border: '1.5px solid #a7f3d0',
+                              borderRadius: '20px',
+                              padding: '24px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              minHeight: '190px',
+                              boxSizing: 'border-box',
+                              gap: '12px'
                             }}
                           >
-                            Mint Vibe Club NFT ↗
-                          </a>
-                        </div>
-                      )}
+                            <img
+                              src="/vibe-logo-nobg.png"
+                              alt="Eligible VIBE"
+                              style={{ width: 95, height: 95, objectFit: 'contain', margin: '-4px 0 -8px 0' }}
+                            />
+                            <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                              You are Eligible!
+                            </h4>
+                          </div>
+                        ) : (
+                          <div
+                            style={{
+                              background: '#fef2f2',
+                              border: '1.5px solid #fecaca',
+                              borderRadius: '20px',
+                              padding: '24px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              minHeight: '190px',
+                              boxSizing: 'border-box',
+                              gap: '10px'
+                            }}
+                          >
+                            <img
+                              src="/vibe-sad-logo-nobg.png"
+                              alt="Sad VIBE"
+                              style={{ width: 85, height: 85, objectFit: 'contain', margin: '-4px 0 -6px 0' }}
+                            />
+                            <h4 style={{ fontSize: '1.3rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                              Not Eligible Yet
+                            </h4>
+                            <a
+                              href={O1}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="btn-fill"
+                              style={{
+                                marginTop: '4px',
+                                padding: '9px 18px',
+                                fontSize: '0.84rem',
+                                fontWeight: 800,
+                                borderRadius: '12px',
+                                textDecoration: 'none',
+                                background: '#ef4444'
+                              }}
+                            >
+                              Buy 5M+ on o1.exchange <ArrowUpRight size={14} />
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Countdown Status Pill */}
+                    <div
+                      style={{
+                        width: '100%',
+                        padding: '12px 18px',
+                        borderRadius: '14px',
+                        background: 'rgba(255, 255, 255, 0.75)',
+                        border: '1.5px solid rgba(0, 160, 255, 0.2)',
+                        color: '#64748b',
+                        fontWeight: 800,
+                        fontSize: '0.84rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      <Lock size={14} /> Claim opens {upcomingHolderRound?.unlockDate || 'Sep 25, 00:15 UTC'} ({formatCountdown(upcomingHolderRound?.targetDate)})
                     </div>
                   </div>
 
-                  {/* Countdown Status Pill */}
+                  {/* 2. Next Vibe Club Royalty Card */}
                   <div
                     style={{
-                      width: '100%',
-                      padding: '12px 18px',
-                      borderRadius: '14px',
-                      background: 'rgba(255, 255, 255, 0.75)',
-                      border: '1.5px solid rgba(0, 160, 255, 0.2)',
-                      color: '#64748b',
-                      fontWeight: 800,
-                      fontSize: '0.84rem',
+                      background: 'var(--surface)',
+                      border: '1.5px solid var(--border)',
+                      borderRadius: '24px',
+                      padding: '28px',
                       display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px'
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      boxShadow: '0 6px 28px rgba(0, 82, 255, 0.05)',
+                      position: 'relative'
                     }}
                   >
-                    <Lock size={14} /> Claim opens {upcomingVibeClubRound?.claimDate || 'Aug 28, 00:00 UTC'} ({formatCountdown(upcomingVibeClubRound?.targetDate)})
-                  </div>
-                </div>
+                    <div>
+                      {/* Header */}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <Crown size={22} color="var(--blue)" />
+                          </div>
+                          <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                            Vibe Club · {upcomingVibeClubRound?.name || 'Royalty 1'}
+                          </h3>
+                        </div>
+                        <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                          Upcoming
+                        </span>
+                      </div>
 
-              </div>
+                      {/* Metric Box (Royalty Pool) */}
+                      <div
+                        style={{
+                          background: '#ffffff',
+                          borderRadius: '16px',
+                          padding: '14px 18px',
+                          border: '1px solid rgba(0, 160, 255, 0.2)',
+                          boxShadow: '0 3px 12px rgba(0, 82, 255, 0.04)',
+                          marginBottom: '20px'
+                        }}
+                      >
+                        <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
+                          <Crown size={13} color="var(--blue)" /> Royalty Pool
+                        </div>
+                        <div style={{ fontSize: '1.42rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                          TBA
+                        </div>
+                      </div>
+
+                      {/* Eligibility Box with Mascot */}
+                      <div style={{ marginBottom: '24px' }}>
+                        {isVibeClubEligible ? (
+                          <div
+                            style={{
+                              background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
+                              border: '1.5px solid #a7f3d0',
+                              borderRadius: '20px',
+                              padding: '24px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              minHeight: '190px',
+                              boxSizing: 'border-box',
+                              gap: '12px'
+                            }}
+                          >
+                            <img
+                              src="/vibe-logo-nobg.png"
+                              alt="Eligible NFT"
+                              style={{ width: 95, height: 95, objectFit: 'contain', margin: '-4px 0 -8px 0' }}
+                            />
+                            <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                              Eligible Vibe Club Member!
+                            </h4>
+                          </div>
+                        ) : (
+                          <div
+                            style={{
+                              background: '#fef2f2',
+                              border: '1.5px solid #fecaca',
+                              borderRadius: '20px',
+                              padding: '24px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              minHeight: '190px',
+                              boxSizing: 'border-box',
+                              gap: '10px'
+                            }}
+                          >
+                            <img
+                              src="/vibe-sad-logo-nobg.png"
+                              alt="Sad NFT"
+                              style={{ width: 85, height: 85, objectFit: 'contain', margin: '-4px 0 -6px 0' }}
+                            />
+                            <h4 style={{ fontSize: '1.3rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                              No NFTs Detected
+                            </h4>
+                            <a
+                              href={VIBECLUB_MINT_URL}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="btn-fill"
+                              style={{
+                                marginTop: '4px',
+                                padding: '9px 18px',
+                                fontSize: '0.84rem',
+                                fontWeight: 800,
+                                borderRadius: '12px',
+                                textDecoration: 'none',
+                                background: '#10b981'
+                              }}
+                            >
+                              Mint Vibe Club NFT ↗
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Countdown Status Pill */}
+                    <div
+                      style={{
+                        width: '100%',
+                        padding: '12px 18px',
+                        borderRadius: '14px',
+                        background: 'rgba(255, 255, 255, 0.75)',
+                        border: '1.5px solid rgba(0, 160, 255, 0.2)',
+                        color: '#64748b',
+                        fontWeight: 800,
+                        fontSize: '0.84rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      <Lock size={14} /> Claim opens {upcomingVibeClubRound?.claimDate || 'Aug 28, 00:00 UTC'} ({formatCountdown(upcomingVibeClubRound?.targetDate)})
+                    </div>
+                  </div>
+
+                </div>
+              )}
             </div>
 
             {/* ═════════════════════════════════════════════════════════════════════════ */}
@@ -1065,71 +1115,93 @@ export default function Checker() {
                   <h3 style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <CheckCircle2 size={20} color="#10b981" /> Claim History ({claimedHistory.length})
                   </h3>
+                  <button
+                    onClick={() => setIsHistoryOpen(!isHistoryOpen)}
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.85)',
+                      border: '1.5px solid rgba(16, 185, 129, 0.25)',
+                      borderRadius: '10px',
+                      padding: '5px 9px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#10b981',
+                      transition: 'all 0.2s ease',
+                      transform: isHistoryOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+                      boxShadow: '0 2px 6px rgba(16, 185, 129, 0.05)'
+                    }}
+                    title={isHistoryOpen ? "Collapse section" : "Expand section"}
+                  >
+                    <ChevronDown size={18} />
+                  </button>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {claimedHistory.map((item) => (
-                    <div
-                      key={item?.id || Math.random()}
-                      style={{
-                        background: '#ffffff',
-                        border: '1.5px solid #a7f3d0',
-                        borderRadius: '18px',
-                        padding: '16px 24px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        flexWrap: 'wrap',
-                        gap: '14px',
-                        boxShadow: '0 4px 16px rgba(16, 185, 129, 0.06)'
-                      }}
-                    >
-                      {/* Left: Event info */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#ecfdf5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <Check size={20} color="#10b981" strokeWidth={3} />
+                {isHistoryOpen && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {claimedHistory.map((item) => (
+                      <div
+                        key={item?.id || Math.random()}
+                        style={{
+                          background: '#ffffff',
+                          border: '1.5px solid #a7f3d0',
+                          borderRadius: '18px',
+                          padding: '16px 24px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          flexWrap: 'wrap',
+                          gap: '14px',
+                          boxShadow: '0 4px 16px rgba(16, 185, 129, 0.06)'
+                        }}
+                      >
+                        {/* Left: Event info */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#ecfdf5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <Check size={20} color="#10b981" strokeWidth={3} />
+                          </div>
+                          <div>
+                            <strong style={{ fontSize: '1rem', color: 'var(--ink)', fontWeight: 900, display: 'block' }}>
+                              {item?.title || 'Rewards Claim'}
+                            </strong>
+                            <span style={{ fontSize: '0.74rem', color: '#059669', fontWeight: 700 }}>
+                              Successfully Claimed on Base
+                            </span>
+                          </div>
                         </div>
-                        <div>
-                          <strong style={{ fontSize: '1rem', color: 'var(--ink)', fontWeight: 900, display: 'block' }}>
-                            {item?.title || 'Rewards Claim'}
-                          </strong>
-                          <span style={{ fontSize: '0.74rem', color: '#059669', fontWeight: 700 }}>
-                            Successfully Claimed on Base
-                          </span>
+
+                        {/* Middle: Amount */}
+                        <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#10b981' }}>
+                          +{typeof item?.amount === 'number' ? item.amount.toLocaleString('en-US') : (item?.amount || '0')} <span style={{ fontSize: '0.85rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
                         </div>
-                      </div>
 
-                      {/* Middle: Amount */}
-                      <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#10b981' }}>
-                        +{typeof item?.amount === 'number' ? item.amount.toLocaleString('en-US') : (item?.amount || '0')} <span style={{ fontSize: '0.85rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
+                        {/* Right: Tx link */}
+                        {item?.txHash && item.txHash.startsWith('0x') && (
+                          <a
+                            href={`https://basescan.org/tx/${item.txHash}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              fontSize: '0.82rem',
+                              fontWeight: 800,
+                              color: '#0284c7',
+                              textDecoration: 'none',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              background: 'rgba(2, 132, 199, 0.08)',
+                              padding: '7px 14px',
+                              borderRadius: '10px',
+                              border: '1px solid rgba(2, 132, 199, 0.2)'
+                            }}
+                          >
+                            View on Basescan <ExternalLink size={13} />
+                          </a>
+                        )}
                       </div>
-
-                      {/* Right: Tx link */}
-                      {item?.txHash && item.txHash.startsWith('0x') && (
-                        <a
-                          href={`https://basescan.org/tx/${item.txHash}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          style={{
-                            fontSize: '0.82rem',
-                            fontWeight: 800,
-                            color: '#0284c7',
-                            textDecoration: 'none',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            background: 'rgba(2, 132, 199, 0.08)',
-                            padding: '7px 14px',
-                            borderRadius: '10px',
-                            border: '1px solid rgba(2, 132, 199, 0.2)'
-                          }}
-                        >
-                          View on Basescan <ExternalLink size={13} />
-                        </a>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
