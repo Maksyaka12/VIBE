@@ -1902,35 +1902,6 @@ export default function Checker() {
                           <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#10b981' }}>
                             +{typeof item?.amount === 'number' ? item.amount.toLocaleString('en-US') : (item?.amount || '0')} <span style={{ fontSize: '0.85rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
                           </div>
-
-                          {/* Right: Tx link */}
-                          {item?.txHash && (
-                            <a
-                              href={
-                                item.txHash.startsWith('0x') && item.txHash.length === 66
-                                  ? `https://basescan.org/tx/${item.txHash}`
-                                  : `https://basescan.org/address/${address}#tokentxns`
-                              }
-                              target="_blank"
-                              rel="noreferrer"
-                              style={{
-                                fontSize: '0.82rem',
-                                fontWeight: 800,
-                                color: '#0284c7',
-                                textDecoration: 'none',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                                background: 'rgba(2, 132, 199, 0.08)',
-                                padding: '7px 14px',
-                                borderRadius: '10px',
-                                border: '1px solid rgba(2, 132, 199, 0.2)',
-                                transition: 'all 0.15s ease'
-                              }}
-                            >
-                              View on Basescan <ExternalLink size={13} />
-                            </a>
-                          )}
                         </div>
                       ))}
                     </div>
