@@ -86,10 +86,10 @@ function Nav() {
     { id: 'about', label: 'About' },
     { id: 'tokenomics', label: 'Tokenomics' },
     { id: 'hub', label: 'Rewards Hub' },
+    { id: 'checker', label: 'Claim Portal' },
     { id: 'roadmap', label: 'Roadmap' },
     { id: 'chart', label: 'Chart' },
-    { id: 'trade', label: 'Trade' },
-    { id: 'checker', label: 'Checker' }
+    { id: 'trade', label: 'Trade' }
   ];
 
   return (
@@ -112,6 +112,9 @@ function Nav() {
                     gap: '6px',
                     ...(id === 'hub' ? {
                       color: '#ff6600',
+                      fontWeight: 800
+                    } : id === 'checker' ? {
+                      color: 'var(--blue)',
                       fontWeight: 800
                     } : {})
                   }}
@@ -146,8 +149,11 @@ function Nav() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '6px',
-                ...(id === 'rewards' ? {
+                ...(id === 'hub' || id === 'rewards' ? {
                   color: '#ff6600',
+                  fontWeight: 800
+                } : id === 'checker' ? {
+                  color: 'var(--blue)',
                   fontWeight: 800
                 } : {})
               }}
@@ -3185,6 +3191,8 @@ function DomainRouter() {
       <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
       <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
       <Route path="/checker" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
+      <Route path="/claim" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
+      <Route path="/portal" element={<StandaloneLayout><Checker /></StandaloneLayout>} />
       <Route
         path="/verse"
         element={isDevPreview ? <VibeVerse /> : <VibeVerseLockScreen />}
