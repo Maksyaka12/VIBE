@@ -538,41 +538,41 @@ export default function Checker() {
           /* ── AUTHENTICATED PORTAL VIEW ── */
           <div>
             
-            {/* 👤 STYLISH WEB3 USER PROFILE CARD */}
+            {/* 👤 FULL STYLISH WEB3 USER DASHBOARD */}
             <div
               style={{
-                background: 'rgba(255, 255, 255, 0.82)',
+                background: 'rgba(255, 255, 255, 0.92)',
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
                 border: '1.5px solid rgba(0, 140, 255, 0.22)',
-                borderRadius: '24px',
-                padding: '22px 28px',
-                boxShadow: '0 8px 32px rgba(0, 82, 255, 0.06)',
-                marginBottom: '36px'
+                borderRadius: '28px',
+                padding: '30px 32px',
+                boxShadow: '0 12px 40px rgba(0, 82, 255, 0.07), 0 2px 8px rgba(0, 0, 0, 0.02)',
+                marginBottom: '40px'
               }}
             >
-              {/* Top Row: User Avatar & Info (Left) + Balances & Action Buttons (Right) */}
+              {/* Top Hero Row: Big Avatar + Name (Left) & Wallet / Actions (Right) */}
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   flexWrap: 'wrap',
-                  gap: '20px'
+                  gap: '24px'
                 }}
               >
-                {/* Left: Avatar + Identity + Wallet Address */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  {/* Avatar Container */}
+                {/* Left: Big Avatar + Name + Badges */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                  {/* Big Avatar Container */}
                   <div
                     style={{
-                      width: '62px',
-                      height: '62px',
-                      borderRadius: '18px',
+                      width: '96px',
+                      height: '96px',
+                      borderRadius: '22px',
                       overflow: 'hidden',
-                      border: userNft ? '2px solid var(--blue)' : '2px solid #cbd5e1',
+                      border: userNft ? '3px solid var(--blue)' : '2.5px solid #cbd5e1',
                       background: userNft ? '#ffffff' : '#f1f5f9',
-                      boxShadow: userNft ? '0 4px 16px rgba(0, 82, 255, 0.18)' : '0 2px 8px rgba(0,0,0,0.04)',
+                      boxShadow: userNft ? '0 8px 24px rgba(0, 82, 255, 0.2)' : '0 4px 12px rgba(0,0,0,0.05)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -587,145 +587,132 @@ export default function Checker() {
                         onError={(e) => { e.target.src = '/new-logo-vibe.png'; }}
                       />
                     ) : (
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '2px', color: '#94a3b8' }}>
-                        <User size={26} color="#64748b" />
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', color: '#94a3b8' }}>
+                        <User size={40} color="#64748b" />
                       </div>
                     )}
                   </div>
 
-                  {/* Name and Address */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {/* Identity Info */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      Vibe Rewards Profile
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                       <h3
                         style={{
                           margin: 0,
-                          fontSize: '1.25rem',
-                          fontWeight: 700,
+                          fontSize: '1.65rem',
+                          fontWeight: 800,
                           color: 'var(--ink)',
-                          letterSpacing: '-0.01em',
-                          lineHeight: 1.2
+                          letterSpacing: '-0.02em',
+                          lineHeight: 1.1
                         }}
                       >
                         {userNft ? userNft.name : 'Unknown Dog'}
                       </h3>
-                      {userNft && (
+                      {userNft ? (
                         <span
                           style={{
-                            fontSize: '0.68rem',
+                            fontSize: '0.72rem',
                             fontWeight: 700,
                             color: '#10b981',
-                            background: 'rgba(16, 185, 129, 0.1)',
-                            border: '1px solid rgba(16, 185, 129, 0.25)',
-                            padding: '2px 8px',
+                            background: 'rgba(16, 185, 129, 0.12)',
+                            border: '1px solid rgba(16, 185, 129, 0.28)',
+                            padding: '3px 10px',
                             borderRadius: '99px',
                             lineHeight: 1.2
                           }}
                         >
-                          Vibe Club
+                          Vibe Club Member
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            fontSize: '0.72rem',
+                            fontWeight: 700,
+                            color: '#64748b',
+                            background: '#f1f5f9',
+                            border: '1px solid #e2e8f0',
+                            padding: '3px 10px',
+                            borderRadius: '99px',
+                            lineHeight: 1.2
+                          }}
+                        >
+                          No NFT
                         </span>
                       )}
                     </div>
 
-                    {/* Connected Wallet Row */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }} />
-                      <span style={{ fontFamily: 'ui-monospace, monospace', fontSize: '0.84rem', color: '#64748b', fontWeight: 500 }}>
-                        {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : ''}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '2px' }}>
+                      <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>
+                        Holder Tier: <strong style={{ color: isHolderEligibleLive ? '#10b981' : '#ef4444' }}>{isHolderEligibleLive ? 'Eligible (5M+)' : 'Standard'}</strong>
                       </span>
-                      <button
-                        onClick={copyAddress}
-                        title="Copy Address"
-                        style={{
-                          background: 'transparent',
-                          border: 'none',
-                          cursor: 'pointer',
-                          color: copied ? '#10b981' : 'var(--blue)',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          padding: '2px',
-                          marginLeft: '2px'
-                        }}
-                      >
-                        {copied ? <Check size={14} strokeWidth={2.5} /> : <Copy size={14} />}
-                      </button>
                     </div>
                   </div>
                 </div>
 
-                {/* Right: Balance Badges & Actions */}
+                {/* Right: Wallet Address Pill + Actions */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                  {/* $VIBE Balance Box */}
+                  {/* Connected Wallet Address Pill */}
                   <div
                     style={{
                       background: '#ffffff',
-                      borderRadius: '16px',
-                      border: '1px solid rgba(0, 140, 255, 0.18)',
+                      border: '1.5px solid rgba(0, 140, 255, 0.2)',
+                      borderRadius: '14px',
                       padding: '8px 16px',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '10px',
+                      gap: '8px',
                       boxShadow: '0 2px 8px rgba(0, 82, 255, 0.03)'
                     }}
                   >
-                    <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(0, 82, 255, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <Coins size={16} color="var(--blue)" />
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 600, lineHeight: 1.1, marginBottom: '2px' }}>
-                        $VIBE Balance
-                      </span>
-                      <span style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--ink)', lineHeight: 1 }}>
-                        {loading || balance === null ? <Loader2 size={13} className="spin" /> : `${(balance || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE`}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Vibe Club NFTs Box */}
-                  <div
-                    style={{
-                      background: '#ffffff',
-                      borderRadius: '16px',
-                      border: '1px solid rgba(16, 185, 129, 0.22)',
-                      padding: '8px 16px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '10px',
-                      boxShadow: '0 2px 8px rgba(16, 185, 129, 0.03)'
-                    }}
-                  >
-                    <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <Crown size={16} color="#10b981" />
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 600, lineHeight: 1.1, marginBottom: '2px' }}>
-                        Vibe Club
-                      </span>
-                      <span style={{ fontSize: '0.98rem', fontWeight: 700, color: '#059669', lineHeight: 1 }}>
-                        {loading || nftCount === null ? <Loader2 size={13} className="spin" /> : `${nftCount || 0} NFT${nftCount === 1 ? '' : 's'}`}
-                      </span>
-                    </div>
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981', display: 'inline-block' }} />
+                    <span style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 600 }}>
+                      {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : ''}
+                    </span>
+                    <button
+                      onClick={copyAddress}
+                      title="Copy Address"
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: copied ? '#10b981' : 'var(--blue)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        padding: '3px',
+                        marginLeft: '2px'
+                      }}
+                    >
+                      {copied ? <Check size={15} strokeWidth={2.5} /> : <Copy size={15} />}
+                    </button>
                   </div>
 
                   {/* Refresh Button */}
                   <button
                     onClick={fetchBalances}
                     disabled={loading}
-                    title="Refresh Balances"
+                    title="Refresh On-Chain Balances"
                     style={{
                       background: '#ffffff',
-                      border: '1px solid rgba(0, 140, 255, 0.22)',
-                      padding: '10px',
-                      borderRadius: '12px',
+                      border: '1.5px solid rgba(0, 140, 255, 0.22)',
+                      padding: '10px 14px',
+                      borderRadius: '14px',
                       cursor: 'pointer',
                       color: 'var(--blue)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      boxShadow: '0 2px 6px rgba(0, 82, 255, 0.04)',
+                      gap: '6px',
+                      boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)',
+                      fontSize: '0.84rem',
+                      fontWeight: 700,
                       transition: 'all 0.15s ease'
                     }}
                   >
                     <RefreshCw size={15} className={loading ? 'spin' : ''} />
+                    <span>Refresh</span>
                   </button>
 
                   {/* Disconnect Button */}
@@ -733,12 +720,12 @@ export default function Checker() {
                     onClick={logout}
                     style={{
                       background: 'rgba(239, 68, 68, 0.06)',
-                      border: '1px solid rgba(239, 68, 68, 0.2)',
+                      border: '1.5px solid rgba(239, 68, 68, 0.22)',
                       color: '#ef4444',
-                      fontWeight: 600,
-                      fontSize: '0.84rem',
-                      padding: '9px 16px',
-                      borderRadius: '12px',
+                      fontWeight: 700,
+                      fontSize: '0.86rem',
+                      padding: '10px 18px',
+                      borderRadius: '14px',
                       cursor: 'pointer',
                       transition: 'all 0.15s ease'
                     }}
@@ -748,90 +735,179 @@ export default function Checker() {
                 </div>
               </div>
 
-              {/* Bottom Row: Quick Navigation & Stats Bar */}
+              {/* Dashboard Metric & Quick-Nav Tiles Grid */}
               <div
                 style={{
-                  borderTop: '1px solid rgba(0, 140, 255, 0.12)',
-                  marginTop: '18px',
-                  paddingTop: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  flexWrap: 'wrap',
-                  gap: '10px'
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: '16px',
+                  marginTop: '28px'
                 }}
               >
-                <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span>Quick Jump:</span>
+                {/* 1. $VIBE Balance Tile */}
+                <div
+                  style={{
+                    background: '#ffffff',
+                    border: '1.5px solid rgba(0, 140, 255, 0.2)',
+                    borderRadius: '20px',
+                    padding: '18px 20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 4px 16px rgba(0, 82, 255, 0.04)'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      $VIBE Balance
+                    </span>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(0, 82, 255, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Coins size={16} color="var(--blue)" />
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '6px' }}>
+                      {loading || balance === null ? <Loader2 size={16} className="spin" /> : `${(balance || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE`}
+                    </div>
+                    <div style={{ fontSize: '0.74rem', color: isHolderEligibleLive ? '#10b981' : '#64748b', fontWeight: 600 }}>
+                      {isHolderEligibleLive ? '✓ Eligible for 5M+ unlocks' : 'Requires 5M+ for unlocks'}
+                    </div>
+                  </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                  {/* Jump to Available Rewards */}
-                  <button
-                    onClick={() => scrollToSection('available-rewards-section', setIsAvailableOpen)}
-                    style={{
-                      background: isHolderRound1Available ? 'rgba(0, 82, 255, 0.08)' : '#ffffff',
-                      border: isHolderRound1Available ? '1px solid rgba(0, 82, 255, 0.28)' : '1px solid rgba(0, 140, 255, 0.16)',
-                      borderRadius: '10px',
-                      padding: '6px 14px',
-                      fontSize: '0.82rem',
-                      fontWeight: 600,
-                      color: isHolderRound1Available ? 'var(--blue)' : '#475569',
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      transition: 'all 0.15s ease'
-                    }}
-                  >
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: isHolderRound1Available ? '#059669' : '#94a3b8' }} />
-                    Available ({totalAvailableCount})
-                  </button>
-
-                  {/* Jump to Upcoming Rewards */}
-                  <button
-                    onClick={() => scrollToSection('upcoming-rewards-section', setIsUpcomingOpen)}
-                    style={{
-                      background: '#ffffff',
-                      border: '1px solid rgba(0, 140, 255, 0.16)',
-                      borderRadius: '10px',
-                      padding: '6px 14px',
-                      fontSize: '0.82rem',
-                      fontWeight: 600,
-                      color: '#475569',
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      transition: 'all 0.15s ease'
-                    }}
-                  >
-                    <Clock size={13} color="#0284c7" />
-                    Upcoming (2)
-                  </button>
-
-                  {/* Jump to History */}
-                  <button
-                    onClick={() => scrollToSection('claimed-rewards-section', setIsHistoryOpen)}
-                    style={{
-                      background: '#ffffff',
-                      border: '1px solid rgba(16, 185, 129, 0.2)',
-                      borderRadius: '10px',
-                      padding: '6px 14px',
-                      fontSize: '0.82rem',
-                      fontWeight: 600,
-                      color: '#059669',
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      transition: 'all 0.15s ease'
-                    }}
-                  >
-                    <CheckCircle2 size={13} color="#10b981" />
-                    Claim History ({claimedHistory?.length || 0})
-                  </button>
+                {/* 2. Vibe Club NFTs Tile */}
+                <div
+                  style={{
+                    background: '#ffffff',
+                    border: '1.5px solid rgba(16, 185, 129, 0.24)',
+                    borderRadius: '20px',
+                    padding: '18px 20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 4px 16px rgba(16, 185, 129, 0.04)'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Vibe Club NFTs
+                    </span>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Crown size={16} color="#10b981" />
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#059669', lineHeight: 1.2, marginBottom: '6px' }}>
+                      {loading || nftCount === null ? <Loader2 size={16} className="spin" /> : `${nftCount || 0} NFT${nftCount === 1 ? '' : 's'}`}
+                    </div>
+                    <div style={{ fontSize: '0.74rem', color: (nftCount && nftCount > 0) ? '#10b981' : '#64748b', fontWeight: 600 }}>
+                      {(nftCount && nftCount > 0) ? '✓ Eligible for NFT royalties' : 'Mint NFT for royalties'}
+                    </div>
+                  </div>
                 </div>
+
+                {/* 3. Available Rewards Quick-Nav Tile */}
+                <div
+                  onClick={() => scrollToSection('available-rewards-section', setIsAvailableOpen)}
+                  style={{
+                    background: isHolderRound1Available ? 'linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%)' : '#ffffff',
+                    border: isHolderRound1Available ? '1.5px solid rgba(0, 140, 255, 0.35)' : '1.5px solid rgba(0, 140, 255, 0.18)',
+                    borderRadius: '20px',
+                    padding: '18px 20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    boxShadow: isHolderRound1Available ? '0 6px 20px rgba(0, 82, 255, 0.08)' : '0 4px 16px rgba(0, 82, 255, 0.03)',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Available Rewards
+                    </span>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: isHolderRound1Available ? 'rgba(0, 82, 255, 0.12)' : 'rgba(0, 82, 255, 0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Sparkles size={16} color="var(--blue)" />
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--blue)', lineHeight: 1.2, marginBottom: '6px' }}>
+                      {totalAvailableCount} Ready
+                    </div>
+                    <div style={{ fontSize: '0.74rem', color: 'var(--blue)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span>Claim Rewards</span> ↓
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. Upcoming Rewards Quick-Nav Tile */}
+                <div
+                  onClick={() => scrollToSection('upcoming-rewards-section', setIsUpcomingOpen)}
+                  style={{
+                    background: '#ffffff',
+                    border: '1.5px solid rgba(0, 140, 255, 0.18)',
+                    borderRadius: '20px',
+                    padding: '18px 20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 4px 16px rgba(0, 82, 255, 0.03)',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Upcoming Unlocks
+                    </span>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(2, 132, 199, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Clock size={16} color="#0284c7" />
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0284c7', lineHeight: 1.2, marginBottom: '6px' }}>
+                      2 Scheduled
+                    </div>
+                    <div style={{ fontSize: '0.74rem', color: '#0284c7', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span>View Schedule</span> ↓
+                    </div>
+                  </div>
+                </div>
+
+                {/* 5. Claim History Quick-Nav Tile */}
+                <div
+                  onClick={() => scrollToSection('claimed-rewards-section', setIsHistoryOpen)}
+                  style={{
+                    background: '#ffffff',
+                    border: '1.5px solid rgba(16, 185, 129, 0.2)',
+                    borderRadius: '20px',
+                    padding: '18px 20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 4px 16px rgba(16, 185, 129, 0.03)',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Claim History
+                    </span>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <CheckCircle2 size={16} color="#10b981" />
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.2, marginBottom: '6px' }}>
+                      {claimedHistory?.length || 0} Claimed
+                    </div>
+                    <div style={{ fontSize: '0.74rem', color: '#10b981', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span>View History</span> ↓
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
 
