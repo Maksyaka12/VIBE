@@ -383,8 +383,13 @@ export default function Checker() {
           </p>
         </div>
 
-        {/* ── UNAUTHENTICATED STATE ── */}
-        {!authenticated && (
+        {/* ── LOADING STATE ── */}
+        {!ready ? (
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 0', color: 'var(--blue)' }}>
+            <Loader2 className="spin" size={40} />
+          </div>
+        ) : !authenticated ? (
+          /* ── UNAUTHENTICATED STATE ── */
           <div style={{ maxWidth: '520px', margin: '0 auto' }}>
             <div
               style={{
@@ -426,17 +431,8 @@ export default function Checker() {
               </div>
             </div>
           </div>
-        )}
-
-        {/* ── LOADING STATE ── */}
-        {!ready && (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 0', color: 'var(--blue)' }}>
-            <Loader2 className="spin" size={40} />
-          </div>
-        )}
-
-        {/* ── AUTHENTICATED PORTAL VIEW ── */}
-        {ready && authenticated && (
+        ) : (
+          /* ── AUTHENTICATED PORTAL VIEW ── */
           <div>
             
             {/* Top Connected Wallet Info Bar */}

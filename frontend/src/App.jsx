@@ -3084,11 +3084,49 @@ function LandingPage() {
   );
 }
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error("ErrorBoundary caught:", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: '140px 20px 100px 20px', textAlign: 'center', maxWidth: '640px', margin: '0 auto' }}>
+          <div style={{ background: '#ffffff', border: '1.5px solid #fecaca', borderRadius: '24px', padding: '32px 24px', boxShadow: '0 8px 30px rgba(239, 68, 68, 0.08)' }}>
+            <h3 style={{ color: '#ef4444', fontWeight: 900, fontSize: '1.35rem', marginBottom: '10px' }}>Something went wrong</h3>
+            <p style={{ color: 'var(--muted)', fontSize: '0.88rem', marginBottom: '16px' }}>An error occurred while loading this view.</p>
+            <pre style={{ background: '#fef2f2', padding: '14px', borderRadius: '12px', textAlign: 'left', overflow: 'auto', border: '1px solid #fecaca', color: '#991b1b', fontSize: '0.8rem', whiteSpace: 'pre-wrap', wordBreak: 'break-word', maxHeight: '180px' }}>
+              {this.state.error?.toString() || 'Unknown error'}
+            </pre>
+            <button
+              onClick={() => window.location.reload()}
+              className="btn-fill"
+              style={{ marginTop: '20px', padding: '10px 24px', background: 'var(--blue)', color: '#fff', border: 'none', borderRadius: '12px', fontWeight: 800, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            >
+              <RotateCcw size={16} /> Reload Page
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function StandaloneLayout({ children }) {
   return (
     <div className="standalone-page">
       <Nav />
-      {children}
+      <ErrorBoundary>
+        {children}
+      </ErrorBoundary>
       <Footer />
     </div>
   );
