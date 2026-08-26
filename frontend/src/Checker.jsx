@@ -390,45 +390,34 @@ export default function Checker() {
             <Loader2 className="spin" size={40} />
           </div>
         ) : !authenticated ? (
-          /* ── UNAUTHENTICATED STATE ── */
-          <div style={{ maxWidth: '520px', margin: '0 auto' }}>
-            <div
-              style={{
-                background: 'var(--surface)',
-                border: '1.5px solid var(--border)',
-                borderRadius: '24px',
-                padding: '40px 32px',
-                textAlign: 'center',
-                boxShadow: '0 8px 32px rgba(0, 82, 255, 0.06)'
-              }}
-            >
-              <div style={{ width: '64px', height: '64px', borderRadius: '18px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px auto' }}>
-                <Coins size={32} color="var(--blue)" />
+          /* ── NOT AUTHENTICATED STATE (Matching Original Prod Checker) ── */
+          <div
+            className="checker-card"
+            style={{
+              background: 'var(--surface)',
+              padding: '40px',
+              borderRadius: '24px',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
+              textAlign: 'center',
+              maxWidth: 600,
+              margin: '0 auto'
+            }}
+          >
+            <div className="ch-unauth">
+              <div style={{ width: 64, height: 64, borderRadius: '50%', margin: '0 auto 20px', overflow: 'hidden' }}>
+                <img src="/new-logo-vibe.png" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="VIBE" />
               </div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '10px', color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                Connect Your Wallet
+              <h3 style={{ fontSize: '1.4rem', marginBottom: '8px', fontWeight: 800, color: 'var(--ink)' }}>
+                Wallet not connected
               </h3>
-              <p style={{ color: 'var(--muted)', fontSize: '0.92rem', marginBottom: '28px', lineHeight: 1.5 }}>
+              <p style={{ color: 'var(--muted)', marginBottom: '24px', fontSize: '0.95rem' }}>
                 Please connect your wallet to check your eligibility and claim $VIBE rewards.
               </p>
-              <button
-                onClick={login}
-                className="btn-fill"
-                style={{
-                  width: '100%',
-                  padding: '14px 24px',
-                  fontSize: '1rem',
-                  fontWeight: 800,
-                  justifyContent: 'center',
-                  borderRadius: '14px',
-                  boxShadow: '0 4px 20px rgba(0, 82, 255, 0.35)',
-                  cursor: 'pointer'
-                }}
-              >
+              <button onClick={login} className="btn-fill" style={{ width: '100%', justifyContent: 'center' }}>
                 Connect Wallet
               </button>
-              <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--muted)' }}>
-                <ShieldCheck size={14} color="#10b981" /> Protected by Privy
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', color: 'var(--muted)', fontSize: '0.8rem', marginTop: '16px' }}>
+                Protected by <span style={{ fontWeight: '700', color: 'var(--ink)' }}>privy</span>
               </div>
             </div>
           </div>
