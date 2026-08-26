@@ -569,17 +569,31 @@ export default function Checker() {
                 >
                   <div>
                     {/* Header */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '22px' }}>
-                      <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px' }}>
+                      <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <Coins size={22} color="var(--blue)" />
                       </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', lineHeight: 1.15, marginBottom: '2px' }}>
-                          Holder Rewards · 1 Unlock
-                        </h3>
-                        <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 700, lineHeight: 1 }}>
-                          10,000,000 $VIBE Pool
-                        </span>
+                      <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                        Holder Rewards · 1 Unlock
+                      </h3>
+                    </div>
+
+                    {/* Metric Box (Rewards Pool) */}
+                    <div
+                      style={{
+                        background: '#ffffff',
+                        borderRadius: '16px',
+                        padding: '14px 18px',
+                        border: '1px solid rgba(0, 160, 255, 0.2)',
+                        boxShadow: '0 3px 12px rgba(0, 82, 255, 0.04)',
+                        marginBottom: '20px'
+                      }}
+                    >
+                      <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
+                        <Coins size={13} color="var(--blue)" /> Rewards Pool
+                      </div>
+                      <div style={{ fontSize: '1.42rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                        10,000,000 <span style={{ fontSize: '0.9rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
                       </div>
                     </div>
 
@@ -597,23 +611,20 @@ export default function Checker() {
                               display: 'flex',
                               flexDirection: 'column',
                               alignItems: 'center',
-                              gap: '10px'
+                              justifyContent: 'center',
+                              minHeight: '190px',
+                              boxSizing: 'border-box',
+                              gap: '12px'
                             }}
                           >
                             <img
                               src="/vibe-logo-nobg.png"
                               alt="Eligible VIBE"
-                              style={{ width: 100, height: 100, objectFit: 'contain', margin: '-6px 0 -10px 0' }}
+                              style={{ width: 95, height: 95, objectFit: 'contain', margin: '-4px 0 -8px 0' }}
                             />
                             <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
                               You are Eligible!
                             </h4>
-                            <p style={{ fontSize: '0.88rem', color: 'var(--ink)', margin: 0, fontWeight: 600 }}>
-                              Your wallet qualifies for the 10M $VIBE distribution.
-                            </p>
-                            <div style={{ background: '#ffffff', padding: '10px 18px', borderRadius: '12px', color: '#047857', fontWeight: 800, fontSize: '0.84rem', border: '1px solid #a7f3d0', marginTop: '4px' }}>
-                              Your Balance: {balance !== null ? `${balance.toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE` : '...'}
-                            </div>
                           </div>
                         ) : (
                           <div
@@ -626,31 +637,28 @@ export default function Checker() {
                               display: 'flex',
                               flexDirection: 'column',
                               alignItems: 'center',
+                              justifyContent: 'center',
+                              minHeight: '190px',
+                              boxSizing: 'border-box',
                               gap: '10px'
                             }}
                           >
                             <img
                               src="/vibe-sad-logo-nobg.png"
                               alt="Sad VIBE"
-                              style={{ width: 100, height: 100, objectFit: 'contain', margin: '-6px 0 -10px 0' }}
+                              style={{ width: 85, height: 85, objectFit: 'contain', margin: '-4px 0 -6px 0' }}
                             />
                             <h4 style={{ fontSize: '1.3rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
                               Not Eligible Yet
                             </h4>
-                            <p style={{ fontSize: '0.88rem', color: 'var(--muted)', margin: 0, fontWeight: 700 }}>
-                              Hold 5M+ to become eligible.
-                            </p>
-                            <div style={{ background: '#ffffff', padding: '10px 18px', borderRadius: '12px', color: '#b91c1c', fontWeight: 800, fontSize: '0.84rem', border: '1px solid #fecaca', width: '100%', maxWidth: '320px' }}>
-                              Your Balance: {balance !== null ? `${balance.toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE` : '0 $VIBE'}
-                            </div>
                             <a
                               href={O1}
                               target="_blank"
                               rel="noreferrer"
                               className="btn-fill"
                               style={{
-                                marginTop: '6px',
-                                padding: '10px 20px',
+                                marginTop: '4px',
+                                padding: '9px 18px',
                                 fontSize: '0.84rem',
                                 fontWeight: 800,
                                 borderRadius: '12px',
@@ -658,7 +666,7 @@ export default function Checker() {
                                 background: '#ef4444'
                               }}
                             >
-                              Buy 5M+ on o1.exchange <ArrowUpRight size={15} />
+                              Buy 5M+ on o1.exchange <ArrowUpRight size={14} />
                             </a>
                           </div>
                         )}
@@ -680,7 +688,7 @@ export default function Checker() {
                               flexDirection: 'column',
                               alignItems: 'center',
                               justifyContent: 'center',
-                              minHeight: '228px',
+                              minHeight: '190px',
                               boxSizing: 'border-box',
                               gap: '14px'
                             }}
@@ -704,20 +712,20 @@ export default function Checker() {
                               display: 'flex',
                               flexDirection: 'column',
                               alignItems: 'center',
+                              justifyContent: 'center',
+                              minHeight: '190px',
+                              boxSizing: 'border-box',
                               gap: '10px'
                             }}
                           >
                             <img
                               src="/vibe-sad-logo-nobg.png"
                               alt="Sad VIBE"
-                              style={{ width: 90, height: 90, objectFit: 'contain' }}
+                              style={{ width: 85, height: 85, objectFit: 'contain' }}
                             />
                             <h4 style={{ fontSize: '1.25rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
                               Not Eligible for Round 1
                             </h4>
-                            <p style={{ fontSize: '0.85rem', color: '#991b1b', margin: 0 }}>
-                              Your balance was below 5,000,000 $VIBE at the snapshot.
-                            </p>
                             <a
                               href={O1}
                               target="_blank"
@@ -854,17 +862,31 @@ export default function Checker() {
                 >
                   <div>
                     {/* Header */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '22px' }}>
-                      <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '18px' }}>
+                      <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <Crown size={22} color="#10b981" />
                       </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', lineHeight: 1.15, marginBottom: '2px' }}>
-                          Vibe Club Royalties · Royalty 1
-                        </h3>
-                        <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 700, lineHeight: 1 }}>
-                          15% Revenue Royalties Pool
-                        </span>
+                      <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
+                        Vibe Club · Royalty 1
+                      </h3>
+                    </div>
+
+                    {/* Metric Box (Royalty Pool) */}
+                    <div
+                      style={{
+                        background: '#ffffff',
+                        borderRadius: '16px',
+                        padding: '14px 18px',
+                        border: '1px solid rgba(16, 185, 129, 0.2)',
+                        boxShadow: '0 3px 12px rgba(16, 185, 129, 0.04)',
+                        marginBottom: '20px'
+                      }}
+                    >
+                      <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
+                        <Crown size={13} color="#10b981" /> Royalty Pool
+                      </div>
+                      <div style={{ fontSize: '1.42rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                        15% <span style={{ fontSize: '0.9rem', color: '#10b981', fontWeight: 800 }}>Revenue Share</span>
                       </div>
                     </div>
 
@@ -882,23 +904,20 @@ export default function Checker() {
                               display: 'flex',
                               flexDirection: 'column',
                               alignItems: 'center',
-                              gap: '10px'
+                              justifyContent: 'center',
+                              minHeight: '190px',
+                              boxSizing: 'border-box',
+                              gap: '12px'
                             }}
                           >
                             <img
                               src="/vibe-logo-nobg.png"
                               alt="Eligible NFT"
-                              style={{ width: 100, height: 100, objectFit: 'contain', margin: '-6px 0 -10px 0' }}
+                              style={{ width: 95, height: 95, objectFit: 'contain', margin: '-4px 0 -8px 0' }}
                             />
                             <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
                               Eligible Vibe Club Member!
                             </h4>
-                            <p style={{ fontSize: '0.88rem', color: 'var(--ink)', margin: 0, fontWeight: 600 }}>
-                              All 333 NFTs receive equal royalty pool distributions.
-                            </p>
-                            <div style={{ background: '#ffffff', padding: '10px 18px', borderRadius: '12px', color: '#047857', fontWeight: 800, fontSize: '0.84rem', border: '1px solid #a7f3d0', marginTop: '4px' }}>
-                              Holding: {nftCount} Vibe Club NFT{nftCount > 1 ? 's' : ''}
-                            </div>
                           </div>
                         ) : (
                           <div
@@ -911,28 +930,28 @@ export default function Checker() {
                               display: 'flex',
                               flexDirection: 'column',
                               alignItems: 'center',
+                              justifyContent: 'center',
+                              minHeight: '190px',
+                              boxSizing: 'border-box',
                               gap: '10px'
                             }}
                           >
                             <img
                               src="/vibe-sad-logo-nobg.png"
                               alt="Sad NFT"
-                              style={{ width: 100, height: 100, objectFit: 'contain', margin: '-6px 0 -10px 0' }}
+                              style={{ width: 85, height: 85, objectFit: 'contain', margin: '-4px 0 -6px 0' }}
                             />
                             <h4 style={{ fontSize: '1.3rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
                               No NFTs Detected
                             </h4>
-                            <p style={{ fontSize: '0.88rem', color: 'var(--muted)', margin: 0, fontWeight: 700 }}>
-                              Hold at least 1 Vibe Club NFT to become eligible.
-                            </p>
                             <a
                               href={VIBECLUB_MINT_URL}
                               target="_blank"
                               rel="noreferrer"
                               className="btn-fill"
                               style={{
-                                marginTop: '6px',
-                                padding: '10px 20px',
+                                marginTop: '4px',
+                                padding: '9px 18px',
                                 fontSize: '0.84rem',
                                 fontWeight: 800,
                                 borderRadius: '12px',
@@ -956,26 +975,22 @@ export default function Checker() {
                               background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
                               border: '1.5px solid #a7f3d0',
                               borderRadius: '20px',
-                              padding: '22px 20px',
-                              textAlign: 'left'
+                              padding: '24px 20px',
+                              textAlign: 'center',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              minHeight: '190px',
+                              boxSizing: 'border-box',
+                              gap: '12px'
                             }}
                           >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#059669', fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
-                              <Crown size={16} /> Eligible Vibe Club Member
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-                              <div>
-                                <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em' }}>
-                                  Equal Pool Share <span style={{ fontSize: '0.95rem', color: '#10b981', fontWeight: 800 }}>({nftCount} NFT{nftCount > 1 ? 's' : ''})</span>
-                                </div>
-                                <span style={{ fontSize: '0.78rem', color: '#047857', fontWeight: 700 }}>
-                                  All 333 NFTs receive equal royalty distributions
-                                </span>
-                              </div>
-                              <div style={{ textAlign: 'right' }}>
-                                <span style={{ fontSize: '0.72rem', color: 'var(--muted)', display: 'block' }}>Holding</span>
-                                <strong style={{ fontSize: '0.88rem', color: '#10b981' }}>{nftCount} Vibe Club NFT{nftCount > 1 ? 's' : ''}</strong>
-                              </div>
+                            <h4 style={{ fontSize: '1.3rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                              You're eligible for claim
+                            </h4>
+                            <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: 0 }}>
+                              Equal Pool Share <span style={{ fontSize: '1.15rem', color: '#10b981', fontWeight: 900 }}>({nftCount} NFT{nftCount > 1 ? 's' : ''})</span>
                             </div>
                           </div>
                         ) : (
@@ -989,20 +1004,20 @@ export default function Checker() {
                               display: 'flex',
                               flexDirection: 'column',
                               alignItems: 'center',
+                              justifyContent: 'center',
+                              minHeight: '190px',
+                              boxSizing: 'border-box',
                               gap: '10px'
                             }}
                           >
                             <img
                               src="/vibe-sad-logo-nobg.png"
                               alt="Sad NFT"
-                              style={{ width: 90, height: 90, objectFit: 'contain' }}
+                              style={{ width: 85, height: 85, objectFit: 'contain' }}
                             />
                             <h4 style={{ fontSize: '1.25rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
                               No NFTs Detected
                             </h4>
-                            <p style={{ fontSize: '0.85rem', color: '#991b1b', margin: 0 }}>
-                              You did not hold a Vibe Club NFT at the snapshot time.
-                            </p>
                             <a
                               href={VIBECLUB_MINT_URL}
                               target="_blank"
