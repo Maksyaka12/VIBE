@@ -551,44 +551,18 @@ export default function Checker() {
           <div>
             
             {/* 👤 FULL STYLISH WEB3 USER DASHBOARD */}
-            <div
-              style={{
-                background: 'rgba(255, 255, 255, 0.92)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1.5px solid rgba(0, 140, 255, 0.22)',
-                borderRadius: '28px',
-                padding: '30px 32px',
-                boxShadow: '0 12px 40px rgba(0, 82, 255, 0.07), 0 2px 8px rgba(0, 0, 0, 0.02)',
-                marginBottom: '40px'
-              }}
-            >
+            <div className="checker-user-card">
               {/* Top Hero Row: Big Avatar + Name (Left) & Wallet / Actions (Right) */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  flexWrap: 'wrap',
-                  gap: '24px'
-                }}
-              >
+              <div className="checker-profile-header">
                 {/* Left: Big Avatar + Name + Badge (Matched in height) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                <div className="checker-profile-avatar-info">
                   {/* Big Avatar Container */}
                   <div
+                    className="checker-avatar-box"
                     style={{
-                      width: '96px',
-                      height: '96px',
-                      borderRadius: '22px',
-                      overflow: 'hidden',
                       border: userNft ? '3px solid var(--blue)' : '2.5px solid #cbd5e1',
                       background: userNft ? '#ffffff' : '#f1f5f9',
-                      boxShadow: userNft ? '0 8px 24px rgba(0, 82, 255, 0.2)' : '0 4px 12px rgba(0,0,0,0.05)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0
+                      boxShadow: userNft ? '0 8px 24px rgba(0, 82, 255, 0.2)' : '0 4px 12px rgba(0,0,0,0.05)'
                     }}
                   >
                     {userNft ? (
@@ -600,7 +574,7 @@ export default function Checker() {
                       />
                     ) : (
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '4px', color: '#94a3b8' }}>
-                        <User size={40} color="#64748b" />
+                        <User size={36} color="#64748b" />
                       </div>
                     )}
                   </div>
@@ -611,22 +585,14 @@ export default function Checker() {
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'center',
-                      gap: '4px'
+                      gap: '2px',
+                      minWidth: 0
                     }}
                   >
-                    <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', lineHeight: 1 }}>
+                    <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', lineHeight: 1 }}>
                       Profile:
                     </div>
-                    <h3
-                      style={{
-                        margin: '2px 0 4px 0',
-                        fontSize: '1.65rem',
-                        fontWeight: 800,
-                        color: 'var(--ink)',
-                        letterSpacing: '-0.02em',
-                        lineHeight: 1.15
-                      }}
-                    >
+                    <h3 className="checker-profile-name">
                       {userNft ? userNft.name : 'Unknown Dog'}
                     </h3>
 
@@ -634,12 +600,12 @@ export default function Checker() {
                       {userNft ? (
                         <span
                           style={{
-                            fontSize: '0.78rem',
+                            fontSize: '0.74rem',
                             fontWeight: 700,
                             color: '#10b981',
                             background: 'rgba(16, 185, 129, 0.12)',
                             border: '1.5px solid rgba(16, 185, 129, 0.28)',
-                            padding: '3px 12px',
+                            padding: '2px 10px',
                             borderRadius: '99px',
                             display: 'inline-flex',
                             alignItems: 'center',
@@ -654,12 +620,12 @@ export default function Checker() {
                           target="_blank"
                           rel="noreferrer"
                           style={{
-                            fontSize: '0.78rem',
+                            fontSize: '0.74rem',
                             fontWeight: 700,
                             color: '#059669',
                             background: 'rgba(16, 185, 129, 0.12)',
                             border: '1.5px solid rgba(16, 185, 129, 0.3)',
-                            padding: '3px 12px',
+                            padding: '2px 10px',
                             borderRadius: '99px',
                             display: 'inline-flex',
                             alignItems: 'center',
@@ -677,7 +643,7 @@ export default function Checker() {
                 </div>
 
                 {/* Right: Wallet Address Pill + Actions */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                <div className="checker-actions-header">
                   {/* Connected Wallet Address Pill */}
                   <div
                     style={{
@@ -691,8 +657,8 @@ export default function Checker() {
                       boxShadow: '0 2px 8px rgba(0, 82, 255, 0.03)'
                     }}
                   >
-                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981', display: 'inline-block' }} />
-                    <span style={{ fontSize: '0.92rem', color: 'var(--ink)', fontWeight: 600 }}>
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981', display: 'inline-block', flexShrink: 0 }} />
+                    <span style={{ fontSize: '0.90rem', color: 'var(--ink)', fontWeight: 600 }}>
                       {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : ''}
                     </span>
                     <button
@@ -713,49 +679,52 @@ export default function Checker() {
                     </button>
                   </div>
 
-                  {/* Refresh Button */}
-                  <button
-                    onClick={fetchBalances}
-                    disabled={loading}
-                    title="Refresh On-Chain Balances"
-                    style={{
-                      background: '#ffffff',
-                      border: '1.5px solid rgba(0, 140, 255, 0.22)',
-                      padding: '10px 14px',
-                      borderRadius: '14px',
-                      cursor: 'pointer',
-                      color: 'var(--blue)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px',
-                      boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)',
-                      fontSize: '0.84rem',
-                      fontWeight: 700,
-                      transition: 'all 0.15s ease'
-                    }}
-                  >
-                    <RefreshCw size={15} className={loading ? 'spin' : ''} />
-                    <span>Refresh</span>
-                  </button>
+                  {/* Action Buttons Row */}
+                  <div className="checker-buttons-row">
+                    {/* Refresh Button */}
+                    <button
+                      onClick={fetchBalances}
+                      disabled={loading}
+                      title="Refresh On-Chain Balances"
+                      style={{
+                        background: '#ffffff',
+                        border: '1.5px solid rgba(0, 140, 255, 0.22)',
+                        padding: '10px 14px',
+                        borderRadius: '14px',
+                        cursor: 'pointer',
+                        color: 'var(--blue)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        boxShadow: '0 2px 8px rgba(0, 82, 255, 0.04)',
+                        fontSize: '0.84rem',
+                        fontWeight: 700,
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      <RefreshCw size={15} className={loading ? 'spin' : ''} />
+                      <span>Refresh</span>
+                    </button>
 
-                  {/* Disconnect Button */}
-                  <button
-                    onClick={logout}
-                    style={{
-                      background: 'rgba(239, 68, 68, 0.06)',
-                      border: '1.5px solid rgba(239, 68, 68, 0.22)',
-                      color: '#ef4444',
-                      fontWeight: 700,
-                      fontSize: '0.86rem',
-                      padding: '10px 18px',
-                      borderRadius: '14px',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease'
-                    }}
-                  >
-                    Disconnect
-                  </button>
+                    {/* Disconnect Button */}
+                    <button
+                      onClick={logout}
+                      style={{
+                        background: 'rgba(239, 68, 68, 0.06)',
+                        border: '1.5px solid rgba(239, 68, 68, 0.22)',
+                        color: '#ef4444',
+                        fontWeight: 700,
+                        fontSize: '0.86rem',
+                        padding: '10px 18px',
+                        borderRadius: '14px',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      Disconnect
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -763,22 +732,16 @@ export default function Checker() {
               <div className="dashboard-metrics-5">
                 {/* 1. $VIBE Balance Tile */}
                 <div
+                  className="checker-metric-tile"
                   style={{
-                    background: '#ffffff',
-                    border: '1.5px solid rgba(0, 140, 255, 0.2)',
-                    borderRadius: '18px',
-                    padding: '16px 14px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 4px 16px rgba(0, 82, 255, 0.03)'
+                    border: '1.5px solid rgba(0, 140, 255, 0.2)'
                   }}
                 >
-                  <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px', whiteSpace: 'nowrap' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px', whiteSpace: 'nowrap' }}>
                     $VIBE Balance
                   </div>
                   <div>
-                    <div style={{ fontSize: '1.22rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '1.20rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '4px', whiteSpace: 'nowrap' }}>
                       {loading || balance === null ? <Loader2 size={15} className="spin" /> : formatCompactBalance(balance)}
                     </div>
                     <div style={{ fontSize: '0.67rem', color: isHolderEligibleLive ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', letterSpacing: '-0.02em' }}>
@@ -789,22 +752,16 @@ export default function Checker() {
 
                 {/* 2. Vibe Club Member Tile */}
                 <div
+                  className="checker-metric-tile"
                   style={{
-                    background: '#ffffff',
-                    border: '1.5px solid rgba(16, 185, 129, 0.24)',
-                    borderRadius: '18px',
-                    padding: '16px 14px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 4px 16px rgba(16, 185, 129, 0.03)'
+                    border: '1.5px solid rgba(16, 185, 129, 0.24)'
                   }}
                 >
-                  <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px', whiteSpace: 'nowrap' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px', whiteSpace: 'nowrap' }}>
                     Vibe Club Member
                   </div>
                   <div>
-                    <div style={{ fontSize: '1.22rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '1.20rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '4px', whiteSpace: 'nowrap' }}>
                       {loading || nftCount === null ? <Loader2 size={15} className="spin" /> : `${nftCount || 0} NFT${nftCount === 1 ? '' : 's'}`}
                     </div>
                     <div style={{ fontSize: '0.67rem', color: (nftCount && nftCount > 0) ? '#10b981' : '#ef4444', fontWeight: 700, whiteSpace: 'nowrap', letterSpacing: '-0.02em' }}>
@@ -816,27 +773,21 @@ export default function Checker() {
                 {/* 3. Available Rewards Quick-Nav Tile */}
                 <div
                   onClick={() => scrollToSection('available-rewards-section', setIsAvailableOpen)}
+                  className="checker-metric-tile"
                   style={{
-                    background: '#ffffff',
                     border: isHolderRound1Available ? '1.5px solid rgba(0, 140, 255, 0.35)' : '1.5px solid rgba(0, 140, 255, 0.18)',
-                    borderRadius: '18px',
-                    padding: '16px 14px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 4px 16px rgba(0, 82, 255, 0.03)',
                     cursor: 'pointer',
                     transition: 'all 0.15s ease'
                   }}
                 >
-                  <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px', whiteSpace: 'nowrap' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px', whiteSpace: 'nowrap' }}>
                     Available Rewards
                   </div>
                   <div>
-                    <div style={{ fontSize: '1.22rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '1.20rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '4px', whiteSpace: 'nowrap' }}>
                       {totalAvailableCount} Available
                     </div>
-                    <div style={{ fontSize: '0.74rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
                       <span>Claim Rewards</span> ↓
                     </div>
                   </div>
@@ -845,27 +796,21 @@ export default function Checker() {
                 {/* 4. Upcoming Rewards Quick-Nav Tile */}
                 <div
                   onClick={() => scrollToSection('upcoming-rewards-section', setIsUpcomingOpen)}
+                  className="checker-metric-tile"
                   style={{
-                    background: '#ffffff',
                     border: '1.5px solid rgba(0, 140, 255, 0.18)',
-                    borderRadius: '18px',
-                    padding: '16px 14px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 4px 16px rgba(0, 82, 255, 0.03)',
                     cursor: 'pointer',
                     transition: 'all 0.15s ease'
                   }}
                 >
-                  <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px', whiteSpace: 'nowrap' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px', whiteSpace: 'nowrap' }}>
                     Upcoming Unlocks
                   </div>
                   <div>
-                    <div style={{ fontSize: '1.22rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '1.20rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '4px', whiteSpace: 'nowrap' }}>
                       2 Upcoming
                     </div>
-                    <div style={{ fontSize: '0.74rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
                       <span>View Schedule</span> ↓
                     </div>
                   </div>
@@ -874,27 +819,21 @@ export default function Checker() {
                 {/* 5. Claim History Quick-Nav Tile */}
                 <div
                   onClick={() => scrollToSection('claimed-rewards-section', setIsHistoryOpen)}
+                  className="checker-metric-tile"
                   style={{
-                    background: '#ffffff',
                     border: '1.5px solid rgba(16, 185, 129, 0.2)',
-                    borderRadius: '18px',
-                    padding: '16px 14px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 4px 16px rgba(16, 185, 129, 0.03)',
                     cursor: 'pointer',
                     transition: 'all 0.15s ease'
                   }}
                 >
-                  <div style={{ fontSize: '0.70rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px', whiteSpace: 'nowrap' }}>
+                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px', whiteSpace: 'nowrap' }}>
                     Claim History
                   </div>
                   <div>
-                    <div style={{ fontSize: '1.22rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '6px', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '1.20rem', fontWeight: 800, color: 'var(--ink)', lineHeight: 1.15, marginBottom: '4px', whiteSpace: 'nowrap' }}>
                       {claimedHistory?.length || 0} Claimed
                     </div>
-                    <div style={{ fontSize: '0.74rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
+                    <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
                       <span>View History</span> ↓
                     </div>
                   </div>
@@ -935,49 +874,34 @@ export default function Checker() {
               </div>
 
               {isAvailableOpen && (
-                <div
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.65)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                    border: '1.5px solid rgba(0, 140, 255, 0.22)',
-                    borderRadius: '26px',
-                    padding: '28px',
-                    boxShadow: '0 8px 30px rgba(0, 82, 255, 0.05)'
-                  }}
-                >
+                <div className="checker-section-panel">
                   {isHolderRound1Available ? (
                     <div className="rewards-grid-2">
                       
                       {/* Holder Rewards Active Claim Card */}
                       <div
+                        className="checker-reward-card"
                         style={{
-                          background: '#ffffff',
                           border: '2px solid rgba(0, 82, 255, 0.38)',
-                          borderRadius: '22px',
-                          padding: '26px',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
                           boxShadow: '0 10px 32px rgba(0, 82, 255, 0.12), 0 2px 6px rgba(0, 0, 0, 0.03)',
                           position: 'relative'
                         }}
                       >
                         <div>
                           {/* Header */}
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                              <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                <Coins size={22} color="var(--blue)" />
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', gap: '8px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <Coins size={20} color="var(--blue)" />
                               </div>
-                              <h4 style={{ margin: 0, fontSize: '1.22rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                                Holder Rewards
-                                <span style={{ fontSize: '0.72rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '4px 10px', borderRadius: '99px', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
+                              <h4 style={{ margin: 0, fontSize: '1.18rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                                <span>Holder Rewards</span>
+                                <span style={{ fontSize: '0.70rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '3px 8px', borderRadius: '99px', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
                                   Unlock 1
                                 </span>
                               </h4>
                             </div>
-                            <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#059669', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
+                            <span style={{ fontSize: '0.70rem', fontWeight: 900, color: '#059669', background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '3px 9px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
                               CLAIM IS LIVE
                             </span>
                           </div>
@@ -1009,23 +933,23 @@ export default function Checker() {
                                   background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
                                   border: '1.5px solid #a7f3d0',
                                   borderRadius: '18px',
-                                  padding: '22px 18px',
+                                  padding: '20px 16px',
                                   textAlign: 'center',
                                   display: 'flex',
                                   flexDirection: 'column',
                                   alignItems: 'center',
                                   justifyContent: 'center',
-                                  minHeight: '180px',
+                                  minHeight: '160px',
                                   boxSizing: 'border-box',
-                                  gap: '12px'
+                                  gap: '10px'
                                 }}
                               >
-                                <h5 style={{ fontSize: '1.25rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                                <h5 style={{ fontSize: '1.20rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
                                   You're eligible for claim
                                 </h5>
                                 
-                                <div style={{ fontSize: '2.4rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: 0 }}>
-                                  {(holderRewardAmount || 0).toLocaleString('en-US')} <span style={{ fontSize: '1.2rem', color: 'var(--blue)', fontWeight: 900 }}>$VIBE</span>
+                                <div style={{ fontSize: '2.2rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: 0 }}>
+                                  {(holderRewardAmount || 0).toLocaleString('en-US')} <span style={{ fontSize: '1.1rem', color: 'var(--blue)', fontWeight: 900 }}>$VIBE</span>
                                 </div>
                               </div>
                             ) : (
@@ -1034,13 +958,13 @@ export default function Checker() {
                                   background: '#fef2f2',
                                   border: '1.5px solid #fecaca',
                                   borderRadius: '18px',
-                                  padding: '22px 18px',
+                                  padding: '20px 16px',
                                   textAlign: 'center',
                                   display: 'flex',
                                   flexDirection: 'column',
                                   alignItems: 'center',
                                   justifyContent: 'center',
-                                  minHeight: '180px',
+                                  minHeight: '160px',
                                   boxSizing: 'border-box',
                                   gap: '10px'
                                 }}
@@ -1048,9 +972,9 @@ export default function Checker() {
                                 <img
                                   src="/vibe-sad-logo-nobg.png"
                                   alt="Sad VIBE"
-                                  style={{ width: 85, height: 85, objectFit: 'contain' }}
+                                  style={{ width: 75, height: 75, objectFit: 'contain' }}
                                 />
-                                <h5 style={{ fontSize: '1.2rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                                <h5 style={{ fontSize: '1.15rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
                                   Not Eligible for Round 1
                                 </h5>
                                 <a
@@ -1165,10 +1089,10 @@ export default function Checker() {
                         background: '#ffffff',
                         border: '1.5px solid rgba(0, 140, 255, 0.22)',
                         borderRadius: '18px',
-                        padding: '28px 24px',
+                        padding: '24px 20px',
                         textAlign: 'center',
                         color: '#64748b',
-                        fontSize: '0.92rem',
+                        fontSize: '0.90rem',
                         fontWeight: 700,
                         boxShadow: '0 4px 16px rgba(0, 82, 255, 0.04)'
                       }}
@@ -1212,48 +1136,33 @@ export default function Checker() {
               </div>
 
               {isUpcomingOpen && (
-                <div
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.65)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                    border: '1.5px solid rgba(0, 140, 255, 0.22)',
-                    borderRadius: '26px',
-                    padding: '28px',
-                    boxShadow: '0 8px 30px rgba(0, 82, 255, 0.05)'
-                  }}
-                >
+                <div className="checker-section-panel">
                   <div className="rewards-grid-2">
                     
                     {/* 1. Next Holder Rewards Unlock Card */}
                     <div
+                      className="checker-reward-card"
                       style={{
-                        background: '#ffffff',
                         border: '1.5px solid rgba(0, 100, 255, 0.25)',
-                        borderRadius: '22px',
-                        padding: '26px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
                         boxShadow: '0 8px 28px rgba(0, 82, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03)',
                         position: 'relative'
                       }}
                     >
                       <div>
                         {/* Header */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                              <Coins size={22} color="var(--blue)" />
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', gap: '8px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                            <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                              <Coins size={20} color="var(--blue)" />
                             </div>
-                            <h4 style={{ margin: 0, fontSize: '1.22rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                              Holder Rewards
-                              <span style={{ fontSize: '0.72rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '4px 10px', borderRadius: '99px', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
+                            <h4 style={{ margin: 0, fontSize: '1.18rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                              <span>Holder Rewards</span>
+                              <span style={{ fontSize: '0.70rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '3px 8px', borderRadius: '99px', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
                                 {upcomingHolderRound?.name || 'Unlock 2'}
                               </span>
                             </h4>
                           </div>
-                          <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
+                          <span style={{ fontSize: '0.70rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '3px 9px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
                             Upcoming
                           </span>
                         </div>
@@ -1285,23 +1194,23 @@ export default function Checker() {
                                 background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
                                 border: '1.5px solid #a7f3d0',
                                 borderRadius: '18px',
-                                padding: '22px 18px',
+                                padding: '20px 16px',
                                 textAlign: 'center',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                minHeight: '180px',
+                                minHeight: '160px',
                                 boxSizing: 'border-box',
-                                gap: '10px'
+                                gap: '8px'
                               }}
                             >
                               <img
                                 src="/vibe-logo-nobg.png"
                                 alt="Eligible VIBE"
-                                style={{ width: 90, height: 90, objectFit: 'contain', margin: '-4px 0 -6px 0' }}
+                                style={{ width: 80, height: 80, objectFit: 'contain', margin: '-4px 0 -4px 0' }}
                               />
-                              <h5 style={{ fontSize: '1.25rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                              <h5 style={{ fontSize: '1.20rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
                                 You are Eligible!
                               </h5>
                             </div>
@@ -1311,23 +1220,23 @@ export default function Checker() {
                                 background: '#fef2f2',
                                 border: '1.5px solid #fecaca',
                                 borderRadius: '18px',
-                                padding: '22px 18px',
+                                padding: '20px 16px',
                                 textAlign: 'center',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                minHeight: '180px',
+                                minHeight: '160px',
                                 boxSizing: 'border-box',
-                                gap: '10px'
+                                gap: '8px'
                               }}
                             >
                               <img
                                 src="/vibe-sad-logo-nobg.png"
                                 alt="Sad VIBE"
-                                style={{ width: 85, height: 85, objectFit: 'contain', margin: '-4px 0 -6px 0' }}
+                                style={{ width: 75, height: 75, objectFit: 'contain', margin: '-4px 0 -4px 0' }}
                               />
-                              <h5 style={{ fontSize: '1.2rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                              <h5 style={{ fontSize: '1.15rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
                                 Not Eligible Yet
                               </h5>
                               <a
@@ -1393,33 +1302,28 @@ export default function Checker() {
 
                     {/* 2. Next Vibe Club Royalty Card */}
                     <div
+                      className="checker-reward-card"
                       style={{
-                        background: '#ffffff',
                         border: '1.5px solid rgba(0, 100, 255, 0.25)',
-                        borderRadius: '22px',
-                        padding: '26px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
                         boxShadow: '0 8px 28px rgba(0, 82, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03)',
                         position: 'relative'
                       }}
                     >
                       <div>
                         {/* Header */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                              <Crown size={22} color="var(--blue)" />
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', gap: '8px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                            <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'rgba(0, 82, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                              <Crown size={20} color="var(--blue)" />
                             </div>
-                            <h4 style={{ margin: 0, fontSize: '1.22rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                              Vibe Club
-                              <span style={{ fontSize: '0.72rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '4px 10px', borderRadius: '99px', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
+                            <h4 style={{ margin: 0, fontSize: '1.18rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                              <span>Vibe Club</span>
+                              <span style={{ fontSize: '0.70rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '3px 8px', borderRadius: '99px', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
                                 {upcomingVibeClubRound?.name || 'Royalty 1'}
                               </span>
                             </h4>
                           </div>
-                          <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '4px 10px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center' }}>
+                          <span style={{ fontSize: '0.70rem', fontWeight: 900, color: '#0284c7', background: 'rgba(2, 132, 199, 0.1)', border: '1px solid rgba(2, 132, 199, 0.25)', padding: '3px 9px', borderRadius: '99px', textTransform: 'uppercase', letterSpacing: '0.04em', lineHeight: 1.2, display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
                             Upcoming
                           </span>
                         </div>
@@ -1451,23 +1355,23 @@ export default function Checker() {
                                 background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
                                 border: '1.5px solid #a7f3d0',
                                 borderRadius: '18px',
-                                padding: '22px 18px',
+                                padding: '20px 16px',
                                 textAlign: 'center',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                minHeight: '180px',
+                                minHeight: '160px',
                                 boxSizing: 'border-box',
-                                gap: '10px'
+                                gap: '8px'
                               }}
                             >
                               <img
                                 src="/vibe-logo-nobg.png"
                                 alt="Eligible NFT"
-                                style={{ width: 90, height: 90, objectFit: 'contain', margin: '-4px 0 -6px 0' }}
+                                style={{ width: 80, height: 80, objectFit: 'contain', margin: '-4px 0 -4px 0' }}
                               />
-                              <h5 style={{ fontSize: '1.25rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                              <h5 style={{ fontSize: '1.20rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
                                 Eligible Vibe Club Member!
                               </h5>
                             </div>
@@ -1477,24 +1381,24 @@ export default function Checker() {
                                 background: '#fef2f2',
                                 border: '1.5px solid #fecaca',
                                 borderRadius: '18px',
-                                padding: '22px 18px',
+                                padding: '20px 16px',
                                 textAlign: 'center',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                minHeight: '180px',
+                                minHeight: '160px',
                                 boxSizing: 'border-box',
-                                gap: '10px'
+                                gap: '8px'
                               }}
                             >
                               <img
                                 src="/vibe-sad-logo-nobg.png"
-                                alt="Sad NFT"
-                                style={{ width: 85, height: 85, objectFit: 'contain', margin: '-4px 0 -6px 0' }}
+                                alt="Sad VIBE"
+                                style={{ width: 75, height: 75, objectFit: 'contain', margin: '-4px 0 -4px 0' }}
                               />
-                              <h5 style={{ fontSize: '1.2rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
-                                No NFTs Detected
+                              <h5 style={{ fontSize: '1.15rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                                Not Eligible Yet
                               </h5>
                               <a
                                 href={VIBECLUB_MINT_URL}
@@ -1594,17 +1498,7 @@ export default function Checker() {
               </div>
 
               {isHistoryOpen && (
-                <div
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.65)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                    border: '1.5px solid rgba(16, 185, 129, 0.25)',
-                    borderRadius: '26px',
-                    padding: '28px',
-                    boxShadow: '0 8px 30px rgba(16, 185, 129, 0.05)'
-                  }}
-                >
+                <div className="checker-section-panel">
                   {Array.isArray(claimedHistory) && claimedHistory.length > 0 ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                       {claimedHistory.map((item) => (
@@ -1660,7 +1554,8 @@ export default function Checker() {
                                 background: 'rgba(2, 132, 199, 0.08)',
                                 padding: '7px 14px',
                                 borderRadius: '10px',
-                                border: '1px solid rgba(2, 132, 199, 0.2)'
+                                border: '1px solid rgba(2, 132, 199, 0.2)',
+                                transition: 'all 0.15s ease'
                               }}
                             >
                               View on Basescan <ExternalLink size={13} />
@@ -1675,15 +1570,15 @@ export default function Checker() {
                         background: '#ffffff',
                         border: '1.5px solid rgba(16, 185, 129, 0.2)',
                         borderRadius: '18px',
-                        padding: '28px 24px',
+                        padding: '24px 20px',
                         textAlign: 'center',
                         color: '#64748b',
-                        fontSize: '0.92rem',
+                        fontSize: '0.90rem',
                         fontWeight: 700,
-                        boxShadow: '0 2px 8px rgba(16, 185, 129, 0.02)'
+                        boxShadow: '0 4px 16px rgba(16, 185, 129, 0.04)'
                       }}
                     >
-                      No claimed rewards yet.
+                      No claimed rewards yet. Check available rewards above to claim.
                     </div>
                   )}
                 </div>

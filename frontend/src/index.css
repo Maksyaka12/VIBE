@@ -1674,11 +1674,160 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
 @media (max-width: 640px) {
   .dashboard-metrics-5 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .dashboard-metrics-5 > div:last-child {
+    grid-column: span 2;
   }
 }
 
-@media (max-width: 440px) {
-  .dashboard-metrics-5 {
-    grid-template-columns: 1fr;
+/* Claim Portal Responsive Styles */
+.checker-user-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(0, 140, 255, 0.22);
+  border-radius: 26px;
+  padding: 28px;
+  box-shadow: 0 8px 30px rgba(0, 82, 255, 0.05);
+  margin-bottom: 24px;
+}
+
+.checker-profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.checker-profile-avatar-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.checker-avatar-box {
+  width: 96px;
+  height: 96px;
+  border-radius: 22px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.checker-profile-name {
+  margin: 2px 0 4px 0;
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.checker-actions-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.checker-buttons-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checker-metric-tile {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 16px rgba(0, 82, 255, 0.03);
+}
+
+.checker-section-panel {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(0, 140, 255, 0.22);
+  border-radius: 26px;
+  padding: 28px;
+  box-shadow: 0 8px 30px rgba(0, 82, 255, 0.05);
+}
+
+.checker-reward-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media (max-width: 640px) {
+  .checker-user-card {
+    padding: 18px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .checker-profile-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .checker-profile-avatar-info {
+    gap: 14px;
+    width: 100%;
+  }
+  .checker-avatar-box {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+  }
+  .checker-profile-name {
+    font-size: 1.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 220px;
+    margin: 1px 0 3px 0;
+  }
+  .checker-actions-header {
+    width: 100%;
+    gap: 8px;
+  }
+  .checker-actions-header > div:first-child {
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: space-between;
+    padding: 7px 14px;
+  }
+  .checker-buttons-row {
+    width: 100%;
+    gap: 8px;
+  }
+  .checker-buttons-row > button {
+    flex: 1;
+    padding: 8px 12px !important;
+    font-size: 0.82rem !important;
+    justify-content: center;
+  }
+  .checker-metric-tile {
+    padding: 12px 10px;
+    border-radius: 14px;
+  }
+  .checker-section-panel {
+    padding: 16px 12px;
+    border-radius: 18px;
+  }
+  .checker-reward-card {
+    padding: 16px 14px;
+    border-radius: 18px;
   }
 }
