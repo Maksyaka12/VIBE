@@ -756,25 +756,6 @@ export default function Checker() {
                                 <h5 style={{ fontSize: '1.2rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
                                   Not Eligible for Round 1
                                 </h5>
-                                <a
-                                  href={O1}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                  style={{
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    gap: '5px',
-                                    background: '#ef4444',
-                                    color: '#ffffff',
-                                    padding: '8px 16px',
-                                    borderRadius: '10px',
-                                    fontSize: '0.8rem',
-                                    fontWeight: 800,
-                                    textDecoration: 'none'
-                                  }}
-                                >
-                                  Buy 5M+ on o1 <ArrowUpRight size={14} />
-                                </a>
                               </div>
                             )}
                           </div>
@@ -809,22 +790,28 @@ export default function Checker() {
                               )}
                             </button>
                           ) : (
-                            <button
-                              disabled
+                            <a
+                              href={O1}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="btn-fill"
                               style={{
                                 width: '100%',
-                                padding: '12px 20px',
+                                padding: '13px 20px',
                                 borderRadius: '14px',
-                                background: '#f1f5f9',
-                                border: '1px solid #cbd5e1',
-                                color: '#94a3b8',
-                                fontWeight: 800,
-                                fontSize: '0.86rem',
-                                cursor: 'not-allowed'
+                                fontSize: '0.92rem',
+                                fontWeight: 900,
+                                justifyContent: 'center',
+                                textDecoration: 'none',
+                                background: '#ef4444',
+                                boxShadow: '0 4px 18px rgba(239, 68, 68, 0.25)',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px'
                               }}
                             >
-                              Not Eligible for this Round
-                            </button>
+                              Hold 5M+ $VIBE to become eligible <ArrowUpRight size={15} />
+                            </a>
                           )}
 
                           {/* Claim window ends caption with countdown */}
@@ -1033,64 +1020,57 @@ export default function Checker() {
                               <h5 style={{ fontSize: '1.2rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
                                 Not Eligible Yet
                               </h5>
-                              <a
-                                href={O1}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="btn-fill"
-                                style={{
-                                  marginTop: '2px',
-                                  padding: '8px 16px',
-                                  fontSize: '0.82rem',
-                                  fontWeight: 800,
-                                  borderRadius: '10px',
-                                  textDecoration: 'none',
-                                  background: '#ef4444'
-                                }}
-                              >
-                                Buy 5M+ on o1 <ArrowUpRight size={14} />
-                              </a>
                             </div>
                           )}
                         </div>
                       </div>
 
-                      {/* Countdown Status Pill */}
-                      <div
-                        style={{
-                          width: '100%',
-                          padding: '12px 16px',
-                          borderRadius: '14px',
-                          background: '#f8fafc',
-                          border: '1.5px solid rgba(0, 140, 255, 0.18)',
-                          color: '#475569',
-                          fontWeight: 800,
-                          fontSize: '0.86rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '8px',
-                          flexWrap: 'wrap'
-                        }}
-                      >
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#64748b' }}>
-                          <Lock size={14} /> Claim opens {upcomingHolderRound?.unlockDate || 'Sep 25'}
-                        </span>
-                        <span
-                          style={{
-                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                            fontSize: '0.80rem',
-                            fontWeight: 900,
-                            background: 'rgba(0, 82, 255, 0.08)',
-                            color: 'var(--blue)',
-                            border: '1px solid rgba(0, 82, 255, 0.2)',
-                            padding: '3px 8px',
-                            borderRadius: '8px',
-                            letterSpacing: '0.04em'
-                          }}
-                        >
-                          {formatDigitalCountdown(upcomingHolderRound?.targetDate)}
-                        </span>
+                      {/* Action Pill (Locked Status OR Red CTA) */}
+                      <div>
+                        {isHolderEligibleLive ? (
+                          <div
+                            style={{
+                              width: '100%',
+                              padding: '12px 16px',
+                              borderRadius: '14px',
+                              background: '#f8fafc',
+                              border: '1.5px solid rgba(0, 140, 255, 0.18)',
+                              color: '#475569',
+                              fontWeight: 800,
+                              fontSize: '0.88rem',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '8px'
+                            }}
+                          >
+                            <Lock size={14} color="#64748b" />
+                            <span>Claim opens {upcomingHolderRound?.unlockDate || 'Sep 25'}</span>
+                          </div>
+                        ) : (
+                          <a
+                            href={O1}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="btn-fill"
+                            style={{
+                              width: '100%',
+                              padding: '13px 20px',
+                              borderRadius: '14px',
+                              fontSize: '0.92rem',
+                              fontWeight: 900,
+                              justifyContent: 'center',
+                              textDecoration: 'none',
+                              background: '#ef4444',
+                              boxShadow: '0 4px 18px rgba(239, 68, 68, 0.25)',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px'
+                            }}
+                          >
+                            Hold 5M+ $VIBE to become eligible <ArrowUpRight size={15} />
+                          </a>
+                        )}
                       </div>
                     </div>
 
@@ -1199,64 +1179,57 @@ export default function Checker() {
                               <h5 style={{ fontSize: '1.2rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
                                 No NFTs Detected
                               </h5>
-                              <a
-                                href={VIBECLUB_MINT_URL}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="btn-fill"
-                                style={{
-                                  marginTop: '2px',
-                                  padding: '8px 16px',
-                                  fontSize: '0.82rem',
-                                  fontWeight: 800,
-                                  borderRadius: '10px',
-                                  textDecoration: 'none',
-                                  background: '#10b981'
-                                }}
-                              >
-                                Mint Vibe Club NFT ↗
-                              </a>
                             </div>
                           )}
                         </div>
                       </div>
 
-                      {/* Countdown Status Pill */}
-                      <div
-                        style={{
-                          width: '100%',
-                          padding: '12px 16px',
-                          borderRadius: '14px',
-                          background: '#f8fafc',
-                          border: '1.5px solid rgba(0, 140, 255, 0.18)',
-                          color: '#475569',
-                          fontWeight: 800,
-                          fontSize: '0.86rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '8px',
-                          flexWrap: 'wrap'
-                        }}
-                      >
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#64748b' }}>
-                          <Lock size={14} /> Claim opens {upcomingVibeClubRound?.claimDate || 'Aug 28'}
-                        </span>
-                        <span
-                          style={{
-                            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-                            fontSize: '0.80rem',
-                            fontWeight: 900,
-                            background: 'rgba(0, 82, 255, 0.08)',
-                            color: 'var(--blue)',
-                            border: '1px solid rgba(0, 82, 255, 0.2)',
-                            padding: '3px 8px',
-                            borderRadius: '8px',
-                            letterSpacing: '0.04em'
-                          }}
-                        >
-                          {formatDigitalCountdown(upcomingVibeClubRound?.targetDate)}
-                        </span>
+                      {/* Action Pill (Locked Status OR Red CTA) */}
+                      <div>
+                        {isVibeClubEligible ? (
+                          <div
+                            style={{
+                              width: '100%',
+                              padding: '12px 16px',
+                              borderRadius: '14px',
+                              background: '#f8fafc',
+                              border: '1.5px solid rgba(0, 140, 255, 0.18)',
+                              color: '#475569',
+                              fontWeight: 800,
+                              fontSize: '0.88rem',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '8px'
+                            }}
+                          >
+                            <Lock size={14} color="#64748b" />
+                            <span>Claim opens {upcomingVibeClubRound?.claimDate || 'Aug 28'}</span>
+                          </div>
+                        ) : (
+                          <a
+                            href={VIBECLUB_MINT_URL}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="btn-fill"
+                            style={{
+                              width: '100%',
+                              padding: '13px 20px',
+                              borderRadius: '14px',
+                              fontSize: '0.92rem',
+                              fontWeight: 900,
+                              justifyContent: 'center',
+                              textDecoration: 'none',
+                              background: '#ef4444',
+                              boxShadow: '0 4px 18px rgba(239, 68, 68, 0.25)',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px'
+                            }}
+                          >
+                            Mint Vibe Club NFT <ArrowUpRight size={15} />
+                          </a>
+                        )}
                       </div>
                     </div>
 
@@ -1386,7 +1359,7 @@ export default function Checker() {
                         boxShadow: '0 2px 8px rgba(16, 185, 129, 0.02)'
                       }}
                     >
-                      No claimed rewards yet. Your claim history will appear here once you claim rewards.
+                      No claimed rewards yet.
                     </div>
                   )}
                 </div>
