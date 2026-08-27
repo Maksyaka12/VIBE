@@ -1301,8 +1301,8 @@ const GIVEAWAYS_DATA = [
     winners: '7 Winners',
     prizePool: '7 NFTs',
     burnNote: '~3M $VIBE burn',
-    status: 'ongoing',
-    deadlineDate: new Date('2026-08-27T12:00:00Z'),
+    status: 'ended',
+    distribution: 'Completed',
     link: 'https://x.com/vibeB20/status/2092000984671129772'
   },
   {
