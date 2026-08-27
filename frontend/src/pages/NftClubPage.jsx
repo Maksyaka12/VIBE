@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 import { parseEther } from 'viem';
 import { useUserBalances } from '../verse/hooks/useUserBalances';
-import { useVibeNftContract, NFT_CONTRACT_ADDRESS } from '../hooks/useVibeNftContract';
+import { useVibeNftContract, NFT_CONTRACT_ADDRESS, OPENSEA_COLLECTION_URL } from '../hooks/useVibeNftContract';
 import nftNames from '../data/nftNames.json';
 
 // Pixel SVG Wallet Icon
@@ -599,7 +599,7 @@ export default function NftClubPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           {/* OpenSea Link (Hidden on mobile) */}
           <a
-            href={`https://opensea.io/assets/base/${NFT_CONTRACT_ADDRESS}`}
+            href={OPENSEA_COLLECTION_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="vv-opensea-btn"
@@ -1125,7 +1125,7 @@ export default function NftClubPage() {
                         🎉 VIEW MINT CARD & SHARE
                       </button>
                       <a
-                        href={`https://opensea.io/assets/base/${NFT_CONTRACT_ADDRESS}`}
+                        href={OPENSEA_COLLECTION_URL}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{ color: '#00f5ff', textDecoration: 'underline', fontSize: '8px' }}
@@ -1385,7 +1385,7 @@ export default function NftClubPage() {
 
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
                   <span style={{ color: '#ffd700', fontSize: '9px', flexShrink: 0 }}>•</span>
-                  <span>LIFETIME $VIBE ROYALTIES FOR CLUB MEMBERS (LOCKED IN $VIBE TOKENOMICS)</span>
+                  <span>LIFETIME $VIBE ROYALTIES DISTRIBUTED TO NFT HOLDERS EVERY 10 DAYS</span>
                 </div>
 
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
@@ -1486,7 +1486,7 @@ export default function NftClubPage() {
                   <span>
                     THE COLLECTION IS FULLY VERIFIED & TRADEABLE ON{' '}
                     <a
-                      href={`https://opensea.io/assets/base/${NFT_CONTRACT_ADDRESS}`}
+                      href={OPENSEA_COLLECTION_URL}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
