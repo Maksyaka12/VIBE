@@ -1338,17 +1338,51 @@ const GIVEAWAYS_DATA = [
 ];
 
 const HOLDER_UNLOCKS = [
-  { unlock: 'Unlock 1', snapshotTime: '26 Aug, 00:00 UTC', unlockDate: '26 Aug, 14:00 UTC', dateObj: new Date('2026-08-26T14:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 2', snapshotTime: '25 Sep, 00:00 UTC', unlockDate: '25 Sep, 14:00 UTC', dateObj: new Date('2026-09-25T14:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 3', snapshotTime: '25 Oct, 00:00 UTC', unlockDate: '25 Oct, 14:00 UTC', dateObj: new Date('2026-10-25T14:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 4', snapshotTime: '24 Nov, 00:00 UTC', unlockDate: '24 Nov, 14:00 UTC', dateObj: new Date('2026-11-24T14:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 5', snapshotTime: '24 Dec, 00:00 UTC', unlockDate: '24 Dec, 14:00 UTC', dateObj: new Date('2026-12-24T14:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 6', snapshotTime: '23 Jan, 00:00 UTC', unlockDate: '23 Jan, 14:00 UTC', dateObj: new Date('2027-01-23T14:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 7', snapshotTime: '22 Feb, 00:00 UTC', unlockDate: '22 Feb, 14:00 UTC', dateObj: new Date('2027-02-22T14:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 8', snapshotTime: '24 Mar, 00:00 UTC', unlockDate: '24 Mar, 14:00 UTC', dateObj: new Date('2027-03-24T14:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 9', snapshotTime: '23 Apr, 00:00 UTC', unlockDate: '23 Apr, 14:00 UTC', dateObj: new Date('2027-04-23T14:00:00Z'), poolAmount: '10,000,000' },
-  { unlock: 'Unlock 10', snapshotTime: '23 May, 00:00 UTC', unlockDate: '23 May, 14:00 UTC', dateObj: new Date('2027-05-23T14:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 1', snapshotTime: '26 Aug, 00:00 UTC', unlockDate: '26 Aug, 14:00 UTC', dateObj: new Date('2026-08-26T14:00:00Z'), nextSnapshotDate: new Date('2026-09-25T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 2', snapshotTime: '25 Sep, 00:00 UTC', unlockDate: '25 Sep, 14:00 UTC', dateObj: new Date('2026-09-25T14:00:00Z'), nextSnapshotDate: new Date('2026-10-25T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 3', snapshotTime: '25 Oct, 00:00 UTC', unlockDate: '25 Oct, 14:00 UTC', dateObj: new Date('2026-10-25T14:00:00Z'), nextSnapshotDate: new Date('2026-11-24T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 4', snapshotTime: '24 Nov, 00:00 UTC', unlockDate: '24 Nov, 14:00 UTC', dateObj: new Date('2026-11-24T14:00:00Z'), nextSnapshotDate: new Date('2026-12-24T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 5', snapshotTime: '24 Dec, 00:00 UTC', unlockDate: '24 Dec, 14:00 UTC', dateObj: new Date('2026-12-24T14:00:00Z'), nextSnapshotDate: new Date('2027-01-23T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 6', snapshotTime: '23 Jan, 00:00 UTC', unlockDate: '23 Jan, 14:00 UTC', dateObj: new Date('2027-01-23T14:00:00Z'), nextSnapshotDate: new Date('2027-02-22T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 7', snapshotTime: '22 Feb, 00:00 UTC', unlockDate: '22 Feb, 14:00 UTC', dateObj: new Date('2027-02-22T14:00:00Z'), nextSnapshotDate: new Date('2027-03-24T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 8', snapshotTime: '24 Mar, 00:00 UTC', unlockDate: '24 Mar, 14:00 UTC', dateObj: new Date('2027-03-24T14:00:00Z'), nextSnapshotDate: new Date('2027-04-23T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 9', snapshotTime: '23 Apr, 00:00 UTC', unlockDate: '23 Apr, 14:00 UTC', dateObj: new Date('2027-04-23T14:00:00Z'), nextSnapshotDate: new Date('2027-05-23T00:00:00Z'), poolAmount: '10,000,000' },
+  { unlock: 'Unlock 10', snapshotTime: '23 May, 00:00 UTC', unlockDate: '23 May, 14:00 UTC', dateObj: new Date('2027-05-23T14:00:00Z'), nextSnapshotDate: new Date('2027-06-23T00:00:00Z'), poolAmount: '10,000,000' },
 ];
+
+function formatClaimCountdown(targetDate) {
+  if (!targetDate) return '';
+  const now = new Date().getTime();
+  const target = new Date(targetDate).getTime();
+  const diff = target - now;
+
+  if (diff <= 0) return 'Ended';
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  const pad = (n) => String(n).padStart(2, '0');
+
+  if (days > 0) {
+    return `${days}d ${pad(hours)}h ${pad(minutes)}m`;
+  }
+  return `${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+}
+
+function HolderClaimCountdown({ targetDate }) {
+  const [timeLeft, setTimeLeft] = useState(() => formatClaimCountdown(targetDate));
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft(formatClaimCountdown(targetDate));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [targetDate]);
+
+  return <span>Claim {timeLeft}</span>;
+}
 
 function Rewards() {
   const [activeTab, setActiveTab] = useState(null);
@@ -2704,7 +2738,7 @@ function Rewards() {
                             {isUnlocked ? (
                               <>
                                 <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981', flexShrink: 0 }} />
-                                Unlocked
+                                <HolderClaimCountdown targetDate={u.nextSnapshotDate} />
                               </>
                             ) : (
                               <>
