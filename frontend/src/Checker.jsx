@@ -66,7 +66,7 @@ const HOLDER_ROUNDS = [
 ];
 
 const VIBECLUB_ROUNDS = [
-  { id: 1, name: 'Royalty 1', pool: 'TBA', snapshotDate: 'Aug 28, 00:00 UTC', snapshotIso: '2026-08-28T00:00:00Z', claimDate: 'Aug 28', targetDate: '2026-08-28T14:00:00Z' },
+  { id: 1, name: 'Royalty 1', pool: '2,500,000 $VIBE', snapshotDate: 'Aug 28, 00:00 UTC', snapshotIso: '2026-08-28T00:00:00Z', claimDate: 'Aug 28', targetDate: '2026-08-28T14:00:00Z' },
   { id: 2, name: 'Royalty 2', pool: 'TBA', snapshotDate: 'Sep 3, 00:00 UTC', snapshotIso: '2026-09-03T00:00:00Z', claimDate: 'Sep 3', targetDate: '2026-09-03T14:00:00Z' },
   { id: 3, name: 'Royalty 3', pool: 'TBA', snapshotDate: 'Sep 13, 00:00 UTC', snapshotIso: '2026-09-13T00:00:00Z', claimDate: 'Sep 13', targetDate: '2026-09-13T14:00:00Z' },
   { id: 4, name: 'Royalty 4', pool: 'TBA', snapshotDate: 'Sep 23, 00:00 UTC', snapshotIso: '2026-09-23T00:00:00Z', claimDate: 'Sep 23', targetDate: '2026-09-23T14:00:00Z' },
@@ -1738,7 +1738,7 @@ export default function Checker() {
                             <Crown size={12} color="var(--blue)" /> Royalty Pool
                           </div>
                           <div style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
-                            TBA
+                            {upcomingVibeClubRound?.pool || '2,500,000 $VIBE'}
                           </div>
                         </div>
 

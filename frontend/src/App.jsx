@@ -1240,7 +1240,7 @@ const VIBEVERSE_EPOCHS = [
 ];
 
 const VIBECLUB_EPOCHS = [
-  { epoch: 'Royalty 1', snapshotTime: '28 Aug, 00:00 UTC', claimDate: '28 Aug 2026', dateObj: new Date('2026-08-28T00:00:00Z'), nextSnapshotDate: new Date('2026-09-03T00:00:00Z'), poolAmount: 'TBA' },
+  { epoch: 'Royalty 1', snapshotTime: '28 Aug, 00:00 UTC', claimDate: '28 Aug 2026', dateObj: new Date('2026-08-28T00:00:00Z'), nextSnapshotDate: new Date('2026-09-03T00:00:00Z'), poolAmount: '2,500,000 $VIBE' },
   { epoch: 'Royalty 2', snapshotTime: '3 Sep, 00:00 UTC', claimDate: '3 Sep 2026', dateObj: new Date('2026-09-03T00:00:00Z'), nextSnapshotDate: new Date('2026-09-13T00:00:00Z'), poolAmount: 'TBA' },
   { epoch: 'Royalty 3', snapshotTime: '13 Sep, 00:00 UTC', claimDate: '13 Sep 2026', dateObj: new Date('2026-09-13T00:00:00Z'), nextSnapshotDate: new Date('2026-09-23T00:00:00Z'), poolAmount: 'TBA' },
   { epoch: 'Royalty 4', snapshotTime: '23 Sep, 00:00 UTC', claimDate: '23 Sep 2026', dateObj: new Date('2026-09-23T00:00:00Z'), nextSnapshotDate: new Date('2026-10-03T00:00:00Z'), poolAmount: 'TBA' },
