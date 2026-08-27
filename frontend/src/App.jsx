@@ -331,7 +331,7 @@ function Tokenomics() {
   const { totalBurned, totalBurnedNum, totalBuybacks, communityRewards, distributedRewards, loading } = useRevenueStats();
   
   const now = new Date();
-  const unlockedCount = UNLOCKS.filter(u => new Date(u.d) <= now).length;
+  const unlockedCount = UNLOCKS.filter(u => new Date(u.iso || u.d) <= now).length;
   const unlockedTokens = unlockedCount * 10_000_000;
   
   const baseCirculating = 900_000_000;
