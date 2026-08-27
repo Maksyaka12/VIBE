@@ -35,11 +35,13 @@ import {
   User
 } from 'lucide-react';
 import round1Data from './data/round_1_proofs.json';
+import royalty1Data from './data/royalty_1_proofs.json';
 import nftNames from './data/nftNames.json';
 
 const CA = '0xb200000000000000000000df24ecb8bf51100a01';
 const NFT_CA = '0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886';
 const DISTRIBUTOR_CA = '0x77e04dd8c45725d2b2b3c8eebac2f3f1708fd089';
+export const ROYALTY_DISTRIBUTOR_CA = '0x77e04dd8c45725d2b2b3c8eebac2f3f1708fd089';
 const ADMIN_WALLET = '0x4c91d3bed372c11795b9ce9a9017dfe447bf050a';
 const O1 = 'https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453';
 const VIBECLUB_MINT_URL = 'https://vibeverse.dog/vibeclub';
@@ -176,13 +178,15 @@ export default function Checker() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(true);
 
   // Admin Panel States
+  const [adminDistributorType, setAdminDistributorType] = useState('holder'); // 'holder' | 'royalty'
+  const [adminCustomRoyaltyCa, setAdminCustomRoyaltyCa] = useState(ROYALTY_DISTRIBUTOR_CA);
   const [adminEpochId, setAdminEpochId] = useState('1');
   const [adminMerkleRoot, setAdminMerkleRoot] = useState(round1Data?.merkleRoot || '0xac99116798ace01d3ebcb6f4c6e60ccd8c5d464b94da5de34aa04f602cb9115a');
   const [adminWithdrawAmount, setAdminWithdrawAmount] = useState('');
   const [adminBurnAmount, setAdminBurnAmount] = useState('');
   const [adminMetrics, setAdminMetrics] = useState(() => {
     try {
-      const cached = localStorage.getItem('vibe_admin_metrics');
+      const cached = localStorage.getItem('vibe_admin_metrics_holder');
       if (cached) return JSON.parse(cached);
     } catch {}
     return {
@@ -334,6 +338,7 @@ export default function Checker() {
     if (isManual) setLoading(true);
     try {
       const client = getPublicClient();
+      const targetRoyaltyCa = adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA;
 
       const results = await client.multicall({
         contracts: [
@@ -357,6 +362,12 @@ export default function Checker() {
           },
           {
             address: DISTRIBUTOR_CA,
+            abi: parseAbi(['function hasClaimed(uint256, address) view returns (bool)']),
+            functionName: 'hasClaimed',
+            args: [1n, address]
+          },
+          {
+            address: targetRoyaltyCa,
             abi: parseAbi(['function hasClaimed(uint256, address) view returns (bool)']),
             functionName: 'hasClaimed',
             args: [1n, address]
@@ -390,10 +401,13 @@ export default function Checker() {
         localStorage.removeItem(`vibe_user_nft_${address.toLowerCase()}`);
       }
 
-      // 4. On-chain claim status check
+      // 4. On-chain claim status checks
       if (results[3]?.status === 'success' && results[3].result === true) {
         setClaimStatus(prev => ({ ...prev, 'holder-1': 'claimed' }));
         syncClaimHistory(client, address);
+      }
+      if (results[4]?.status === 'success' && results[4].result === true) {
+        setClaimStatus(prev => ({ ...prev, 'vibeclub-1': 'claimed' }));
       }
     } catch (e) {
       console.warn("Background balance fetch error:", e);
@@ -409,13 +423,17 @@ export default function Checker() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Proof data for Round 1
+  // Proof data for Round 1 Holder Rewards
   const userProofData = (address && round1Data && round1Data.claims) ? round1Data.claims[address.toLowerCase()] : null;
   const isHolderEligibleLive = (balance !== null && balance >= MIN_HOLDER_BALANCE);
   const hasConfirmedHolderClaim = !!userProofData;
   const holderRewardAmount = userProofData ? (userProofData.amount || 0) : (isHolderEligibleLive ? 500000 : 0);
 
-  const isVibeClubEligible = (nftCount !== null && nftCount > 0);
+  // Proof data for Royalty 1 Vibe Club
+  const userRoyaltyProofData = (address && royalty1Data && royalty1Data.claims) ? royalty1Data.claims[address.toLowerCase()] : null;
+  const isVibeClubEligible = (nftCount !== null && nftCount > 0) || !!userRoyaltyProofData;
+  const hasConfirmedRoyaltyClaim = !!userRoyaltyProofData;
+  const vibeClubRewardAmount = userRoyaltyProofData ? (userRoyaltyProofData.amount || 0) : (isVibeClubEligible ? 22935 : 0);
 
   // Check if connected wallet is Admin / Contract Owner
   const isAdmin = !!(address && (address.toLowerCase() === ADMIN_WALLET.toLowerCase()));
@@ -443,18 +461,23 @@ export default function Checker() {
   const fetchAdminMetrics = async () => {
     try {
       const client = getPublicClient();
-      const claims = Object.values(round1Data?.claims || {});
+      const claims = Object.values(
+        adminDistributorType === 'holder'
+          ? (round1Data?.claims || {})
+          : (royalty1Data?.claims || {})
+      );
+      const targetCa = adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA);
 
-      // 1 single multicall for distributor balance + all 42 hasClaimed states
+      // 1 single multicall for distributor balance + all hasClaimed states
       const calls = [
         {
           address: CA,
           abi: parseAbi(['function balanceOf(address) view returns (uint256)']),
           functionName: 'balanceOf',
-          args: [DISTRIBUTOR_CA]
+          args: [targetCa]
         },
         ...claims.map(c => ({
-          address: DISTRIBUTOR_CA,
+          address: targetCa,
           abi: parseAbi(['function hasClaimed(uint256, address) view returns (bool)']),
           functionName: 'hasClaimed',
           args: [BigInt(adminEpochId || '1'), c.address]
@@ -560,15 +583,14 @@ export default function Checker() {
     setAdminLoading(true);
     setAdminError('');
     setAdminSuccess(false);
-    setAdminTxHash('');
-
     try {
+      const targetCa = adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA);
       const calldata = encodeFunctionData({
         abi: DISTRIBUTOR_ABI,
         functionName: 'setMerkleRoot',
         args: [BigInt(adminEpochId || '1'), adminMerkleRoot]
       });
-      const txHash = await sendAdminTx(DISTRIBUTOR_CA, calldata);
+      const txHash = await sendAdminTx(targetCa, calldata);
       setAdminTxHash(txHash || 'Confirmed');
       setAdminSuccess(true);
       setTimeout(fetchAdminMetrics, 3000);
@@ -596,13 +618,14 @@ export default function Checker() {
     setAdminTxHash('');
 
     try {
+      const targetCa = adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA);
       const amountWei = parseUnits(adminWithdrawAmount.toString(), 18);
       const calldata = encodeFunctionData({
         abi: DISTRIBUTOR_ABI,
         functionName: 'emergencyWithdraw',
         args: [CA, amountWei]
       });
-      const txHash = await sendAdminTx(DISTRIBUTOR_CA, calldata);
+      const txHash = await sendAdminTx(targetCa, calldata);
       setAdminTxHash(txHash || 'Confirmed');
       setAdminSuccess(true);
       setAdminWithdrawAmount('');
@@ -631,6 +654,7 @@ export default function Checker() {
     setAdminTxHash('');
 
     try {
+      const targetCa = adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA);
       const amountWei = parseUnits(adminBurnAmount.toString(), 18);
       
       // Step 1: Withdraw from distributor contract to admin
@@ -639,7 +663,7 @@ export default function Checker() {
         functionName: 'emergencyWithdraw',
         args: [CA, amountWei]
       });
-      await sendAdminTx(DISTRIBUTOR_CA, withdrawCalldata);
+      await sendAdminTx(targetCa, withdrawCalldata);
 
       // Step 2: Transfer to Dead address
       const burnCalldata = encodeFunctionData({
@@ -648,7 +672,6 @@ export default function Checker() {
         args: ['0x000000000000000000000000000000000000dead', amountWei]
       });
       const txHash = await sendAdminTx(CA, burnCalldata);
-
       setAdminTxHash(txHash || 'Confirmed');
       setAdminSuccess(true);
       setAdminBurnAmount('');
@@ -727,6 +750,73 @@ export default function Checker() {
               address: CA,
               event: parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)'),
               args: { from: DISTRIBUTOR_CA, to: address },
+              fromBlock: currentBlock > 10000n ? (currentBlock - 9000n) : 0n,
+              toBlock: currentBlock
+            });
+            if (logs && logs.length > 0) {
+              txHashResult = logs[logs.length - 1].transactionHash;
+            }
+          } catch (e) {}
+        }
+      } else if (type === 'vibeclub' && userRoyaltyProofData && wallets && wallets.length > 0) {
+        const activeWallet = wallets.find(w => w.address.toLowerCase() === address?.toLowerCase()) || wallets[0];
+        const provider = await activeWallet.getEthereumProvider();
+        const amountWei = parseUnits(userRoyaltyProofData.amount.toString(), 18);
+        const targetRoyaltyCa = adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA;
+        const calldataRaw = encodeFunctionData({
+          abi: DISTRIBUTOR_ABI,
+          functionName: 'claim',
+          args: [BigInt(roundId), amountWei, userRoyaltyProofData.proof]
+        });
+        const calldata = calldataRaw.includes(BUILDER_CODE_HEX) ? calldataRaw : (calldataRaw + BUILDER_CODE_HEX);
+
+        try {
+          const callsRes = await provider.request({
+            method: 'wallet_sendCalls',
+            params: [{
+              version: '1.0',
+              chainId: '0x2105',
+              from: address,
+              calls: [{ to: targetRoyaltyCa, value: '0x0', data: calldata }],
+              capabilities: {
+                dataSuffix: {
+                  value: '0x' + BUILDER_CODE_HEX,
+                  optional: true
+                }
+              }
+            }]
+          });
+          if (callsRes) {
+            const callId = typeof callsRes === 'object' ? (callsRes.id || callsRes) : callsRes;
+            for (let i = 0; i < 20; i++) {
+              await new Promise(r => setTimeout(r, 1000));
+              try {
+                const status = await provider.request({
+                  method: 'wallet_getCallsStatus',
+                  params: [callId]
+                });
+                if (status?.receipts?.[0]?.transactionHash) {
+                  txHashResult = status.receipts[0].transactionHash;
+                  break;
+                }
+              } catch (e) {}
+            }
+          }
+        } catch (e) {
+          txHashResult = await provider.request({
+            method: 'eth_sendTransaction',
+            params: [{ from: address, to: targetRoyaltyCa, data: calldata, value: '0x0' }]
+          });
+        }
+
+        if (!txHashResult || txHashResult.length !== 66) {
+          try {
+            const client = createPublicClient({ chain: base, transport: http('https://mainnet.base.org') });
+            const currentBlock = await client.getBlockNumber();
+            const logs = await client.getLogs({
+              address: CA,
+              event: parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)'),
+              args: { from: targetRoyaltyCa, to: address },
               fromBlock: currentBlock > 10000n ? (currentBlock - 9000n) : 0n,
               toBlock: currentBlock
             });
@@ -1133,259 +1223,495 @@ export default function Checker() {
                     borderRadius: '10px',
                     padding: '5px 9px',
                     cursor: 'pointer',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'var(--blue)',
-                    transition: 'all 0.2s ease',
-                    transform: isAvailableOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
-                    boxShadow: '0 2px 6px rgba(0, 82, 255, 0.05)'
-                  }}
-                  title={isAvailableOpen ? "Collapse section" : "Expand section"}
-                >
-                  <ChevronDown size={18} />
-                </button>
-              </div>
+                        transition: 'all 0.2s ease',
+                        transform: isAvailableOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+                        boxShadow: '0 2px 6px rgba(0, 82, 255, 0.05)'
+                      }}
+                      title={isAvailableOpen ? "Collapse section" : "Expand section"}
+                    >
+                      <ChevronDown size={18} />
+                    </button>
+                  </div>
 
-              {isAvailableOpen && (
+                  {isAvailableOpen && (
                 <div className="checker-section-panel">
-                  {isHolderRound1Available ? (
+                  {(isHolderRound1Available || isVibeClubRoyalty1Available) ? (
                     <div className="rewards-grid-2">
                       
-                      {/* Holder Rewards Active Claim Card */}
-                      <div
-                        className="checker-reward-card"
-                        style={{
-                          border: '2px solid var(--blue)',
-                          boxShadow: '0 10px 32px rgba(0, 82, 255, 0.12), 0 2px 6px rgba(0, 0, 0, 0.03)',
-                          position: 'relative'
-                        }}
-                      >
-                        <div>
-                          {/* Header */}
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-                              <img
-                                src="/new-logo-vibe.png"
-                                alt="VIBE"
-                                style={{
-                                  width: '36px',
-                                  height: '36px',
-                                  borderRadius: '50%',
-                                  objectFit: 'cover',
-                                  border: '2px solid var(--blue)',
-                                  boxShadow: '0 2px 8px rgba(0, 82, 255, 0.15)',
-                                  flexShrink: 0
-                                }}
-                              />
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                                <h4 style={{ margin: 0, fontSize: '1.02rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
-                                  Holder Rewards
-                                </h4>
-                                <span style={{ fontSize: '0.66rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '2px 7px', borderRadius: '99px', lineHeight: 1.2, whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center' }}>
-                                  Unlock 1
-                                </span>
-                              </div>
-                            </div>
-                            <span
-                              style={{
-                                padding: '3px 8px',
-                                borderRadius: '99px',
-                                fontSize: '0.66rem',
-                                fontWeight: 900,
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.04em',
-                                background: '#ecfdf5',
-                                color: '#059669',
-                                border: '1px solid #a7f3d0',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                                whiteSpace: 'nowrap',
-                                flexShrink: 0,
-                                boxShadow: '0 2px 8px rgba(16, 185, 129, 0.15)'
-                              }}
-                            >
-                              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981', flexShrink: 0 }} />
-                              Claim Live
-                            </span>
-                          </div>
-
-                          {/* Metric Box (Rewards Pool) */}
-                          <div
-                            style={{
-                              background: '#f8fafc',
-                              borderRadius: '16px',
-                              padding: '12px 16px',
-                              border: '1px solid rgba(0, 140, 255, 0.18)',
-                              boxShadow: '0 2px 8px rgba(0, 82, 255, 0.03)',
-                              marginBottom: '14px'
-                            }}
-                          >
-                            <div style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
-                              <Coins size={12} color="var(--blue)" /> Rewards Pool
-                            </div>
-                            <div style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
-                              10,000,000 <span style={{ fontSize: '0.86rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
-                            </div>
-                          </div>
-
-                          {/* Allocation / Eligibility Box */}
-                          <div style={{ marginBottom: '18px' }}>
-                            {(hasConfirmedHolderClaim || isHolderEligibleLive) ? (
-                              <div
-                                style={{
-                                  background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
-                                  border: '1.5px solid #a7f3d0',
-                                  borderRadius: '18px',
-                                  padding: '16px 14px',
-                                  textAlign: 'center',
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  minHeight: '145px',
-                                  boxSizing: 'border-box',
-                                  gap: '8px'
-                                }}
-                              >
-                                <h5 style={{ fontSize: '1.10rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
-                                  You're eligible for claim
-                                </h5>
-                                
-                                <div style={{ fontSize: '2.0rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: 0 }}>
-                                  {(holderRewardAmount || 0).toLocaleString('en-US')} <span style={{ fontSize: '1.0rem', color: 'var(--blue)', fontWeight: 900 }}>$VIBE</span>
+                      {/* 1. Holder Rewards Active Claim Card */}
+                      {isHolderRound1Available && (
+                        <div
+                          className="checker-reward-card"
+                          style={{
+                            border: '2px solid var(--blue)',
+                            boxShadow: '0 10px 32px rgba(0, 82, 255, 0.12), 0 2px 6px rgba(0, 0, 0, 0.03)',
+                            position: 'relative'
+                          }}
+                        >
+                          <div>
+                            {/* Header */}
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+                                <img
+                                  src="/new-logo-vibe.png"
+                                  alt="VIBE"
+                                  style={{
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '50%',
+                                    objectFit: 'cover',
+                                    border: '2px solid var(--blue)',
+                                    boxShadow: '0 2px 8px rgba(0, 82, 255, 0.15)',
+                                    flexShrink: 0
+                                  }}
+                                />
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                                  <h4 style={{ margin: 0, fontSize: '1.02rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                                    Holder Rewards
+                                  </h4>
+                                  <span style={{ fontSize: '0.66rem', fontWeight: 800, background: 'rgba(0, 82, 255, 0.08)', color: 'var(--blue)', border: '1px solid rgba(0, 82, 255, 0.2)', padding: '2px 7px', borderRadius: '99px', lineHeight: 1.2, whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center' }}>
+                                    Unlock 1
+                                  </span>
                                 </div>
                               </div>
-                            ) : (
-                              <div
+                              <span
                                 style={{
-                                  background: '#fef2f2',
-                                  border: '1.5px solid #fecaca',
-                                  borderRadius: '18px',
-                                  padding: '16px 14px',
-                                  textAlign: 'center',
-                                  display: 'flex',
-                                  flexDirection: 'column',
+                                  padding: '3px 8px',
+                                  borderRadius: '99px',
+                                  fontSize: '0.66rem',
+                                  fontWeight: 900,
+                                  textTransform: 'uppercase',
+                                  letterSpacing: '0.04em',
+                                  background: '#ecfdf5',
+                                  color: '#059669',
+                                  border: '1px solid #a7f3d0',
+                                  display: 'inline-flex',
                                   alignItems: 'center',
-                                  justifyContent: 'center',
-                                  minHeight: '145px',
-                                  boxSizing: 'border-box',
-                                  gap: '8px'
+                                  gap: '4px',
+                                  whiteSpace: 'nowrap',
+                                  flexShrink: 0,
+                                  boxShadow: '0 2px 8px rgba(16, 185, 129, 0.15)'
                                 }}
                               >
-                                <img
-                                  src="/vibe-sad-logo-nobg.png"
-                                  alt="Sad VIBE"
-                                  style={{ width: 70, height: 70, objectFit: 'contain' }}
-                                />
-                                <h5 style={{ fontSize: '1.05rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
-                                  Not Eligible for Round 1
-                                </h5>
-                                <a
-                                  href={O1}
-                                  target="_blank"
-                                  rel="noreferrer"
+                                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981', flexShrink: 0 }} />
+                                Claim Live
+                              </span>
+                            </div>
+
+                            {/* Metric Box (Rewards Pool) */}
+                            <div
+                              style={{
+                                background: '#f8fafc',
+                                borderRadius: '16px',
+                                padding: '12px 16px',
+                                border: '1px solid rgba(0, 140, 255, 0.18)',
+                                boxShadow: '0 2px 8px rgba(0, 82, 255, 0.03)',
+                                marginBottom: '14px'
+                              }}
+                            >
+                              <div style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                                <Coins size={12} color="var(--blue)" /> Rewards Pool
+                              </div>
+                              <div style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                                10,000,000 <span style={{ fontSize: '0.86rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
+                              </div>
+                            </div>
+
+                            {/* Allocation / Eligibility Box */}
+                            <div style={{ marginBottom: '18px' }}>
+                              {(hasConfirmedHolderClaim || isHolderEligibleLive) ? (
+                                <div
                                   style={{
-                                    display: 'inline-flex',
+                                    background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
+                                    border: '1.5px solid #a7f3d0',
+                                    borderRadius: '18px',
+                                    padding: '16px 14px',
+                                    textAlign: 'center',
+                                    display: 'flex',
+                                    flexDirection: 'column',
                                     alignItems: 'center',
-                                    gap: '4px',
-                                    background: '#ef4444',
-                                    color: '#ffffff',
-                                    padding: '7px 14px',
-                                    borderRadius: '10px',
-                                    fontSize: '0.78rem',
-                                    fontWeight: 800,
-                                    textDecoration: 'none'
+                                    justifyContent: 'center',
+                                    minHeight: '145px',
+                                    boxSizing: 'border-box',
+                                    gap: '8px'
                                   }}
                                 >
-                                  Buy & Hold 5M+ $VIBE <ArrowUpRight size={13} />
-                                </a>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Action Button */}
-                        <div>
-                          {(hasConfirmedHolderClaim || isHolderEligibleLive) ? (
-                            <button
-                              onClick={() => handleClaim('holder', 1, holderRewardAmount)}
-                              disabled={claimStatus['holder-1'] === 'claiming'}
-                              className="btn-fill"
-                              style={{
-                                width: '100%',
-                                padding: '12px 18px',
-                                borderRadius: '12px',
-                                fontSize: '0.90rem',
-                                fontWeight: 900,
-                                justifyContent: 'center',
-                                boxShadow: '0 4px 18px rgba(0, 82, 255, 0.32)',
-                                cursor: 'pointer'
-                              }}
-                            >
-                              {claimStatus['holder-1'] === 'claiming' ? (
-                                <>
-                                  <Loader2 size={16} className="spin" /> Confirming Claim...
-                                </>
+                                  <h5 style={{ fontSize: '1.10rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                                    You're eligible for claim
+                                  </h5>
+                                  
+                                  <div style={{ fontSize: '2.0rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: 0 }}>
+                                    {(holderRewardAmount || 0).toLocaleString('en-US')} <span style={{ fontSize: '1.0rem', color: 'var(--blue)', fontWeight: 900 }}>$VIBE</span>
+                                  </div>
+                                </div>
                               ) : (
-                                <>
-                                  <Gift size={16} /> Claim {(holderRewardAmount || 0).toLocaleString('en-US')} $VIBE
-                                </>
+                                <div
+                                  style={{
+                                    background: '#fef2f2',
+                                    border: '1.5px solid #fecaca',
+                                    borderRadius: '18px',
+                                    padding: '16px 14px',
+                                    textAlign: 'center',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    minHeight: '145px',
+                                    boxSizing: 'border-box',
+                                    gap: '8px'
+                                  }}
+                                >
+                                  <img
+                                    src="/vibe-sad-logo-nobg.png"
+                                    alt="Sad VIBE"
+                                    style={{ width: 70, height: 70, objectFit: 'contain' }}
+                                  />
+                                  <h5 style={{ fontSize: '1.05rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                                    Not Eligible for Round 1
+                                  </h5>
+                                  <a
+                                    href={O1}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      gap: '4px',
+                                      background: '#ef4444',
+                                      color: '#ffffff',
+                                      padding: '7px 14px',
+                                      borderRadius: '10px',
+                                      fontSize: '0.78rem',
+                                      fontWeight: 800,
+                                      textDecoration: 'none'
+                                    }}
+                                  >
+                                    Buy & Hold 5M+ $VIBE <ArrowUpRight size={13} />
+                                  </a>
+                                </div>
                               )}
-                            </button>
-                          ) : (
-                            <button
-                              disabled
-                              style={{
-                                width: '100%',
-                                padding: '11px 16px',
-                                borderRadius: '12px',
-                                background: '#f1f5f9',
-                                border: '1px solid #cbd5e1',
-                                color: '#94a3b8',
-                                fontWeight: 800,
-                                fontSize: '0.84rem',
-                                cursor: 'not-allowed'
-                              }}
-                            >
-                              Not Eligible for this Round
-                            </button>
-                          )}
+                            </div>
+                          </div>
 
-                          {/* Claim window ends caption with countdown */}
-                          <div
-                            style={{
-                              marginTop: '10px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              gap: '6px',
-                              fontSize: '0.74rem',
-                              color: '#64748b',
-                              fontWeight: 700
-                            }}
-                          >
-                            <Clock size={12} color="#64748b" />
-                            <span>Claim window ends:</span>
-                            <span
+                          {/* Action Button */}
+                          <div>
+                            {(hasConfirmedHolderClaim || isHolderEligibleLive) ? (
+                              <button
+                                onClick={() => handleClaim('holder', 1, holderRewardAmount)}
+                                disabled={claimStatus['holder-1'] === 'claiming'}
+                                className="btn-fill"
+                                style={{
+                                  width: '100%',
+                                  padding: '12px 18px',
+                                  borderRadius: '12px',
+                                  fontSize: '0.90rem',
+                                  fontWeight: 900,
+                                  justifyContent: 'center',
+                                  boxShadow: '0 4px 18px rgba(0, 82, 255, 0.32)',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                {claimStatus['holder-1'] === 'claiming' ? (
+                                  <>
+                                    <Loader2 size={16} className="spin" /> Confirming Claim...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Gift size={16} /> Claim {(holderRewardAmount || 0).toLocaleString('en-US')} $VIBE
+                                  </>
+                                )}
+                              </button>
+                            ) : (
+                              <button
+                                disabled
+                                style={{
+                                  width: '100%',
+                                  padding: '11px 16px',
+                                  borderRadius: '12px',
+                                  background: '#f1f5f9',
+                                  border: '1px solid #cbd5e1',
+                                  color: '#94a3b8',
+                                  fontWeight: 800,
+                                  fontSize: '0.84rem',
+                                  cursor: 'not-allowed'
+                                }}
+                              >
+                                Not Eligible for this Round
+                              </button>
+                            )}
+
+                            {/* Claim window ends caption with countdown */}
+                            <div
                               style={{
-                                fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                marginTop: '10px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '6px',
                                 fontSize: '0.74rem',
-                                fontWeight: 900,
-                                color: '#0284c7',
-                                background: 'rgba(2, 132, 199, 0.08)',
-                                border: '1px solid rgba(2, 132, 199, 0.2)',
-                                padding: '2px 6px',
-                                borderRadius: '6px',
-                                letterSpacing: '0.03em'
+                                color: '#64748b',
+                                fontWeight: 700
                               }}
                             >
-                              {formatDigitalCountdown(upcomingHolderRound?.targetDate)}
-                            </span>
+                              <Clock size={12} color="#64748b" />
+                              <span>Claim window ends:</span>
+                              <span
+                                style={{
+                                  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                  fontSize: '0.74rem',
+                                  fontWeight: 900,
+                                  color: '#0284c7',
+                                  background: 'rgba(2, 132, 199, 0.08)',
+                                  border: '1px solid rgba(2, 132, 199, 0.2)',
+                                  padding: '2px 6px',
+                                  borderRadius: '6px',
+                                  letterSpacing: '0.03em'
+                                }}
+                              >
+                                {formatDigitalCountdown(upcomingHolderRound?.targetDate)}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      )}
+
+                      {/* 2. Vibe Club Royalties Active Claim Card */}
+                      {isVibeClubRoyalty1Available && (
+                        <div
+                          className="checker-reward-card"
+                          style={{
+                            border: '2px solid #00c8ff',
+                            boxShadow: '0 10px 32px rgba(0, 200, 255, 0.12), 0 2px 6px rgba(0, 0, 0, 0.03)',
+                            position: 'relative'
+                          }}
+                        >
+                          <div>
+                            {/* Header */}
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', gap: '8px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+                                <img
+                                  src="/nft-avatar.png"
+                                  alt="Vibe Club"
+                                  style={{
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '10px',
+                                    objectFit: 'cover',
+                                    border: '2px solid #00c8ff',
+                                    boxShadow: '0 2px 8px rgba(0, 200, 255, 0.18)',
+                                    flexShrink: 0
+                                  }}
+                                  onError={(e) => { e.target.src = '/new-logo-vibe.png'; }}
+                                />
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                                  <h4 style={{ margin: 0, fontSize: '1.02rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                                    Vibe Club Royalties
+                                  </h4>
+                                  <span style={{ fontSize: '0.66rem', fontWeight: 800, background: 'rgba(0, 200, 255, 0.1)', color: '#0284c7', border: '1px solid rgba(0, 200, 255, 0.25)', padding: '2px 7px', borderRadius: '99px', lineHeight: 1.2, whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center' }}>
+                                    Royalty 1
+                                  </span>
+                                </div>
+                              </div>
+                              <span
+                                style={{
+                                  padding: '3px 8px',
+                                  borderRadius: '99px',
+                                  fontSize: '0.66rem',
+                                  fontWeight: 900,
+                                  textTransform: 'uppercase',
+                                  letterSpacing: '0.04em',
+                                  background: '#ecfdf5',
+                                  color: '#059669',
+                                  border: '1px solid #a7f3d0',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '4px',
+                                  whiteSpace: 'nowrap',
+                                  flexShrink: 0,
+                                  boxShadow: '0 2px 8px rgba(16, 185, 129, 0.15)'
+                                }}
+                              >
+                                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981', flexShrink: 0 }} />
+                                Claim Live
+                              </span>
+                            </div>
+
+                            {/* Metric Box (Rewards Pool) */}
+                            <div
+                              style={{
+                                background: '#f8fafc',
+                                borderRadius: '16px',
+                                padding: '12px 16px',
+                                border: '1px solid rgba(0, 200, 255, 0.2)',
+                                boxShadow: '0 2px 8px rgba(0, 200, 255, 0.04)',
+                                marginBottom: '14px'
+                              }}
+                            >
+                              <div style={{ fontSize: '0.66rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                                <Crown size={12} color="#0284c7" /> Royalty Pool
+                              </div>
+                              <div style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                                2,500,000 <span style={{ fontSize: '0.86rem', color: '#0284c7', fontWeight: 800 }}>$VIBE</span>
+                              </div>
+                            </div>
+
+                            {/* Allocation / Eligibility Box */}
+                            <div style={{ marginBottom: '18px' }}>
+                              {(hasConfirmedRoyaltyClaim || isVibeClubEligible) ? (
+                                <div
+                                  style={{
+                                    background: 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)',
+                                    border: '1.5px solid #a7f3d0',
+                                    borderRadius: '18px',
+                                    padding: '16px 14px',
+                                    textAlign: 'center',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    minHeight: '145px',
+                                    boxSizing: 'border-box',
+                                    gap: '8px'
+                                  }}
+                                >
+                                  <h5 style={{ fontSize: '1.10rem', color: '#10b981', margin: 0, fontWeight: 900 }}>
+                                    You're eligible for claim
+                                  </h5>
+                                  
+                                  <div style={{ fontSize: '2.0rem', fontWeight: 900, color: 'var(--ink)', letterSpacing: '-0.03em', lineHeight: 1, margin: 0 }}>
+                                    {(vibeClubRewardAmount || 22935).toLocaleString('en-US')} <span style={{ fontSize: '1.0rem', color: '#0284c7', fontWeight: 900 }}>$VIBE</span>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div
+                                  style={{
+                                    background: '#fef2f2',
+                                    border: '1.5px solid #fecaca',
+                                    borderRadius: '18px',
+                                    padding: '16px 14px',
+                                    textAlign: 'center',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    minHeight: '145px',
+                                    boxSizing: 'border-box',
+                                    gap: '8px'
+                                  }}
+                                >
+                                  <img
+                                    src="/vibe-sad-logo-nobg.png"
+                                    alt="Sad VIBE"
+                                    style={{ width: 70, height: 70, objectFit: 'contain' }}
+                                  />
+                                  <h5 style={{ fontSize: '1.05rem', color: '#ef4444', margin: 0, fontWeight: 900 }}>
+                                    Not Eligible for Royalty 1
+                                  </h5>
+                                  <a
+                                    href={VIBECLUB_MINT_URL}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    style={{
+                                      display: 'inline-flex',
+                                      alignItems: 'center',
+                                      gap: '4px',
+                                      background: '#ef4444',
+                                      color: '#ffffff',
+                                      padding: '7px 14px',
+                                      borderRadius: '10px',
+                                      fontSize: '0.78rem',
+                                      fontWeight: 800,
+                                      textDecoration: 'none'
+                                    }}
+                                  >
+                                    Mint Vibe Club NFT <ArrowUpRight size={13} />
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Action Button */}
+                          <div>
+                            {(hasConfirmedRoyaltyClaim || isVibeClubEligible) ? (
+                              <button
+                                onClick={() => handleClaim('vibeclub', 1, vibeClubRewardAmount)}
+                                disabled={claimStatus['vibeclub-1'] === 'claiming'}
+                                className="btn-fill"
+                                style={{
+                                  width: '100%',
+                                  padding: '12px 18px',
+                                  borderRadius: '12px',
+                                  fontSize: '0.90rem',
+                                  fontWeight: 900,
+                                  justifyContent: 'center',
+                                  boxShadow: '0 4px 18px rgba(0, 180, 255, 0.32)',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                {claimStatus['vibeclub-1'] === 'claiming' ? (
+                                  <>
+                                    <Loader2 size={16} className="spin" /> Confirming Claim...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Gift size={16} /> Claim {(vibeClubRewardAmount || 22935).toLocaleString('en-US')} $VIBE
+                                  </>
+                                )}
+                              </button>
+                            ) : (
+                              <button
+                                disabled
+                                style={{
+                                  width: '100%',
+                                  padding: '11px 16px',
+                                  borderRadius: '12px',
+                                  background: '#f1f5f9',
+                                  border: '1px solid #cbd5e1',
+                                  color: '#94a3b8',
+                                  fontWeight: 800,
+                                  fontSize: '0.84rem',
+                                  cursor: 'not-allowed'
+                                }}
+                              >
+                                Not Eligible for this Round
+                              </button>
+                            )}
+
+                            {/* Claim window ends caption with countdown */}
+                            <div
+                              style={{
+                                marginTop: '10px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '6px',
+                                fontSize: '0.74rem',
+                                color: '#64748b',
+                                fontWeight: 700
+                              }}
+                            >
+                              <Clock size={12} color="#64748b" />
+                              <span>Claim window ends:</span>
+                              <span
+                                style={{
+                                  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                                  fontSize: '0.74rem',
+                                  fontWeight: 900,
+                                  color: '#0284c7',
+                                  background: 'rgba(2, 132, 199, 0.08)',
+                                  border: '1px solid rgba(2, 132, 199, 0.2)',
+                                  padding: '2px 6px',
+                                  borderRadius: '6px',
+                                  letterSpacing: '0.03em'
+                                }}
+                              >
+                                {formatDigitalCountdown(upcomingVibeClubRound?.targetDate)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
 
                     </div>
                   ) : (
@@ -2006,7 +2332,7 @@ export default function Checker() {
                     justifyContent: 'space-between',
                     flexWrap: 'wrap',
                     gap: '10px',
-                    marginBottom: '20px',
+                    marginBottom: '16px',
                     paddingBottom: '16px',
                     borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
                   }}
@@ -2015,7 +2341,7 @@ export default function Checker() {
                     Admin Panel
                   </h3>
                   <a
-                    href={`https://basescan.org/address/${DISTRIBUTOR_CA}`}
+                    href={`https://basescan.org/address/${adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)}`}
                     target="_blank"
                     rel="noreferrer"
                     style={{
@@ -2029,9 +2355,80 @@ export default function Checker() {
                       border: '1px solid rgba(255, 255, 255, 0.1)'
                     }}
                   >
-                    Contract: {DISTRIBUTOR_CA.slice(0, 6)}...{DISTRIBUTOR_CA.slice(-4)} ↗
+                    Contract: {(adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)).slice(0, 6)}...{(adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)).slice(-4)} ↗
                   </a>
                 </div>
+
+                {/* Distributor Selector Tabs */}
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', background: 'rgba(255, 255, 255, 0.04)', padding: '4px', borderRadius: '12px' }}>
+                  <button
+                    onClick={() => {
+                      setAdminDistributorType('holder');
+                      setAdminEpochId('1');
+                      setAdminMerkleRoot(round1Data?.merkleRoot || '');
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '10px 14px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: adminDistributorType === 'holder' ? 'var(--blue)' : 'transparent',
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: '0.82rem',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    🔵 Holder Rewards (Vesting)
+                  </button>
+                  <button
+                    onClick={() => {
+                      setAdminDistributorType('royalty');
+                      setAdminEpochId('1');
+                      setAdminMerkleRoot(royalty1Data?.merkleRoot || '');
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '10px 14px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: adminDistributorType === 'royalty' ? '#0284c7' : 'transparent',
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: '0.82rem',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    👑 Vibe Club Royalties (NFT)
+                  </button>
+                </div>
+
+                {adminDistributorType === 'royalty' && (
+                  <div style={{ background: 'rgba(2, 132, 199, 0.08)', border: '1px solid rgba(2, 132, 199, 0.25)', borderRadius: '12px', padding: '12px 16px', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 800 }}>Royalty Contract CA:</span>
+                    <input
+                      type="text"
+                      value={adminCustomRoyaltyCa}
+                      onChange={(e) => setAdminCustomRoyaltyCa(e.target.value.trim())}
+                      placeholder="0x... Royalty Distributor Address"
+                      style={{
+                        flex: 1,
+                        minWidth: '220px',
+                        background: 'rgba(15, 23, 42, 0.8)',
+                        border: '1px solid rgba(148, 163, 184, 0.25)',
+                        borderRadius: '8px',
+                        padding: '6px 12px',
+                        color: '#ffffff',
+                        fontFamily: 'monospace',
+                        fontSize: '0.78rem',
+                        fontWeight: 700,
+                        outline: 'none'
+                      }}
+                    />
+                  </div>
+                )}
 
                 {/* 4. Live Metrics */}
                 <div
