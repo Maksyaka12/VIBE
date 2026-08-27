@@ -41,7 +41,7 @@ import nftNames from './data/nftNames.json';
 const CA = '0xb200000000000000000000df24ecb8bf51100a01';
 const NFT_CA = '0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886';
 const DISTRIBUTOR_CA = '0x77e04dd8c45725d2b2b3c8eebac2f3f1708fd089';
-export const ROYALTY_DISTRIBUTOR_CA = '0x77e04dd8c45725d2b2b3c8eebac2f3f1708fd089';
+export const ROYALTY_DISTRIBUTOR_CA = '0x3753EE7fa9538087f901aa5E4afc12dBA57B97c1';
 const ADMIN_WALLET = '0x4c91d3bed372c11795b9ce9a9017dfe447bf050a';
 const O1 = 'https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453';
 const VIBECLUB_MINT_URL = 'https://vibeverse.dog/vibeclub';
