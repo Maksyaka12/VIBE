@@ -231,12 +231,6 @@ export default function Checker() {
     }, 60);
   };
 
-  // Sync cache when wallet changes
-  useEffect(() => {
-    if (address) {
-      const cachedBal = localStorage.getItem(`vibe_balance_${address.toLowerCase()}`);
-      if (cachedBal !== null) setBalance(Number(cachedBal));
-
   // Helper to ensure deterministic latest-first sorting (newest claim always on top)
   const getSortedClaimedHistory = (list) => {
     if (!Array.isArray(list)) return [];
