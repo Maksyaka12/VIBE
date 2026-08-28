@@ -873,6 +873,51 @@ export default function Checker() {
     }
   };
 
+  // Download / Save to Photos (Direct iOS Photos / Android Gallery Native Share)
+  const [downloadingBanner, setDownloadingBanner] = useState(false);
+  const handleDownloadRoyaltyBanner = async () => {
+    setDownloadingBanner(true);
+    const imageUrl = '/vibe-club-royalties-banner.jpg';
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const file = new File([blob], 'vibe-club-royalties-claimed.jpg', { type: 'image/jpeg' });
+
+      // 1. Try Native Mobile Web Share (Direct save to iOS Photos / Android Gallery)
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: 'Vibe Club Royalties Claimed',
+            text: 'Vibe Club Royalties Claimed 🐶💰'
+          });
+          setDownloadingBanner(false);
+          return;
+        } catch (shareErr) {
+          if (shareErr.name === 'AbortError') {
+            setDownloadingBanner(false);
+            return;
+          }
+        }
+      }
+
+      // 2. Standard Browser Download fallback
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = 'vibe-club-royalties-claimed.jpg';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (e) {
+      console.error('Download error:', e);
+      window.open(imageUrl, '_blank');
+    } finally {
+      setDownloadingBanner(false);
+    }
+  };
+
   return (
     <section id="claim-portal" style={{ minHeight: '80vh', padding: '130px 0 100px 0', background: 'var(--bg)' }}>
       <div className="wrap" style={{ maxWidth: '1200px' }}>
@@ -2845,53 +2890,34 @@ export default function Checker() {
       {showRoyaltySuccessModal && (
         <div
           onClick={() => setShowRoyaltySuccessModal(false)}
+          className="royalty-modal-overlay"
           style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 99999,
-            background: 'rgba(5, 10, 25, 0.78)',
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px',
             animation: 'fadeIn 0.25s ease-out'
           }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            style={{
-              position: 'relative',
-              background: '#ffffff',
-              borderRadius: '28px',
-              padding: '32px 28px',
-              maxWidth: '520px',
-              width: '100%',
-              boxShadow: '0 25px 60px -15px rgba(0, 50, 150, 0.35)',
-              border: '1.5px solid rgba(0, 200, 255, 0.3)',
-              textAlign: 'center',
-              boxSizing: 'border-box'
-            }}
+            className="royalty-modal-card"
           >
             {/* Close Button */}
             <button
               onClick={() => setShowRoyaltySuccessModal(false)}
               style={{
                 position: 'absolute',
-                top: '18px',
-                right: '18px',
+                top: '16px',
+                right: '16px',
                 background: '#f1f5f9',
                 border: 'none',
                 borderRadius: '50%',
-                width: '36px',
-                height: '36px',
+                width: '34px',
+                height: '34px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
                 color: '#64748b',
-                transition: 'all 0.2s ease'
+                transition: 'all 0.2s ease',
+                zIndex: 2
               }}
               onMouseEnter={(e) => { e.currentTarget.style.background = '#e2e8f0'; e.currentTarget.style.color = '#0f172a'; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.color = '#64748b'; }}
@@ -2899,44 +2925,22 @@ export default function Checker() {
               <X size={18} />
             </button>
 
-            {/* Success Green Badge */}
-            <div
-              style={{
-                width: '62px',
-                height: '62px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px auto',
-                boxShadow: '0 10px 25px rgba(16, 185, 129, 0.4)'
-              }}
-            >
+            {/* Success Green Badge (Desktop) */}
+            <div className="royalty-modal-badge-desktop">
               <Check size={32} color="#ffffff" strokeWidth={3.2} />
             </div>
 
-            {/* Title & Subtitle */}
-            <h3
-              style={{
-                fontSize: '1.55rem',
-                fontWeight: 900,
-                color: '#0f172a',
-                margin: '0 0 6px 0',
-                letterSpacing: '-0.02em'
-              }}
-            >
+            {/* Title with Inline Icon on Mobile */}
+            <h3 className="royalty-modal-title">
+              <span className="royalty-modal-check-inline">
+                <CheckCircle2 size={24} color="#10b981" strokeWidth={2.8} />
+              </span>
               Claim Successful!
             </h3>
-            <p
-              style={{
-                fontSize: '0.94rem',
-                color: '#64748b',
-                margin: '0 0 20px 0',
-                fontWeight: 600
-              }}
-            >
-              You’ve claimed <strong style={{ color: '#0284c7', fontWeight: 900 }}>22,935 $VIBE</strong> in Club Royalties 🐶🔥
+
+            {/* Subtitle */}
+            <p className="royalty-modal-sub">
+              You’ve claimed <strong style={{ color: '#0284c7', fontWeight: 900 }}>22,935 $VIBE</strong> in Vibe Club Royalties 🐶🔥
             </p>
 
             {/* Royalty Banner Image */}
@@ -2947,7 +2951,7 @@ export default function Checker() {
                 overflow: 'hidden',
                 border: '1.5px solid rgba(0, 200, 255, 0.35)',
                 boxShadow: '0 12px 30px rgba(0, 102, 255, 0.16)',
-                marginBottom: '22px'
+                marginBottom: '20px'
               }}
             >
               <img
@@ -2963,32 +2967,31 @@ export default function Checker() {
             </div>
 
             {/* Action Buttons */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              <a
-                href="/vibe-club-royalties-banner.jpg"
-                download="vibe-club-royalties-claimed.jpg"
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <button
+                onClick={handleDownloadRoyaltyBanner}
+                disabled={downloadingBanner}
+                className="royalty-modal-btn"
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  padding: '14px 18px',
-                  borderRadius: '14px',
                   background: '#f8fafc',
                   color: '#334155',
                   border: '1.5px solid #cbd5e1',
-                  fontSize: '0.92rem',
-                  fontWeight: 800,
-                  textDecoration: 'none',
-                  cursor: 'pointer',
                   boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
                   transition: 'all 0.2s ease'
                 }}
                 onMouseEnter={(e) => { e.currentTarget.style.background = '#e2e8f0'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
               >
-                <Download size={18} /> Save Image
-              </a>
+                {downloadingBanner ? (
+                  <>
+                    <Loader2 size={16} className="spin" /> Saving...
+                  </>
+                ) : (
+                  <>
+                    <Download size={16} /> Save Image
+                  </>
+                )}
+              </button>
 
               <button
                 onClick={() => {
@@ -2996,26 +2999,18 @@ export default function Checker() {
                   const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
                   window.open(shareUrl, '_blank', 'noopener,noreferrer');
                 }}
+                className="royalty-modal-btn"
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  padding: '14px 18px',
-                  borderRadius: '14px',
                   background: '#000000',
                   color: '#ffffff',
                   border: 'none',
-                  fontSize: '0.92rem',
-                  fontWeight: 800,
-                  cursor: 'pointer',
                   boxShadow: '0 6px 20px rgba(0, 0, 0, 0.25)',
                   transition: 'all 0.2s ease'
                 }}
                 onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.35)'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.25)'; }}
               >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
                 Share on X
