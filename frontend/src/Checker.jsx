@@ -873,26 +873,32 @@ export default function Checker() {
     }
   };
 
-  // Download / Save to Photos (Direct iOS Photos / Android Gallery Native Share)
+  // Download / Save to Photos (Direct iOS Photos / Android Gallery on Mobile, Direct file download on Desktop)
   const [downloadingBanner, setDownloadingBanner] = useState(false);
   const handleDownloadRoyaltyBanner = async () => {
     setDownloadingBanner(true);
     const imageUrl = '/vibe-club-royalties-banner.jpg';
     try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const file = new File([blob], 'vibe-club-royalties-claimed.jpg', { type: 'image/jpeg' });
+      const isMobileDevice = typeof navigator !== 'undefined' && (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+        ('ontouchstart' in window && window.innerWidth <= 768)
+      );
 
-      // 1. Try Native Mobile Web Share (Direct save to iOS Photos / Android Gallery)
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      // 1. On Mobile: Use Native Web Share to save directly to iOS Photos / Android Gallery
+      if (isMobileDevice && navigator.canShare) {
         try {
-          await navigator.share({
-            files: [file],
-            title: 'Vibe Club Royalties Claimed',
-            text: 'Vibe Club Royalties Claimed 🐶💰'
-          });
-          setDownloadingBanner(false);
-          return;
+          const response = await fetch(imageUrl);
+          const blob = await response.blob();
+          const file = new File([blob], 'vibe-club-royalties-claimed.jpg', { type: 'image/jpeg' });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: 'Vibe Club Royalties Claimed',
+              text: 'Vibe Club Royalties Claimed 🐶💰'
+            });
+            setDownloadingBanner(false);
+            return;
+          }
         } catch (shareErr) {
           if (shareErr.name === 'AbortError') {
             setDownloadingBanner(false);
@@ -901,15 +907,13 @@ export default function Checker() {
         }
       }
 
-      // 2. Standard Browser Download fallback
-      const blobUrl = window.URL.createObjectURL(blob);
+      // 2. On Desktop: Direct Instant File Download
       const link = document.createElement('a');
-      link.href = blobUrl;
+      link.href = imageUrl;
       link.download = 'vibe-club-royalties-claimed.jpg';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
     } catch (e) {
       console.error('Download error:', e);
       window.open(imageUrl, '_blank');
