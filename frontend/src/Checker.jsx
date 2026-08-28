@@ -71,16 +71,16 @@ const HOLDER_ROUNDS = [
 ];
 
 const VIBECLUB_ROUNDS = [
-  { id: 1, name: 'Royalty 1', pool: '2,500,000 $VIBE', snapshotDate: 'Aug 28, 00:00 UTC', snapshotIso: '2026-08-28T00:00:00Z', claimDate: 'Aug 28', targetDate: '2026-08-28T00:00:00Z', nextSnapshotDate: '2026-09-07T00:00:00Z' },
-  { id: 2, name: 'Royalty 2', pool: 'TBA', snapshotDate: 'Sep 7, 00:00 UTC', snapshotIso: '2026-09-07T00:00:00Z', claimDate: 'Sep 7', targetDate: '2026-09-07T00:00:00Z', nextSnapshotDate: '2026-09-17T00:00:00Z' },
-  { id: 3, name: 'Royalty 3', pool: 'TBA', snapshotDate: 'Sep 17, 00:00 UTC', snapshotIso: '2026-09-17T00:00:00Z', claimDate: 'Sep 17', targetDate: '2026-09-17T00:00:00Z', nextSnapshotDate: '2026-09-27T00:00:00Z' },
-  { id: 4, name: 'Royalty 4', pool: 'TBA', snapshotDate: 'Sep 27, 00:00 UTC', snapshotIso: '2026-09-27T00:00:00Z', claimDate: 'Sep 27', targetDate: '2026-09-27T00:00:00Z', nextSnapshotDate: '2026-10-07T00:00:00Z' },
-  { id: 5, name: 'Royalty 5', pool: 'TBA', snapshotDate: 'Oct 7, 00:00 UTC', snapshotIso: '2026-10-07T00:00:00Z', claimDate: 'Oct 7', targetDate: '2026-10-07T00:00:00Z', nextSnapshotDate: '2026-10-17T00:00:00Z' },
-  { id: 6, name: 'Royalty 6', pool: 'TBA', snapshotDate: 'Oct 17, 00:00 UTC', snapshotIso: '2026-10-17T00:00:00Z', claimDate: 'Oct 17', targetDate: '2026-10-17T00:00:00Z', nextSnapshotDate: '2026-10-27T00:00:00Z' },
-  { id: 7, name: 'Royalty 7', pool: 'TBA', snapshotDate: 'Oct 27, 00:00 UTC', snapshotIso: '2026-10-27T00:00:00Z', claimDate: 'Oct 27', targetDate: '2026-10-27T00:00:00Z', nextSnapshotDate: '2026-11-06T00:00:00Z' },
-  { id: 8, name: 'Royalty 8', pool: 'TBA', snapshotDate: 'Nov 6, 00:00 UTC', snapshotIso: '2026-11-06T00:00:00Z', claimDate: 'Nov 6', targetDate: '2026-11-06T00:00:00Z', nextSnapshotDate: '2026-11-16T00:00:00Z' },
-  { id: 9, name: 'Royalty 9', pool: 'TBA', snapshotDate: 'Nov 16, 00:00 UTC', snapshotIso: '2026-11-16T00:00:00Z', claimDate: 'Nov 16', targetDate: '2026-11-16T00:00:00Z', nextSnapshotDate: '2026-11-26T00:00:00Z' },
-  { id: 10, name: 'Royalty 10', pool: 'TBA', snapshotDate: 'Nov 26, 00:00 UTC', snapshotIso: '2026-11-26T00:00:00Z', claimDate: 'Nov 26', targetDate: '2026-11-26T00:00:00Z', nextSnapshotDate: '2026-12-06T00:00:00Z' },
+  { id: 1, name: 'Royalty 1', pool: '2,500,000 $VIBE', snapshotDate: 'Aug 28, 00:00 UTC', snapshotIso: '2026-08-28T00:00:00Z', claimDate: 'Aug 28', targetDate: '2026-08-28T14:00:00Z', nextSnapshotDate: '2026-09-07T00:00:00Z' },
+  { id: 2, name: 'Royalty 2', pool: 'TBA', snapshotDate: 'Sep 7, 00:00 UTC', snapshotIso: '2026-09-07T00:00:00Z', claimDate: 'Sep 7', targetDate: '2026-09-07T14:00:00Z', nextSnapshotDate: '2026-09-17T00:00:00Z' },
+  { id: 3, name: 'Royalty 3', pool: 'TBA', snapshotDate: 'Sep 17, 00:00 UTC', snapshotIso: '2026-09-17T00:00:00Z', claimDate: 'Sep 17', targetDate: '2026-09-17T14:00:00Z', nextSnapshotDate: '2026-09-27T00:00:00Z' },
+  { id: 4, name: 'Royalty 4', pool: 'TBA', snapshotDate: 'Sep 27, 00:00 UTC', snapshotIso: '2026-09-27T00:00:00Z', claimDate: 'Sep 27', targetDate: '2026-09-27T14:00:00Z', nextSnapshotDate: '2026-10-07T00:00:00Z' },
+  { id: 5, name: 'Royalty 5', pool: 'TBA', snapshotDate: 'Oct 7, 00:00 UTC', snapshotIso: '2026-10-07T00:00:00Z', claimDate: 'Oct 7', targetDate: '2026-10-07T14:00:00Z', nextSnapshotDate: '2026-10-17T00:00:00Z' },
+  { id: 6, name: 'Royalty 6', pool: 'TBA', snapshotDate: 'Oct 17, 00:00 UTC', snapshotIso: '2026-10-17T00:00:00Z', claimDate: 'Oct 17', targetDate: '2026-10-17T14:00:00Z', nextSnapshotDate: '2026-10-27T00:00:00Z' },
+  { id: 7, name: 'Royalty 7', pool: 'TBA', snapshotDate: 'Oct 27, 00:00 UTC', snapshotIso: '2026-10-27T00:00:00Z', claimDate: 'Oct 27', targetDate: '2026-10-27T14:00:00Z', nextSnapshotDate: '2026-11-06T00:00:00Z' },
+  { id: 8, name: 'Royalty 8', pool: 'TBA', snapshotDate: 'Nov 6, 00:00 UTC', snapshotIso: '2026-11-06T00:00:00Z', claimDate: 'Nov 6', targetDate: '2026-11-06T14:00:00Z', nextSnapshotDate: '2026-11-16T00:00:00Z' },
+  { id: 9, name: 'Royalty 9', pool: 'TBA', snapshotDate: 'Nov 16, 00:00 UTC', snapshotIso: '2026-11-16T00:00:00Z', claimDate: 'Nov 16', targetDate: '2026-11-16T14:00:00Z', nextSnapshotDate: '2026-11-26T00:00:00Z' },
+  { id: 10, name: 'Royalty 10', pool: 'TBA', snapshotDate: 'Nov 26, 00:00 UTC', snapshotIso: '2026-11-26T00:00:00Z', claimDate: 'Nov 26', targetDate: '2026-11-26T14:00:00Z', nextSnapshotDate: '2026-12-06T00:00:00Z' },
 ];
 
 const ERC20_ABI = parseAbi([
@@ -1580,29 +1580,6 @@ export default function Checker() {
                                   <span style={{ fontSize: '0.66rem', fontWeight: 800, background: 'rgba(0, 200, 255, 0.1)', color: '#0284c7', border: '1px solid rgba(0, 200, 255, 0.25)', padding: '2px 7px', borderRadius: '99px', lineHeight: 1.2, whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center' }}>
                                     Royalty 1
                                   </span>
-                                  {isAdmin && (
-                                    <button
-                                      onClick={() => setShowRoyaltySuccessModal(true)}
-                                      style={{
-                                        fontSize: '0.66rem',
-                                        fontWeight: 900,
-                                        background: 'rgba(255, 102, 0, 0.12)',
-                                        color: '#ea580c',
-                                        border: '1px solid rgba(255, 102, 0, 0.3)',
-                                        padding: '2px 8px',
-                                        borderRadius: '99px',
-                                        lineHeight: 1.2,
-                                        whiteSpace: 'nowrap',
-                                        display: 'inline-flex',
-                                        alignItems: 'center',
-                                        gap: '4px',
-                                        cursor: 'pointer'
-                                      }}
-                                      title="Admin: Preview the Royalty Claim Success Modal"
-                                    >
-                                      👑 Preview Modal
-                                    </button>
-                                  )}
                                 </div>
                               </div>
                               <span
@@ -2499,44 +2476,23 @@ export default function Checker() {
                   <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em' }}>
                     Admin Panel
                   </h3>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                    <button
-                      onClick={() => setShowRoyaltySuccessModal(true)}
-                      style={{
-                        fontSize: '0.78rem',
-                        fontWeight: 800,
-                        background: 'linear-gradient(135deg, #0284c7 0%, #0052ff 100%)',
-                        color: '#ffffff',
-                        border: 'none',
-                        padding: '6px 12px',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        boxShadow: '0 2px 8px rgba(0, 82, 255, 0.3)'
-                      }}
-                    >
-                      <Sparkles size={13} /> Preview Royalty Claim Modal
-                    </button>
-                    <a
-                      href={`https://basescan.org/address/${adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={{
-                        fontSize: '0.78rem',
-                        color: '#94a3b8',
-                        textDecoration: 'none',
-                        fontFamily: 'monospace',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        padding: '5px 10px',
-                        borderRadius: '8px',
-                        border: '1px solid rgba(255, 255, 255, 0.1)'
-                      }}
-                    >
-                      Contract: {(adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)).slice(0, 6)}...{(adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)).slice(-4)} ↗
-                    </a>
-                  </div>
+                  <a
+                    href={`https://basescan.org/address/${adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      fontSize: '0.78rem',
+                      color: '#94a3b8',
+                      textDecoration: 'none',
+                      fontFamily: 'monospace',
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      padding: '5px 10px',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(255, 255, 255, 0.1)'
+                    }}
+                  >
+                    Contract: {(adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)).slice(0, 6)}...{(adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)).slice(-4)} ↗
+                  </a>
                 </div>
 
                 {/* Distributor Selector Tabs */}
