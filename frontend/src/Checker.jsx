@@ -68,10 +68,16 @@ const HOLDER_ROUNDS = [
 ];
 
 const VIBECLUB_ROUNDS = [
-  { id: 1, name: 'Royalty 1', pool: '2,500,000 $VIBE', snapshotDate: 'Aug 28, 00:00 UTC', snapshotIso: '2026-08-28T00:00:00Z', claimDate: 'Aug 28', targetDate: '2026-08-28T14:00:00Z' },
-  { id: 2, name: 'Royalty 2', pool: 'TBA', snapshotDate: 'Sep 3, 00:00 UTC', snapshotIso: '2026-09-03T00:00:00Z', claimDate: 'Sep 3', targetDate: '2026-09-03T14:00:00Z' },
-  { id: 3, name: 'Royalty 3', pool: 'TBA', snapshotDate: 'Sep 13, 00:00 UTC', snapshotIso: '2026-09-13T00:00:00Z', claimDate: 'Sep 13', targetDate: '2026-09-13T14:00:00Z' },
-  { id: 4, name: 'Royalty 4', pool: 'TBA', snapshotDate: 'Sep 23, 00:00 UTC', snapshotIso: '2026-09-23T00:00:00Z', claimDate: 'Sep 23', targetDate: '2026-09-23T14:00:00Z' },
+  { id: 1, name: 'Royalty 1', pool: '2,500,000 $VIBE', snapshotDate: 'Aug 28, 00:00 UTC', snapshotIso: '2026-08-28T00:00:00Z', claimDate: 'Aug 28', targetDate: '2026-08-28T00:00:00Z', nextSnapshotDate: '2026-09-07T00:00:00Z' },
+  { id: 2, name: 'Royalty 2', pool: 'TBA', snapshotDate: 'Sep 7, 00:00 UTC', snapshotIso: '2026-09-07T00:00:00Z', claimDate: 'Sep 7', targetDate: '2026-09-07T00:00:00Z', nextSnapshotDate: '2026-09-17T00:00:00Z' },
+  { id: 3, name: 'Royalty 3', pool: 'TBA', snapshotDate: 'Sep 17, 00:00 UTC', snapshotIso: '2026-09-17T00:00:00Z', claimDate: 'Sep 17', targetDate: '2026-09-17T00:00:00Z', nextSnapshotDate: '2026-09-27T00:00:00Z' },
+  { id: 4, name: 'Royalty 4', pool: 'TBA', snapshotDate: 'Sep 27, 00:00 UTC', snapshotIso: '2026-09-27T00:00:00Z', claimDate: 'Sep 27', targetDate: '2026-09-27T00:00:00Z', nextSnapshotDate: '2026-10-07T00:00:00Z' },
+  { id: 5, name: 'Royalty 5', pool: 'TBA', snapshotDate: 'Oct 7, 00:00 UTC', snapshotIso: '2026-10-07T00:00:00Z', claimDate: 'Oct 7', targetDate: '2026-10-07T00:00:00Z', nextSnapshotDate: '2026-10-17T00:00:00Z' },
+  { id: 6, name: 'Royalty 6', pool: 'TBA', snapshotDate: 'Oct 17, 00:00 UTC', snapshotIso: '2026-10-17T00:00:00Z', claimDate: 'Oct 17', targetDate: '2026-10-17T00:00:00Z', nextSnapshotDate: '2026-10-27T00:00:00Z' },
+  { id: 7, name: 'Royalty 7', pool: 'TBA', snapshotDate: 'Oct 27, 00:00 UTC', snapshotIso: '2026-10-27T00:00:00Z', claimDate: 'Oct 27', targetDate: '2026-10-27T00:00:00Z', nextSnapshotDate: '2026-11-06T00:00:00Z' },
+  { id: 8, name: 'Royalty 8', pool: 'TBA', snapshotDate: 'Nov 6, 00:00 UTC', snapshotIso: '2026-11-06T00:00:00Z', claimDate: 'Nov 6', targetDate: '2026-11-06T00:00:00Z', nextSnapshotDate: '2026-11-16T00:00:00Z' },
+  { id: 9, name: 'Royalty 9', pool: 'TBA', snapshotDate: 'Nov 16, 00:00 UTC', snapshotIso: '2026-11-16T00:00:00Z', claimDate: 'Nov 16', targetDate: '2026-11-16T00:00:00Z', nextSnapshotDate: '2026-11-26T00:00:00Z' },
+  { id: 10, name: 'Royalty 10', pool: 'TBA', snapshotDate: 'Nov 26, 00:00 UTC', snapshotIso: '2026-11-26T00:00:00Z', claimDate: 'Nov 26', targetDate: '2026-11-26T00:00:00Z', nextSnapshotDate: '2026-12-06T00:00:00Z' },
 ];
 
 const ERC20_ABI = parseAbi([
