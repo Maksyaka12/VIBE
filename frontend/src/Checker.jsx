@@ -32,7 +32,10 @@ import {
   Gift,
   ShieldCheck,
   ChevronDown,
-  User
+  User,
+  Download,
+  X,
+  Share2
 } from 'lucide-react';
 import round1Data from './data/round_1_proofs.json';
 import royalty1Data from './data/royalty_1_proofs.json';
@@ -177,6 +180,7 @@ export default function Checker() {
   const [currentTime, setCurrentTime] = useState(() => new Date());
   const [claimStatus, setClaimStatus] = useState({});
   const [claimedHistory, setClaimedHistory] = useState([]);
+  const [showRoyaltySuccessModal, setShowRoyaltySuccessModal] = useState(false);
 
   // Collapsible Section States
   const [isAvailableOpen, setIsAvailableOpen] = useState(true);
@@ -860,6 +864,9 @@ export default function Checker() {
       }
 
       setClaimStatus(prev => ({ ...prev, [claimKey]: 'claimed' }));
+      if (type === 'vibeclub') {
+        setShowRoyaltySuccessModal(true);
+      }
     } catch (err) {
       console.error('Claim transaction error:', err);
       setClaimStatus(prev => ({ ...prev, [claimKey]: 'idle' }));
@@ -1524,6 +1531,29 @@ export default function Checker() {
                                   <span style={{ fontSize: '0.66rem', fontWeight: 800, background: 'rgba(0, 200, 255, 0.1)', color: '#0284c7', border: '1px solid rgba(0, 200, 255, 0.25)', padding: '2px 7px', borderRadius: '99px', lineHeight: 1.2, whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center' }}>
                                     Royalty 1
                                   </span>
+                                  {isAdmin && (
+                                    <button
+                                      onClick={() => setShowRoyaltySuccessModal(true)}
+                                      style={{
+                                        fontSize: '0.66rem',
+                                        fontWeight: 900,
+                                        background: 'rgba(255, 102, 0, 0.12)',
+                                        color: '#ea580c',
+                                        border: '1px solid rgba(255, 102, 0, 0.3)',
+                                        padding: '2px 8px',
+                                        borderRadius: '99px',
+                                        lineHeight: 1.2,
+                                        whiteSpace: 'nowrap',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '4px',
+                                        cursor: 'pointer'
+                                      }}
+                                      title="Admin: Preview the Royalty Claim Success Modal"
+                                    >
+                                      👑 Preview Modal
+                                    </button>
+                                  )}
                                 </div>
                               </div>
                               <span
@@ -1647,7 +1677,51 @@ export default function Checker() {
 
                           {/* Action Button */}
                           <div>
-                            {(hasConfirmedRoyaltyClaim || isVibeClubEligible) ? (
+                            {isVibeClubRoyalty1Claimed ? (
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                <button
+                                  disabled
+                                  style={{
+                                    width: '100%',
+                                    padding: '12px 18px',
+                                    borderRadius: '12px',
+                                    fontSize: '0.90rem',
+                                    fontWeight: 900,
+                                    background: '#ecfdf5',
+                                    color: '#059669',
+                                    border: '1.5px solid #a7f3d0',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '6px',
+                                    cursor: 'default'
+                                  }}
+                                >
+                                  <CheckCircle2 size={16} color="#059669" /> Claimed Successfully
+                                </button>
+                                <button
+                                  onClick={() => setShowRoyaltySuccessModal(true)}
+                                  style={{
+                                    width: '100%',
+                                    padding: '10px 16px',
+                                    borderRadius: '12px',
+                                    fontSize: '0.84rem',
+                                    fontWeight: 800,
+                                    background: '#000000',
+                                    color: '#ffffff',
+                                    border: 'none',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '6px',
+                                    cursor: 'pointer',
+                                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)'
+                                  }}
+                                >
+                                  <Share2 size={14} /> Share Claim on X
+                                </button>
+                              </div>
+                            ) : (hasConfirmedRoyaltyClaim || isVibeClubEligible) ? (
                               <button
                                 onClick={() => handleClaim('vibeclub', 1, vibeClubRewardAmount)}
                                 disabled={claimStatus['vibeclub-1'] === 'claiming'}
@@ -2294,9 +2368,31 @@ export default function Checker() {
                             </div>
                           </div>
 
-                          {/* Middle: Amount */}
-                          <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#10b981' }}>
-                            +{typeof item?.amount === 'number' ? item.amount.toLocaleString('en-US') : (item?.amount || '0')} <span style={{ fontSize: '0.85rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
+                          {/* Right: Amount & Share button */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+                            <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#10b981' }}>
+                              +{typeof item?.amount === 'number' ? item.amount.toLocaleString('en-US') : (item?.amount || '0')} <span style={{ fontSize: '0.85rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
+                            </div>
+                            {(item?.type === 'vibeclub' || item?.id?.includes('vibeclub')) && (
+                              <button
+                                onClick={() => setShowRoyaltySuccessModal(true)}
+                                style={{
+                                  background: '#000000',
+                                  color: '#ffffff',
+                                  border: 'none',
+                                  padding: '7px 12px',
+                                  borderRadius: '9px',
+                                  fontSize: '0.78rem',
+                                  fontWeight: 800,
+                                  cursor: 'pointer',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '5px'
+                                }}
+                              >
+                                <Share2 size={12} /> Share
+                              </button>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -2354,23 +2450,44 @@ export default function Checker() {
                   <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em' }}>
                     Admin Panel
                   </h3>
-                  <a
-                    href={`https://basescan.org/address/${adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{
-                      fontSize: '0.78rem',
-                      color: '#94a3b8',
-                      textDecoration: 'none',
-                      fontFamily: 'monospace',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      padding: '5px 10px',
-                      borderRadius: '8px',
-                      border: '1px solid rgba(255, 255, 255, 0.1)'
-                    }}
-                  >
-                    Contract: {(adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)).slice(0, 6)}...{(adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)).slice(-4)} ↗
-                  </a>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                    <button
+                      onClick={() => setShowRoyaltySuccessModal(true)}
+                      style={{
+                        fontSize: '0.78rem',
+                        fontWeight: 800,
+                        background: 'linear-gradient(135deg, #0284c7 0%, #0052ff 100%)',
+                        color: '#ffffff',
+                        border: 'none',
+                        padding: '6px 12px',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        boxShadow: '0 2px 8px rgba(0, 82, 255, 0.3)'
+                      }}
+                    >
+                      <Sparkles size={13} /> Preview Royalty Claim Modal
+                    </button>
+                    <a
+                      href={`https://basescan.org/address/${adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        fontSize: '0.78rem',
+                        color: '#94a3b8',
+                        textDecoration: 'none',
+                        fontFamily: 'monospace',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        padding: '5px 10px',
+                        borderRadius: '8px',
+                        border: '1px solid rgba(255, 255, 255, 0.1)'
+                      }}
+                    >
+                      Contract: {(adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)).slice(0, 6)}...{(adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA)).slice(-4)} ↗
+                    </a>
+                  </div>
                 </div>
 
                 {/* Distributor Selector Tabs */}
@@ -2721,6 +2838,192 @@ export default function Checker() {
         )}
 
       </div>
+
+      {/* ═════════════════════════════════════════════════════════════════════════ */}
+      {/* 👑 VIBE CLUB ROYALTY CLAIM SUCCESS MODAL                              */}
+      {/* ═════════════════════════════════════════════════════════════════════════ */}
+      {showRoyaltySuccessModal && (
+        <div
+          onClick={() => setShowRoyaltySuccessModal(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 99999,
+            background: 'rgba(5, 10, 25, 0.78)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+            animation: 'fadeIn 0.25s ease-out'
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: 'relative',
+              background: '#ffffff',
+              borderRadius: '28px',
+              padding: '32px 28px',
+              maxWidth: '520px',
+              width: '100%',
+              boxShadow: '0 25px 60px -15px rgba(0, 50, 150, 0.35)',
+              border: '1.5px solid rgba(0, 200, 255, 0.3)',
+              textAlign: 'center',
+              boxSizing: 'border-box'
+            }}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setShowRoyaltySuccessModal(false)}
+              style={{
+                position: 'absolute',
+                top: '18px',
+                right: '18px',
+                background: '#f1f5f9',
+                border: 'none',
+                borderRadius: '50%',
+                width: '36px',
+                height: '36px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                color: '#64748b',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#e2e8f0'; e.currentTarget.style.color = '#0f172a'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.color = '#64748b'; }}
+            >
+              <X size={18} />
+            </button>
+
+            {/* Success Green Badge */}
+            <div
+              style={{
+                width: '62px',
+                height: '62px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 16px auto',
+                boxShadow: '0 10px 25px rgba(16, 185, 129, 0.4)'
+              }}
+            >
+              <Check size={32} color="#ffffff" strokeWidth={3.2} />
+            </div>
+
+            {/* Title & Subtitle */}
+            <h3
+              style={{
+                fontSize: '1.55rem',
+                fontWeight: 900,
+                color: '#0f172a',
+                margin: '0 0 6px 0',
+                letterSpacing: '-0.02em'
+              }}
+            >
+              Claim Successful!
+            </h3>
+            <p
+              style={{
+                fontSize: '0.94rem',
+                color: '#64748b',
+                margin: '0 0 20px 0',
+                fontWeight: 600
+              }}
+            >
+              You’ve claimed <strong style={{ color: '#0284c7', fontWeight: 900 }}>22,935 $VIBE</strong> in Club Royalties 🐶🔥
+            </p>
+
+            {/* Royalty Banner Image */}
+            <div
+              style={{
+                position: 'relative',
+                borderRadius: '18px',
+                overflow: 'hidden',
+                border: '1.5px solid rgba(0, 200, 255, 0.35)',
+                boxShadow: '0 12px 30px rgba(0, 102, 255, 0.16)',
+                marginBottom: '22px'
+              }}
+            >
+              <img
+                src="/vibe-club-royalties-banner.jpg"
+                alt="Vibe Club Royalties Banner"
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block',
+                  borderRadius: '16px'
+                }}
+              />
+            </div>
+
+            {/* Action Buttons */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <a
+                href="/vibe-club-royalties-banner.jpg"
+                download="vibe-club-royalties-claimed.jpg"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  padding: '14px 18px',
+                  borderRadius: '14px',
+                  background: '#f8fafc',
+                  color: '#334155',
+                  border: '1.5px solid #cbd5e1',
+                  fontSize: '0.92rem',
+                  fontWeight: 800,
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = '#e2e8f0'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
+              >
+                <Download size={18} /> Save Image
+              </a>
+
+              <button
+                onClick={() => {
+                  const tweetText = `JUST CLAIMED MY NFT ROYALTIES 🐶💰\n\nHolding Vibe Club NFT unlocks passive $VIBE payouts every 10 days to all Club Members\n\nJoin → https://vibeverse.dog/vibeclub?ref=x`;
+                  const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+                  window.open(shareUrl, '_blank', 'noopener,noreferrer');
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  padding: '14px 18px',
+                  borderRadius: '14px',
+                  background: '#000000',
+                  color: '#ffffff',
+                  border: 'none',
+                  fontSize: '0.92rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  boxShadow: '0 6px 20px rgba(0, 0, 0, 0.25)',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.35)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.25)'; }}
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                Share on X
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
