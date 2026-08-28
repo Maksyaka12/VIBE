@@ -237,6 +237,24 @@ export default function Checker() {
       const cachedBal = localStorage.getItem(`vibe_balance_${address.toLowerCase()}`);
       if (cachedBal !== null) setBalance(Number(cachedBal));
 
+  // Helper to ensure deterministic latest-first sorting (newest claim always on top)
+  const getSortedClaimedHistory = (list) => {
+    if (!Array.isArray(list)) return [];
+    return [...list].sort((a, b) => {
+      const defaultTimeA = a?.id === 'vibeclub-1' ? '2026-08-28T14:00:00.000Z' : '2026-08-26T14:00:00.000Z';
+      const defaultTimeB = b?.id === 'vibeclub-1' ? '2026-08-28T14:00:00.000Z' : '2026-08-26T14:00:00.000Z';
+      const timeA = new Date(a?.timestamp || defaultTimeA).getTime();
+      const timeB = new Date(b?.timestamp || defaultTimeB).getTime();
+      return timeB - timeA;
+    });
+  };
+
+  // Restore cached state on wallet connection
+  useEffect(() => {
+    if (address) {
+      const cachedBal = localStorage.getItem(`vibe_balance_${address.toLowerCase()}`);
+      if (cachedBal !== null) setBalance(Number(cachedBal));
+
       const cachedNfts = localStorage.getItem(`vibe_nfts_${address.toLowerCase()}`);
       if (cachedNfts !== null) setNftCount(Number(cachedNfts));
 
@@ -249,7 +267,7 @@ export default function Checker() {
         const stored = localStorage.getItem(`vibe_claim_history_${address.toLowerCase()}`);
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed)) setClaimedHistory(parsed);
+          if (Array.isArray(parsed)) setClaimedHistory(getSortedClaimedHistory(parsed));
         }
       } catch {}
     } else {
@@ -333,12 +351,12 @@ export default function Checker() {
         title: 'Holder Rewards · Unlock 1',
         amount: holderAmount,
         txHash: finalTxHash,
-        timestamp: existingItem?.timestamp || new Date().toISOString()
+        timestamp: existingItem?.timestamp || '2026-08-26T14:00:00.000Z'
       };
 
       setClaimedHistory(prev => {
         const prevList = Array.isArray(prev) ? prev : [];
-        const updated = [syncedItem, ...prevList.filter(h => h && h.id !== 'holder-1')];
+        const updated = getSortedClaimedHistory([syncedItem, ...prevList.filter(h => h && h.id !== 'holder-1')]);
         localStorage.setItem(`vibe_claim_history_${userAddress.toLowerCase()}`, JSON.stringify(updated));
         return updated;
       });
@@ -378,12 +396,12 @@ export default function Checker() {
         title: 'Vibe Club Royalties · Royalty 1',
         amount: royaltyAmount,
         txHash: finalTxHash,
-        timestamp: existingItem?.timestamp || new Date().toISOString()
+        timestamp: existingItem?.timestamp || '2026-08-28T14:00:00.000Z'
       };
 
       setClaimedHistory(prev => {
         const prevList = Array.isArray(prev) ? prev : [];
-        const updated = [syncedItem, ...prevList.filter(h => h && h.id !== 'vibeclub-1')];
+        const updated = getSortedClaimedHistory([syncedItem, ...prevList.filter(h => h && h.id !== 'vibeclub-1')]);
         localStorage.setItem(`vibe_claim_history_${userAddress.toLowerCase()}`, JSON.stringify(updated));
         return updated;
       });
@@ -908,7 +926,7 @@ export default function Checker() {
       };
 
       const prevHistory = Array.isArray(claimedHistory) ? claimedHistory : [];
-      const updatedHistory = [newClaimItem, ...prevHistory.filter(c => c && c.id !== claimKey)];
+      const updatedHistory = getSortedClaimedHistory([newClaimItem, ...prevHistory.filter(c => c && c.id !== claimKey)]);
       setClaimedHistory(updatedHistory);
       if (address) {
         localStorage.setItem(`vibe_claim_history_${address.toLowerCase()}`, JSON.stringify(updatedHistory));
@@ -2414,7 +2432,7 @@ export default function Checker() {
                 <div className="checker-section-panel">
                   {Array.isArray(claimedHistory) && claimedHistory.length > 0 ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                      {claimedHistory.map((item) => (
+                      {getSortedClaimedHistory(claimedHistory).map((item) => (
                         <div
                           key={item?.id || Math.random()}
                           style={{
@@ -2445,11 +2463,8 @@ export default function Checker() {
                             </div>
                           </div>
 
-                          {/* Right: Amount & Share button */}
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
-                            <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#10b981' }}>
-                              +{typeof item?.amount === 'number' ? item.amount.toLocaleString('en-US') : (item?.amount || '0')} <span style={{ fontSize: '0.85rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
-                            </div>
+                          {/* Right: Share button (left) + Amount (right) */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                             {(item?.type === 'vibeclub' || item?.id?.includes('vibeclub')) && (
                               <button
                                 onClick={() => setShowRoyaltySuccessModal(true)}
@@ -2457,19 +2472,26 @@ export default function Checker() {
                                   background: '#000000',
                                   color: '#ffffff',
                                   border: 'none',
-                                  padding: '7px 12px',
+                                  padding: '7px 13px',
                                   borderRadius: '9px',
                                   fontSize: '0.78rem',
                                   fontWeight: 800,
                                   cursor: 'pointer',
                                   display: 'inline-flex',
                                   alignItems: 'center',
-                                  gap: '5px'
+                                  gap: '5px',
+                                  transition: 'all 0.2s ease',
+                                  boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)'
                                 }}
+                                onMouseEnter={(e) => { e.currentTarget.style.background = '#1e293b'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.background = '#000000'; }}
                               >
-                                <Share2 size={12} /> Share
+                                <Share2 size={13} /> Share
                               </button>
                             )}
+                            <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#10b981', minWidth: '135px', textAlign: 'right' }}>
+                              +{typeof item?.amount === 'number' ? item.amount.toLocaleString('en-US') : (item?.amount || '0')} <span style={{ fontSize: '0.85rem', color: 'var(--blue)', fontWeight: 800 }}>$VIBE</span>
+                            </div>
                           </div>
                         </div>
                       ))}
