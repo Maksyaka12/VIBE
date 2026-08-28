@@ -464,15 +464,19 @@ export default function Checker() {
   const upcomingVibeClubRound = isVibeClubRoyalty1Live ? VIBECLUB_ROUNDS[1] : VIBECLUB_ROUNDS[0];
 
   // ⚡ High-Speed Admin Metrics Unified Multicall (<350ms)
-  const fetchAdminMetrics = async () => {
+  const fetchAdminMetrics = async (overrideType, overrideEpoch, overrideCa) => {
     try {
+      const type = overrideType || adminDistributorType;
+      const epoch = overrideEpoch || adminEpochId || '1';
       const client = getPublicClient();
       const claims = Object.values(
-        adminDistributorType === 'holder'
+        type === 'holder'
           ? (round1Data?.claims || {})
           : (royalty1Data?.claims || {})
       );
-      const targetCa = adminDistributorType === 'holder' ? DISTRIBUTOR_CA : (adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA);
+      const targetCa = type === 'holder' ? DISTRIBUTOR_CA : (overrideCa || adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA);
+
+      setAdminMetrics(prev => ({ ...prev, metricsLoading: true }));
 
       // 1 single multicall for distributor balance + all hasClaimed states
       const calls = [
@@ -486,7 +490,7 @@ export default function Checker() {
           address: targetCa,
           abi: parseAbi(['function hasClaimed(uint256, address) view returns (bool)']),
           functionName: 'hasClaimed',
-          args: [BigInt(adminEpochId || '1'), c.address]
+          args: [BigInt(epoch), c.address]
         }))
       ];
 
@@ -505,16 +509,20 @@ export default function Checker() {
         }
       }
 
+      const totalWallets = claims.length || (type === 'holder' ? 42 : 109);
+      const totalPool = type === 'holder' ? 10000000 : 2500000;
+
       const newMetrics = {
         contractBalance,
         claimedWalletsCount,
-        totalWalletsCount: claims.length || 42,
+        totalWalletsCount: totalWallets,
         claimedTokens,
+        unclaimedTokens: Math.max(0, totalPool - claimedTokens),
         metricsLoading: false
       };
 
       setAdminMetrics(newMetrics);
-      localStorage.setItem('vibe_admin_metrics', JSON.stringify(newMetrics));
+      localStorage.setItem(`vibe_admin_metrics_${type}`, JSON.stringify(newMetrics));
     } catch (e) {
       console.warn('Failed to fetch admin metrics:', e);
       setAdminMetrics(prev => ({ ...prev, metricsLoading: false }));
@@ -525,14 +533,14 @@ export default function Checker() {
   useEffect(() => {
     if (authenticated && address) {
       fetchBalances();
-      if (isAdmin) fetchAdminMetrics();
+      if (isAdmin) fetchAdminMetrics(adminDistributorType, adminEpochId, adminCustomRoyaltyCa);
       const interval = setInterval(() => {
         fetchBalances();
-        if (isAdmin) fetchAdminMetrics();
+        if (isAdmin) fetchAdminMetrics(adminDistributorType, adminEpochId, adminCustomRoyaltyCa);
       }, 12000);
       return () => clearInterval(interval);
     }
-  }, [authenticated, address, isAdmin, adminEpochId]);
+  }, [authenticated, address, isAdmin, adminEpochId, adminDistributorType, adminCustomRoyaltyCa]);
 
   // Generic Admin Transaction Sender (supports Smart Wallet batching & EOA)
   const sendAdminTx = async (to, data) => {
@@ -2372,6 +2380,7 @@ export default function Checker() {
                       setAdminDistributorType('holder');
                       setAdminEpochId('1');
                       setAdminMerkleRoot(round1Data?.merkleRoot || '');
+                      fetchAdminMetrics('holder', '1', DISTRIBUTOR_CA);
                     }}
                     style={{
                       flex: 1,
@@ -2393,6 +2402,7 @@ export default function Checker() {
                       setAdminDistributorType('royalty');
                       setAdminEpochId('1');
                       setAdminMerkleRoot(royalty1Data?.merkleRoot || '');
+                      fetchAdminMetrics('royalty', '1', adminCustomRoyaltyCa || ROYALTY_DISTRIBUTOR_CA);
                     }}
                     style={{
                       flex: 1,
@@ -2417,7 +2427,13 @@ export default function Checker() {
                     <input
                       type="text"
                       value={adminCustomRoyaltyCa}
-                      onChange={(e) => setAdminCustomRoyaltyCa(e.target.value.trim())}
+                      onChange={(e) => {
+                        const newCa = e.target.value.trim();
+                        setAdminCustomRoyaltyCa(newCa);
+                        if (newCa.length === 42) {
+                          fetchAdminMetrics('royalty', adminEpochId, newCa);
+                        }
+                      }}
                       placeholder="0x... Royalty Distributor Address"
                       style={{
                         flex: 1,
@@ -2480,7 +2496,7 @@ export default function Checker() {
                       Unclaimed in Round
                     </div>
                     <div style={{ fontSize: '1.20rem', fontWeight: 800, color: '#fbbf24' }}>
-                      {adminMetrics.metricsLoading ? '...' : Math.max(0, 10000000 - (adminMetrics.claimedTokens || 0)).toLocaleString('en-US') + ' $VIBE'}
+                      {adminMetrics.metricsLoading ? '...' : (adminMetrics.unclaimedTokens !== undefined ? adminMetrics.unclaimedTokens : Math.max(0, (adminDistributorType === 'holder' ? 10000000 : 2500000) - (adminMetrics.claimedTokens || 0))).toLocaleString('en-US') + ' $VIBE'}
                     </div>
                   </div>
                 </div>
@@ -2637,7 +2653,7 @@ export default function Checker() {
                         }}
                       />
                       <button
-                        onClick={() => setAdminBurnAmount(String(Math.max(0, 10000000 - (adminMetrics.claimedTokens || 0))))}
+                        onClick={() => setAdminBurnAmount(String(adminMetrics.unclaimedTokens !== undefined ? adminMetrics.unclaimedTokens : Math.max(0, (adminDistributorType === 'holder' ? 10000000 : 2500000) - (adminMetrics.claimedTokens || 0))))}
                         style={{
                           position: 'absolute',
                           right: '8px',
