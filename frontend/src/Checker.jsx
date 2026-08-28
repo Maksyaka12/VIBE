@@ -2970,55 +2970,115 @@ export default function Checker() {
               />
             </div>
 
-            {/* Action Buttons */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              <button
-                onClick={handleDownloadRoyaltyBanner}
-                disabled={downloadingBanner}
-                className="royalty-modal-btn"
-                style={{
-                  background: '#f8fafc',
-                  color: '#334155',
-                  border: '1.5px solid #cbd5e1',
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = '#e2e8f0'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
-              >
-                {downloadingBanner ? (
-                  <>
-                    <Loader2 size={16} className="spin" /> Saving...
-                  </>
-                ) : (
-                  <>
-                    <Download size={16} /> Save Image
-                  </>
-                )}
-              </button>
+            {/* Action Buttons Flow (Step 1 & Step 2) */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', textAlign: 'left' }}>
+              {/* Step 1 Column */}
+              <div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  marginBottom: '6px',
+                  fontSize: '0.68rem',
+                  fontWeight: 900,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
+                  color: '#0284c7'
+                }}>
+                  <span style={{
+                    width: '16px',
+                    height: '16px',
+                    borderRadius: '50%',
+                    background: 'rgba(2, 132, 199, 0.12)',
+                    border: '1px solid rgba(2, 132, 199, 0.3)',
+                    color: '#0284c7',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.62rem',
+                    fontWeight: 900
+                  }}>1</span>
+                  <span>STEP 1 · SAVE</span>
+                </div>
+                <button
+                  onClick={handleDownloadRoyaltyBanner}
+                  disabled={downloadingBanner}
+                  className="royalty-modal-btn"
+                  style={{
+                    width: '100%',
+                    background: '#f8fafc',
+                    color: '#334155',
+                    border: '1.5px solid #cbd5e1',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = '#e2e8f0'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = '#f8fafc'; }}
+                >
+                  {downloadingBanner ? (
+                    <>
+                      <Loader2 size={15} className="spin" /> Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Download size={15} /> Save Image
+                    </>
+                  )}
+                </button>
+              </div>
 
-              <button
-                onClick={() => {
-                  const tweetText = `JUST CLAIMED MY NFT ROYALTIES 🐶💰\n\nHolding Vibe Club NFT unlocks passive $VIBE payouts every 10 days to all Club Members\n\nJoin → https://vibeverse.dog/vibeclub?ref=x`;
-                  const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
-                  window.open(shareUrl, '_blank', 'noopener,noreferrer');
-                }}
-                className="royalty-modal-btn"
-                style={{
-                  background: '#000000',
-                  color: '#ffffff',
-                  border: 'none',
-                  boxShadow: '0 6px 20px rgba(0, 0, 0, 0.25)',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.35)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.25)'; }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-                Share on X
-              </button>
+              {/* Step 2 Column */}
+              <div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  marginBottom: '6px',
+                  fontSize: '0.68rem',
+                  fontWeight: 900,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
+                  color: '#0f172a'
+                }}>
+                  <span style={{
+                    width: '16px',
+                    height: '16px',
+                    borderRadius: '50%',
+                    background: 'rgba(15, 23, 42, 0.08)',
+                    border: '1px solid rgba(15, 23, 42, 0.2)',
+                    color: '#0f172a',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.62rem',
+                    fontWeight: 900
+                  }}>2</span>
+                  <span>STEP 2 · POST</span>
+                </div>
+                <button
+                  onClick={() => {
+                    const tweetText = `JUST CLAIMED MY NFT ROYALTIES 🐶💰\n\nHolding Vibe Club NFT unlocks passive $VIBE payouts every 10 days to all Club Members\n\nJoin → https://vibeverse.dog/vibeclub?ref=x`;
+                    const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+                    window.open(shareUrl, '_blank', 'noopener,noreferrer');
+                  }}
+                  className="royalty-modal-btn"
+                  style={{
+                    width: '100%',
+                    background: '#000000',
+                    color: '#ffffff',
+                    border: 'none',
+                    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.25)',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.35)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.25)'; }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                  Share on X
+                </button>
+              </div>
             </div>
           </div>
         </div>
