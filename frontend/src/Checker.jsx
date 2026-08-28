@@ -302,7 +302,7 @@ export default function Checker() {
     }
   };
 
-  // Asynchronous background sync of claimed transaction history
+  // Asynchronous background sync of claimed transaction history for Holder Rewards
   const syncClaimHistory = async (client, userAddress) => {
     try {
       const currentBlock = await client.getBlockNumber();
@@ -310,35 +310,85 @@ export default function Checker() {
         address: CA,
         event: parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)'),
         args: { from: DISTRIBUTOR_CA, to: userAddress },
-        fromBlock: currentBlock > 10000n ? (currentBlock - 9000n) : 0n,
+        fromBlock: currentBlock > 20000n ? (currentBlock - 19000n) : 0n,
         toBlock: currentBlock
-      });
+      }).catch(() => []);
       let realTxHash = null;
       if (logs && logs.length > 0) {
         realTxHash = logs[logs.length - 1].transactionHash;
       }
 
       const existingHistory = JSON.parse(localStorage.getItem(`vibe_claim_history_${userAddress.toLowerCase()}`) || '[]');
-      const existingItem = existingHistory.find(h => h.id === 'holder-1');
+      const existingItem = existingHistory.find(h => h && h.id === 'holder-1');
       const finalTxHash = (realTxHash && realTxHash.length === 66) 
         ? realTxHash 
         : (existingItem?.txHash && existingItem.txHash.length === 66 ? existingItem.txHash : realTxHash);
+
+      const holderAmount = round1Data?.claims?.[userAddress.toLowerCase()]?.amount || 126127;
 
       const syncedItem = {
         id: 'holder-1',
         type: 'holder',
         roundId: 1,
         title: 'Holder Rewards · Unlock 1',
-        amount: (userProofData?.amount || 126127),
+        amount: holderAmount,
         txHash: finalTxHash,
         timestamp: existingItem?.timestamp || new Date().toISOString()
       };
 
-      const updated = [syncedItem, ...existingHistory.filter(h => h.id !== 'holder-1')];
-      setClaimedHistory(updated);
-      localStorage.setItem(`vibe_claim_history_${userAddress.toLowerCase()}`, JSON.stringify(updated));
+      setClaimedHistory(prev => {
+        const prevList = Array.isArray(prev) ? prev : [];
+        const updated = [syncedItem, ...prevList.filter(h => h && h.id !== 'holder-1')];
+        localStorage.setItem(`vibe_claim_history_${userAddress.toLowerCase()}`, JSON.stringify(updated));
+        return updated;
+      });
     } catch (claimErr) {
       console.warn('Background sync claim history error:', claimErr);
+    }
+  };
+
+  // Asynchronous background sync of claimed transaction history for Vibe Club Royalties
+  const syncRoyaltyClaimHistory = async (client, userAddress, targetCa) => {
+    try {
+      const currentBlock = await client.getBlockNumber();
+      const logs = await client.getLogs({
+        address: CA,
+        event: parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)'),
+        args: { from: targetCa, to: userAddress },
+        fromBlock: currentBlock > 20000n ? (currentBlock - 19000n) : 0n,
+        toBlock: currentBlock
+      }).catch(() => []);
+      let realTxHash = null;
+      if (logs && logs.length > 0) {
+        realTxHash = logs[logs.length - 1].transactionHash;
+      }
+
+      const existingHistory = JSON.parse(localStorage.getItem(`vibe_claim_history_${userAddress.toLowerCase()}`) || '[]');
+      const existingItem = existingHistory.find(h => h && h.id === 'vibeclub-1');
+      const finalTxHash = (realTxHash && realTxHash.length === 66) 
+        ? realTxHash 
+        : (existingItem?.txHash && existingItem.txHash.length === 66 ? existingItem.txHash : realTxHash);
+
+      const royaltyAmount = royalty1Data?.claims?.[userAddress.toLowerCase()]?.amount || 22935;
+
+      const syncedItem = {
+        id: 'vibeclub-1',
+        type: 'vibeclub',
+        roundId: 1,
+        title: 'Vibe Club Royalties · Royalty 1',
+        amount: royaltyAmount,
+        txHash: finalTxHash,
+        timestamp: existingItem?.timestamp || new Date().toISOString()
+      };
+
+      setClaimedHistory(prev => {
+        const prevList = Array.isArray(prev) ? prev : [];
+        const updated = [syncedItem, ...prevList.filter(h => h && h.id !== 'vibeclub-1')];
+        localStorage.setItem(`vibe_claim_history_${userAddress.toLowerCase()}`, JSON.stringify(updated));
+        return updated;
+      });
+    } catch (claimErr) {
+      console.warn('Background sync royalty claim history error:', claimErr);
     }
   };
 
@@ -418,6 +468,7 @@ export default function Checker() {
       }
       if (results[4]?.status === 'success' && results[4].result === true) {
         setClaimStatus(prev => ({ ...prev, 'vibeclub-1': 'claimed' }));
+        syncRoyaltyClaimHistory(client, address, targetRoyaltyCa);
       }
     } catch (e) {
       console.warn("Background balance fetch error:", e);
