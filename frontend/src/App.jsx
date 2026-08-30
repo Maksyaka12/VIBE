@@ -2428,9 +2428,10 @@ function Rewards() {
                         </div>
                       </div>
 
-                      {/* Action Button: Claim or Locked */}
+                      {/* Action Button: Claim redirect or Locked */}
                       {isUnlocked ? (
-                        <button
+                        <Link
+                          to="/claim"
                           className="btn-fill"
                           style={{
                             background: 'var(--blue)',
@@ -2447,13 +2448,11 @@ function Rewards() {
                             textDecoration: 'none',
                             whiteSpace: 'nowrap',
                             boxShadow: '0 4px 16px rgba(0, 0, 255, 0.3)',
-                            transition: 'all 0.15s',
-                            cursor: 'pointer',
-                            border: 'none'
+                            transition: 'all 0.15s'
                           }}
                         >
                           <span>Claim</span> <ArrowUpRight size={15} strokeWidth={2.5} />
-                        </button>
+                        </Link>
                       ) : (
                         <button
                           disabled
