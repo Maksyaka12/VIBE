@@ -1301,6 +1301,15 @@ function GiveawayCountdown({ targetDate, isOngoing }) {
 
 const GIVEAWAYS_DATA = [
   {
+    id: 5,
+    title: 'Meme & Art',
+    prizePool: '$50 in ETH',
+    status: 'ongoing',
+    distribution: 'Not Started',
+    deadlineDate: new Date('2026-09-02T13:00:00Z'),
+    link: 'https://x.com/noelle_base/status/2094038840927203494'
+  },
+  {
     id: 4,
     title: '7 NFTs Vibe Club',
     image: '/rewards/vibe-club.jfif',
@@ -3024,25 +3033,28 @@ function Rewards() {
 
                         {/* Key-Values with Icons */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
-                            <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
-                              <Users size={12} color="#0284c7" /> Winners
-                            </span>
-                            <strong style={{ color: isOngoing ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ev.winners}</strong>
-                          </div>
-                          {ev.deadlineDate ? (
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
-                              <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
-                                <Clock size={12} color="#0284c7" /> Deadline
-                              </span>
-                              <GiveawayCountdown targetDate={ev.deadlineDate} isOngoing={isOngoing} />
-                            </div>
-                          ) : (
+                          {ev.distribution && (
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
                               <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
                                 <Gift size={12} color="#0284c7" /> Distribution
                               </span>
                               <strong style={{ color: isOngoing ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ev.distribution}</strong>
+                            </div>
+                          )}
+                          {ev.winners && (
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                              <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                                <Users size={12} color="#0284c7" /> Winners
+                              </span>
+                              <strong style={{ color: isOngoing ? 'var(--ink)' : '#475569', fontWeight: 700, fontSize: '0.76rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{ev.winners}</strong>
+                            </div>
+                          )}
+                          {ev.deadlineDate && (
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 255, 255, 0.65)', padding: '7px 11px', borderRadius: '10px', border: '1px solid rgba(0, 160, 255, 0.12)', gap: '8px' }}>
+                              <span style={{ color: '#64748b', fontWeight: 700, fontSize: '0.74rem', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '5px', flexShrink: 0 }}>
+                                <Clock size={12} color="#0284c7" /> Deadline
+                              </span>
+                              <GiveawayCountdown targetDate={ev.deadlineDate} isOngoing={isOngoing} />
                             </div>
                           )}
                         </div>
