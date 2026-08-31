@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { BaseAppHeader } from './BaseAppHeader';
 import { BaseAppSidebar } from './BaseAppSidebar';
 import Checker from '../Checker';
+import NftClubPage from '../pages/NftClubPage';
 
 export function BaseAppView({ RewardsComponent }) {
   const location = useLocation();
@@ -12,6 +13,7 @@ export function BaseAppView({ RewardsComponent }) {
   const getInitialTab = () => {
     const path = location.pathname.toLowerCase();
     if (path.includes('claim') || path.includes('checker')) return 'claim';
+    if (path.includes('vibeclub') || path.includes('vibe-club') || path.includes('mint') || path.includes('nft')) return 'vibeclub';
     return 'hub';
   };
 
@@ -28,6 +30,8 @@ export function BaseAppView({ RewardsComponent }) {
     setActiveTab(tabId);
     if (tabId === 'claim') {
       navigate('/claim', { replace: false });
+    } else if (tabId === 'vibeclub') {
+      navigate('/vibeclub', { replace: false });
     } else {
       navigate('/hub', { replace: false });
     }
@@ -35,7 +39,7 @@ export function BaseAppView({ RewardsComponent }) {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg, #f8fafc)', color: 'var(--ink, #0f172a)' }}>
+    <div style={{ minHeight: '100vh', background: activeTab === 'vibeclub' ? '#020b1a' : 'var(--bg, #f8fafc)', color: 'var(--ink, #0f172a)' }}>
       {/* Base App Header */}
       <BaseAppHeader
         onOpenSidebar={() => setIsSidebarOpen(true)}
@@ -50,10 +54,12 @@ export function BaseAppView({ RewardsComponent }) {
         onSelectTab={handleSelectTab}
       />
 
-      {/* View Content: Rewards Hub or Claim Portal */}
+      {/* View Content: Rewards Hub, Claim Portal, or Join Vibe Club (NFT Mint) */}
       <main style={{ paddingBottom: '60px' }}>
         {activeTab === 'claim' ? (
           <Checker isBaseAppMode={true} />
+        ) : activeTab === 'vibeclub' ? (
+          <NftClubPage isEmbeddedInBaseApp={true} />
         ) : (
           RewardsComponent ? <RewardsComponent isBaseAppMode={true} /> : null
         )}

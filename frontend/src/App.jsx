@@ -3231,11 +3231,11 @@ function DomainRouter() {
   return (
     <Routes>
       {/* ── Standalone VIBE Club NFT Mint Page / Redirect ── */}
-      <Route path="/vibeclub" element={isGameDomain ? <NftClubPage /> : <VibeClubRedirect />} />
-      <Route path="/vibe-club" element={isGameDomain ? <NftClubPage /> : <VibeClubRedirect />} />
-      <Route path="/nft-club" element={isGameDomain ? <NftClubPage /> : <VibeClubRedirect />} />
-      <Route path="/nft" element={isGameDomain ? <NftClubPage /> : <VibeClubRedirect />} />
-      <Route path="/mint" element={isGameDomain ? <NftClubPage /> : <VibeClubRedirect />} />
+      <Route path="/vibeclub" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : (isGameDomain ? <NftClubPage /> : <VibeClubRedirect />)} />
+      <Route path="/vibe-club" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : (isGameDomain ? <NftClubPage /> : <VibeClubRedirect />)} />
+      <Route path="/nft-club" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : (isGameDomain ? <NftClubPage /> : <VibeClubRedirect />)} />
+      <Route path="/nft" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : (isGameDomain ? <NftClubPage /> : <VibeClubRedirect />)} />
+      <Route path="/mint" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : (isGameDomain ? <NftClubPage /> : <VibeClubRedirect />)} />
 
       {/* ── Dedicated Base App / Vibe Hub Routes ── */}
       <Route path="/app" element={<BaseAppView RewardsComponent={Rewards} />} />

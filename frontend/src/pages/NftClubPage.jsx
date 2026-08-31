@@ -17,7 +17,7 @@ const WalletSvgIcon = ({ size = 14 }) => (
 // NFT Deck strictly from #5 to #35 (31 NFTs)
 const NFT_DECK = Array.from({ length: 31 }, (_, i) => i + 5);
 
-export default function NftClubPage() {
+export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
   const { login, logout, authenticated, user } = usePrivy();
   const walletAddress = user?.wallet?.address;
   const balances = useUserBalances(walletAddress);
@@ -467,7 +467,7 @@ export default function NftClubPage() {
       paddingBottom: '80px',
       overflowX: 'hidden',
       textTransform: 'uppercase',
-      width: '100vw'
+      width: isEmbeddedInBaseApp ? '100%' : '100vw'
     }}>
       {/* Inline animation & Mobile CSS Override */}
       <style>{`
@@ -571,162 +571,164 @@ export default function NftClubPage() {
       `}</style>
 
       {/* ── TOP HEADER / NAV ── */}
-      <header className="vv-nft-club-header" style={{
-        padding: '16px 20px',
-        borderBottom: '1px solid rgba(0, 245, 255, 0.15)',
-        background: 'rgba(2, 11, 26, 0.85)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img src="/new-logo-vibe.png" alt="VIBE" style={{ width: '34px', height: '34px', borderRadius: '8px' }} />
-          <div>
-            <div style={{ fontFamily: 'var(--vv-pixel)', fontSize: '11px', color: '#00f5ff', letterSpacing: '0.5px' }}>
-              VIBE CLUB
-            </div>
-            <div className="vv-nft-club-header-subtext" style={{ fontSize: '8px', color: '#88aacc', marginTop: '2px', letterSpacing: '0.3px' }}>
-              VIBE VERSE: GENESIS
+      {!isEmbeddedInBaseApp && (
+        <header className="vv-nft-club-header" style={{
+          padding: '16px 20px',
+          borderBottom: '1px solid rgba(0, 245, 255, 0.15)',
+          background: 'rgba(2, 11, 26, 0.85)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <img src="/new-logo-vibe.png" alt="VIBE" style={{ width: '34px', height: '34px', borderRadius: '8px' }} />
+            <div>
+              <div style={{ fontFamily: 'var(--vv-pixel)', fontSize: '11px', color: '#00f5ff', letterSpacing: '0.5px' }}>
+                VIBE CLUB
+              </div>
+              <div className="vv-nft-club-header-subtext" style={{ fontSize: '8px', color: '#88aacc', marginTop: '2px', letterSpacing: '0.3px' }}>
+                VIBE VERSE: GENESIS
+              </div>
             </div>
           </div>
-        </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* OpenSea Link (Hidden on mobile) */}
-          <a
-            href={OPENSEA_COLLECTION_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="vv-opensea-btn"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 12px',
-              borderRadius: '20px',
-              background: 'rgba(32, 129, 226, 0.15)',
-              border: '1px solid #2081e2',
-              color: '#2081e2',
-              fontSize: '8px',
-              textDecoration: 'none',
-              fontWeight: 900
-            }}
-          >
-            OPENSEA ↗
-          </a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {/* OpenSea Link (Hidden on mobile) */}
+            <a
+              href={OPENSEA_COLLECTION_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="vv-opensea-btn"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '6px 12px',
+                borderRadius: '20px',
+                background: 'rgba(32, 129, 226, 0.15)',
+                border: '1px solid #2081e2',
+                color: '#2081e2',
+                fontSize: '8px',
+                textDecoration: 'none',
+                fontWeight: 900
+              }}
+            >
+              OPENSEA ↗
+            </a>
 
-          {/* DESKTOP WALLET CONNECT */}
-          <div className="vv-desktop-wallet-btn">
-            {authenticated ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{
-                  background: 'rgba(0, 245, 255, 0.1)',
-                  border: '1px solid rgba(0, 245, 255, 0.3)',
-                  padding: '6px 12px',
-                  borderRadius: '20px',
-                  fontSize: '9px',
-                  color: '#00ff88',
-                  fontFamily: 'var(--vv-pixel)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}>
-                  <WalletSvgIcon size={12} /> {walletAddress?.slice(0, 6)}...{walletAddress?.slice(-4)}
+            {/* DESKTOP WALLET CONNECT */}
+            <div className="vv-desktop-wallet-btn">
+              {authenticated ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{
+                    background: 'rgba(0, 245, 255, 0.1)',
+                    border: '1px solid rgba(0, 245, 255, 0.3)',
+                    padding: '6px 12px',
+                    borderRadius: '20px',
+                    fontSize: '9px',
+                    color: '#00ff88',
+                    fontFamily: 'var(--vv-pixel)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}>
+                    <WalletSvgIcon size={12} /> {walletAddress?.slice(0, 6)}...{walletAddress?.slice(-4)}
+                  </div>
+                  <button
+                    onClick={logout}
+                    style={{
+                      fontFamily: 'var(--vv-pixel)',
+                      background: 'transparent',
+                      border: '1px solid rgba(255, 68, 102, 0.4)',
+                      color: '#ff4466',
+                      padding: '6px 12px',
+                      borderRadius: '20px',
+                      fontSize: '8px',
+                      cursor: 'pointer',
+                      textTransform: 'uppercase'
+                    }}
+                  >
+                    LOGOUT
+                  </button>
                 </div>
+              ) : (
+                <button
+                  onClick={login}
+                  style={{
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '9px',
+                    background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
+                    color: '#fff',
+                    border: '1.5px solid #fff',
+                    padding: '10px 16px',
+                    borderRadius: '10px',
+                    cursor: 'pointer',
+                    boxShadow: '0 0 14px rgba(0, 245, 255, 0.4)',
+                    fontWeight: 900,
+                    textTransform: 'uppercase',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <WalletSvgIcon size={13} /> CONNECT WALLET
+                </button>
+              )}
+            </div>
+
+            {/* MOBILE WALLET CONNECT */}
+            <div className="vv-mobile-wallet-btn" style={{ alignItems: 'center' }}>
+              {authenticated ? (
                 <button
                   onClick={logout}
                   style={{
                     fontFamily: 'var(--vv-pixel)',
-                    background: 'transparent',
-                    border: '1px solid rgba(255, 68, 102, 0.4)',
-                    color: '#ff4466',
-                    padding: '6px 12px',
-                    borderRadius: '20px',
                     fontSize: '8px',
+                    background: 'rgba(0, 245, 255, 0.12)',
+                    border: '1.5px solid #00f5ff',
+                    color: '#00ff88',
+                    padding: '8px 12px',
+                    borderRadius: '10px',
                     cursor: 'pointer',
-                    textTransform: 'uppercase'
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    boxShadow: '0 0 10px rgba(0, 245, 255, 0.3)'
                   }}
                 >
-                  LOGOUT
+                  <WalletSvgIcon size={12} /> {walletAddress?.slice(0, 4)}...{walletAddress?.slice(-3)}
                 </button>
-              </div>
-            ) : (
-              <button
-                onClick={login}
-                style={{
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '9px',
-                  background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
-                  color: '#fff',
-                  border: '1.5px solid #fff',
-                  padding: '10px 16px',
-                  borderRadius: '10px',
-                  cursor: 'pointer',
-                  boxShadow: '0 0 14px rgba(0, 245, 255, 0.4)',
-                  fontWeight: 900,
-                  textTransform: 'uppercase',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
-              >
-                <WalletSvgIcon size={13} /> CONNECT WALLET
-              </button>
-            )}
+              ) : (
+                <button
+                  onClick={login}
+                  style={{
+                    fontFamily: 'var(--vv-pixel)',
+                    fontSize: '8px',
+                    background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
+                    color: '#fff',
+                    border: '1.5px solid #ffffff',
+                    padding: '8px 12px',
+                    borderRadius: '10px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    boxShadow: '0 0 12px rgba(0, 245, 255, 0.4)',
+                    fontWeight: 900
+                  }}
+                >
+                  <WalletSvgIcon size={12} /> CONNECT
+                </button>
+              )}
+            </div>
           </div>
-
-          {/* MOBILE WALLET CONNECT */}
-          <div className="vv-mobile-wallet-btn" style={{ alignItems: 'center' }}>
-            {authenticated ? (
-              <button
-                onClick={logout}
-                style={{
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '8px',
-                  background: 'rgba(0, 245, 255, 0.12)',
-                  border: '1.5px solid #00f5ff',
-                  color: '#00ff88',
-                  padding: '8px 12px',
-                  borderRadius: '10px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  boxShadow: '0 0 10px rgba(0, 245, 255, 0.3)'
-                }}
-              >
-                <WalletSvgIcon size={12} /> {walletAddress?.slice(0, 4)}...{walletAddress?.slice(-3)}
-              </button>
-            ) : (
-              <button
-                onClick={login}
-                style={{
-                  fontFamily: 'var(--vv-pixel)',
-                  fontSize: '8px',
-                  background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
-                  color: '#fff',
-                  border: '1.5px solid #ffffff',
-                  padding: '8px 12px',
-                  borderRadius: '10px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  boxShadow: '0 0 12px rgba(0, 245, 255, 0.4)',
-                  fontWeight: 900
-                }}
-              >
-                <WalletSvgIcon size={12} /> CONNECT
-              </button>
-            )}
-          </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* ── MAIN CONTAINER ── */}
       <div className="vv-nft-club-container" style={{

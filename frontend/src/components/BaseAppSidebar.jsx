@@ -225,57 +225,57 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
               <span>Claim Portal</span>
             </button>
 
-            {/* Option 3: Join Vibe Club */}
-            <a
-              href="https://vibeverse.dog/vibeclub"
-              target="_blank"
-              rel="noreferrer"
+            {/* Option 3: Join Vibe Club (Internal Section) */}
+            <button
+              onClick={() => {
+                onSelectTab('vibeclub');
+                onClose();
+              }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
                 gap: '12px',
                 width: '100%',
                 padding: '12px 14px',
                 borderRadius: '14px',
                 border: 'none',
-                background: 'transparent',
-                color: '#94a3b8',
+                background: activeTab === 'vibeclub' ? 'rgba(245, 158, 11, 0.2)' : 'transparent',
+                color: activeTab === 'vibeclub' ? '#FFFFFF' : '#94a3b8',
                 fontSize: '0.94rem',
-                fontWeight: 600,
+                fontWeight: activeTab === 'vibeclub' ? 800 : 600,
                 cursor: 'pointer',
-                textDecoration: 'none',
-                boxSizing: 'border-box',
+                textAlign: 'left',
                 transition: 'all 0.15s ease'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
-                e.currentTarget.style.color = '#FFFFFF';
+                if (activeTab !== 'vibeclub') {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+                  e.currentTarget.style.color = '#FFFFFF';
+                }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = '#94a3b8';
+                if (activeTab !== 'vibeclub') {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.color = '#94a3b8';
+                }
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '10px',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#f59e0b'
-                  }}
-                >
-                  <Crown size={16} strokeWidth={2.5} />
-                </div>
-                <span>Join Vibe Club</span>
+              <div
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '10px',
+                  background: activeTab === 'vibeclub' ? '#f59e0b' : 'rgba(255, 255, 255, 0.05)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: activeTab === 'vibeclub' ? '#000000' : '#f59e0b'
+                }}
+              >
+                <Crown size={16} strokeWidth={2.5} />
               </div>
-              <ArrowUpRight size={15} color="#64748b" />
-            </a>
+              <span>Join Vibe Club</span>
+            </button>
           </div>
         </div>
 
