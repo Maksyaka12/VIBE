@@ -1,17 +1,18 @@
 {
   "accountAssociation": {
-    "header": "eyJmaWZ0eU9uZSI6ImV5SmhiR2NpT2lKSVV6STFOaUpkTENKaGJHOTFibVJwYjI0aU9pSk1TVEExU2tGaFVDSXNJbXAwWlNJNkltUmhkRzFOWVVocVVEUnFRVk5YVVZraWZRcyIsImFzc29jaWF0aW9uS2V5IjoiMHgzNGVhOTJBMzRhNEU1MTkwOEVkMDhBZDE2MWExMTEzOTgzRTVFNGZlIn0",
-    "payload": "eyJkb21haW4iOiJ2aWJldmVyc2UuZG9nIn0",
-    "signature": "MHhkMDkzYTA5YTk4YWI5OTliZmM1ZGY2MGM4ZDExNWYxNWMzNDdkZWExNzA1MmE1Mzc0YTM4YmM3ZTM3Y2I5YTg0NDlhNmRlMmI5NWJmNmQ5MTRkOTI1MDRiMzVhMWJmNDRmMDA2ODZlNDk4ODgyODNmYWQ5YjEzOTZkYzA1NWEyZDFj"
+    "header": "",
+    "payload": "",
+    "signature": ""
   },
   "frame": {
     "version": "1",
-    "name": "Vibe Verse — The Base Dog Web3 World",
-    "iconUrl": "https://vibeverse.dog/vibe-logo.png",
-    "homeUrl": "https://vibeverse.dog/",
-    "imageUrl": "https://vibeverse.dog/map-bg.jpg",
-    "buttonTitle": "Play Vibe Verse 🎮",
-    "splashImageUrl": "https://vibeverse.dog/vibe-logo.png",
-    "splashBackgroundColor": "#020b1a"
+    "name": "Vibe Hub",
+    "iconUrl": "https://vibehome.dog/new-logo-vibe.png",
+    "homeUrl": "https://vibehome.dog/app",
+    "imageUrl": "https://vibehome.dog/x-banner.png?v=2",
+    "buttonTitle": "Open Vibe Hub",
+    "splashImageUrl": "https://vibehome.dog/new-logo-vibe.png",
+    "splashBackgroundColor": "#0b0f19",
+    "webhookUrl": "https://vibehome.dog/api/webhook"
   }
 }

@@ -1,21 +1,23 @@
 import React from 'react';
 import { X, Gift, Coins, Crown, ArrowUpRight, LogOut, Wallet, Check, Copy } from 'lucide-react';
-import { usePrivy } from '@privy-io/react-auth';
+import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useAccount, useDisconnect } from 'wagmi';
 
 const shortAddress = (a) => (a ? a.slice(0, 6) + '...' + a.slice(-4) : '');
 
 export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
-  const { login, logout, authenticated } = usePrivy();
-  const { address, isConnected } = useAccount();
+  const { login, logout, authenticated, user } = usePrivy();
+  const { wallets } = useWallets();
+  const { address: wagmiAddress, isConnected: isWagmiConnected } = useAccount();
   const { disconnect } = useDisconnect();
   const [copied, setCopied] = React.useState(false);
 
-  const hasWallet = isConnected && !!address;
+  const activeAddress = user?.wallet?.address || wallets?.[0]?.address || wagmiAddress;
+  const hasWallet = (authenticated && !!activeAddress) || (isWagmiConnected && !!wagmiAddress);
 
   const handleCopy = () => {
-    if (!address) return;
-    navigator.clipboard.writeText(address);
+    if (!activeAddress) return;
+    navigator.clipboard.writeText(activeAddress);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -36,9 +38,9 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
         style={{
           position: 'fixed',
           inset: 0,
-          background: 'rgba(0, 0, 0, 0.7)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
+          background: 'rgba(0, 0, 0, 0.75)',
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
           zIndex: 998,
           animation: 'fadeIn 0.2s ease-out'
         }}
@@ -53,6 +55,7 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
           bottom: 0,
           width: '280px',
           maxWidth: '85vw',
+          height: '100vh',
           background: '#0b0f19',
           borderRight: '1px solid rgba(255, 255, 255, 0.08)',
           zIndex: 999,
@@ -62,7 +65,7 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
           padding: '20px 16px',
           boxSizing: 'border-box',
           fontFamily: "'Inter', sans-serif",
-          boxShadow: '8px 0 32px rgba(0, 0, 0, 0.6)',
+          boxShadow: '10px 0 40px rgba(0, 0, 0, 0.75)',
           animation: 'slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
       >
@@ -116,8 +119,8 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
             </button>
           </div>
 
-          {/* Navigation Items (3 Options) */}
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          {/* Navigation Items (3 Options) - Using div instead of nav to avoid index.css collision */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             {/* Option 1: Rewards Hub */}
             <button
               onClick={() => {
@@ -132,7 +135,7 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
                 padding: '12px 14px',
                 borderRadius: '14px',
                 border: 'none',
-                background: activeTab === 'hub' ? 'rgba(0, 82, 255, 0.15)' : 'transparent',
+                background: activeTab === 'hub' ? 'rgba(0, 82, 255, 0.2)' : 'transparent',
                 color: activeTab === 'hub' ? '#FFFFFF' : '#94a3b8',
                 fontSize: '0.94rem',
                 fontWeight: activeTab === 'hub' ? 800 : 600,
@@ -184,7 +187,7 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
                 padding: '12px 14px',
                 borderRadius: '14px',
                 border: 'none',
-                background: activeTab === 'claim' ? 'rgba(0, 82, 255, 0.15)' : 'transparent',
+                background: activeTab === 'claim' ? 'rgba(0, 82, 255, 0.2)' : 'transparent',
                 color: activeTab === 'claim' ? '#FFFFFF' : '#94a3b8',
                 fontSize: '0.94rem',
                 fontWeight: activeTab === 'claim' ? 800 : 600,
@@ -273,7 +276,7 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
               </div>
               <ArrowUpRight size={15} color="#64748b" />
             </a>
-          </nav>
+          </div>
         </div>
 
         {/* Footer: Wallet status */}
@@ -298,7 +301,7 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
                     style={{ width: '24px', height: '24px', borderRadius: '50%' }}
                   />
                   <span style={{ fontSize: '0.84rem', fontWeight: 800, color: '#FFFFFF', fontFamily: 'monospace' }}>
-                    {shortAddress(address)}
+                    {shortAddress(activeAddress)}
                   </span>
                 </div>
 

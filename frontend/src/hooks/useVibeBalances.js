@@ -3,7 +3,7 @@ import { createPublicClient, http, formatUnits, parseAbi } from 'viem';
 import { base } from 'viem/chains';
 
 const CA = '0xb200000000000000000000df24ecb8bf51100a01';
-const NFT_CA = '0xa8715CBe858d4E6b92D2c0F2913eFeB88B27b3fa';
+const NFT_CA = '0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886';
 
 const ERC20_ABI = parseAbi([
   'function balanceOf(address owner) view returns (uint256)'
@@ -54,6 +54,27 @@ export function useVibeBalances(address) {
   });
 
   const [loading, setLoading] = useState(false);
+
+  // Sync with localStorage on any change (e.g. after Checker updates balances)
+  useEffect(() => {
+    if (!address) {
+      setBalance(0);
+      setNftCount(0);
+      return;
+    }
+    const syncFromCache = () => {
+      try {
+        const cachedBal = localStorage.getItem('vibe_balance_' + address.toLowerCase());
+        if (cachedBal !== null) setBalance(Number(cachedBal));
+        const cachedNfts = localStorage.getItem('vibe_nfts_' + address.toLowerCase());
+        if (cachedNfts !== null) setNftCount(Number(cachedNfts));
+      } catch {}
+    };
+
+    syncFromCache();
+    window.addEventListener('storage', syncFromCache);
+    return () => window.removeEventListener('storage', syncFromCache);
+  }, [address]);
 
   const fetchBalances = useCallback(async () => {
     if (!address) {
@@ -123,9 +144,6 @@ export function useVibeBalances(address) {
       fetchBalances();
       const interval = setInterval(fetchBalances, 15000);
       return () => clearInterval(interval);
-    } else {
-      setBalance(0);
-      setNftCount(0);
     }
   }, [address, fetchBalances]);
 

@@ -1,15 +1,18 @@
 import React from 'react';
-import { Menu, Wallet, ShieldCheck, Sparkles } from 'lucide-react';
-import { usePrivy } from '@privy-io/react-auth';
+import { Menu, Wallet } from 'lucide-react';
+import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useAccount } from 'wagmi';
 import { useVibeBalances } from '../hooks/useVibeBalances';
 
 export function BaseAppHeader({ onOpenSidebar, activeTab }) {
-  const { login, authenticated } = usePrivy();
-  const { address, isConnected } = useAccount();
-  const { balance, nftCount, formattedBalance } = useVibeBalances(address);
+  const { login, authenticated, user } = usePrivy();
+  const { wallets } = useWallets();
+  const { address: wagmiAddress, isConnected: isWagmiConnected } = useAccount();
 
-  const hasWallet = isConnected && !!address;
+  const activeAddress = user?.wallet?.address || wallets?.[0]?.address || wagmiAddress;
+  const hasWallet = (authenticated && !!activeAddress) || (isWagmiConnected && !!wagmiAddress);
+
+  const { balance, nftCount, formattedBalance } = useVibeBalances(activeAddress);
 
   return (
     <header
