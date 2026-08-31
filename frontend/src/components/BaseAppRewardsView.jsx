@@ -242,7 +242,7 @@ export default function BaseAppRewardsView({
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
               <span style={{ fontSize: '13px', flexShrink: 0 }}>💡</span>
               <span style={{ fontSize: '6.5px', color: '#ffd700', lineHeight: 1.5, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
-                Hold 5M+ $VIBE at each snapshot to share the prize pool.
+                Hold 5M+ $VIBE at snapshot time to share the prize pool.
               </span>
             </div>
             <a
@@ -424,7 +424,7 @@ export default function BaseAppRewardsView({
                           📸 Snapshot: {stripYear(u.snapshotTime)}
                         </div>
                         <div style={{ fontSize: '6px', color: '#cbd5e1', lineHeight: 1.5, textShadow: 'none' }}>
-                          Hold 5M+ $VIBE at each snapshot to be eligible.
+                          Hold 5M+ $VIBE at snapshot time to be eligible.
                         </div>
                       </div>
                     )}
@@ -456,7 +456,7 @@ export default function BaseAppRewardsView({
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
               <span style={{ fontSize: '13px', flexShrink: 0 }}>💡</span>
               <span style={{ fontSize: '6.5px', color: '#ffd700', lineHeight: 1.5, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
-                Hold Vibe Club NFT at each snapshot to share royalty pool.
+                Hold Vibe Club NFT at snapshot time to share royalty pool.
               </span>
             </div>
             <Link
@@ -637,7 +637,7 @@ export default function BaseAppRewardsView({
                           📸 Snapshot: {stripYear(u.snapshotTime || 'Snapshot Date')}
                         </div>
                         <div style={{ fontSize: '6px', color: '#cbd5e1', lineHeight: 1.5, textShadow: 'none' }}>
-                          Hold Vibe Club NFT at each snapshot to be eligible.
+                          Hold Vibe Club NFT at snapshot time to be eligible.
                         </div>
                       </div>
                     )}
