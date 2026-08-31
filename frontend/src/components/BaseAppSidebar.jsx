@@ -101,7 +101,7 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
                   fontWeight: 900,
                   color: '#00f5ff',
                   letterSpacing: '0.5px',
-                  textShadow: '0 0 10px rgba(0, 245, 255, 0.6)'
+                  textShadow: 'none'
                 }}
               >
                 $VIBE

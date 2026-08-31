@@ -1362,7 +1362,7 @@ const GIVEAWAYS_DATA = [
     id: 2,
     title: 'Base App Welcome Bonus',
     image: '/event2.png',
-    winners: 'TBA',
+    winners: '350 Winners',
     prizePool: '1M $VIBE',
     status: 'ended',
     distribution: 'In Progress (92%)',

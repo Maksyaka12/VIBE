@@ -68,7 +68,7 @@
 .base-app-pixel-theme .sec-head h2 {
   font-size: 12px !important;
   color: #00f5ff !important;
-  text-shadow: 0 0 14px rgba(0, 245, 255, 0.6) !important;
+  text-shadow: none !important;
   margin: 0 0 6px 0 !important;
   letter-spacing: 0.5px !important;
 }
@@ -83,7 +83,7 @@
 
 .base-app-pixel-theme .bl {
   color: #00f5ff !important;
-  text-shadow: 0 0 12px rgba(0, 245, 255, 0.6);
+  text-shadow: none !important;
 }
 
 /* ── 3. MAIN HUBS & CATEGORY CARDS (FULL BANNER ART) ── */
@@ -207,7 +207,7 @@
   font-size: 9.5px !important;
   color: #00f5ff !important;
   letter-spacing: 0.3px !important;
-  text-shadow: 0 0 10px rgba(0, 245, 255, 0.45) !important;
+  text-shadow: none !important;
 }
 
 .base-app-pixel-theme span[style*="color: var(--blue)"],
@@ -215,6 +215,14 @@
 .base-app-pixel-theme span[style*="color: rgb(0, 0, 255)"] {
   color: #00f5ff !important;
   font-size: 7.5px !important;
+}
+
+/* Ensure Green Buttons ALWAYS have green text */
+.base-app-pixel-theme a[style*="#00ff88"] span,
+.base-app-pixel-theme button[style*="#00ff88"] span,
+.base-app-pixel-theme a[style*="rgb(0, 255, 136)"] span,
+.base-app-pixel-theme button[style*="rgb(0, 255, 136)"] span {
+  color: #00ff88 !important;
 }
 
 /* Requirements & Snapshot Info Row Dark Plashkas (Matching Mint Page) */
@@ -294,9 +302,7 @@
   margin-bottom: 10px !important;
 }
 
-.base-app-pixel-theme .rewards-faq-item span,
-.base-app-pixel-theme #rewards div[style*="border-radius: 18px"] span,
-.base-app-pixel-theme #rewards div[style*="border-radius: 18px"] strong {
+.base-app-pixel-theme .rewards-faq-item span {
   font-size: 7.5px !important;
   color: #00f5ff !important;
   line-height: 1.5 !important;
