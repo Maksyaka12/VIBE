@@ -310,3 +310,18 @@
   line-height: 1.6 !important;
   letter-spacing: 0.2px !important;
 }
+
+
+/* Explore Button under Category Banners (Transparent with Turquoise Outline & Text) */
+.base-app-pixel-theme .rewards-explore-badge {
+  background: transparent !important;
+  border: 1.5px solid #00f5ff !important;
+  color: #00f5ff !important;
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.25) !important;
+}
+
+.base-app-pixel-theme .rewards-explore-badge span,
+.base-app-pixel-theme .rewards-explore-badge svg {
+  color: #00f5ff !important;
+  stroke: #00f5ff !important;
+}
