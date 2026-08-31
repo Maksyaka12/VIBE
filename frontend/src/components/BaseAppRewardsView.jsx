@@ -89,62 +89,48 @@ export default function BaseAppRewardsView({
 
   return (
     <div style={{ width: '100%', boxSizing: 'border-box' }}>
-      {/* ── 1. MODERN ULTRA-STYLISH REWARDS HERO HEADER ── */}
+      {/* ── 1. MODERN REWARDS HERO HEADER ── */}
       <div
         style={{
           textAlign: 'center',
           marginBottom: '20px',
-          padding: '14px 12px 10px 12px',
+          padding: '10px 12px 6px 12px',
           position: 'relative'
         }}
       >
-        {/* Subtle status pill */}
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            background: 'rgba(0, 245, 255, 0.08)',
-            border: '1px solid rgba(0, 245, 255, 0.25)',
-            borderRadius: '99px',
-            padding: '5px 12px',
-            marginBottom: '10px'
-          }}
-        >
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 6px #00ff88' }} />
-          <span style={{ fontSize: '6.5px', color: '#00f5ff', letterSpacing: '0.6px', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
-            LIVE REWARDS ECOSYSTEM
-          </span>
-        </div>
-
         <h2
           style={{
-            fontSize: '13px',
-            margin: '0 0 6px 0',
+            fontSize: '15px',
+            margin: '0 0 10px 0',
             letterSpacing: '0.5px',
             color: '#ffffff',
             fontFamily: "'Press Start 2P', monospace",
             textShadow: 'none'
           }}
         >
-          REWARDS <span style={{ color: '#00f5ff' }}>HUB</span>.
+          REWARDS <span style={{ color: '#00f5ff' }}>HUB</span>
         </h2>
-        <p
+
+        {/* Subtitle Status Pill */}
+        <div
           style={{
-            fontSize: '7px',
-            color: '#88aacc',
-            lineHeight: 1.5,
-            margin: 0,
-            letterSpacing: '0.2px',
-            fontFamily: "'Press Start 2P', monospace",
-            textShadow: 'none'
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            background: 'rgba(0, 245, 255, 0.08)',
+            border: '1px solid rgba(0, 245, 255, 0.3)',
+            borderRadius: '99px',
+            padding: '6px 14px'
           }}
         >
-          Track live epochs, claim rewards &amp; join events
-        </p>
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 6px #00ff88', flexShrink: 0 }} />
+          <span style={{ fontSize: '6.5px', color: '#00f5ff', letterSpacing: '0.5px', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
+            TRACK ACTIVE REWARDS. JOIN &amp; EARN
+          </span>
+        </div>
       </div>
 
-      {/* ── 2. PREMIUM CYBERPUNK / WEB3 CATEGORY SWITCHER ── */}
+      {/* ── 2. PREMIUM CYBERPUNK / WEB3 CATEGORY SWITCHER (TURQUOISE OUTLINES) ── */}
       <div
         style={{
           display: 'grid',
@@ -179,8 +165,8 @@ export default function BaseAppRewardsView({
                   : 'rgba(255, 255, 255, 0.02)',
                 color: isActive ? '#ffffff' : '#88aacc',
                 border: isActive
-                  ? '1px solid rgba(0, 245, 255, 0.6)'
-                  : '1px solid transparent',
+                  ? '1.5px solid #00f5ff'
+                  : '1.5px solid rgba(0, 245, 255, 0.45)',
                 borderRadius: '12px',
                 padding: '10px 2px 8px 2px',
                 fontSize: '6.5px',
@@ -192,7 +178,7 @@ export default function BaseAppRewardsView({
                 alignItems: 'center',
                 gap: '4px',
                 boxShadow: isActive
-                  ? '0 4px 16px rgba(0, 82, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+                  ? '0 4px 16px rgba(0, 82, 255, 0.45), 0 0 10px rgba(0, 245, 255, 0.35)'
                   : 'none',
                 transition: 'all 0.18s ease',
                 position: 'relative',
@@ -202,20 +188,23 @@ export default function BaseAppRewardsView({
               <span style={{ fontSize: '13px', filter: isActive ? 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))' : 'grayscale(0.2)' }}>
                 {tab.icon}
               </span>
-              <span style={{ whiteSpace: 'nowrap', color: isActive ? '#ffffff' : '#cbd5e1', fontWeight: 900 }}>
+              <span style={{ whiteSpace: 'nowrap', color: isActive ? '#ffffff' : '#e2e8f0', fontWeight: 900 }}>
                 {tab.label}
               </span>
-              <span
-                style={{
-                  fontSize: '5px',
-                  color: isActive ? '#00f5ff' : '#64748b',
-                  letterSpacing: '0.2px',
-                  fontWeight: 800,
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                {tab.count}
-              </span>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', marginTop: '2px' }}>
+                <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 5px #00ff88', flexShrink: 0 }} />
+                <span
+                  style={{
+                    fontSize: '5px',
+                    color: '#00ff88',
+                    letterSpacing: '0.2px',
+                    fontWeight: 800,
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  {tab.count}
+                </span>
+              </div>
             </button>
           );
         })}
