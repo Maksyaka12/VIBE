@@ -1497,6 +1497,10 @@ function Rewards({ isBaseAppMode = false } = {}) {
     ended: GIVEAWAYS_DATA.filter(e => e.status === 'ended').length
   };
 
+  const activeCategoryCards = isBaseAppMode
+    ? categoryCards.filter(c => c.id !== 'vibe-verse')
+    : categoryCards;
+
   const categoryCards = [
     {
       id: 'holders',
@@ -1579,7 +1583,7 @@ function Rewards({ isBaseAppMode = false } = {}) {
                 marginBottom: '40px'
               }}
             >
-              {categoryCards.map(cat => (
+              {activeCategoryCards.map(cat => (
                 <div
                   key={cat.id}
                   onClick={() => {

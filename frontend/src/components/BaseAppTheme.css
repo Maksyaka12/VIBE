@@ -86,10 +86,9 @@
   text-shadow: 0 0 12px rgba(0, 245, 255, 0.6);
 }
 
-/* ── 3. MAIN HUBS & CATEGORY CARDS ── */
+/* ── 3. MAIN HUBS & CATEGORY CARDS (FULL BANNER ART) ── */
 .base-app-pixel-theme #rewards div[role="button"],
-.base-app-pixel-theme #rewards .wrap > div > div[style*="border-radius: 24px"],
-.base-app-pixel-theme #rewards div[style*="border-radius: 24px"] {
+.base-app-pixel-theme #rewards .wrap > div > div[style*="border-radius: 24px"] {
   background: rgba(4, 20, 48, 0.88) !important;
   border: 1.5px solid rgba(0, 245, 255, 0.25) !important;
   border-radius: 16px !important;
@@ -104,18 +103,39 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 245, 255, 0.35) !important;
 }
 
-.base-app-pixel-theme #rewards div[style*="background: #ffffff"],
-.base-app-pixel-theme #rewards div[style*="background: rgb(255, 255, 255)"] {
-  background: rgba(4, 20, 48, 0.88) !important;
+/* Card Body (Below banner) */
+.base-app-pixel-theme #rewards div[role="button"] > div[style*="padding: 16px 20px"] {
+  background: rgba(4, 20, 48, 0.95) !important;
+  padding: 12px 14px !important;
 }
 
 .base-app-pixel-theme #rewards h3 {
-  font-size: 9.5px !important;
+  font-size: 9px !important;
   color: #ffffff !important;
   letter-spacing: 0.4px !important;
 }
 
-/* ── 4. REWARDS HUB DETAIL VIEW (HOLDER REWARDS / UNLOCKS / STAKING) ── */
+/* ── 4. QUICK SWITCHER & STATUS FILTERS (NEVER STRETCH 100%) ── */
+.base-app-pixel-theme div[style*="background: #f1f5f9"] button,
+.base-app-pixel-theme div[style*="background: rgb(241, 245, 249)"] button,
+.base-app-pixel-theme .vv-filter-btn {
+  width: auto !important;
+  max-width: max-content !important;
+}
+
+/* Back button in Rewards detail view */
+.base-app-pixel-theme #rewards button[style*="background: #ffffff"],
+.base-app-pixel-theme #rewards button[style*="background: rgb(255, 255, 255)"] {
+  background: rgba(2, 11, 26, 0.85) !important;
+  border: 1.5px solid rgba(0, 245, 255, 0.3) !important;
+  color: #00f5ff !important;
+  font-size: 7px !important;
+  padding: 8px 12px !important;
+  border-radius: 10px !important;
+  width: auto !important;
+}
+
+/* ── 5. REWARDS HUB DETAIL VIEW (HOLDER REWARDS / UNLOCKS / STAKING / GIVEAWAYS) ── */
 .base-app-pixel-theme #rewards div[style*="border-radius: 22px"],
 .base-app-pixel-theme #rewards div[style*="border-radius: 20px"],
 .base-app-pixel-theme #rewards div[style*="border-radius: 18px"],
@@ -130,32 +150,6 @@
   max-width: 100% !important;
 }
 
-/* Back button in Rewards detail view */
-.base-app-pixel-theme #rewards button[style*="background: #ffffff"],
-.base-app-pixel-theme #rewards button[style*="background: rgb(255, 255, 255)"] {
-  background: rgba(2, 11, 26, 0.85) !important;
-  border: 1.5px solid rgba(0, 245, 255, 0.3) !important;
-  color: #00f5ff !important;
-  font-size: 7.5px !important;
-  padding: 8px 12px !important;
-  border-radius: 10px !important;
-}
-
-/* Filter pills container */
-.base-app-pixel-theme div[style*="background: #f1f5f9"],
-.base-app-pixel-theme div[style*="background: rgb(241, 245, 249)"] {
-  background: rgba(2, 11, 26, 0.9) !important;
-  border: 1px solid rgba(0, 245, 255, 0.2) !important;
-  border-radius: 10px !important;
-  padding: 4px !important;
-}
-
-.base-app-pixel-theme div[style*="background: rgb(241, 245, 249)"] button,
-.base-app-pixel-theme div[style*="background: #f1f5f9"] button {
-  font-size: 7px !important;
-  padding: 6px 10px !important;
-}
-
 /* 3-Point Staking / Holder Info Cards */
 .base-app-pixel-theme #rewards div[style*="linear-gradient(135deg, rgba(190, 241, 255"] {
   background: rgba(2, 11, 26, 0.75) !important;
@@ -165,12 +159,12 @@
 }
 
 .base-app-pixel-theme #rewards div[style*="linear-gradient(135deg, rgba(190, 241, 255"] strong {
-  font-size: 8px !important;
+  font-size: 7.5px !important;
   color: #00f5ff !important;
 }
 
 .base-app-pixel-theme #rewards div[style*="linear-gradient(135deg, rgba(190, 241, 255"] p {
-  font-size: 7px !important;
+  font-size: 6.5px !important;
   color: #cbd5e1 !important;
   line-height: 1.5 !important;
 }
@@ -186,11 +180,10 @@
   letter-spacing: 0.3px !important;
 }
 
-/* Rewards Pool Box inside Cards (Dark Box) */
-.base-app-pixel-theme div[style*="background: #090d16"],
-.base-app-pixel-theme div[style*="background: rgb(9, 13, 22)"],
-.base-app-pixel-theme div[style*="background: #f8fafc"],
-.base-app-pixel-theme div[style*="background: rgb(248, 250, 252)"] {
+/* Rewards Pool Box inside Cards (ALWAYS TURQUOISE VALUE #00f5ff) */
+.base-app-pixel-theme #rewards div[style*="border-radius: 22px"] div[style*="margin-bottom: 14px"],
+.base-app-pixel-theme #rewards div[style*="border-radius: 22px"] div[style*="margin-bottom: 12px"],
+.base-app-pixel-theme .checker-reward-card div[style*="margin-bottom: 14px"] {
   background: rgba(2, 11, 26, 0.75) !important;
   border: 1px solid rgba(0, 245, 255, 0.25) !important;
   border-radius: 12px !important;
@@ -199,37 +192,34 @@
 }
 
 /* Pool Title / Label */
-.base-app-pixel-theme div[style*="background: #090d16"] div,
-.base-app-pixel-theme div[style*="background: #f8fafc"] div {
-  font-size: 7px !important;
+.base-app-pixel-theme #rewards div[style*="border-radius: 22px"] div[style*="text-transform: uppercase"],
+.base-app-pixel-theme .checker-reward-card div[style*="text-transform: uppercase"] {
+  font-size: 6.5px !important;
   color: #88aacc !important;
   letter-spacing: 0.3px !important;
 }
 
-/* Pool Value Number */
-.base-app-pixel-theme div[style*="background: #090d16"] span[style*="font-size: 1.8rem"],
-.base-app-pixel-theme div[style*="background: #090d16"] span[style*="font-size: 1.6rem"],
-.base-app-pixel-theme div[style*="background: #090d16"] span[style*="font-size: 1.5rem"],
-.base-app-pixel-theme div[style*="background: #090d16"] span[style*="font-weight: 900"],
-.base-app-pixel-theme div[style*="background: #f8fafc"] div[style*="font-size: 1.35rem"],
-.base-app-pixel-theme div[style*="font-size: 1.35rem"] {
-  font-size: 10px !important;
-  color: #ffffff !important;
-  letter-spacing: 0.4px !important;
+/* Pool Value Number (ALWAYS TURQUOISE / CYAN #00f5ff) */
+.base-app-pixel-theme #rewards div[style*="font-size: 1.42rem"],
+.base-app-pixel-theme #rewards div[style*="font-size: 1.38rem"],
+.base-app-pixel-theme #rewards div[style*="font-size: 1.35rem"],
+.base-app-pixel-theme .checker-reward-card div[style*="font-size: 1.35rem"] {
+  font-size: 9.5px !important;
+  color: #00f5ff !important;
+  letter-spacing: 0.3px !important;
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.45) !important;
 }
 
 .base-app-pixel-theme span[style*="color: var(--blue)"],
 .base-app-pixel-theme span[style*="color: #0000ff"],
 .base-app-pixel-theme span[style*="color: rgb(0, 0, 255)"] {
   color: #00f5ff !important;
-  font-size: 8px !important;
+  font-size: 7.5px !important;
 }
 
-/* Requirements & Snapshot Info Row Pills */
-.base-app-pixel-theme div[style*="background: #f8fafc"],
-.base-app-pixel-theme div[style*="background: rgb(248, 250, 252)"],
-.base-app-pixel-theme div[style*="background: #f1f5f9"],
-.base-app-pixel-theme div[style*="background: rgb(241, 245, 249)"] {
+/* Requirements & Snapshot Info Row Dark Plashkas (Matching Mint Page) */
+.base-app-pixel-theme #rewards div[style*="display: flex"][style*="justify-content: space-between"][style*="border-radius: 10px"],
+.base-app-pixel-theme .checker-reward-card div[style*="display: flex"][style*="justify-content: space-between"][style*="border-radius: 10px"] {
   background: rgba(2, 11, 26, 0.75) !important;
   border: 1px solid rgba(0, 245, 255, 0.2) !important;
   border-radius: 10px !important;
@@ -241,20 +231,16 @@
   gap: 6px !important;
 }
 
-.base-app-pixel-theme div[style*="background: #f8fafc"] span,
-.base-app-pixel-theme div[style*="background: rgb(248, 250, 252)"] span,
-.base-app-pixel-theme div[style*="background: #f1f5f9"] span,
-.base-app-pixel-theme div[style*="background: rgb(241, 245, 249)"] span {
-  font-size: 7px !important;
+.base-app-pixel-theme #rewards div[style*="border-radius: 10px"] span,
+.base-app-pixel-theme .checker-reward-card div[style*="border-radius: 10px"] span {
+  font-size: 6.5px !important;
   color: #88aacc !important;
   letter-spacing: 0.2px !important;
 }
 
-.base-app-pixel-theme div[style*="background: #f8fafc"] strong,
-.base-app-pixel-theme div[style*="background: rgb(248, 250, 252)"] strong,
-.base-app-pixel-theme div[style*="background: #f1f5f9"] strong,
-.base-app-pixel-theme div[style*="background: rgb(241, 245, 249)"] strong {
-  font-size: 7.5px !important;
+.base-app-pixel-theme #rewards div[style*="border-radius: 10px"] strong,
+.base-app-pixel-theme .checker-reward-card div[style*="border-radius: 10px"] strong {
+  font-size: 7px !important;
   color: #ffffff !important;
   letter-spacing: 0.2px !important;
 }
@@ -262,9 +248,8 @@
 /* Status Badges (Active, Upcoming, Live, Locked) */
 .base-app-pixel-theme span[style*="border-radius: 99px"],
 .base-app-pixel-theme span[style*="border-radius: 8px"],
-.base-app-pixel-theme div[style*="border-radius: 99px"],
-.base-app-pixel-theme .vv-badge {
-  font-size: 7px !important;
+.base-app-pixel-theme div[style*="border-radius: 99px"] {
+  font-size: 6.5px !important;
   padding: 4px 8px !important;
   letter-spacing: 0.3px !important;
 }
@@ -278,232 +263,26 @@
   color: #00ff88 !important;
 }
 
-/* ── 5. CLAIM PORTAL: PROFILE & 5 METRICS TILES ── */
-.base-app-pixel-theme .checker-user-card {
-  background: rgba(4, 20, 48, 0.88) !important;
-  border: 1.5px solid rgba(0, 245, 255, 0.25) !important;
-  border-radius: 16px !important;
-  padding: 16px 14px !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  margin-bottom: 24px !important;
-}
-
-.base-app-pixel-theme .checker-profile-name {
-  font-size: 9.5px !important;
-  color: #00f5ff !important;
-  letter-spacing: 0.4px !important;
-  margin: 0 0 4px 0 !important;
-}
-
-.base-app-pixel-theme .checker-profile-header {
-  gap: 12px !important;
-}
-
-/* 5 Metric Tiles in Claim Portal */
-.base-app-pixel-theme .dashboard-metrics-5 {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 8px !important;
-  width: 100% !important;
-  margin-top: 12px !important;
-}
-
-.base-app-pixel-theme .checker-metric-tile {
-  background: rgba(2, 11, 26, 0.75) !important;
-  border: 1px solid rgba(0, 245, 255, 0.25) !important;
-  border-radius: 12px !important;
-  padding: 10px 10px !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: space-between !important;
-}
-
-/* Metric Tile Label */
-.base-app-pixel-theme .checker-metric-tile > div:first-child {
-  font-size: 7px !important;
-  color: #88aacc !important;
-  letter-spacing: 0.3px !important;
-  margin-bottom: 4px !important;
-}
-
-/* Metric Tile Value */
-.base-app-pixel-theme .checker-metric-tile div[style*="font-size: 1.20rem"],
-.base-app-pixel-theme .checker-metric-tile div[style*="font-size: 1.25rem"],
-.base-app-pixel-theme .checker-metric-tile div[style*="font-size: 1.15rem"] {
-  font-size: 9px !important;
-  color: #00ff88 !important;
-  letter-spacing: 0.3px !important;
-  text-shadow: 0 0 8px rgba(0, 255, 136, 0.35) !important;
-  margin-bottom: 3px !important;
-}
-
-/* Metric Tile Subtext (Action link) */
-.base-app-pixel-theme .checker-metric-tile div[style*="font-size: 0.72rem"],
-.base-app-pixel-theme .checker-metric-tile div[style*="font-size: 0.67rem"] {
-  font-size: 6.5px !important;
-  color: #00f5ff !important;
-  letter-spacing: 0.2px !important;
-}
-
-/* ── 6. CLAIM PORTAL: SECTION ACCORDIONS (AVAILABLE, UPCOMING, CLAIMED) ── */
-.base-app-pixel-theme #available-rewards-section,
-.base-app-pixel-theme #upcoming-rewards-section,
-.base-app-pixel-theme #claimed-rewards-section {
-  width: 100% !important;
-  max-width: 100% !important;
-  margin-bottom: 24px !important;
-}
-
-/* Section Header (Title + Count) */
-.base-app-pixel-theme #available-rewards-section h3,
-.base-app-pixel-theme #upcoming-rewards-section h3,
-.base-app-pixel-theme #claimed-rewards-section h3 {
-  font-size: 9px !important;
-  color: #00f5ff !important;
-  letter-spacing: 0.4px !important;
-  margin: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-}
-
-/* Section Header Collapse Button */
-.base-app-pixel-theme #available-rewards-section button,
-.base-app-pixel-theme #upcoming-rewards-section button,
-.base-app-pixel-theme #claimed-rewards-section button {
-  background: rgba(4, 20, 48, 0.85) !important;
-  border: 1px solid rgba(0, 245, 255, 0.3) !important;
-  color: #00f5ff !important;
-  padding: 4px 8px !important;
-  border-radius: 8px !important;
-}
-
-/* Accordion Panel Container */
-.base-app-pixel-theme .checker-section-panel {
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  box-shadow: none !important;
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-/* Section Grid Container */
-.base-app-pixel-theme .rewards-grid-2 {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-  gap: 14px !important;
-  width: 100% !important;
-}
-
-/* Single Reward Card in Claim Portal */
-.base-app-pixel-theme .checker-reward-card {
-  background: rgba(4, 20, 48, 0.88) !important;
-  border: 1.5px solid rgba(0, 245, 255, 0.25) !important;
-  border-radius: 16px !important;
-  padding: 16px 14px !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-/* Allocation Box (You Are Eligible) inside Reward Card */
-.base-app-pixel-theme div[style*="background: linear-gradient(135deg, #ecfdf5"],
-.base-app-pixel-theme div[style*="background: rgb(236, 253, 245)"] {
-  background: rgba(2, 11, 26, 0.75) !important;
-  border: 1px solid rgba(0, 255, 136, 0.3) !important;
-  border-radius: 12px !important;
-  padding: 12px !important;
-  color: #00ff88 !important;
-  text-align: center !important;
-  width: 100% !important;
-}
-
-.base-app-pixel-theme div[style*="background: linear-gradient(135deg, #ecfdf5"] div,
-.base-app-pixel-theme div[style*="background: rgb(236, 253, 245)"] div {
-  font-size: 7.5px !important;
-  color: #00ff88 !important;
-  letter-spacing: 0.3px !important;
-}
-
-/* ── 7. CLAIMED REWARDS LIST ITEMS ── */
-.base-app-pixel-theme #claimed-rewards-section div[style*="border-radius: 18px"],
-.base-app-pixel-theme #claimed-rewards-section div[style*="background: #ffffff"],
-.base-app-pixel-theme #claimed-rewards-section div[style*="background: rgb(255, 255, 255)"] {
-  background: rgba(4, 20, 48, 0.88) !important;
-  border: 1.5px solid rgba(0, 245, 255, 0.25) !important;
-  border-radius: 14px !important;
-  padding: 12px 12px !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  gap: 10px !important;
-}
-
-.base-app-pixel-theme #claimed-rewards-section strong {
-  font-size: 8px !important;
-  color: #ffffff !important;
-  letter-spacing: 0.3px !important;
-  display: block;
-  margin-bottom: 3px;
-}
-
-.base-app-pixel-theme #claimed-rewards-section span[style*="color: #059669"],
-.base-app-pixel-theme #claimed-rewards-section span[style*="color: rgb(5, 150, 105)"] {
-  font-size: 7px !important;
-  color: #00ff88 !important;
-  letter-spacing: 0.2px !important;
-}
-
-.base-app-pixel-theme #claimed-rewards-section div[style*="font-size: 1.25rem"],
-.base-app-pixel-theme #claimed-rewards-section div[style*="color: #10b981"],
-.base-app-pixel-theme #claimed-rewards-section div[style*="color: rgb(16, 185, 129)"] {
-  font-size: 9px !important;
-  color: #00ff88 !important;
-  letter-spacing: 0.3px !important;
-  text-shadow: 0 0 8px rgba(0, 255, 136, 0.35) !important;
-}
-
-.base-app-pixel-theme #claimed-rewards-section button[style*="background: #000000"],
-.base-app-pixel-theme #claimed-rewards-section button[style*="background: rgb(0, 0, 0)"] {
-  background: rgba(0, 245, 255, 0.12) !important;
-  border: 1px solid rgba(0, 245, 255, 0.35) !important;
-  color: #00f5ff !important;
-  font-size: 7px !important;
-  padding: 6px 10px !important;
-  border-radius: 8px !important;
-}
-
-/* ── 8. ALL BUTTONS ACROSS BASE APP ── */
+/* ── 6. ALL ACTION BUTTONS ── */
 .base-app-pixel-theme button.btn-fill,
 .base-app-pixel-theme a.btn-fill,
-.base-app-pixel-theme button[style*="background: linear-gradient(135deg, rgb(0, 82, 255)"],
-.base-app-pixel-theme button[style*="background: linear-gradient(135deg, var(--blue)"],
-.base-app-pixel-theme button[style*="background: var(--blue)"],
-.base-app-pixel-theme button[style*="background: rgb(0, 0, 255)"],
-.base-app-pixel-theme div[style*="background: var(--blue)"] {
+.base-app-pixel-theme #rewards a[style*="background: var(--blue)"],
+.base-app-pixel-theme #rewards a[style*="background: rgb(0, 0, 255)"],
+.base-app-pixel-theme #rewards button[style*="background: var(--blue)"] {
   background: linear-gradient(135deg, #00f5ff 0%, #0050ff 100%) !important;
   border: 1.5px solid #ffffff !important;
   box-shadow: 0 0 14px rgba(0, 245, 255, 0.4) !important;
-  font-size: 8px !important;
+  font-size: 7.5px !important;
   font-weight: 900 !important;
   color: #ffffff !important;
-  padding: 10px 14px !important;
+  padding: 9px 12px !important;
   border-radius: 10px !important;
   letter-spacing: 0.4px !important;
   text-transform: uppercase !important;
   cursor: pointer !important;
-  width: 100% !important;
 }
 
-/* ── 9. FAQ ITEMS & CARDS (MATCHING NFT CLUB FAQ) ── */
+/* ── 7. FAQ ITEMS & CARDS (MATCHING NFT CLUB FAQ) ── */
 .base-app-pixel-theme .rewards-faq-item,
 .base-app-pixel-theme #rewards div[style*="border-radius: 18px"] {
   background: rgba(4, 20, 48, 0.88) !important;
@@ -518,7 +297,7 @@
 .base-app-pixel-theme .rewards-faq-item span,
 .base-app-pixel-theme #rewards div[style*="border-radius: 18px"] span,
 .base-app-pixel-theme #rewards div[style*="border-radius: 18px"] strong {
-  font-size: 8px !important;
+  font-size: 7.5px !important;
   color: #00f5ff !important;
   line-height: 1.5 !important;
   letter-spacing: 0.3px !important;
@@ -526,7 +305,7 @@
 
 .base-app-pixel-theme .rewards-faq-item div,
 .base-app-pixel-theme #rewards div[style*="border-radius: 18px"] p {
-  font-size: 7px !important;
+  font-size: 6.5px !important;
   color: #cbd5e1 !important;
   line-height: 1.6 !important;
   letter-spacing: 0.2px !important;
