@@ -7,12 +7,12 @@
   "frame": {
     "version": "1",
     "name": "Vibe Hub",
-    "iconUrl": "https://vibe.dog/new-logo-vibe.png",
-    "homeUrl": "https://vibe.dog/app",
-    "imageUrl": "https://vibe.dog/x-banner.png",
+    "iconUrl": "https://vibehome.dog/new-logo-vibe.png",
+    "homeUrl": "https://vibehome.dog/app",
+    "imageUrl": "https://vibehome.dog/x-banner.png",
     "buttonTitle": "Open Vibe Hub",
-    "splashImageUrl": "https://vibe.dog/new-logo-vibe.png",
+    "splashImageUrl": "https://vibehome.dog/new-logo-vibe.png",
     "splashBackgroundColor": "#020b1a",
-    "webhookUrl": "https://vibe.dog/api/webhook"
+    "webhookUrl": "https://vibehome.dog/api/webhook"
   }
 }

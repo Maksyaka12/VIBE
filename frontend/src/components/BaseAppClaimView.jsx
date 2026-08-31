@@ -136,7 +136,7 @@ export function BaseAppClaimView(props) {
     const text = isRoyalty
       ? `I just claimed ${amt} $VIBE royalties from Vibe Club on @VIBEDOG_BASE! 👑🐶 Holding my NFT and sharing 20% royalties every 10 days.`
       : `I just claimed ${amt} $VIBE Holder Rewards on @VIBEDOG_BASE! 💎🐶 100M tokens distributed to 5M+ holders. Check eligibility:`;
-    const url = 'https://vibe.dog/claim';
+    const url = 'https://vibehome.dog/claim';
     return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
   };
 
