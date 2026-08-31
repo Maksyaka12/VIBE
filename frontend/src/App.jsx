@@ -1963,7 +1963,20 @@ function Rewards({ isBaseAppMode = false } = {}) {
               </div>
 
               {/* Status Filter for Staking Epochs (Aligned to Left) */}
-              <div style={{ display: 'flex', gap: '4px', background: '#ffffff', padding: '3px', borderRadius: '99px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.02)', flexWrap: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: isBaseAppMode ? '4px' : '4px',
+                  background: isBaseAppMode ? 'rgba(2, 11, 26, 0.85)' : '#ffffff',
+                  padding: '3px 4px',
+                  borderRadius: '10px',
+                  border: isBaseAppMode ? '1px solid rgba(0, 245, 255, 0.25)' : '1px solid #e2e8f0',
+                  flexWrap: 'nowrap',
+                  overflowX: 'auto',
+                  maxWidth: '100%',
+                  boxSizing: 'border-box'
+                }}
+              >
                 {[
                   { id: 'all', label: `All (${stakingCounts.all})` },
                   { id: 'active', label: `Active (${stakingCounts.active})` },
@@ -1976,19 +1989,20 @@ function Rewards({ isBaseAppMode = false } = {}) {
                       key={f.id}
                       onClick={() => setStakingFilter(f.id)}
                       style={{
-                        fontFamily: 'var(--font)',
-                        padding: '4px 10px',
-                        borderRadius: '99px',
+                        fontFamily: isBaseAppMode ? "'Press Start 2P', monospace" : 'var(--font)',
+                        padding: isBaseAppMode ? '6px 8px' : '4px 10px',
+                        borderRadius: '8px',
                         border: 'none',
-                        background: isFActive ? 'var(--blue)' : 'transparent',
-                        color: isFActive ? '#ffffff' : '#64748b',
+                        background: isFActive ? (isBaseAppMode ? '#0052ff' : 'var(--blue)') : 'transparent',
+                        color: isFActive ? '#ffffff' : (isBaseAppMode ? '#cbd5e1' : '#64748b'),
                         fontWeight: 800,
-                        fontSize: '0.72rem',
+                        fontSize: isBaseAppMode ? '6.5px' : '0.72rem',
                         letterSpacing: '-0.01em',
                         whiteSpace: 'nowrap',
                         flexShrink: 0,
                         cursor: 'pointer',
-                        transition: 'all 0.15s'
+                        transition: 'all 0.15s',
+                        boxShadow: isFActive && isBaseAppMode ? '0 0 8px rgba(0, 82, 255, 0.4)' : 'none'
                       }}
                     >
                       {f.label}
@@ -2280,34 +2294,51 @@ function Rewards({ isBaseAppMode = false } = {}) {
               </div>
 
               {/* Status Filters */}
-              <div style={{ display: 'flex', gap: '4px', background: '#f1f5f9', padding: '3px', borderRadius: '99px', border: '1px solid #e2e8f0', flexWrap: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: isBaseAppMode ? '4px' : '4px',
+                  background: isBaseAppMode ? 'rgba(2, 11, 26, 0.85)' : '#f1f5f9',
+                  padding: '3px 4px',
+                  borderRadius: '10px',
+                  border: isBaseAppMode ? '1px solid rgba(0, 245, 255, 0.25)' : '1px solid #e2e8f0',
+                  flexWrap: 'nowrap',
+                  overflowX: 'auto',
+                  maxWidth: '100%',
+                  boxSizing: 'border-box'
+                }}
+              >
                 {[
                   { id: 'all', label: `All (${vibeClubCounts.all})` },
                   { id: 'active', label: `Active (${vibeClubCounts.active})` },
                   { id: 'upcoming', label: `Upcoming (${vibeClubCounts.upcoming})` },
                   { id: 'ended', label: `Ended (${vibeClubCounts.ended})` }
-                ].map(f => (
-                  <button
-                    key={f.id}
-                    onClick={() => setVibeClubFilter(f.id)}
-                    style={{
-                      fontFamily: 'var(--font)',
-                      background: vibeClubFilter === f.id ? 'var(--blue)' : 'transparent',
-                      color: vibeClubFilter === f.id ? '#ffffff' : '#64748b',
-                      border: 'none',
-                      padding: '4px 10px',
-                      borderRadius: '99px',
-                      fontSize: '0.72rem',
-                      fontWeight: 800,
-                      whiteSpace: 'nowrap',
-                      flexShrink: 0,
-                      cursor: 'pointer',
-                      transition: 'all 0.15s'
-                    }}
-                  >
-                    {f.label}
-                  </button>
-                ))}
+                ].map(f => {
+                  const isFActive = vibeClubFilter === f.id;
+                  return (
+                    <button
+                      key={f.id}
+                      onClick={() => setVibeClubFilter(f.id)}
+                      style={{
+                        fontFamily: isBaseAppMode ? "'Press Start 2P', monospace" : 'var(--font)',
+                        background: isFActive ? (isBaseAppMode ? '#0052ff' : 'var(--blue)') : 'transparent',
+                        color: isFActive ? '#ffffff' : (isBaseAppMode ? '#cbd5e1' : '#64748b'),
+                        border: 'none',
+                        padding: isBaseAppMode ? '6px 8px' : '4px 10px',
+                        borderRadius: '8px',
+                        fontSize: isBaseAppMode ? '6.5px' : '0.72rem',
+                        fontWeight: 800,
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                        cursor: 'pointer',
+                        transition: 'all 0.15s',
+                        boxShadow: isFActive && isBaseAppMode ? '0 0 8px rgba(0, 82, 255, 0.4)' : 'none'
+                      }}
+                    >
+                      {f.label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -2648,34 +2679,51 @@ function Rewards({ isBaseAppMode = false } = {}) {
               </div>
 
               {/* Status Filters */}
-              <div style={{ display: 'flex', gap: '4px', background: '#f1f5f9', padding: '3px', borderRadius: '99px', border: '1px solid #e2e8f0', flexWrap: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: isBaseAppMode ? '4px' : '4px',
+                  background: isBaseAppMode ? 'rgba(2, 11, 26, 0.85)' : '#f1f5f9',
+                  padding: '3px 4px',
+                  borderRadius: '10px',
+                  border: isBaseAppMode ? '1px solid rgba(0, 245, 255, 0.25)' : '1px solid #e2e8f0',
+                  flexWrap: 'nowrap',
+                  overflowX: 'auto',
+                  maxWidth: '100%',
+                  boxSizing: 'border-box'
+                }}
+              >
                 {[
                   { id: 'all', label: `All (${holderCounts.all})` },
                   { id: 'active', label: `Active (${holderCounts.active})` },
                   { id: 'upcoming', label: `Upcoming (${holderCounts.upcoming})` },
                   { id: 'ended', label: `Ended (${holderCounts.ended})` }
-                ].map(f => (
-                  <button
-                    key={f.id}
-                    onClick={() => setHolderFilter(f.id)}
-                    style={{
-                      fontFamily: 'var(--font)',
-                      background: holderFilter === f.id ? 'var(--blue)' : 'transparent',
-                      color: holderFilter === f.id ? '#ffffff' : '#64748b',
-                      border: 'none',
-                      padding: '4px 10px',
-                      borderRadius: '99px',
-                      fontSize: '0.72rem',
-                      fontWeight: 800,
-                      whiteSpace: 'nowrap',
-                      flexShrink: 0,
-                      cursor: 'pointer',
-                      transition: 'all 0.15s'
-                    }}
-                  >
-                    {f.label}
-                  </button>
-                ))}
+                ].map(f => {
+                  const isFActive = holderFilter === f.id;
+                  return (
+                    <button
+                      key={f.id}
+                      onClick={() => setHolderFilter(f.id)}
+                      style={{
+                        fontFamily: isBaseAppMode ? "'Press Start 2P', monospace" : 'var(--font)',
+                        background: isFActive ? (isBaseAppMode ? '#0052ff' : 'var(--blue)') : 'transparent',
+                        color: isFActive ? '#ffffff' : (isBaseAppMode ? '#cbd5e1' : '#64748b'),
+                        border: 'none',
+                        padding: isBaseAppMode ? '6px 8px' : '4px 10px',
+                        borderRadius: '8px',
+                        fontSize: isBaseAppMode ? '6.5px' : '0.72rem',
+                        fontWeight: 800,
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                        cursor: 'pointer',
+                        transition: 'all 0.15s',
+                        boxShadow: isFActive && isBaseAppMode ? '0 0 8px rgba(0, 82, 255, 0.4)' : 'none'
+                      }}
+                    >
+                      {f.label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -2882,33 +2930,50 @@ function Rewards({ isBaseAppMode = false } = {}) {
               </div>
 
               {/* Status Filters */}
-              <div style={{ display: 'flex', gap: '4px', background: '#f1f5f9', padding: '3px', borderRadius: '99px', border: '1px solid #e2e8f0', flexWrap: 'nowrap', overflowX: 'auto', maxWidth: '100%' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: isBaseAppMode ? '4px' : '4px',
+                  background: isBaseAppMode ? 'rgba(2, 11, 26, 0.85)' : '#f1f5f9',
+                  padding: '3px 4px',
+                  borderRadius: '10px',
+                  border: isBaseAppMode ? '1px solid rgba(0, 245, 255, 0.25)' : '1px solid #e2e8f0',
+                  flexWrap: 'nowrap',
+                  overflowX: 'auto',
+                  maxWidth: '100%',
+                  boxSizing: 'border-box'
+                }}
+              >
                 {[
                   { id: 'all', label: `All (${giveawayCounts.all})` },
                   { id: 'active', label: `Active (${giveawayCounts.active})` },
                   { id: 'ended', label: `Ended (${giveawayCounts.ended})` }
-                ].map(f => (
-                  <button
-                    key={f.id}
-                    onClick={() => setGiveawayFilter(f.id)}
-                    style={{
-                      fontFamily: 'var(--font)',
-                      background: (giveawayFilter === f.id || (f.id === 'active' && giveawayFilter === 'ongoing')) ? 'var(--blue)' : 'transparent',
-                      color: (giveawayFilter === f.id || (f.id === 'active' && giveawayFilter === 'ongoing')) ? '#ffffff' : '#64748b',
-                      border: 'none',
-                      padding: '4px 10px',
-                      borderRadius: '99px',
-                      fontSize: '0.72rem',
-                      fontWeight: 800,
-                      whiteSpace: 'nowrap',
-                      flexShrink: 0,
-                      cursor: 'pointer',
-                      transition: 'all 0.15s'
-                    }}
-                  >
-                    {f.label}
-                  </button>
-                ))}
+                ].map(f => {
+                  const isFActive = (giveawayFilter === f.id || (f.id === 'active' && giveawayFilter === 'ongoing'));
+                  return (
+                    <button
+                      key={f.id}
+                      onClick={() => setGiveawayFilter(f.id)}
+                      style={{
+                        fontFamily: isBaseAppMode ? "'Press Start 2P', monospace" : 'var(--font)',
+                        background: isFActive ? (isBaseAppMode ? '#0052ff' : 'var(--blue)') : 'transparent',
+                        color: isFActive ? '#ffffff' : (isBaseAppMode ? '#cbd5e1' : '#64748b'),
+                        border: 'none',
+                        padding: isBaseAppMode ? '6px 8px' : '4px 10px',
+                        borderRadius: '8px',
+                        fontSize: isBaseAppMode ? '6.5px' : '0.72rem',
+                        fontWeight: 800,
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                        cursor: 'pointer',
+                        transition: 'all 0.15s',
+                        boxShadow: isFActive && isBaseAppMode ? '0 0 8px rgba(0, 82, 255, 0.4)' : 'none'
+                      }}
+                    >
+                      {f.label}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
