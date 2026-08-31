@@ -1241,6 +1241,66 @@ const STAKING_EPOCHS = [
     startDateObj: new Date('2026-09-20T15:00:00Z'),
     endDateObj: new Date('2026-09-30T15:00:00Z'),
     link: O1_STAKING_VAULT
+  },
+  {
+    epoch: 'Epoch 5',
+    duration: '10 Days',
+    poolAmount: 'TBA',
+    startTime: '30 Sep, 15:00 UTC',
+    endTime: '10 Oct, 15:00 UTC',
+    startDateObj: new Date('2026-09-30T15:00:00Z'),
+    endDateObj: new Date('2026-10-10T15:00:00Z'),
+    link: O1_STAKING_VAULT
+  },
+  {
+    epoch: 'Epoch 6',
+    duration: '10 Days',
+    poolAmount: 'TBA',
+    startTime: '10 Oct, 15:00 UTC',
+    endTime: '20 Oct, 15:00 UTC',
+    startDateObj: new Date('2026-10-10T15:00:00Z'),
+    endDateObj: new Date('2026-10-20T15:00:00Z'),
+    link: O1_STAKING_VAULT
+  },
+  {
+    epoch: 'Epoch 7',
+    duration: '10 Days',
+    poolAmount: 'TBA',
+    startTime: '20 Oct, 15:00 UTC',
+    endTime: '30 Oct, 15:00 UTC',
+    startDateObj: new Date('2026-10-20T15:00:00Z'),
+    endDateObj: new Date('2026-10-30T15:00:00Z'),
+    link: O1_STAKING_VAULT
+  },
+  {
+    epoch: 'Epoch 8',
+    duration: '10 Days',
+    poolAmount: 'TBA',
+    startTime: '30 Oct, 15:00 UTC',
+    endTime: '09 Nov, 15:00 UTC',
+    startDateObj: new Date('2026-10-30T15:00:00Z'),
+    endDateObj: new Date('2026-11-09T15:00:00Z'),
+    link: O1_STAKING_VAULT
+  },
+  {
+    epoch: 'Epoch 9',
+    duration: '10 Days',
+    poolAmount: 'TBA',
+    startTime: '09 Nov, 15:00 UTC',
+    endTime: '19 Nov, 15:00 UTC',
+    startDateObj: new Date('2026-11-09T15:00:00Z'),
+    endDateObj: new Date('2026-11-19T15:00:00Z'),
+    link: O1_STAKING_VAULT
+  },
+  {
+    epoch: 'Epoch 10',
+    duration: '10 Days',
+    poolAmount: 'TBA',
+    startTime: '19 Nov, 15:00 UTC',
+    endTime: '29 Nov, 15:00 UTC',
+    startDateObj: new Date('2026-11-19T15:00:00Z'),
+    endDateObj: new Date('2026-11-29T15:00:00Z'),
+    link: O1_STAKING_VAULT
   }
 ];
 
@@ -1281,13 +1341,14 @@ function formatCountdown(targetDate) {
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
   const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
   const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
 
   const pad = (n) => String(n).padStart(2, '0');
 
   if (days > 0) {
-    return `${days}D:${pad(hours)}H:${pad(minutes)}M`;
+    return `${days}D:${pad(hours)}H:${pad(minutes)}M:${pad(seconds)}S`;
   }
-  return `${pad(hours)}H:${pad(minutes)}M`;
+  return `${pad(hours)}H:${pad(minutes)}M:${pad(seconds)}S`;
 }
 
 function GiveawayCountdown({ targetDate, isOngoing }) {

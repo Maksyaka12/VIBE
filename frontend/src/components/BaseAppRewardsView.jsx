@@ -18,7 +18,7 @@ function formatClaimCountdown(targetDate) {
   const pad = (n) => String(n).padStart(2, '0');
 
   if (days > 0) {
-    return `${days}D ${pad(hours)}H ${pad(minutes)}M`;
+    return `${days}D ${pad(hours)}H ${pad(minutes)}M ${pad(seconds)}S`;
   }
   return `${pad(hours)}H ${pad(minutes)}M ${pad(seconds)}S`;
 }
@@ -178,7 +178,8 @@ export default function BaseAppRewardsView({
                   ? '1.5px solid #00f5ff'
                   : '1.5px solid rgba(0, 245, 255, 0.45)',
                 borderRadius: '12px',
-                padding: '10px 2px 8px 2px',
+                padding: '10px 2px',
+                minHeight: '74px',
                 fontSize: '6.5px',
                 fontFamily: "'Press Start 2P', monospace",
                 cursor: 'pointer',
@@ -186,7 +187,8 @@ export default function BaseAppRewardsView({
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: '4px',
+                justifyContent: 'center',
+                gap: '5px',
                 boxShadow: isActive
                   ? '0 4px 16px rgba(0, 82, 255, 0.45), 0 0 10px rgba(0, 245, 255, 0.35)'
                   : 'none',
@@ -201,7 +203,7 @@ export default function BaseAppRewardsView({
               <span style={{ whiteSpace: 'nowrap', color: isActive ? '#ffffff' : '#e2e8f0', fontWeight: 900 }}>
                 {tab.label}
               </span>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', marginTop: '2px' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
                 <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 5px #00ff88', flexShrink: 0 }} />
                 <span
                   style={{
