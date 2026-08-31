@@ -986,7 +986,7 @@ export default function Checker({ isBaseAppMode = false } = {}) {
   };
 
   return (
-    <section id="claim-portal" style={{ minHeight: '80vh', padding: isBaseAppMode ? '36px 0 80px 0' : '130px 0 100px 0', background: 'var(--bg)' }}>
+    <section id="claim-portal" style={{ minHeight: '80vh', padding: isBaseAppMode ? '36px 0 80px 0' : '130px 0 100px 0', background: isBaseAppMode ? 'transparent' : 'var(--bg)' }}>
       <div className="wrap" style={{ maxWidth: '1200px' }}>
         
         {/* Portal Header */}
