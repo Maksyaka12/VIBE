@@ -29,7 +29,6 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
     currentPhase,
     ethPriceFormatted,
     contractEthBalance,
-    contractVibeBalance,
     totalOnChainVibeBurned,
     hasMinted,
     isMintingEth,
@@ -43,6 +42,13 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
     setRouterSuccess,
     isWithdrawingEth,
     withdrawSuccess,
+    isWithdrawingVibe,
+    withdrawVibeSuccess,
+    contractVibeBalance,
+    isAdminPaidMinting,
+    adminPaidMintSuccess,
+    adminPaidMintedTokenId,
+    adminPaidRecipient,
     txHash,
     lastMintedId,
     errorMessage,
@@ -51,13 +57,17 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
     mintWithVIBE,
     executeAdminSwapAndBurn,
     executeSetAggregatorRouter,
-    executeWithdrawEth
+    executeWithdrawEth,
+    executeWithdrawVibe,
+    executeAdminPaidMintWithEth,
+    executeAdminPaidMintWithVibe
   } = useVibeNftContract();
 
   const [deckIndex, setDeckIndex] = useState(0);
   const [vibePerEthRatio, setVibePerEthRatio] = useState(50000000); // 1 ETH = ~50M VIBE fallback
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [adminEthInput, setAdminEthInput] = useState('0.005');
+  const [adminGiveawayRecipient, setAdminGiveawayRecipient] = useState('');
 
   const isAdmin = walletAddress?.toLowerCase() === '0x4c91d3bed372c11795b9ce9a9017dfe447bf050a';
 
@@ -205,9 +215,9 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
 
   // 4 Mint Phases definition
   const phases = [
-    { phase: 'PHASE 1', count: '103 NFT', price: '0.005 ETH', vibePrice: formatVibeComma(Math.floor(0.005 * vibePerEthRatio)), active: currentPhase === 1, done: currentPhase > 1 },
-    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', vibePrice: formatVibeComma(Math.floor(0.015 * vibePerEthRatio)), active: currentPhase === 2, done: currentPhase > 2 },
-    { phase: 'PHASE 3', count: '100 NFT', price: '0.05 ETH', vibePrice: formatVibeComma(Math.floor(0.05 * vibePerEthRatio)), active: currentPhase === 3, done: currentPhase > 3 },
+    { phase: 'PHASE 1', count: '103 NFT', price: '0.005 ETH', vibePrice: formatVibeComma(Math.floor(0.005 * vibePerEthRatio)), active: currentPhase === 1, done: currentPhase > 1 || totalMinted >= 103 },
+    { phase: 'PHASE 2', count: '100 NFT', price: '0.015 ETH', vibePrice: formatVibeComma(Math.floor(0.015 * vibePerEthRatio)), active: currentPhase === 2, done: currentPhase > 2 || totalMinted >= 203 },
+    { phase: 'PHASE 3', count: '100 NFT', price: '0.05 ETH', vibePrice: formatVibeComma(Math.floor(0.05 * vibePerEthRatio)), active: currentPhase === 3, done: currentPhase > 3 || totalMinted >= 303 },
     { phase: 'PHASE 4', count: '30 NFT', price: '0.1 ETH', vibePrice: formatVibeComma(Math.floor(0.1 * vibePerEthRatio)), active: currentPhase === 4, done: false },
   ];
 
@@ -229,7 +239,7 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
     return (
       <div style={{
         minHeight: '100vh',
-        width: '100vw',
+        width: isEmbeddedInBaseApp ? '100%' : '100vw',
         background: 'radial-gradient(circle at 50% 30%, #041430 0%, #020b1a 70%, #000511 100%)',
         color: '#fff',
         fontFamily: 'var(--vv-pixel)',
@@ -467,7 +477,7 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
       paddingBottom: '80px',
       overflowX: 'hidden',
       textTransform: 'uppercase',
-      width: isEmbeddedInBaseApp ? '100%' : '100vw'
+      width: '100vw'
     }}>
       {/* Inline animation & Mobile CSS Override */}
       <style>{`
@@ -573,161 +583,161 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
       {/* ── TOP HEADER / NAV ── */}
       {!isEmbeddedInBaseApp && (
         <header className="vv-nft-club-header" style={{
-          padding: '16px 20px',
-          borderBottom: '1px solid rgba(0, 245, 255, 0.15)',
-          background: 'rgba(2, 11, 26, 0.85)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          position: 'sticky',
-          top: 0,
-          zIndex: 100,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img src="/new-logo-vibe.png" alt="VIBE" style={{ width: '34px', height: '34px', borderRadius: '8px' }} />
-            <div>
-              <div style={{ fontFamily: 'var(--vv-pixel)', fontSize: '11px', color: '#00f5ff', letterSpacing: '0.5px' }}>
-                VIBE CLUB
-              </div>
-              <div className="vv-nft-club-header-subtext" style={{ fontSize: '8px', color: '#88aacc', marginTop: '2px', letterSpacing: '0.3px' }}>
-                VIBE VERSE: GENESIS
-              </div>
+        padding: '16px 20px',
+        borderBottom: '1px solid rgba(0, 245, 255, 0.15)',
+        background: 'rgba(2, 11, 26, 0.85)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src="/new-logo-vibe.png" alt="VIBE" style={{ width: '34px', height: '34px', borderRadius: '8px' }} />
+          <div>
+            <div style={{ fontFamily: 'var(--vv-pixel)', fontSize: '11px', color: '#00f5ff', letterSpacing: '0.5px' }}>
+              VIBE CLUB
+            </div>
+            <div className="vv-nft-club-header-subtext" style={{ fontSize: '8px', color: '#88aacc', marginTop: '2px', letterSpacing: '0.3px' }}>
+              VIBE VERSE: GENESIS
             </div>
           </div>
+        </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            {/* OpenSea Link (Hidden on mobile) */}
-            <a
-              href={OPENSEA_COLLECTION_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="vv-opensea-btn"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '6px 12px',
-                borderRadius: '20px',
-                background: 'rgba(32, 129, 226, 0.15)',
-                border: '1px solid #2081e2',
-                color: '#2081e2',
-                fontSize: '8px',
-                textDecoration: 'none',
-                fontWeight: 900
-              }}
-            >
-              OPENSEA ↗
-            </a>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {/* OpenSea Link (Hidden on mobile) */}
+          <a
+            href={OPENSEA_COLLECTION_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="vv-opensea-btn"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 12px',
+              borderRadius: '20px',
+              background: 'rgba(32, 129, 226, 0.15)',
+              border: '1px solid #2081e2',
+              color: '#2081e2',
+              fontSize: '8px',
+              textDecoration: 'none',
+              fontWeight: 900
+            }}
+          >
+            OPENSEA ↗
+          </a>
 
-            {/* DESKTOP WALLET CONNECT */}
-            <div className="vv-desktop-wallet-btn">
-              {authenticated ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{
-                    background: 'rgba(0, 245, 255, 0.1)',
-                    border: '1px solid rgba(0, 245, 255, 0.3)',
-                    padding: '6px 12px',
-                    borderRadius: '20px',
-                    fontSize: '9px',
-                    color: '#00ff88',
-                    fontFamily: 'var(--vv-pixel)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}>
-                    <WalletSvgIcon size={12} /> {walletAddress?.slice(0, 6)}...{walletAddress?.slice(-4)}
-                  </div>
-                  <button
-                    onClick={logout}
-                    style={{
-                      fontFamily: 'var(--vv-pixel)',
-                      background: 'transparent',
-                      border: '1px solid rgba(255, 68, 102, 0.4)',
-                      color: '#ff4466',
-                      padding: '6px 12px',
-                      borderRadius: '20px',
-                      fontSize: '8px',
-                      cursor: 'pointer',
-                      textTransform: 'uppercase'
-                    }}
-                  >
-                    LOGOUT
-                  </button>
+          {/* DESKTOP WALLET CONNECT */}
+          <div className="vv-desktop-wallet-btn">
+            {authenticated ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{
+                  background: 'rgba(0, 245, 255, 0.1)',
+                  border: '1px solid rgba(0, 245, 255, 0.3)',
+                  padding: '6px 12px',
+                  borderRadius: '20px',
+                  fontSize: '9px',
+                  color: '#00ff88',
+                  fontFamily: 'var(--vv-pixel)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}>
+                  <WalletSvgIcon size={12} /> {walletAddress?.slice(0, 6)}...{walletAddress?.slice(-4)}
                 </div>
-              ) : (
-                <button
-                  onClick={login}
-                  style={{
-                    fontFamily: 'var(--vv-pixel)',
-                    fontSize: '9px',
-                    background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
-                    color: '#fff',
-                    border: '1.5px solid #fff',
-                    padding: '10px 16px',
-                    borderRadius: '10px',
-                    cursor: 'pointer',
-                    boxShadow: '0 0 14px rgba(0, 245, 255, 0.4)',
-                    fontWeight: 900,
-                    textTransform: 'uppercase',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}
-                >
-                  <WalletSvgIcon size={13} /> CONNECT WALLET
-                </button>
-              )}
-            </div>
-
-            {/* MOBILE WALLET CONNECT */}
-            <div className="vv-mobile-wallet-btn" style={{ alignItems: 'center' }}>
-              {authenticated ? (
                 <button
                   onClick={logout}
                   style={{
                     fontFamily: 'var(--vv-pixel)',
+                    background: 'transparent',
+                    border: '1px solid rgba(255, 68, 102, 0.4)',
+                    color: '#ff4466',
+                    padding: '6px 12px',
+                    borderRadius: '20px',
                     fontSize: '8px',
-                    background: 'rgba(0, 245, 255, 0.12)',
-                    border: '1.5px solid #00f5ff',
-                    color: '#00ff88',
-                    padding: '8px 12px',
-                    borderRadius: '10px',
                     cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    boxShadow: '0 0 10px rgba(0, 245, 255, 0.3)'
+                    textTransform: 'uppercase'
                   }}
                 >
-                  <WalletSvgIcon size={12} /> {walletAddress?.slice(0, 4)}...{walletAddress?.slice(-3)}
+                  LOGOUT
                 </button>
-              ) : (
-                <button
-                  onClick={login}
-                  style={{
-                    fontFamily: 'var(--vv-pixel)',
-                    fontSize: '8px',
-                    background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
-                    color: '#fff',
-                    border: '1.5px solid #ffffff',
-                    padding: '8px 12px',
-                    borderRadius: '10px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    boxShadow: '0 0 12px rgba(0, 245, 255, 0.4)',
-                    fontWeight: 900
-                  }}
-                >
-                  <WalletSvgIcon size={12} /> CONNECT
-                </button>
-              )}
-            </div>
+              </div>
+            ) : (
+              <button
+                onClick={login}
+                style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '9px',
+                  background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
+                  color: '#fff',
+                  border: '1.5px solid #fff',
+                  padding: '10px 16px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  boxShadow: '0 0 14px rgba(0, 245, 255, 0.4)',
+                  fontWeight: 900,
+                  textTransform: 'uppercase',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <WalletSvgIcon size={13} /> CONNECT WALLET
+              </button>
+            )}
           </div>
-        </header>
+
+          {/* MOBILE WALLET CONNECT */}
+          <div className="vv-mobile-wallet-btn" style={{ alignItems: 'center' }}>
+            {authenticated ? (
+              <button
+                onClick={logout}
+                style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8px',
+                  background: 'rgba(0, 245, 255, 0.12)',
+                  border: '1.5px solid #00f5ff',
+                  color: '#00ff88',
+                  padding: '8px 12px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 0 10px rgba(0, 245, 255, 0.3)'
+                }}
+              >
+                <WalletSvgIcon size={12} /> {walletAddress?.slice(0, 4)}...{walletAddress?.slice(-3)}
+              </button>
+            ) : (
+              <button
+                onClick={login}
+                style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8px',
+                  background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
+                  color: '#fff',
+                  border: '1.5px solid #ffffff',
+                  padding: '8px 12px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 0 12px rgba(0, 245, 255, 0.4)',
+                  fontWeight: 900
+                }}
+              >
+                <WalletSvgIcon size={12} /> CONNECT
+              </button>
+            )}
+          </div>
+        </div>
+      </header>
       )}
 
       {/* ── MAIN CONTAINER ── */}
@@ -1271,9 +1281,15 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
                     whiteSpace: 'nowrap',
                     flexShrink: 0
                   }}>
-                    <span style={{ color: '#00f5ff' }}>{p.price}</span>
-                    <span className="vv-phase-vibe-part" style={{ color: '#88aacc' }}>/</span>
-                    <span className="vv-phase-vibe-part" style={{ color: '#ffd700' }}>{p.vibePrice}</span>
+                    {p.done ? (
+                      <span style={{ color: '#ffd700', letterSpacing: '0.4px' }}>{p.phase} COMPLETED</span>
+                    ) : (
+                      <>
+                        <span style={{ color: '#00f5ff' }}>{p.price}</span>
+                        <span className="vv-phase-vibe-part" style={{ color: '#88aacc' }}>/</span>
+                        <span className="vv-phase-vibe-part" style={{ color: '#ffd700' }}>{p.vibePrice}</span>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
@@ -1343,7 +1359,7 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
 
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
                   <span style={{ color: '#00ff88', fontSize: '9px', flexShrink: 0 }}>•</span>
-                  <span>THE REMAINING 20% GOES DIRECTLY INTO THE VIBE VERSE REWARDS POOL.</span>
+                  <span>THE REMAINING 20% GOES DIRECTLY INTO THE COMMUNITY REWARDS POOL.</span>
                 </div>
               </div>
             </div>
@@ -1539,16 +1555,29 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
               }}>
                 <span>👑</span> ADMIN PANEL: SWAP & AUTO-BURN
               </div>
-              <div style={{
-                fontFamily: 'var(--vv-pixel)',
-                fontSize: '8px',
-                color: '#00f5ff',
-                background: 'rgba(0, 245, 255, 0.12)',
-                padding: '4px 10px',
-                borderRadius: '8px',
-                border: '1px solid #00f5ff'
-              }}>
-                CONTRACT ETH: {parseFloat(contractEthBalance || '0').toFixed(4)} ETH
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <div style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8px',
+                  color: '#00f5ff',
+                  background: 'rgba(0, 245, 255, 0.12)',
+                  padding: '4px 10px',
+                  borderRadius: '8px',
+                  border: '1px solid #00f5ff'
+                }}>
+                  CONTRACT ETH: {parseFloat(contractEthBalance || '0').toFixed(4)} ETH
+                </div>
+                <div style={{
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8px',
+                  color: '#ffd700',
+                  background: 'rgba(255, 215, 0, 0.12)',
+                  padding: '4px 10px',
+                  borderRadius: '8px',
+                  border: '1px solid #ffd700'
+                }}>
+                  CONTRACT $VIBE: {Number(contractVibeBalance || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE
+                </div>
               </div>
             </div>
 
@@ -1692,7 +1721,7 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
               {/* Execute Swap Button */}
               <button
                 onClick={() => executeAdminSwapAndBurn(adminEthInput)}
-                disabled={isAdminSwapping || isWithdrawingEth || parseFloat(adminEthInput || '0') <= 0}
+                disabled={isAdminSwapping || isWithdrawingEth || isWithdrawingVibe || parseFloat(adminEthInput || '0') <= 0}
                 style={{
                   width: '100%',
                   height: '44px',
@@ -1703,7 +1732,7 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
                   border: '2px solid #ffffff',
                   borderRadius: '10px',
                   color: '#ffffff',
-                  cursor: (isAdminSwapping || isWithdrawingEth) ? 'not-allowed' : 'pointer',
+                  cursor: (isAdminSwapping || isWithdrawingEth || isWithdrawingVibe) ? 'not-allowed' : 'pointer',
                   boxShadow: '0 4px 16px rgba(255, 68, 102, 0.4)',
                   letterSpacing: '0.5px',
                   display: 'flex',
@@ -1719,7 +1748,7 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
               {/* Withdraw Contract ETH to Admin Wallet Button */}
               <button
                 onClick={executeWithdrawEth}
-                disabled={isWithdrawingEth || isAdminSwapping || parseFloat(contractEthBalance || '0') <= 0}
+                disabled={isWithdrawingEth || isAdminSwapping || isWithdrawingVibe || parseFloat(contractEthBalance || '0') <= 0}
                 style={{
                   width: '100%',
                   height: '38px',
@@ -1730,7 +1759,7 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
                   border: '1.5px solid #00f5ff',
                   borderRadius: '10px',
                   color: '#00f5ff',
-                  cursor: (isWithdrawingEth || isAdminSwapping) ? 'not-allowed' : 'pointer',
+                  cursor: (isWithdrawingEth || isAdminSwapping || isWithdrawingVibe) ? 'not-allowed' : 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -1740,6 +1769,32 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
                 }}
               >
                 {isWithdrawingEth ? '⏳ WITHDRAWING ETH...' : `💸 WITHDRAW ALL ETH TO ADMIN WALLET (${parseFloat(contractEthBalance || '0').toFixed(4)} ETH)`}
+              </button>
+
+              {/* Withdraw Contract $VIBE to Admin Wallet Button */}
+              <button
+                onClick={executeWithdrawVibe}
+                disabled={isWithdrawingVibe || isAdminSwapping || isWithdrawingEth || parseFloat(contractVibeBalance || '0') <= 0}
+                style={{
+                  width: '100%',
+                  height: '38px',
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8.5px',
+                  fontWeight: 900,
+                  background: 'rgba(255, 215, 0, 0.12)',
+                  border: '1.5px solid #ffd700',
+                  borderRadius: '10px',
+                  color: '#ffd700',
+                  cursor: (isWithdrawingVibe || isAdminSwapping || isWithdrawingEth) ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  textTransform: 'uppercase',
+                  boxShadow: '0 0 12px rgba(255, 215, 0, 0.2)'
+                }}
+              >
+                {isWithdrawingVibe ? '⏳ WITHDRAWING $VIBE...' : `💰 WITHDRAW ALL $VIBE TO ADMIN WALLET (${Number(contractVibeBalance || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE)`}
               </button>
             </div>
 
@@ -1757,6 +1812,33 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
                 lineHeight: 1.6
               }}>
                 ✓ ETH WITHDRAWN TO ADMIN WALLET SUCCESSFULLY!
+                {adminTxHash && (
+                  <div style={{ marginTop: '4px' }}>
+                    <a
+                      href={`https://basescan.org/tx/${adminTxHash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#00f5ff', textDecoration: 'underline' }}
+                    >
+                      VIEW TRANSACTION ON BASESCAN ↗
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
+            {withdrawVibeSuccess && (
+              <div style={{
+                marginTop: '12px',
+                padding: '10px',
+                background: 'rgba(0, 255, 136, 0.15)',
+                border: '1px solid #00ff88',
+                borderRadius: '8px',
+                color: '#00ff88',
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '8px',
+                lineHeight: 1.6
+              }}>
+                ✓ ALL CONTRACT $VIBE WITHDRAWN TO ADMIN WALLET SUCCESSFULLY!
                 {adminTxHash && (
                   <div style={{ marginTop: '4px' }}>
                     <a
@@ -1798,6 +1880,138 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
                 )}
               </div>
             )}
+
+            {/* ── ADMIN NFT MINT & DIRECT GIVEAWAY SECTION ── */}
+            <div style={{
+              marginTop: '20px',
+              paddingTop: '16px',
+              borderTop: '1px solid rgba(0, 245, 255, 0.25)'
+            }}>
+              <div style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '10px',
+                color: '#00f5ff',
+                marginBottom: '10px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                <span>🎁</span> ADMIN NFT MINT & DIRECT GIVEAWAY (FULL PHASE PRICE)
+              </div>
+              <p style={{
+                fontFamily: 'var(--vv-pixel)',
+                fontSize: '7.5px',
+                color: '#a0b5d0',
+                lineHeight: 1.6,
+                marginBottom: '14px',
+                textTransform: 'uppercase'
+              }}>
+                Mint NFTs at full phase price and automatically send them directly to a winner address (or your own wallet). 80% burns $VIBE & 20% goes to Rewards Pool.
+              </p>
+
+              <div style={{
+                background: 'rgba(2, 11, 26, 0.6)',
+                border: '1px solid rgba(0, 245, 255, 0.3)',
+                borderRadius: '10px',
+                padding: '12px',
+                marginBottom: '12px'
+              }}>
+                <div style={{ marginBottom: '10px' }}>
+                  <div style={{ fontSize: '7px', color: '#88aacc', fontFamily: 'var(--vv-pixel)', marginBottom: '4px' }}>
+                    RECIPIENT ADDRESS (LEAVE EMPTY TO MINT TO YOUR ADMIN WALLET):
+                  </div>
+                  <input
+                    type="text"
+                    value={adminGiveawayRecipient}
+                    onChange={(e) => setAdminGiveawayRecipient(e.target.value)}
+                    placeholder={walletAddress || '0x... (Winner / Destination Address)'}
+                    style={{
+                      width: '100%',
+                      background: 'rgba(2, 11, 26, 0.9)',
+                      border: '1px solid #00f5ff',
+                      borderRadius: '8px',
+                      color: '#00f5ff',
+                      fontFamily: 'var(--vv-pixel)',
+                      fontSize: '8px',
+                      padding: '8px 10px',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                  <button
+                    onClick={() => executeAdminPaidMintWithEth(adminGiveawayRecipient)}
+                    disabled={isAdminPaidMinting || isMintingEth || isMintingVibe || isApprovingVibe}
+                    style={{
+                      height: '42px',
+                      fontFamily: 'var(--vv-pixel)',
+                      fontSize: '8px',
+                      fontWeight: 900,
+                      background: 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)',
+                      border: '1.5px solid #ffffff',
+                      borderRadius: '8px',
+                      color: '#ffffff',
+                      cursor: (isAdminPaidMinting || isMintingEth || isMintingVibe || isApprovingVibe) ? 'not-allowed' : 'pointer',
+                      textTransform: 'uppercase',
+                      boxShadow: '0 0 12px rgba(0, 245, 255, 0.25)'
+                    }}
+                  >
+                    {isAdminPaidMinting ? '⏳ MINTING & SENDING...' : `MINT WITH ETH (${ethPriceFormatted} ETH)`}
+                  </button>
+
+                  <button
+                    onClick={() => executeAdminPaidMintWithVibe(adminGiveawayRecipient, parseEther(String(currentDynamicVibeAmount)))}
+                    disabled={isAdminPaidMinting || isMintingEth || isMintingVibe || isApprovingVibe}
+                    style={{
+                      height: '42px',
+                      fontFamily: 'var(--vv-pixel)',
+                      fontSize: '8px',
+                      fontWeight: 900,
+                      background: 'linear-gradient(135deg, #ffd700 0%, #ff6b35 100%)',
+                      border: '1.5px solid #ffffff',
+                      borderRadius: '8px',
+                      color: '#ffffff',
+                      cursor: (isAdminPaidMinting || isMintingEth || isMintingVibe || isApprovingVibe) ? 'not-allowed' : 'pointer',
+                      textTransform: 'uppercase',
+                      boxShadow: '0 0 12px rgba(255, 215, 0, 0.25)'
+                    }}
+                  >
+                    {isApprovingVibe ? 'APPROVING $VIBE...' : isAdminPaidMinting ? '⏳ MINTING & SENDING...' : `MINT WITH $VIBE`}
+                  </button>
+                </div>
+              </div>
+
+              {/* Status messages for Admin Paid Mint */}
+              {adminPaidMintSuccess && (
+                <div style={{
+                  marginTop: '12px',
+                  padding: '10px',
+                  background: 'rgba(0, 255, 136, 0.15)',
+                  border: '1px solid #00ff88',
+                  borderRadius: '8px',
+                  color: '#00ff88',
+                  fontFamily: 'var(--vv-pixel)',
+                  fontSize: '8px',
+                  lineHeight: 1.6
+                }}>
+                  🎉 NFT #{adminPaidMintedTokenId} SUCCESSFULLY MINTED FOR {adminPaidRecipient || 'ADMIN WALLET'}!
+                  {adminTxHash && (
+                    <div style={{ marginTop: '4px' }}>
+                      <a
+                        href={`https://basescan.org/tx/${adminTxHash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: '#00f5ff', textDecoration: 'underline' }}
+                      >
+                        VIEW TRANSACTION ON BASESCAN ↗
+                      </a>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

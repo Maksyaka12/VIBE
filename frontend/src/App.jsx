@@ -333,6 +333,23 @@ function Tokenomics() {
   const r = useRev();
   const { totalBurned, totalBurnedNum, totalBuybacks, communityRewards, distributedRewards, loading } = useRevenueStats();
   
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash === '#vesting-details') {
+      const scrollToVesting = () => {
+        const el = document.getElementById('vesting-details');
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const targetY = scrollTop + rect.top - 80;
+          window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+        }
+      };
+      scrollToVesting();
+      const timer = setTimeout(scrollToVesting, 200);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   const now = new Date();
   const unlockedCount = UNLOCKS.filter(u => new Date(u.d) <= now).length;
   const unlockedTokens = unlockedCount * 10_000_000;
@@ -896,7 +913,7 @@ function Tokenomics() {
         </div>
 
         {/* BLOCK 4: VESTING DETAILS */}
-        <div id="vesting-details" className="sec-head" style={{ marginBottom: '40px', marginTop: '40px' }}>
+        <div id="vesting-details" className="sec-head" style={{ marginBottom: '40px', marginTop: '40px', scrollMarginTop: '90px' }}>
           <h2>Vesting <span className="bl">Details</span>.</h2>
           <p className="sec-sub">100M tokens vested. Every month 10M unlocks and get distributed among holders.</p>
         </div>
