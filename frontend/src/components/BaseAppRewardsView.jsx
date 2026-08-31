@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Coins, Lock, ArrowUpRight, ChevronDown, Info } from 'lucide-react';
+import { Coins, Lock, ArrowUpRight, ChevronDown, Info, Sparkles } from 'lucide-react';
 
 function formatClaimCountdown(targetDate) {
   if (!targetDate) return '';
@@ -83,54 +83,106 @@ export default function BaseAppRewardsView({
   const featuredStakingStatus = getEpochStatus(featuredStaking, now);
   const otherStakings = STAKING_EPOCHS.filter(e => e.epoch !== featuredStaking.epoch);
 
-  // Giveaways calculations (Active ongoing vs Past ended)
+  // Giveaways calculations (All active ongoing vs Past ended)
   const activeGiveaways = GIVEAWAYS_DATA.filter(e => e.status === 'ongoing');
   const pastGiveaways = GIVEAWAYS_DATA.filter(e => e.status === 'ended');
-  const featuredGiveaway = activeGiveaways.find(e => e.id === 5) || activeGiveaways[0] || GIVEAWAYS_DATA[0];
-  const otherActiveGiveaways = activeGiveaways.filter(e => e.id !== featuredGiveaway?.id);
 
   return (
     <div style={{ width: '100%', boxSizing: 'border-box' }}>
-      {/* ── 1. REWARDS HERO TITLE (NO NEON GLOW) ── */}
-      <div className="sec-head" style={{ marginBottom: '18px', textAlign: 'center' }}>
-        <h2 style={{ textShadow: 'none' }}>Rewards <span className="bl" style={{ textShadow: 'none' }}>Hub</span>.</h2>
-        <p className="sec-sub" style={{ textShadow: 'none' }}>Track active epochs &amp; claim community rewards</p>
+      {/* ── 1. MODERN ULTRA-STYLISH REWARDS HERO HEADER ── */}
+      <div
+        style={{
+          textAlign: 'center',
+          marginBottom: '20px',
+          padding: '14px 12px 10px 12px',
+          position: 'relative'
+        }}
+      >
+        {/* Subtle status pill */}
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            background: 'rgba(0, 245, 255, 0.08)',
+            border: '1px solid rgba(0, 245, 255, 0.25)',
+            borderRadius: '99px',
+            padding: '5px 12px',
+            marginBottom: '10px'
+          }}
+        >
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 6px #00ff88' }} />
+          <span style={{ fontSize: '6.5px', color: '#00f5ff', letterSpacing: '0.6px', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
+            LIVE REWARDS ECOSYSTEM
+          </span>
+        </div>
+
+        <h2
+          style={{
+            fontSize: '13px',
+            margin: '0 0 6px 0',
+            letterSpacing: '0.5px',
+            color: '#ffffff',
+            fontFamily: "'Press Start 2P', monospace",
+            textShadow: 'none'
+          }}
+        >
+          REWARDS <span style={{ color: '#00f5ff' }}>HUB</span>.
+        </h2>
+        <p
+          style={{
+            fontSize: '7px',
+            color: '#88aacc',
+            lineHeight: 1.5,
+            margin: 0,
+            letterSpacing: '0.2px',
+            fontFamily: "'Press Start 2P', monospace",
+            textShadow: 'none'
+          }}
+        >
+          Track live epochs, claim rewards &amp; join events
+        </p>
       </div>
 
-      {/* ── 2. SEGMENTED CATEGORY SWITCHER (1 TAP SWITCHING) ── */}
+      {/* ── 2. PREMIUM CYBERPUNK / WEB3 CATEGORY SWITCHER ── */}
       <div
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
-          gap: '5px',
-          background: 'rgba(2, 11, 26, 0.88)',
+          gap: '6px',
+          background: 'linear-gradient(180deg, rgba(6, 26, 60, 0.95) 0%, rgba(2, 11, 26, 0.98) 100%)',
           border: '1.5px solid rgba(0, 245, 255, 0.25)',
-          borderRadius: '14px',
-          padding: '5px',
-          marginBottom: '20px',
-          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.6)'
+          borderRadius: '16px',
+          padding: '6px',
+          marginBottom: '22px',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08)'
         }}
       >
         {[
-          { id: 'holders', label: 'Holders', icon: '💎' },
-          { id: 'vibe-club', label: 'Vibe Club', icon: '👑' },
-          { id: 'staking', label: 'Staking', icon: '⚡' },
-          { id: 'giveaways', label: 'Giveaway', icon: '🎁' }
+          { id: 'holders', label: 'Holders', icon: '💎', count: `${activeHolders.length} LIVE` },
+          { id: 'vibe-club', label: 'Vibe Club', icon: '👑', count: `${activeVibeClubs.length} LIVE` },
+          { id: 'staking', label: 'Staking', icon: '⚡', count: `${activeStakings.length} LIVE` },
+          { id: 'giveaways', label: 'Giveaways', icon: '🎁', count: `${activeGiveaways.length} EVENTS` }
         ].map(tab => {
           const isActive = currentTab === tab.id;
           return (
             <button
               key={tab.id}
+              type="button"
               onClick={() => {
                 setCurrentTab(tab.id);
                 setActiveTooltip(null);
               }}
               style={{
-                background: isActive ? '#0052ff' : 'transparent',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: '10px',
-                padding: '9px 2px',
+                background: isActive
+                  ? 'linear-gradient(135deg, #0052ff 0%, #0036b3 100%)'
+                  : 'rgba(255, 255, 255, 0.02)',
+                color: isActive ? '#ffffff' : '#88aacc',
+                border: isActive
+                  ? '1px solid rgba(0, 245, 255, 0.6)'
+                  : '1px solid transparent',
+                borderRadius: '12px',
+                padding: '10px 2px 8px 2px',
                 fontSize: '6.5px',
                 fontFamily: "'Press Start 2P', monospace",
                 cursor: 'pointer',
@@ -139,12 +191,31 @@ export default function BaseAppRewardsView({
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: '4px',
-                boxShadow: isActive ? '0 0 14px rgba(0, 82, 255, 0.6)' : 'none',
-                transition: 'all 0.15s'
+                boxShadow: isActive
+                  ? '0 4px 16px rgba(0, 82, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+                  : 'none',
+                transition: 'all 0.18s ease',
+                position: 'relative',
+                overflow: 'hidden'
               }}
             >
-              <span style={{ fontSize: '13px' }}>{tab.icon}</span>
-              <span style={{ whiteSpace: 'nowrap' }}>{tab.label}</span>
+              <span style={{ fontSize: '13px', filter: isActive ? 'drop-shadow(0 2px 6px rgba(0,0,0,0.5))' : 'grayscale(0.2)' }}>
+                {tab.icon}
+              </span>
+              <span style={{ whiteSpace: 'nowrap', color: isActive ? '#ffffff' : '#cbd5e1', fontWeight: 900 }}>
+                {tab.label}
+              </span>
+              <span
+                style={{
+                  fontSize: '5px',
+                  color: isActive ? '#00f5ff' : '#64748b',
+                  letterSpacing: '0.2px',
+                  fontWeight: 800,
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                {tab.count}
+              </span>
             </button>
           );
         })}
@@ -153,7 +224,7 @@ export default function BaseAppRewardsView({
       {/* ── 3. CATEGORY VIEW: 💎 HOLDER REWARDS ── */}
       {currentTab === 'holders' && (
         <div>
-          {/* Smart Rule Strip (Clean Gold without neon text shadow) */}
+          {/* Smart Rule Strip */}
           <div
             style={{
               background: 'rgba(255, 215, 0, 0.08)',
@@ -871,7 +942,7 @@ export default function BaseAppRewardsView({
         </div>
       )}
 
-      {/* ── 6. CATEGORY VIEW: 🎁 GIVEAWAYS ── */}
+      {/* ── 6. CATEGORY VIEW: 🎁 GIVEAWAYS (ALL ACTIVE CARDS STACKED) ── */}
       {currentTab === 'giveaways' && (
         <div>
           {/* Smart Rule Strip */}
@@ -893,9 +964,10 @@ export default function BaseAppRewardsView({
             </span>
           </div>
 
-          {/* Featured Spotlight Active Giveaway Card (Meme & Art with LIVE DEADLINE TIMER) */}
-          {featuredGiveaway && (
+          {/* All Active Ongoing Giveaways as Full Rich Cards */}
+          {activeGiveaways.map((g) => (
             <div
+              key={g.id}
               style={{
                 background: 'rgba(4, 20, 48, 0.94)',
                 border: '2px solid #00ff88',
@@ -907,10 +979,18 @@ export default function BaseAppRewardsView({
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', gap: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <img src="/new-logo-vibe.png" alt="VIBE" style={{ width: '34px', height: '34px', borderRadius: '50%', border: '2px solid #00ff88' }} />
+                  <img
+                    src="/new-logo-vibe.png"
+                    alt="VIBE"
+                    style={{ width: '34px', height: '34px', borderRadius: '50%', border: '2px solid #00ff88', objectFit: 'cover' }}
+                  />
                   <div>
-                    <div style={{ fontSize: '9px', color: '#ffffff', fontWeight: 900, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>{featuredGiveaway.title}</div>
-                    <div style={{ fontSize: '6.5px', color: '#00ff88', marginTop: '3px', fontWeight: 900, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>EVENT IS LIVE</div>
+                    <div style={{ fontSize: '9px', color: '#ffffff', fontWeight: 900, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
+                      {g.title}
+                    </div>
+                    <div style={{ fontSize: '6.5px', color: '#00ff88', marginTop: '3px', fontWeight: 900, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
+                      EVENT IS LIVE
+                    </div>
                   </div>
                 </div>
                 <div style={{ background: 'rgba(0, 255, 136, 0.15)', border: '1px solid #00ff88', color: '#00ff88', padding: '4px 8px', borderRadius: '8px', fontSize: '6.5px', display: 'flex', alignItems: 'center', gap: '5px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
@@ -923,27 +1003,31 @@ export default function BaseAppRewardsView({
               <div style={{ background: 'rgba(2, 11, 26, 0.85)', border: '1px solid rgba(0, 245, 255, 0.25)', borderRadius: '12px', padding: '12px 14px', marginBottom: '12px' }}>
                 <div style={{ fontSize: '6.5px', color: '#88aacc', marginBottom: '4px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>PRIZE POOL</div>
                 <div style={{ fontSize: '13px', color: '#00f5ff', fontWeight: 900, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
-                  {featuredGiveaway.prizePool}
+                  {g.prizePool}
                 </div>
               </div>
 
-              {/* Two info pills: Distribution & LIVE DEADLINE */}
+              {/* Two info pills: Distribution & Deadline / Winners */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '14px' }}>
                 <div style={{ background: 'rgba(2, 11, 26, 0.75)', border: '1px solid rgba(0, 245, 255, 0.2)', borderRadius: '10px', padding: '8px 10px' }}>
                   <div style={{ fontSize: '6px', color: '#88aacc', marginBottom: '2px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>DISTRIBUTION</div>
-                  <div style={{ fontSize: '7px', color: '#ffffff', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>{featuredGiveaway.distribution || 'Not Started'}</div>
+                  <div style={{ fontSize: '7px', color: '#ffffff', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
+                    {g.distribution || 'Not Started'}
+                  </div>
                 </div>
                 <div style={{ background: 'rgba(2, 11, 26, 0.75)', border: '1px solid rgba(0, 245, 255, 0.2)', borderRadius: '10px', padding: '8px 10px' }}>
-                  <div style={{ fontSize: '6px', color: '#88aacc', marginBottom: '2px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>DEADLINE</div>
-                  <div style={{ fontSize: '7px', color: '#00ff88', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
-                    {featuredGiveaway.deadlineDate ? <ActiveClaimCountdown targetDate={featuredGiveaway.deadlineDate} /> : 'TBA'}
+                  <div style={{ fontSize: '6px', color: '#88aacc', marginBottom: '2px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
+                    {g.deadlineDate ? 'DEADLINE' : 'WINNERS'}
+                  </div>
+                  <div style={{ fontSize: '7px', color: g.deadlineDate ? '#00ff88' : '#ffffff', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
+                    {g.deadlineDate ? <ActiveClaimCountdown targetDate={g.deadlineDate} /> : (g.winners || 'TBA')}
                   </div>
                 </div>
               </div>
 
-              {/* Direct Join Action Button */}
+              {/* Direct Join Action Button (Links to Tweet) */}
               <a
-                href={featuredGiveaway.link}
+                href={g.link}
                 target="_blank"
                 rel="noreferrer"
                 style={{
@@ -969,68 +1053,7 @@ export default function BaseAppRewardsView({
                 <span style={{ color: '#00ff88' }}>JOIN GIVEAWAY</span> <ArrowUpRight size={14} color="#00ff88" strokeWidth={2.5} />
               </a>
             </div>
-          )}
-
-          {/* Other Ongoing Giveaways ($1M MC & 1000 Holders) */}
-          {otherActiveGiveaways.length > 0 && (
-            <div style={{ background: 'rgba(4, 20, 48, 0.88)', border: '1.5px solid rgba(0, 245, 255, 0.25)', borderRadius: '16px', padding: '16px 14px', marginBottom: '20px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <div style={{ fontSize: '8.5px', color: '#ffffff', fontWeight: 900, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>MORE ACTIVE EVENTS</div>
-                <div style={{ fontSize: '6.5px', color: '#00ff88', fontFamily: "'Press Start 2P', monospace", textShadow: 'none', fontWeight: 800 }}>{otherActiveGiveaways.length} ONGOING</div>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {otherActiveGiveaways.map((u, i) => (
-                  <div
-                    key={u.id || i}
-                    style={{
-                      background: 'rgba(2, 11, 26, 0.75)',
-                      border: '1px solid rgba(0, 255, 136, 0.3)',
-                      borderRadius: '10px',
-                      padding: '10px 12px',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      gap: '8px'
-                    }}
-                  >
-                    <div>
-                      <div style={{ fontSize: '7.5px', color: '#ffffff', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>{u.title}</div>
-                      <div style={{ fontSize: '6.5px', color: '#ffd700', marginTop: '3px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>{u.winners || 'TBA'}</div>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '7.5px', color: '#00f5ff', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>{u.prizePool}</div>
-                        <div style={{ fontSize: '6px', color: '#00ff88', marginTop: '2px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>ONGOING</div>
-                      </div>
-                      <a
-                        href={u.link}
-                        target="_blank"
-                        rel="noreferrer"
-                        style={{
-                          fontSize: '6.5px',
-                          color: '#00ff88',
-                          border: '1px solid #00ff88',
-                          background: 'rgba(0, 255, 136, 0.15)',
-                          padding: '6px 9px',
-                          borderRadius: '6px',
-                          textDecoration: 'none',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                          fontFamily: "'Press Start 2P', monospace",
-                          fontWeight: 800,
-                          whiteSpace: 'nowrap'
-                        }}
-                      >
-                        <span style={{ color: '#00ff88' }}>Join</span> <ArrowUpRight size={10} color="#00ff88" />
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          ))}
 
           {/* Past Giveaways (7 NFTs Vibe Club & Base App Welcome Bonus with 350 Winners & View Button) */}
           {pastGiveaways.length > 0 && (
