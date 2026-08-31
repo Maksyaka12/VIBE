@@ -13,6 +13,7 @@ import VibeVerse from './verse/VibeVerse';
 import VibeVerseLockScreen from './verse/VibeVerseLockScreen';
 import NftClubPage from './pages/NftClubPage';
 import BaseAppRewardsView from './components/BaseAppRewardsView';
+import sdk from '@farcaster/frame-sdk';
 import './index.css';
 
 const CA      = '0xb200000000000000000000df24ecb8bf51100a01';
@@ -3430,10 +3431,11 @@ function DomainRouter() {
     const ua = navigator.userAgent || '';
     const isBaseUa = /BaseApp|CoinbaseWallet|Farcaster|Warpcast/i.test(ua);
     const isBaseProvider = !!(window.ethereum?.isCoinbaseWallet || window.ethereum?.isBaseApp || window.ethereum?.isBase);
+    const isIframe = window.self !== window.top;
     const urlParams = new URLSearchParams(location.search);
     const isBaseParam = urlParams.get('app') === 'base' || urlParams.get('mode') === 'base' || urlParams.get('mode') === 'app' || urlParams.get('source') === 'base';
     const isAppPath = location.pathname.startsWith('/app') || location.pathname.startsWith('/hub-app');
-    return isBaseUa || isBaseProvider || isBaseParam || isAppPath;
+    return isBaseUa || isBaseProvider || isIframe || isBaseParam || isAppPath;
   })();
 
   useEffect(() => {
@@ -3494,6 +3496,19 @@ function DomainRouter() {
 const queryClient = new QueryClient();
 
 export default function App() {
+  useEffect(() => {
+    const initFrameSdk = async () => {
+      try {
+        if (sdk?.actions?.ready) {
+          await sdk.actions.ready();
+        }
+      } catch (err) {
+        // Silently ignore if not in Farcaster / Base App environment
+      }
+    };
+    initFrameSdk();
+  }, []);
+
   return (
     <PrivyProvider
       appId="cmrugdvds02q60cl7tegmrnx7"
