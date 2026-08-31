@@ -41,6 +41,17 @@ const stripYear = (str) => {
   return str.replace(/\s\d{4},/, ',');
 };
 
+const getEpochStatus = (ep, currentTime = new Date()) => {
+  const current = currentTime instanceof Date ? currentTime : new Date(currentTime);
+  if (ep.endDateObj && current >= ep.endDateObj) {
+    return 'ended';
+  }
+  if (ep.startDateObj && current >= ep.startDateObj) {
+    return 'active';
+  }
+  return 'upcoming';
+};
+
 export default function BaseAppRewardsView({
   HOLDER_UNLOCKS,
   VIBECLUB_EPOCHS,
@@ -63,10 +74,14 @@ export default function BaseAppRewardsView({
   const featuredVibeClub = activeVibeClubs[0] || VIBECLUB_EPOCHS[0];
   const upcomingVibeClubs = VIBECLUB_EPOCHS.filter(u => u.epoch !== featuredVibeClub.epoch);
 
-  // Staking calculations
-  const activeStakings = STAKING_EPOCHS.filter(e => e.status === 'active' || e.status === 'ongoing');
-  const featuredStaking = activeStakings[0] || STAKING_EPOCHS[0];
-  const upcomingStakings = STAKING_EPOCHS.filter(e => e.epoch !== featuredStaking.epoch);
+  // Dynamic Staking calculations based on timestamps
+  const activeStakings = STAKING_EPOCHS.filter(e => getEpochStatus(e, now) === 'active');
+  const endedStakings = STAKING_EPOCHS.filter(e => getEpochStatus(e, now) === 'ended');
+  const upcomingStakings = STAKING_EPOCHS.filter(e => getEpochStatus(e, now) === 'upcoming');
+
+  const featuredStaking = activeStakings[0] || upcomingStakings[0] || endedStakings[endedStakings.length - 1] || STAKING_EPOCHS[0];
+  const featuredStakingStatus = getEpochStatus(featuredStaking, now);
+  const otherStakings = STAKING_EPOCHS.filter(e => e.epoch !== featuredStaking.epoch);
 
   // Giveaways calculations
   const activeGiveaways = GIVEAWAYS_DATA.filter(e => e.status === 'ongoing');
@@ -600,7 +615,7 @@ export default function BaseAppRewardsView({
               </span>
             </div>
             <a
-              href={O1_STAKING_VAULT}
+              href={featuredStaking.link || O1_STAKING_VAULT}
               target="_blank"
               rel="noreferrer"
               style={{
@@ -622,12 +637,12 @@ export default function BaseAppRewardsView({
             </a>
           </div>
 
-          {/* Featured Active Staking Epoch (ACTIVE VAULT badge) */}
+          {/* Featured Staking Spotlight Card (Dynamic: Active / Ended / Upcoming) */}
           {featuredStaking && (
             <div
               style={{
                 background: 'rgba(4, 20, 48, 0.94)',
-                border: '2px solid #00ff88',
+                border: featuredStakingStatus === 'active' ? '2px solid #00ff88' : featuredStakingStatus === 'ended' ? '2px solid #00f5ff' : '2px solid rgba(0, 245, 255, 0.4)',
                 borderRadius: '18px',
                 padding: '18px 16px',
                 marginBottom: '20px',
@@ -636,15 +651,17 @@ export default function BaseAppRewardsView({
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', gap: '8px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <img src="/new-logo-vibe.png" alt="VIBE" style={{ width: '34px', height: '34px', borderRadius: '50%', border: '2px solid #00ff88' }} />
+                  <img src="/new-logo-vibe.png" alt="VIBE" style={{ width: '34px', height: '34px', borderRadius: '50%', border: featuredStakingStatus === 'active' ? '2px solid #00ff88' : '2px solid #00f5ff' }} />
                   <div>
                     <div style={{ fontSize: '9px', color: '#ffffff', fontWeight: 900, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>{featuredStaking.epoch}</div>
-                    <div style={{ fontSize: '6.5px', color: '#00ff88', marginTop: '3px', fontWeight: 900, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>STAKING IS LIVE</div>
+                    <div style={{ fontSize: '6.5px', color: featuredStakingStatus === 'active' ? '#00ff88' : featuredStakingStatus === 'ended' ? '#00f5ff' : '#ffd700', marginTop: '3px', fontWeight: 900, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
+                      {featuredStakingStatus === 'active' ? 'STAKING IS LIVE' : featuredStakingStatus === 'ended' ? 'EPOCH ENDED' : 'STARTING SOON'}
+                    </div>
                   </div>
                 </div>
-                <div style={{ background: 'rgba(0, 255, 136, 0.15)', border: '1px solid #00ff88', color: '#00ff88', padding: '4px 8px', borderRadius: '8px', fontSize: '6.5px', display: 'flex', alignItems: 'center', gap: '5px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
-                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#00ff88' }} />
-                  ACTIVE VAULT
+                <div style={{ background: featuredStakingStatus === 'active' ? 'rgba(0, 255, 136, 0.15)' : 'rgba(0, 245, 255, 0.15)', border: featuredStakingStatus === 'active' ? '1px solid #00ff88' : '1px solid #00f5ff', color: featuredStakingStatus === 'active' ? '#00ff88' : '#00f5ff', padding: '4px 8px', borderRadius: '8px', fontSize: '6.5px', display: 'flex', alignItems: 'center', gap: '5px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
+                  {featuredStakingStatus === 'active' && <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 6px #00ff88' }} />}
+                  {featuredStakingStatus === 'active' ? 'ACTIVE VAULT' : featuredStakingStatus === 'ended' ? 'ENDED' : 'UPCOMING'}
                 </div>
               </div>
 
@@ -652,7 +669,7 @@ export default function BaseAppRewardsView({
               <div style={{ background: 'rgba(2, 11, 26, 0.85)', border: '1px solid rgba(0, 245, 255, 0.25)', borderRadius: '12px', padding: '12px 14px', marginBottom: '12px' }}>
                 <div style={{ fontSize: '6.5px', color: '#88aacc', marginBottom: '4px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>REWARDS POOL</div>
                 <div style={{ fontSize: '13px', color: '#00f5ff', fontWeight: 900, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
-                  {featuredStaking.poolAmount} <span style={{ fontSize: '8px', color: '#00f5ff' }}>$VIBE</span>
+                  {featuredStaking.poolAmount} {featuredStaking.poolAmount !== 'TBA' && <span style={{ fontSize: '8px', color: '#00f5ff' }}>$VIBE</span>}
                 </div>
               </div>
 
@@ -668,37 +685,85 @@ export default function BaseAppRewardsView({
                 </div>
               </div>
 
-              {/* Direct Stake Action Button (Green text & border) */}
-              <a
-                href={featuredStaking.link || O1_STAKING_VAULT}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  fontSize: '8px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  textDecoration: 'none',
-                  background: 'rgba(0, 255, 136, 0.12)',
-                  border: '1.5px solid #00ff88',
-                  color: '#00ff88',
-                  borderRadius: '10px',
-                  fontFamily: "'Press Start 2P', monospace",
-                  fontWeight: 900,
-                  transition: 'all 0.2s',
-                  boxSizing: 'border-box',
-                  textShadow: 'none'
-                }}
-              >
-                <span style={{ color: '#00ff88' }}>STAKE &amp; EARN</span> <ArrowUpRight size={14} color="#00ff88" strokeWidth={2.5} />
-              </a>
+              {/* Direct Action Button (Dynamic based on active vs ended vs upcoming) */}
+              {featuredStakingStatus === 'active' ? (
+                <a
+                  href={featuredStaking.link || O1_STAKING_VAULT}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    fontSize: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    textDecoration: 'none',
+                    background: 'rgba(0, 255, 136, 0.12)',
+                    border: '1.5px solid #00ff88',
+                    color: '#00ff88',
+                    borderRadius: '10px',
+                    fontFamily: "'Press Start 2P', monospace",
+                    fontWeight: 900,
+                    transition: 'all 0.2s',
+                    boxSizing: 'border-box',
+                    textShadow: 'none'
+                  }}
+                >
+                  <span style={{ color: '#00ff88' }}>STAKE &amp; EARN</span> <ArrowUpRight size={14} color="#00ff88" strokeWidth={2.5} />
+                </a>
+              ) : featuredStakingStatus === 'ended' ? (
+                <a
+                  href={featuredStaking.link || O1_STAKING_VAULT}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    fontSize: '7.5px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    textDecoration: 'none',
+                    background: 'rgba(0, 245, 255, 0.12)',
+                    border: '1.5px solid #00f5ff',
+                    color: '#00f5ff',
+                    borderRadius: '10px',
+                    fontFamily: "'Press Start 2P', monospace",
+                    fontWeight: 900,
+                    transition: 'all 0.2s',
+                    boxSizing: 'border-box',
+                    textShadow: 'none'
+                  }}
+                >
+                  <span style={{ color: '#00f5ff' }}>WITHDRAW &amp; CLAIM YIELD</span> <ArrowUpRight size={14} color="#00f5ff" strokeWidth={2.5} />
+                </a>
+              ) : (
+                <div
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    fontSize: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    color: '#94a3b8',
+                    borderRadius: '10px',
+                    fontFamily: "'Press Start 2P', monospace",
+                    fontWeight: 900
+                  }}
+                >
+                  COMING SOON
+                </div>
+              )}
             </div>
           )}
 
-          {/* Upcoming Staking Epochs (Header: EVERY 10 DAYS + 5th Extra Card) */}
+          {/* Staking Epochs Schedule List */}
           <div style={{ background: 'rgba(4, 20, 48, 0.88)', border: '1.5px solid rgba(0, 245, 255, 0.25)', borderRadius: '16px', padding: '16px 14px', marginBottom: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
               <div style={{ fontSize: '8.5px', color: '#ffffff', fontWeight: 900, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>MORE STAKING EPOCHS</div>
@@ -706,31 +771,85 @@ export default function BaseAppRewardsView({
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {upcomingStakings.map((u, i) => (
-                <div
-                  key={u.epoch || i}
-                  style={{
-                    background: 'rgba(2, 11, 26, 0.75)',
-                    border: '1px solid rgba(0, 245, 255, 0.15)',
-                    borderRadius: '10px',
-                    padding: '10px 12px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}
-                >
-                  <div>
-                    <div style={{ fontSize: '7.5px', color: '#ffffff', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>{u.epoch}</div>
-                    <div style={{ fontSize: '6.5px', color: '#ffd700', marginTop: '4px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
-                      {stripYear(u.startTime)}
+              {otherStakings.map((u, i) => {
+                const uStatus = getEpochStatus(u, now);
+                return (
+                  <div
+                    key={u.epoch || i}
+                    style={{
+                      background: 'rgba(2, 11, 26, 0.75)',
+                      border: uStatus === 'ended' ? '1px solid rgba(0, 245, 255, 0.3)' : uStatus === 'active' ? '1px solid #00ff88' : '1px solid rgba(0, 245, 255, 0.15)',
+                      borderRadius: '10px',
+                      padding: '10px 12px',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontSize: '7.5px', color: '#ffffff', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>{u.epoch}</div>
+                      <div style={{ fontSize: '6.5px', color: uStatus === 'ended' ? '#88aacc' : '#ffd700', marginTop: '4px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>
+                        {uStatus === 'ended' ? `ENDED: ${stripYear(u.endTime)}` : stripYear(u.startTime)}
+                      </div>
+                    </div>
+                    <div>
+                      {uStatus === 'ended' ? (
+                        <a
+                          href={u.link || O1_STAKING_VAULT}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{
+                            fontSize: '6.5px',
+                            color: '#00f5ff',
+                            border: '1px solid #00f5ff',
+                            background: 'rgba(0, 245, 255, 0.15)',
+                            padding: '6px 9px',
+                            borderRadius: '6px',
+                            textDecoration: 'none',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            fontFamily: "'Press Start 2P', monospace",
+                            fontWeight: 800,
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          <span>Withdraw &amp; Claim</span> <ArrowUpRight size={10} color="#00f5ff" />
+                        </a>
+                      ) : uStatus === 'active' ? (
+                        <a
+                          href={u.link || O1_STAKING_VAULT}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{
+                            fontSize: '6.5px',
+                            color: '#00ff88',
+                            border: '1px solid #00ff88',
+                            background: 'rgba(0, 255, 136, 0.15)',
+                            padding: '6px 9px',
+                            borderRadius: '6px',
+                            textDecoration: 'none',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            fontFamily: "'Press Start 2P', monospace",
+                            fontWeight: 800,
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          <span>Stake &amp; Earn</span> <ArrowUpRight size={10} color="#00ff88" />
+                        </a>
+                      ) : (
+                        <div style={{ textAlign: 'right' }}>
+                          <div style={{ fontSize: '8px', color: '#00f5ff', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>{u.poolAmount}</div>
+                          <div style={{ fontSize: '6px', color: '#64748b', marginTop: '2px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>UPCOMING</div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '8px', color: '#00f5ff', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>{u.poolAmount}</div>
-                    <div style={{ fontSize: '6px', color: '#64748b', marginTop: '2px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>UPCOMING</div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
 
               {/* 5th Extra Card: More Staking Vaults Notice */}
               <div

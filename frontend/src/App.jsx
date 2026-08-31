@@ -18,6 +18,7 @@ import './index.css';
 const CA      = '0xb200000000000000000000df24ecb8bf51100a01';
 const O1      = 'https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453';
 const O1_STAKING_VAULT = 'https://launch.o1.exchange/staking/vaults/0xafa3ce23e0043b651d98e5a89b55a80b71be2f4a945a745cd6e37316b5075663?chain=8453';
+const O1_STAKING_VAULT_EPOCH_2 = 'https://launch.o1.exchange/staking/vaults/0x5dcabfeb83e84ad87572c531dfa8de915e0b5d8c11e4ca39598a3c6b4fc1e446?chain=8453';
 const DEX     = 'https://dexscreener.com/base/0xa1a4159e61ac9fc48aa9e9992c8d4870ef8a496d5749af1d219e8002f74835c5';
 const DEX_EMB = 'https://dexscreener.com/base/0xa1a4159e61ac9fc48aa9e9992c8d4870ef8a496d5749af1d219e8002f74835c5?embed=1&theme=dark&activeTab=chart';
 
@@ -1189,6 +1190,17 @@ function Footer() {
   );
 }
 
+export function getStakingEpochStatus(ep, currentTime = new Date()) {
+  const current = currentTime instanceof Date ? currentTime : new Date(currentTime);
+  if (ep.endDateObj && current >= ep.endDateObj) {
+    return 'ended';
+  }
+  if (ep.startDateObj && current >= ep.startDateObj) {
+    return 'active';
+  }
+  return 'upcoming';
+}
+
 const STAKING_EPOCHS = [
   {
     epoch: 'Epoch 1',
@@ -1196,17 +1208,19 @@ const STAKING_EPOCHS = [
     poolAmount: '2,200,000',
     startTime: '21 Aug, 15:00 UTC',
     endTime: '31 Aug, 15:00 UTC',
-    status: 'active',
+    startDateObj: new Date('2026-08-21T15:00:00Z'),
+    endDateObj: new Date('2026-08-31T15:00:00Z'),
     link: O1_STAKING_VAULT
   },
   {
     epoch: 'Epoch 2',
     duration: '10 Days',
     poolAmount: 'TBA',
-    startTime: '31 Aug, 15:00 UTC',
-    endTime: '10 Sep, 15:00 UTC',
-    status: 'upcoming',
-    link: O1_STAKING_VAULT
+    startTime: '31 Aug, 16:00 UTC',
+    endTime: '10 Sep, 16:00 UTC',
+    startDateObj: new Date('2026-08-31T16:00:00Z'),
+    endDateObj: new Date('2026-09-10T16:00:00Z'),
+    link: O1_STAKING_VAULT_EPOCH_2
   },
   {
     epoch: 'Epoch 3',
@@ -1214,7 +1228,8 @@ const STAKING_EPOCHS = [
     poolAmount: 'TBA',
     startTime: '10 Sep, 15:00 UTC',
     endTime: '20 Sep, 15:00 UTC',
-    status: 'upcoming',
+    startDateObj: new Date('2026-09-10T15:00:00Z'),
+    endDateObj: new Date('2026-09-20T15:00:00Z'),
     link: O1_STAKING_VAULT
   },
   {
@@ -1223,7 +1238,8 @@ const STAKING_EPOCHS = [
     poolAmount: 'TBA',
     startTime: '20 Sep, 15:00 UTC',
     endTime: '30 Sep, 15:00 UTC',
-    status: 'upcoming',
+    startDateObj: new Date('2026-09-20T15:00:00Z'),
+    endDateObj: new Date('2026-09-30T15:00:00Z'),
     link: O1_STAKING_VAULT
   }
 ];
@@ -1437,18 +1453,19 @@ function Rewards({ isBaseAppMode = false } = {}) {
   }, []);
 
   const filteredStakingEpochs = STAKING_EPOCHS.filter(e => {
+    const status = getStakingEpochStatus(e, now);
     if (stakingFilter === 'all') return true;
-    if (stakingFilter === 'active') return e.status === 'active' || e.status === 'ongoing';
-    if (stakingFilter === 'upcoming') return e.status === 'upcoming';
-    if (stakingFilter === 'ended' || stakingFilter === 'completed') return e.status === 'completed' || e.status === 'ended';
+    if (stakingFilter === 'active') return status === 'active';
+    if (stakingFilter === 'upcoming') return status === 'upcoming';
+    if (stakingFilter === 'ended' || stakingFilter === 'completed') return status === 'ended';
     return true;
   });
 
   const stakingCounts = {
     all: STAKING_EPOCHS.length,
-    active: STAKING_EPOCHS.filter(e => e.status === 'active' || e.status === 'ongoing').length,
-    upcoming: STAKING_EPOCHS.filter(e => e.status === 'upcoming').length,
-    ended: STAKING_EPOCHS.filter(e => e.status === 'completed' || e.status === 'ended').length,
+    active: STAKING_EPOCHS.filter(e => getStakingEpochStatus(e, now) === 'active').length,
+    upcoming: STAKING_EPOCHS.filter(e => getStakingEpochStatus(e, now) === 'upcoming').length,
+    ended: STAKING_EPOCHS.filter(e => getStakingEpochStatus(e, now) === 'ended').length,
   };
 
   const filteredHolderUnlocks = HOLDER_UNLOCKS.filter(u => {
@@ -1542,8 +1559,8 @@ function Rewards({ isBaseAppMode = false } = {}) {
       active = HOLDER_UNLOCKS.filter(u => now >= u.dateObj).length;
       upcoming = HOLDER_UNLOCKS.filter(u => now < u.dateObj).length;
     } else if (catId === 'staking') {
-      active = STAKING_EPOCHS.filter(e => e.status === 'active' || e.status === 'ongoing').length;
-      upcoming = STAKING_EPOCHS.filter(e => e.status === 'upcoming').length;
+      active = STAKING_EPOCHS.filter(e => getStakingEpochStatus(e, now) === 'active').length;
+      upcoming = STAKING_EPOCHS.filter(e => getStakingEpochStatus(e, now) === 'upcoming').length;
     } else if (catId === 'vibe-club') {
       active = VIBECLUB_EPOCHS.filter(u => now >= u.dateObj).length;
       upcoming = VIBECLUB_EPOCHS.filter(u => now < u.dateObj).length;
@@ -2050,8 +2067,10 @@ function Rewards({ isBaseAppMode = false } = {}) {
                 }}
               >
                 {filteredStakingEpochs.map(ep => {
-                  const isActive = ep.status === 'active' || ep.status === 'ongoing';
-                  const isCompleted = ep.status === 'completed' || ep.status === 'ended';
+                  const epStatus = getStakingEpochStatus(ep, now);
+                  const isActive = epStatus === 'active';
+                  const isCompleted = epStatus === 'ended';
+                  const isUpcoming = epStatus === 'upcoming';
 
                   return (
                     <div
@@ -2059,8 +2078,10 @@ function Rewards({ isBaseAppMode = false } = {}) {
                       style={{
                         background: isActive
                           ? 'linear-gradient(145deg, rgba(215, 246, 255, 0.85) 0%, rgba(240, 252, 255, 0.95) 100%)'
+                          : isCompleted
+                          ? 'linear-gradient(145deg, rgba(241, 245, 249, 0.9) 0%, rgba(248, 250, 252, 0.95) 100%)'
                           : 'linear-gradient(145deg, rgba(225, 248, 255, 0.55) 0%, rgba(245, 253, 255, 0.8) 100%)',
-                        border: isActive ? '2px solid var(--blue)' : '1.5px solid rgba(0, 160, 255, 0.25)',
+                        border: isActive ? '2px solid var(--blue)' : isCompleted ? '1.5px solid #cbd5e1' : '1.5px solid rgba(0, 160, 255, 0.25)',
                         borderRadius: '22px',
                         padding: '18px 20px',
                         display: 'flex',
@@ -2106,9 +2127,9 @@ function Rewards({ isBaseAppMode = false } = {}) {
                               fontWeight: 900,
                               textTransform: 'uppercase',
                               letterSpacing: '0.04em',
-                              background: isActive ? '#ecfdf5' : 'rgba(255, 255, 255, 0.9)',
-                              color: isActive ? '#059669' : '#64748b',
-                              border: isActive ? '1px solid #a7f3d0' : '1px solid rgba(0, 160, 255, 0.25)',
+                              background: isActive ? '#ecfdf5' : isCompleted ? '#f1f5f9' : 'rgba(255, 255, 255, 0.9)',
+                              color: isActive ? '#059669' : isCompleted ? '#64748b' : '#64748b',
+                              border: isActive ? '1px solid #a7f3d0' : isCompleted ? '1px solid #cbd5e1' : '1px solid rgba(0, 160, 255, 0.25)',
                               display: 'inline-flex',
                               alignItems: 'center',
                               gap: '5px',
@@ -2118,7 +2139,7 @@ function Rewards({ isBaseAppMode = false } = {}) {
                             }}
                           >
                             {isActive && <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981', flexShrink: 0 }} />}
-                            {isActive ? 'Active' : isCompleted ? 'Completed' : 'Upcoming'}
+                            {isActive ? 'Active' : isCompleted ? 'Ended' : 'Upcoming'}
                           </span>
                         </div>
 
@@ -2184,6 +2205,33 @@ function Rewards({ isBaseAppMode = false } = {}) {
                           }}
                         >
                           <span>Stake & Earn</span> <ArrowUpRight size={15} strokeWidth={2.5} />
+                        </a>
+                      ) : isCompleted ? (
+                        <a
+                          href={ep.link || O1_STAKING_VAULT}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="btn-fill"
+                          style={{
+                            background: '#041430',
+                            color: '#00f5ff',
+                            border: '1.5px solid #00f5ff',
+                            padding: '11px 14px',
+                            fontSize: '0.82rem',
+                            fontWeight: 800,
+                            borderRadius: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px',
+                            width: '100%',
+                            textDecoration: 'none',
+                            whiteSpace: 'nowrap',
+                            boxShadow: '0 4px 16px rgba(0, 245, 255, 0.15)',
+                            transition: 'all 0.15s'
+                          }}
+                        >
+                          <span>Withdraw & Claim Yield</span> <ArrowUpRight size={15} strokeWidth={2.5} />
                         </a>
                       ) : (
                         <button
