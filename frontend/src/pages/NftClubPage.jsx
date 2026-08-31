@@ -1527,7 +1527,7 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
         </div>
 
         {/* ── 👑 ADMIN-ONLY CONTROLS: SWAP & AUTO-BURN (AT THE VERY BOTTOM) ── */}
-        {isAdmin && (
+        {isAdmin && !isEmbeddedInBaseApp && (
           <div style={{
             marginTop: '36px',
             background: 'linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(4, 20, 48, 0.95))',
