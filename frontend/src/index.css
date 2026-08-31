@@ -1947,3 +1947,21 @@ footer { border-top: 1px solid var(--border); padding: 38px 0; }
   text-decoration: none;
   white-space: nowrap;
 }
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
