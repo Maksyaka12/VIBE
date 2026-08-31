@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Gift, Coins, Crown, ArrowUpRight, LogOut, Wallet, Check, Copy } from 'lucide-react';
+import { X, Gift, Coins, Crown, LogOut, Wallet, Check, Copy } from 'lucide-react';
 import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useAccount, useDisconnect } from 'wagmi';
 
@@ -38,9 +38,9 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
         style={{
           position: 'fixed',
           inset: 0,
-          background: 'rgba(0, 0, 0, 0.75)',
-          backdropFilter: 'blur(6px)',
-          WebkitBackdropFilter: 'blur(6px)',
+          background: 'rgba(0, 0, 0, 0.8)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           zIndex: 998,
           animation: 'fadeIn 0.2s ease-out'
         }}
@@ -56,17 +56,18 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
           width: '280px',
           maxWidth: '85vw',
           height: '100vh',
-          background: '#0b0f19',
-          borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+          background: '#020b1a',
+          borderRight: '1.5px solid rgba(0, 245, 255, 0.25)',
           zIndex: 999,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
           padding: '20px 16px',
           boxSizing: 'border-box',
-          fontFamily: "'Inter', sans-serif",
-          boxShadow: '10px 0 40px rgba(0, 0, 0, 0.75)',
-          animation: 'slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
+          fontFamily: "'Press Start 2P', monospace",
+          boxShadow: '10px 0 40px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 245, 255, 0.1)',
+          animation: 'slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+          textTransform: 'uppercase'
         }}
       >
         <div>
@@ -76,8 +77,8 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              paddingBottom: '18px',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              paddingBottom: '16px',
+              borderBottom: '1px solid rgba(0, 245, 255, 0.15)',
               marginBottom: '20px'
             }}
           >
@@ -86,14 +87,23 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
                 src="/new-logo-vibe.png"
                 alt="VIBE"
                 style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '8px',
                   objectFit: 'cover',
-                  border: '1.5px solid rgba(0, 160, 255, 0.4)'
+                  border: '1.5px solid #00f5ff',
+                  boxShadow: '0 0 10px rgba(0, 245, 255, 0.4)'
                 }}
               />
-              <span style={{ fontSize: '1.18rem', fontWeight: 900, color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+              <span
+                style={{
+                  fontSize: '12px',
+                  fontWeight: 900,
+                  color: '#00f5ff',
+                  letterSpacing: '0.5px',
+                  textShadow: '0 0 10px rgba(0, 245, 255, 0.6)'
+                }}
+              >
                 $VIBE
               </span>
             </div>
@@ -102,25 +112,24 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
               onClick={onClose}
               aria-label="Close Menu"
               style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '10px',
-                color: '#94a3b8',
+                background: 'rgba(0, 245, 255, 0.08)',
+                border: '1px solid rgba(0, 245, 255, 0.25)',
+                borderRadius: '8px',
+                color: '#00f5ff',
                 cursor: 'pointer',
                 padding: '6px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                outline: 'none',
-                transition: 'all 0.15s ease'
+                outline: 'none'
               }}
             >
-              <X size={18} color="#FFFFFF" />
+              <X size={16} color="#00f5ff" />
             </button>
           </div>
 
-          {/* Navigation Items (3 Options) - Using div instead of nav to avoid index.css collision */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          {/* Navigation Items (3 Options) */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {/* Option 1: Rewards Hub */}
             <button
               onClick={() => {
@@ -130,45 +139,36 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '12px',
+                gap: '10px',
                 width: '100%',
                 padding: '12px 14px',
-                borderRadius: '14px',
-                border: 'none',
-                background: activeTab === 'hub' ? 'rgba(0, 82, 255, 0.2)' : 'transparent',
-                color: activeTab === 'hub' ? '#FFFFFF' : '#94a3b8',
-                fontSize: '0.94rem',
-                fontWeight: activeTab === 'hub' ? 800 : 600,
+                borderRadius: '12px',
+                border: activeTab === 'hub' ? '1.5px solid #00f5ff' : '1.5px solid rgba(0, 245, 255, 0.12)',
+                background: activeTab === 'hub' ? 'rgba(0, 245, 255, 0.15)' : 'rgba(4, 14, 36, 0.8)',
+                color: activeTab === 'hub' ? '#00f5ff' : '#88aacc',
+                fontSize: '8px',
+                fontWeight: 900,
                 cursor: 'pointer',
                 textAlign: 'left',
-                transition: 'all 0.15s ease'
-              }}
-              onMouseEnter={(e) => {
-                if (activeTab !== 'hub') {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
-                  e.currentTarget.style.color = '#FFFFFF';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeTab !== 'hub') {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = '#94a3b8';
-                }
+                transition: 'all 0.15s ease',
+                boxShadow: activeTab === 'hub' ? '0 0 12px rgba(0, 245, 255, 0.25)' : 'none',
+                fontFamily: "'Press Start 2P', monospace",
+                textTransform: 'uppercase'
               }}
             >
               <div
                 style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '10px',
-                  background: activeTab === 'hub' ? '#0052ff' : 'rgba(255, 255, 255, 0.05)',
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '8px',
+                  background: activeTab === 'hub' ? '#0052ff' : 'rgba(0, 245, 255, 0.1)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: '#FFFFFF'
                 }}
               >
-                <Gift size={16} strokeWidth={2.5} />
+                <Gift size={14} strokeWidth={2.5} />
               </div>
               <span>Rewards Hub</span>
             </button>
@@ -182,50 +182,41 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '12px',
+                gap: '10px',
                 width: '100%',
                 padding: '12px 14px',
-                borderRadius: '14px',
-                border: 'none',
-                background: activeTab === 'claim' ? 'rgba(0, 82, 255, 0.2)' : 'transparent',
-                color: activeTab === 'claim' ? '#FFFFFF' : '#94a3b8',
-                fontSize: '0.94rem',
-                fontWeight: activeTab === 'claim' ? 800 : 600,
+                borderRadius: '12px',
+                border: activeTab === 'claim' ? '1.5px solid #00f5ff' : '1.5px solid rgba(0, 245, 255, 0.12)',
+                background: activeTab === 'claim' ? 'rgba(0, 245, 255, 0.15)' : 'rgba(4, 14, 36, 0.8)',
+                color: activeTab === 'claim' ? '#00f5ff' : '#88aacc',
+                fontSize: '8px',
+                fontWeight: 900,
                 cursor: 'pointer',
                 textAlign: 'left',
-                transition: 'all 0.15s ease'
-              }}
-              onMouseEnter={(e) => {
-                if (activeTab !== 'claim') {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
-                  e.currentTarget.style.color = '#FFFFFF';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeTab !== 'claim') {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = '#94a3b8';
-                }
+                transition: 'all 0.15s ease',
+                boxShadow: activeTab === 'claim' ? '0 0 12px rgba(0, 245, 255, 0.25)' : 'none',
+                fontFamily: "'Press Start 2P', monospace",
+                textTransform: 'uppercase'
               }}
             >
               <div
                 style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '10px',
-                  background: activeTab === 'claim' ? '#0052ff' : 'rgba(255, 255, 255, 0.05)',
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '8px',
+                  background: activeTab === 'claim' ? '#0052ff' : 'rgba(0, 245, 255, 0.1)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: '#FFFFFF'
                 }}
               >
-                <Coins size={16} strokeWidth={2.5} />
+                <Coins size={14} strokeWidth={2.5} />
               </div>
               <span>Claim Portal</span>
             </button>
 
-            {/* Option 3: Join Vibe Club (Internal Section) */}
+            {/* Option 3: Join Vibe Club */}
             <button
               onClick={() => {
                 onSelectTab('vibeclub');
@@ -234,45 +225,36 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '12px',
+                gap: '10px',
                 width: '100%',
                 padding: '12px 14px',
-                borderRadius: '14px',
-                border: 'none',
-                background: activeTab === 'vibeclub' ? 'rgba(245, 158, 11, 0.2)' : 'transparent',
-                color: activeTab === 'vibeclub' ? '#FFFFFF' : '#94a3b8',
-                fontSize: '0.94rem',
-                fontWeight: activeTab === 'vibeclub' ? 800 : 600,
+                borderRadius: '12px',
+                border: activeTab === 'vibeclub' ? '1.5px solid #ffd700' : '1.5px solid rgba(255, 215, 0, 0.2)',
+                background: activeTab === 'vibeclub' ? 'rgba(255, 215, 0, 0.18)' : 'rgba(4, 14, 36, 0.8)',
+                color: activeTab === 'vibeclub' ? '#ffd700' : '#88aacc',
+                fontSize: '8px',
+                fontWeight: 900,
                 cursor: 'pointer',
                 textAlign: 'left',
-                transition: 'all 0.15s ease'
-              }}
-              onMouseEnter={(e) => {
-                if (activeTab !== 'vibeclub') {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
-                  e.currentTarget.style.color = '#FFFFFF';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeTab !== 'vibeclub') {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = '#94a3b8';
-                }
+                transition: 'all 0.15s ease',
+                boxShadow: activeTab === 'vibeclub' ? '0 0 12px rgba(255, 215, 0, 0.25)' : 'none',
+                fontFamily: "'Press Start 2P', monospace",
+                textTransform: 'uppercase'
               }}
             >
               <div
                 style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '10px',
-                  background: activeTab === 'vibeclub' ? '#f59e0b' : 'rgba(255, 255, 255, 0.05)',
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '8px',
+                  background: activeTab === 'vibeclub' ? '#ffd700' : 'rgba(255, 215, 0, 0.1)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: activeTab === 'vibeclub' ? '#000000' : '#f59e0b'
+                  color: activeTab === 'vibeclub' ? '#000000' : '#ffd700'
                 }}
               >
-                <Crown size={16} strokeWidth={2.5} />
+                <Crown size={14} strokeWidth={2.5} />
               </div>
               <span>Join Vibe Club</span>
             </button>
@@ -280,27 +262,27 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
         </div>
 
         {/* Footer: Wallet status */}
-        <div style={{ paddingTop: '16px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+        <div style={{ paddingTop: '16px', borderTop: '1px solid rgba(0, 245, 255, 0.15)' }}>
           {hasWallet ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <div
                 style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  borderRadius: '14px',
-                  padding: '10px 12px',
+                  background: 'rgba(4, 14, 36, 0.9)',
+                  border: '1.5px solid rgba(0, 245, 255, 0.25)',
+                  borderRadius: '10px',
+                  padding: '10px 10px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <img
                     src="/new-logo-vibe.png"
                     alt="avatar"
-                    style={{ width: '24px', height: '24px', borderRadius: '50%' }}
+                    style={{ width: '20px', height: '20px', borderRadius: '4px' }}
                   />
-                  <span style={{ fontSize: '0.84rem', fontWeight: 800, color: '#FFFFFF', fontFamily: 'monospace' }}>
+                  <span style={{ fontSize: '7.5px', fontWeight: 900, color: '#00ff88' }}>
                     {shortAddress(activeAddress)}
                   </span>
                 </div>
@@ -311,7 +293,7 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
                   style={{
                     background: 'transparent',
                     border: 'none',
-                    color: copied ? '#10b981' : '#94a3b8',
+                    color: copied ? '#00ff88' : '#00f5ff',
                     cursor: 'pointer',
                     padding: '4px',
                     display: 'flex',
@@ -326,23 +308,25 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
                 onClick={handleDisconnect}
                 style={{
                   width: '100%',
-                  background: 'rgba(239, 68, 68, 0.1)',
-                  border: '1px solid rgba(239, 68, 68, 0.25)',
-                  color: '#ef4444',
-                  borderRadius: '12px',
-                  padding: '9px 12px',
-                  fontSize: '0.8rem',
-                  fontWeight: 800,
+                  background: 'rgba(255, 68, 102, 0.12)',
+                  border: '1.5px solid rgba(255, 68, 102, 0.35)',
+                  color: '#ff4466',
+                  borderRadius: '10px',
+                  padding: '10px 12px',
+                  fontSize: '7.5px',
+                  fontWeight: 900,
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '6px',
-                  transition: 'all 0.15s ease'
+                  transition: 'all 0.15s ease',
+                  fontFamily: "'Press Start 2P', monospace",
+                  textTransform: 'uppercase'
                 }}
               >
-                <LogOut size={13} />
-                <span>Disconnect</span>
+                <LogOut size={12} />
+                <span>DISCONNECT</span>
               </button>
             </div>
           ) : (
@@ -353,23 +337,25 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
               }}
               style={{
                 width: '100%',
-                background: 'linear-gradient(135deg, #0284c7 0%, #0052ff 100%)',
+                background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
                 color: '#FFFFFF',
-                border: 'none',
-                borderRadius: '14px',
-                padding: '11px 14px',
-                fontSize: '0.86rem',
-                fontWeight: 800,
+                border: '1.5px solid #ffffff',
+                borderRadius: '10px',
+                padding: '12px 14px',
+                fontSize: '8px',
+                fontWeight: 900,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                boxShadow: '0 4px 14px rgba(0, 82, 255, 0.35)'
+                boxShadow: '0 0 14px rgba(0, 245, 255, 0.4)',
+                fontFamily: "'Press Start 2P', monospace",
+                textTransform: 'uppercase'
               }}
             >
-              <Wallet size={15} strokeWidth={2.5} />
-              <span>Connect Wallet</span>
+              <Wallet size={14} strokeWidth={2.5} />
+              <span>CONNECT WALLET</span>
             </button>
           )}
         </div>

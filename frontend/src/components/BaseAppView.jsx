@@ -4,6 +4,7 @@ import { BaseAppHeader } from './BaseAppHeader';
 import { BaseAppSidebar } from './BaseAppSidebar';
 import Checker from '../Checker';
 import NftClubPage from '../pages/NftClubPage';
+import './BaseAppTheme.css';
 
 export function BaseAppView({ RewardsComponent }) {
   const location = useLocation();
@@ -39,14 +40,14 @@ export function BaseAppView({ RewardsComponent }) {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: activeTab === 'vibeclub' ? '#020b1a' : 'var(--bg, #f8fafc)', color: 'var(--ink, #0f172a)' }}>
-      {/* Base App Header */}
+    <div className="base-app-pixel-theme">
+      {/* Base App Pixel Header */}
       <BaseAppHeader
         onOpenSidebar={() => setIsSidebarOpen(true)}
         activeTab={activeTab}
       />
 
-      {/* Base App Sidebar Drawer */}
+      {/* Base App Pixel Sidebar Drawer */}
       <BaseAppSidebar
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}

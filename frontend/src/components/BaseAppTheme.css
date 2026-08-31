@@ -1,0 +1,247 @@
+/* ================================================================
+   BASE APP — Complete Pixel Retro Theme (VibeVerse Style)
+   Applies ONLY when inside .base-app-pixel-theme
+   ================================================================ */
+
+.base-app-pixel-theme {
+  --vv-cyan:       #00f5ff;
+  --vv-blue:       #0050ff;
+  --vv-deep:       #020b1a;
+  --vv-navy:       #040e24;
+  --vv-glass:      rgba(4, 14, 36, 0.92);
+  --vv-glass-lite: rgba(0, 245, 255, 0.06);
+  --vv-border:     rgba(0, 245, 255, 0.22);
+  --vv-gold:       #ffd700;
+  --vv-green:      #00ff88;
+  --vv-red:        #ff4466;
+  --vv-pixel:      'Press Start 2P', monospace;
+  --vv-ui:         'Inter', sans-serif;
+
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 10%, #041430 0%, #020b1a 70%, #000511 100%) !important;
+  color: #ffffff !important;
+  font-family: var(--vv-pixel) !important;
+  overflow-x: hidden;
+  text-transform: uppercase;
+}
+
+/* ── Typography & Global Elements inside Base App ── */
+.base-app-pixel-theme h1,
+.base-app-pixel-theme h2,
+.base-app-pixel-theme h3,
+.base-app-pixel-theme h4,
+.base-app-pixel-theme h5,
+.base-app-pixel-theme h6 {
+  font-family: var(--vv-pixel) !important;
+  color: #ffffff !important;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.base-app-pixel-theme span,
+.base-app-pixel-theme p,
+.base-app-pixel-theme label,
+.base-app-pixel-theme div {
+  text-transform: uppercase;
+}
+
+.base-app-pixel-theme .bl {
+  color: #00f5ff !important;
+  text-shadow: 0 0 12px rgba(0, 245, 255, 0.6);
+}
+
+/* ── Rewards Section Overrides ── */
+.base-app-pixel-theme #rewards {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+.base-app-pixel-theme .sec-head h2 {
+  font-family: var(--vv-pixel) !important;
+  font-size: 15px !important;
+  color: #00f5ff !important;
+  text-shadow: 0 0 16px rgba(0, 245, 255, 0.6) !important;
+  margin-bottom: 8px !important;
+}
+
+.base-app-pixel-theme .sec-sub {
+  font-family: var(--vv-pixel) !important;
+  font-size: 7.5px !important;
+  color: #88aacc !important;
+  line-height: 1.6 !important;
+}
+
+/* Category cards */
+.base-app-pixel-theme #rewards div[role="button"],
+.base-app-pixel-theme #rewards .wrap > div > div[style*="border-radius: 24px"],
+.base-app-pixel-theme #rewards div[style*="border-radius: 24px"] {
+  background: rgba(4, 14, 36, 0.92) !important;
+  border: 1.5px solid rgba(0, 245, 255, 0.22) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 82, 255, 0.1) !important;
+}
+
+.base-app-pixel-theme #rewards div[role="button"]:hover {
+  border-color: #00f5ff !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 24px rgba(0, 245, 255, 0.3) !important;
+}
+
+.base-app-pixel-theme #rewards div[style*="background: #ffffff"],
+.base-app-pixel-theme #rewards div[style*="background: rgb(255, 255, 255)"] {
+  background: rgba(4, 14, 36, 0.92) !important;
+}
+
+.base-app-pixel-theme #rewards h3 {
+  font-family: var(--vv-pixel) !important;
+  font-size: 10px !important;
+  color: #ffffff !important;
+}
+
+.base-app-pixel-theme #rewards div[style*="background: var(--blue)"],
+.base-app-pixel-theme #rewards button[style*="background: var(--blue)"],
+.base-app-pixel-theme #rewards div[style*="background: rgb(0, 0, 255)"] {
+  background: linear-gradient(135deg, #00f5ff, #0050ff) !important;
+  border: 1.5px solid #ffffff !important;
+  color: #ffffff !important;
+  font-family: var(--vv-pixel) !important;
+  font-size: 7.5px !important;
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.4) !important;
+}
+
+/* FAQ cards in Rewards */
+.base-app-pixel-theme #rewards div[style*="border-radius: 18px"],
+.base-app-pixel-theme #rewards div[style*="border-radius: 16px"] {
+  background: rgba(4, 14, 36, 0.88) !important;
+  border: 1.5px solid rgba(0, 245, 255, 0.18) !important;
+  color: #ffffff !important;
+}
+
+.base-app-pixel-theme #rewards div[style*="border-radius: 18px"] span,
+.base-app-pixel-theme #rewards div[style*="border-radius: 16px"] span,
+.base-app-pixel-theme #rewards div[style*="border-radius: 18px"] strong,
+.base-app-pixel-theme #rewards div[style*="border-radius: 16px"] strong {
+  font-family: var(--vv-pixel) !important;
+  font-size: 8px !important;
+  color: #00f5ff !important;
+  line-height: 1.6 !important;
+}
+
+.base-app-pixel-theme #rewards div[style*="border-radius: 18px"] p,
+.base-app-pixel-theme #rewards div[style*="border-radius: 16px"] p {
+  font-family: var(--vv-pixel) !important;
+  font-size: 7px !important;
+  color: #88aacc !important;
+  line-height: 1.6 !important;
+}
+
+/* ── Checker / Claim Portal Overrides ── */
+.base-app-pixel-theme .checker-card-main,
+.base-app-pixel-theme .checker-banner-card,
+.base-app-pixel-theme div[style*="border: 2px solid rgba(0, 140, 255, 0.25)"] {
+  background: rgba(4, 14, 36, 0.92) !important;
+  border: 1.5px solid rgba(0, 245, 255, 0.25) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 82, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+.base-app-pixel-theme .checker-hero-title,
+.base-app-pixel-theme h1[style*="letter-spacing: -0.04em"] {
+  font-family: var(--vv-pixel) !important;
+  font-size: 15px !important;
+  color: #00f5ff !important;
+  text-shadow: 0 0 16px rgba(0, 245, 255, 0.6) !important;
+  margin-bottom: 8px !important;
+}
+
+.base-app-pixel-theme .checker-hero-subtitle,
+.base-app-pixel-theme p[style*="color: #64748b"] {
+  font-family: var(--vv-pixel) !important;
+  font-size: 7.5px !important;
+  color: #88aacc !important;
+  line-height: 1.6 !important;
+}
+
+/* Metric Tiles Grid in Checker */
+.base-app-pixel-theme .checker-metric-tile,
+.base-app-pixel-theme div[style*="border: 1.5px solid rgba(0, 140, 255, 0.2)"] {
+  background: rgba(2, 11, 26, 0.85) !important;
+  border: 1.5px solid rgba(0, 245, 255, 0.22) !important;
+  border-radius: 12px !important;
+}
+
+.base-app-pixel-theme .checker-metric-tile span,
+.base-app-pixel-theme .checker-metric-tile div {
+  font-family: var(--vv-pixel) !important;
+}
+
+.base-app-pixel-theme .checker-metric-tile div[style*="font-size: 0.70rem"],
+.base-app-pixel-theme .checker-metric-tile div[style*="font-size: 0.72rem"] {
+  font-size: 6px !important;
+  color: #88aacc !important;
+}
+
+.base-app-pixel-theme .checker-metric-tile div[style*="font-size: 1.25rem"],
+.base-app-pixel-theme .checker-metric-tile div[style*="font-size: 1.20rem"],
+.base-app-pixel-theme .checker-metric-tile div[style*="font-size: 1.15rem"] {
+  font-size: 9.5px !important;
+  color: #00ff88 !important;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.4) !important;
+}
+
+/* Profile Badge & Name */
+.base-app-pixel-theme .checker-profile-name,
+.base-app-pixel-theme h3[style*="font-size: 1.35rem"] {
+  font-family: var(--vv-pixel) !important;
+  font-size: 9.5px !important;
+  color: #00f5ff !important;
+  letter-spacing: 0.5px !important;
+}
+
+.base-app-pixel-theme span[style*="color: rgb(16, 185, 129)"],
+.base-app-pixel-theme span[style*="color: #10b981"] {
+  font-family: var(--vv-pixel) !important;
+  font-size: 7px !important;
+  color: #00ff88 !important;
+  background: rgba(0, 255, 136, 0.12) !important;
+  border: 1px solid #00ff88 !important;
+}
+
+/* Claim Buttons in Checker */
+.base-app-pixel-theme button[style*="background: linear-gradient(135deg, rgb(0, 82, 255)"],
+.base-app-pixel-theme button[style*="background: linear-gradient(135deg, var(--blue)"],
+.base-app-pixel-theme button[style*="background: var(--blue)"],
+.base-app-pixel-theme button[style*="background: rgb(0, 82, 255)"] {
+  background: linear-gradient(135deg, #00f5ff, #0050ff) !important;
+  border: 1.5px solid #ffffff !important;
+  box-shadow: 0 0 14px rgba(0, 245, 255, 0.45) !important;
+  font-family: var(--vv-pixel) !important;
+  font-size: 7.5px !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  border-radius: 10px !important;
+}
+
+/* History Cards */
+.base-app-pixel-theme div[style*="background: rgb(248, 250, 252)"],
+.base-app-pixel-theme div[style*="background: #f8fafc"],
+.base-app-pixel-theme div[style*="background: #f1f5f9"] {
+  background: rgba(2, 11, 26, 0.8) !important;
+  border: 1.5px solid rgba(0, 245, 255, 0.15) !important;
+  border-radius: 12px !important;
+}
+
+.base-app-pixel-theme div[style*="color: rgb(15, 23, 42)"],
+.base-app-pixel-theme div[style*="color: var(--ink)"],
+.base-app-pixel-theme span[style*="color: var(--ink)"] {
+  color: #ffffff !important;
+}
+
+/* Modals & Dialogs */
+.base-app-pixel-theme .share-modal-overlay,
+.base-app-pixel-theme div[style*="z-index: 1000"] > div[style*="background: #ffffff"],
+.base-app-pixel-theme div[style*="z-index: 1000"] > div[style*="background: rgb(255, 255, 255)"] {
+  background: rgba(4, 14, 36, 0.96) !important;
+  border: 2px solid #00f5ff !important;
+  border-radius: 18px !important;
+  box-shadow: 0 0 32px rgba(0, 245, 255, 0.4) !important;
+  color: #ffffff !important;
+}

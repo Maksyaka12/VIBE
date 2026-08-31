@@ -18,8 +18,8 @@ export function BaseAppHeader({ onOpenSidebar, activeTab }) {
     <header
       style={{
         height: '66px',
-        background: '#0b0f19',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        background: 'rgba(2, 11, 26, 0.92)',
+        borderBottom: '1px solid rgba(0, 245, 255, 0.2)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -28,9 +28,10 @@ export function BaseAppHeader({ onOpenSidebar, activeTab }) {
         top: 0,
         zIndex: 50,
         color: '#FFFFFF',
-        fontFamily: "'Inter', sans-serif",
+        fontFamily: "'Press Start 2P', monospace",
         backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)'
+        WebkitBackdropFilter: 'blur(12px)',
+        textTransform: 'uppercase'
       }}
     >
       {/* Left side: Hamburger + Logo + $VIBE */}
@@ -39,22 +40,20 @@ export function BaseAppHeader({ onOpenSidebar, activeTab }) {
           onClick={onOpenSidebar}
           aria-label="Open Navigation Menu"
           style={{
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '12px',
-            color: '#FFFFFF',
+            background: 'rgba(0, 245, 255, 0.08)',
+            border: '1.5px solid rgba(0, 245, 255, 0.3)',
+            borderRadius: '10px',
+            color: '#00f5ff',
             cursor: 'pointer',
-            padding: '8px',
+            padding: '7px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             outline: 'none',
             transition: 'all 0.15s ease'
           }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'; }}
         >
-          <Menu size={20} color="#FFFFFF" strokeWidth={2.5} />
+          <Menu size={18} color="#00f5ff" strokeWidth={2.5} />
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', userSelect: 'none' }}>
@@ -64,21 +63,19 @@ export function BaseAppHeader({ onOpenSidebar, activeTab }) {
             style={{
               width: '28px',
               height: '28px',
-              borderRadius: '50%',
+              borderRadius: '8px',
               objectFit: 'cover',
-              border: '1.5px solid rgba(0, 160, 255, 0.4)',
-              boxShadow: '0 2px 8px rgba(0, 82, 255, 0.25)'
+              border: '1.5px solid #00f5ff',
+              boxShadow: '0 0 10px rgba(0, 245, 255, 0.4)'
             }}
           />
           <span
             style={{
-              fontSize: '1.12rem',
+              fontSize: '11px',
               fontWeight: 900,
-              color: '#FFFFFF',
-              letterSpacing: '-0.02em',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px'
+              color: '#00f5ff',
+              letterSpacing: '0.5px',
+              textShadow: '0 0 10px rgba(0, 245, 255, 0.6)'
             }}
           >
             $VIBE
@@ -89,27 +86,28 @@ export function BaseAppHeader({ onOpenSidebar, activeTab }) {
       {/* Right side: Balances or Connect Wallet */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         {hasWallet ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             {/* NFT Balance Pill */}
             <div
               title="Vibe Club NFT Balance"
               style={{
-                background: 'rgba(255, 255, 255, 0.04)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                borderRadius: '14px',
-                padding: '6px 10px',
+                background: 'rgba(4, 14, 36, 0.9)',
+                border: '1.5px solid rgba(0, 245, 255, 0.3)',
+                boxShadow: '0 0 8px rgba(0, 245, 255, 0.15)',
+                borderRadius: '10px',
+                padding: '6px 8px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
+                gap: '5px',
                 userSelect: 'none'
               }}
             >
               <span
                 style={{
-                  fontSize: '0.82rem',
-                  fontWeight: 800,
-                  color: '#FFFFFF',
-                  letterSpacing: '0.01em',
+                  fontSize: '7.5px',
+                  fontWeight: 900,
+                  color: '#00f5ff',
+                  letterSpacing: '0.3px',
                   fontVariantNumeric: 'tabular-nums'
                 }}
               >
@@ -119,9 +117,9 @@ export function BaseAppHeader({ onOpenSidebar, activeTab }) {
                 src="/new-logo-vibe.png"
                 alt="NFT"
                 style={{
-                  width: '16px',
-                  height: '16px',
-                  borderRadius: '50%',
+                  width: '14px',
+                  height: '14px',
+                  borderRadius: '4px',
                   objectFit: 'cover'
                 }}
               />
@@ -131,23 +129,25 @@ export function BaseAppHeader({ onOpenSidebar, activeTab }) {
             <div
               title="$VIBE Token Balance"
               style={{
-                background: 'rgba(255, 255, 255, 0.04)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                borderRadius: '14px',
-                padding: '6px 10px',
+                background: 'rgba(4, 14, 36, 0.9)',
+                border: '1.5px solid rgba(0, 255, 136, 0.35)',
+                boxShadow: '0 0 8px rgba(0, 255, 136, 0.15)',
+                borderRadius: '10px',
+                padding: '6px 8px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
+                gap: '5px',
                 userSelect: 'none'
               }}
             >
               <span
                 style={{
-                  fontSize: '0.82rem',
-                  fontWeight: 800,
-                  color: '#FFFFFF',
-                  letterSpacing: '0.01em',
-                  fontVariantNumeric: 'tabular-nums'
+                  fontSize: '7.5px',
+                  fontWeight: 900,
+                  color: '#00ff88',
+                  letterSpacing: '0.3px',
+                  fontVariantNumeric: 'tabular-nums',
+                  textShadow: '0 0 8px rgba(0, 255, 136, 0.4)'
                 }}
               >
                 {formattedBalance}
@@ -156,9 +156,9 @@ export function BaseAppHeader({ onOpenSidebar, activeTab }) {
                 src="/new-logo-vibe.png"
                 alt="$VIBE"
                 style={{
-                  width: '16px',
-                  height: '16px',
-                  borderRadius: '50%',
+                  width: '14px',
+                  height: '14px',
+                  borderRadius: '4px',
                   objectFit: 'cover'
                 }}
               />
@@ -168,32 +168,25 @@ export function BaseAppHeader({ onOpenSidebar, activeTab }) {
           <button
             onClick={login}
             style={{
-              background: 'linear-gradient(135deg, #0284c7 0%, #0052ff 100%)',
+              background: 'linear-gradient(135deg, #00f5ff, #0050ff)',
               color: '#FFFFFF',
-              border: 'none',
-              borderRadius: '14px',
-              padding: '8px 14px',
-              fontSize: '0.82rem',
-              fontWeight: 800,
+              border: '1.5px solid #ffffff',
+              borderRadius: '10px',
+              padding: '8px 12px',
+              fontSize: '7.5px',
+              fontWeight: 900,
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              boxShadow: '0 4px 14px rgba(0, 82, 255, 0.35)',
+              boxShadow: '0 0 14px rgba(0, 245, 255, 0.4)',
               transition: 'all 0.2s ease',
-              outline: 'none'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-1px)';
-              e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 82, 255, 0.45)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'none';
-              e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 82, 255, 0.35)';
+              outline: 'none',
+              textTransform: 'uppercase'
             }}
           >
-            <Wallet size={14} strokeWidth={2.5} />
-            <span>Connect Wallet</span>
+            <Wallet size={12} strokeWidth={2.5} />
+            <span>CONNECT</span>
           </button>
         )}
       </div>
