@@ -13,7 +13,6 @@ import VibeVerse from './verse/VibeVerse';
 import VibeVerseLockScreen from './verse/VibeVerseLockScreen';
 import NftClubPage from './pages/NftClubPage';
 import BaseAppRewardsView from './components/BaseAppRewardsView';
-import sdk from '@farcaster/frame-sdk';
 import './index.css';
 
 const CA      = '0xb200000000000000000000df24ecb8bf51100a01';
@@ -3496,19 +3495,6 @@ function DomainRouter() {
 const queryClient = new QueryClient();
 
 export default function App() {
-  useEffect(() => {
-    const initFrameSdk = async () => {
-      try {
-        if (sdk?.actions?.ready) {
-          await sdk.actions.ready();
-        }
-      } catch (err) {
-        // Silently ignore if not in Farcaster / Base App environment
-      }
-    };
-    initFrameSdk();
-  }, []);
-
   return (
     <PrivyProvider
       appId="cmrugdvds02q60cl7tegmrnx7"
