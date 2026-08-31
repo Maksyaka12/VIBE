@@ -1194,8 +1194,8 @@ const STAKING_EPOCHS = [
     epoch: 'Epoch 1',
     duration: '10 Days',
     poolAmount: '2,200,000',
-    startTime: '21 Aug 2026, 15:00 UTC',
-    endTime: '31 Aug 2026, 15:00 UTC',
+    startTime: '21 Aug, 15:00 UTC',
+    endTime: '31 Aug, 15:00 UTC',
     status: 'active',
     link: O1_STAKING_VAULT
   },
@@ -1203,8 +1203,8 @@ const STAKING_EPOCHS = [
     epoch: 'Epoch 2',
     duration: '10 Days',
     poolAmount: 'TBA',
-    startTime: '31 Aug 2026, 15:00 UTC',
-    endTime: '10 Sep 2026, 15:00 UTC',
+    startTime: '31 Aug, 15:00 UTC',
+    endTime: '10 Sep, 15:00 UTC',
     status: 'upcoming',
     link: O1_STAKING_VAULT
   },
@@ -1212,8 +1212,8 @@ const STAKING_EPOCHS = [
     epoch: 'Epoch 3',
     duration: '10 Days',
     poolAmount: 'TBA',
-    startTime: '10 Sep 2026, 15:00 UTC',
-    endTime: '20 Sep 2026, 15:00 UTC',
+    startTime: '10 Sep, 15:00 UTC',
+    endTime: '20 Sep, 15:00 UTC',
     status: 'upcoming',
     link: O1_STAKING_VAULT
   },
@@ -1221,8 +1221,8 @@ const STAKING_EPOCHS = [
     epoch: 'Epoch 4',
     duration: '10 Days',
     poolAmount: 'TBA',
-    startTime: '20 Sep 2026, 15:00 UTC',
-    endTime: '30 Sep 2026, 15:00 UTC',
+    startTime: '20 Sep, 15:00 UTC',
+    endTime: '30 Sep, 15:00 UTC',
     status: 'upcoming',
     link: O1_STAKING_VAULT
   }
