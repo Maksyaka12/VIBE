@@ -1215,7 +1215,7 @@ const STAKING_EPOCHS = [
   {
     epoch: 'Epoch 2',
     duration: '10 Days',
-    poolAmount: 'TBA',
+    poolAmount: '2,200,000',
     startTime: '31 Aug, 16:00 UTC',
     endTime: '10 Sep, 16:00 UTC',
     startDateObj: new Date('2026-08-31T16:00:00Z'),
@@ -2213,11 +2213,10 @@ function Rewards({ isBaseAppMode = false } = {}) {
                           rel="noreferrer"
                           className="btn-fill"
                           style={{
-                            background: '#041430',
-                            color: '#00f5ff',
-                            border: '1.5px solid #00f5ff',
+                            background: 'var(--blue)',
+                            color: '#ffffff',
                             padding: '11px 14px',
-                            fontSize: '0.82rem',
+                            fontSize: '0.86rem',
                             fontWeight: 800,
                             borderRadius: '12px',
                             display: 'flex',
@@ -2227,7 +2226,7 @@ function Rewards({ isBaseAppMode = false } = {}) {
                             width: '100%',
                             textDecoration: 'none',
                             whiteSpace: 'nowrap',
-                            boxShadow: '0 4px 16px rgba(0, 245, 255, 0.15)',
+                            boxShadow: '0 4px 16px rgba(0, 82, 255, 0.3)',
                             transition: 'all 0.15s'
                           }}
                         >
