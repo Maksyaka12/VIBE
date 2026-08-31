@@ -89,23 +89,30 @@ export default function BaseAppRewardsView({
 
   return (
     <div style={{ width: '100%', boxSizing: 'border-box' }}>
-      {/* ── 1. MODERN REWARDS HERO HEADER ── */}
+      {/* ── 1. MODERN REWARDS HERO HEADER (CENTERED & LARGER) ── */}
       <div
         style={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
           textAlign: 'center',
-          marginBottom: '20px',
-          padding: '10px 12px 6px 12px',
-          position: 'relative'
+          marginBottom: '22px',
+          padding: '12px 8px 8px 8px'
         }}
       >
         <h2
           style={{
-            fontSize: '15px',
-            margin: '0 0 10px 0',
-            letterSpacing: '0.5px',
+            fontSize: '18px',
+            margin: '0 0 12px 0',
+            letterSpacing: '0.6px',
             color: '#ffffff',
             fontFamily: "'Press Start 2P', monospace",
-            textShadow: 'none'
+            textShadow: 'none',
+            textAlign: 'center',
+            width: '100%',
+            lineHeight: 1.3
           }}
         >
           REWARDS <span style={{ color: '#00f5ff' }}>HUB</span>
@@ -116,15 +123,18 @@ export default function BaseAppRewardsView({
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '6px',
+            justifyContent: 'center',
+            gap: '8px',
             background: 'rgba(0, 245, 255, 0.08)',
-            border: '1px solid rgba(0, 245, 255, 0.3)',
+            border: '1.5px solid rgba(0, 245, 255, 0.35)',
             borderRadius: '99px',
-            padding: '6px 14px'
+            padding: '7px 16px',
+            maxWidth: '100%',
+            boxSizing: 'border-box'
           }}
         >
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 6px #00ff88', flexShrink: 0 }} />
-          <span style={{ fontSize: '6.5px', color: '#00f5ff', letterSpacing: '0.5px', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 8px #00ff88', flexShrink: 0 }} />
+          <span style={{ fontSize: '6.5px', color: '#00f5ff', letterSpacing: '0.5px', fontFamily: "'Press Start 2P', monospace", fontWeight: 800, textAlign: 'center', lineHeight: 1.4 }}>
             TRACK ACTIVE REWARDS. JOIN &amp; EARN
           </span>
         </div>
@@ -147,7 +157,7 @@ export default function BaseAppRewardsView({
         {[
           { id: 'holders', label: 'Holders', icon: '💎', count: `${activeHolders.length} LIVE` },
           { id: 'vibe-club', label: 'Vibe Club', icon: '👑', count: `${activeVibeClubs.length} LIVE` },
-          { id: 'staking', label: 'Staking', icon: '⚡', count: `${activeStakings.length} LIVE` },
+          { id: 'staking', label: 'Staking', icon: '💰', count: `${activeStakings.length} LIVE` },
           { id: 'giveaways', label: 'Giveaways', icon: '🎁', count: `${activeGiveaways.length} EVENTS` }
         ].map(tab => {
           const isActive = currentTab === tab.id;
