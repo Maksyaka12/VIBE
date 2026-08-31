@@ -12,6 +12,7 @@ import { BaseAppView } from './components/BaseAppView';
 import VibeVerse from './verse/VibeVerse';
 import VibeVerseLockScreen from './verse/VibeVerseLockScreen';
 import NftClubPage from './pages/NftClubPage';
+import BaseAppRewardsView from './components/BaseAppRewardsView';
 import './index.css';
 
 const CA      = '0xb200000000000000000000df24ecb8bf51100a01';
@@ -1563,8 +1564,25 @@ function Rewards({ isBaseAppMode = false } = {}) {
     return badges;
   };
 
+  if (isBaseAppMode) {
+    return (
+      <section id="rewards" className="alt" style={{ padding: '24px 0 60px 0' }}>
+        <div className="wrap">
+          <BaseAppRewardsView
+            HOLDER_UNLOCKS={HOLDER_UNLOCKS}
+            VIBECLUB_EPOCHS={VIBECLUB_EPOCHS}
+            STAKING_EPOCHS={STAKING_EPOCHS}
+            GIVEAWAYS_DATA={GIVEAWAYS_DATA}
+            O1_STAKING_VAULT={O1_STAKING_VAULT}
+            now={now}
+          />
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section id="rewards" className="alt" style={{ padding: isBaseAppMode ? '36px 0 80px 0' : '140px 0 100px 0' }}>
+    <section id="rewards" className="alt" style={{ padding: '140px 0 100px 0' }}>
       <div className="wrap">
         {/* Main Rewards Hub Header (when no specific category is selected) */}
         {activeTab === null ? (
