@@ -1497,10 +1497,6 @@ function Rewards({ isBaseAppMode = false } = {}) {
     ended: GIVEAWAYS_DATA.filter(e => e.status === 'ended').length
   };
 
-  const activeCategoryCards = isBaseAppMode
-    ? categoryCards.filter(c => c.id !== 'vibe-verse')
-    : categoryCards;
-
   const categoryCards = [
     {
       id: 'holders',
@@ -1528,6 +1524,10 @@ function Rewards({ isBaseAppMode = false } = {}) {
       image: '/rewards/vibe-verse.jfif',
     },
   ];
+
+  const activeCategoryCards = isBaseAppMode
+    ? categoryCards.filter(c => c.id !== 'vibe-verse')
+    : categoryCards;
 
   const getCategoryBadges = (catId) => {
     if (catId === 'vibe-verse') {
