@@ -426,37 +426,39 @@ export default function DeFiVibePanel({ player }) {
   };
 
   return (
-    <div className="vv-defi-panel-wrap" style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '10px', padding: '4px', width: '100%', boxSizing: 'border-box' }}>
+    <div className="vv-defi-panel-wrap" style={{ fontFamily: 'var(--vv-pixel)', color: '#fff', fontSize: '9px', padding: '2px', width: '100%', boxSizing: 'border-box' }}>
       {/* Header & Mode Switcher (Single row: BUY $VIBE left, Slippage right) */}
       <div className="vv-defi-header-row" style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: '16px',
+        marginBottom: '12px',
         width: '100%',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        gap: '6px'
       }}>
-        <div style={{ fontSize: '12px', color: '#ffd700', fontWeight: 900, letterSpacing: '0.5px', whiteSpace: 'nowrap' }}>
+        <div style={{ fontSize: '9.5px', color: '#ffd700', fontWeight: 900, letterSpacing: '0.4px', whiteSpace: 'nowrap' }}>
           {mode === 'buy' ? 'BUY $VIBE' : 'SELL $VIBE'}
         </div>
 
-        {/* Slippage Tolerance Selector */}
-        <div className="vv-defi-slippage-row" style={{ display: 'flex', alignItems: 'center', gap: '4px', marginLeft: 'auto' }}>
-          <span style={{ fontSize: '7px', color: '#88aacc', fontWeight: 900 }}>SLIPPAGE:</span>
+        {/* Slippage Tolerance Selector (Single row, compact) */}
+        <div className="vv-defi-slippage-row" style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: 'auto', flexShrink: 0 }}>
+          <span style={{ fontSize: '5.5px', color: '#88aacc', fontWeight: 900 }}>SLIP:</span>
           {[0.5, 1.0, 3.0, 5.0].map((s) => (
             <button
               key={s}
               onClick={() => setSlippage(s)}
               style={{
                 fontFamily: 'var(--vv-pixel)',
-                fontSize: '8px',
-                padding: '3px 6px',
-                borderRadius: '5px',
+                fontSize: '6.5px',
+                padding: '2.5px 4px',
+                borderRadius: '4px',
                 border: slippage === s ? '1px solid #00f5ff' : '1px solid rgba(255, 255, 255, 0.15)',
                 background: slippage === s ? 'rgba(0, 245, 255, 0.25)' : 'rgba(2, 11, 26, 0.6)',
                 color: slippage === s ? '#00f5ff' : '#aaa',
                 cursor: 'pointer',
-                fontWeight: 900
+                fontWeight: 900,
+                lineHeight: 1
               }}
             >
               {s}%
@@ -468,17 +470,17 @@ export default function DeFiVibePanel({ player }) {
       {/* INPUT CARD 1: YOU PAY */}
       <div className="vv-defi-input-card" style={{
         background: '#020b1a',
-        border: '2px solid rgba(0, 245, 255, 0.4)',
+        border: '1.5px solid rgba(0, 245, 255, 0.35)',
         borderRadius: '12px',
-        padding: '14px 16px',
-        marginBottom: '10px',
+        padding: '12px 14px',
+        marginBottom: '8px',
         width: '100%',
         boxSizing: 'border-box'
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', color: '#aaa', fontSize: '9px', marginBottom: '8px', fontWeight: 900 }}>
-          <span>YOU PAY</span>
-          <span>
-            BALANCE:{' '}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#aaa', fontSize: '6.5px', marginBottom: '8px', fontWeight: 900, gap: '4px' }}>
+          <span style={{ color: '#88aacc' }}>YOU PAY</span>
+          <span style={{ whiteSpace: 'nowrap', textAlign: 'right' }}>
+            BAL:{' '}
             <strong style={{ color: mode === 'buy' ? '#00f5ff' : '#ffd700' }}>
               {balances.loading
                 ? '...'
@@ -489,7 +491,7 @@ export default function DeFiVibePanel({ player }) {
           </span>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <input
             type="number"
             placeholder="0.00"
@@ -503,7 +505,7 @@ export default function DeFiVibePanel({ player }) {
               width: '100%',
               minWidth: '0',
               fontFamily: 'var(--vv-pixel)',
-              fontSize: '16px',
+              fontSize: '14px',
               background: 'transparent',
               border: 'none',
               color: '#ffffff',
@@ -513,13 +515,13 @@ export default function DeFiVibePanel({ player }) {
           />
           <span style={{
             fontFamily: 'var(--vv-pixel)',
-            fontSize: '10px',
+            fontSize: '8px',
             fontWeight: 900,
             color: mode === 'buy' ? '#00f5ff' : '#ffd700',
             background: mode === 'buy' ? 'rgba(0, 245, 255, 0.15)' : 'rgba(255, 215, 0, 0.15)',
             border: mode === 'buy' ? '1px solid #00f5ff' : '1px solid #ffd700',
-            padding: '6px 10px',
-            borderRadius: '8px',
+            padding: '4px 8px',
+            borderRadius: '6px',
             whiteSpace: 'nowrap',
             flexShrink: 0
           }}>
@@ -528,12 +530,12 @@ export default function DeFiVibePanel({ player }) {
         </div>
 
         {/* Small USD Equivalent Display */}
-        <div style={{ color: 'rgba(255, 255, 255, 0.55)', fontSize: '8px', marginTop: '4px', fontWeight: 700 }}>
+        <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '6.5px', marginTop: '4px', fontWeight: 700 }}>
           {fromUsd}
         </div>
 
         {/* Percentage Preset Buttons (25%, 50%, 75%, MAX) */}
-        <div style={{ display: 'flex', gap: '6px', marginTop: '10px' }}>
+        <div style={{ display: 'flex', gap: '5px', marginTop: '8px' }}>
           {[25, 50, 75, 100].map((p) => (
             <button
               key={p}
@@ -541,14 +543,15 @@ export default function DeFiVibePanel({ player }) {
               style={{
                 flex: 1,
                 fontFamily: 'var(--vv-pixel)',
-                fontSize: '8px',
+                fontSize: '6.5px',
                 background: mode === 'buy' ? 'rgba(0, 245, 255, 0.12)' : 'rgba(255, 215, 0, 0.12)',
-                border: mode === 'buy' ? '1px solid rgba(0, 245, 255, 0.4)' : '1px solid rgba(255, 215, 0, 0.4)',
+                border: mode === 'buy' ? '1px solid rgba(0, 245, 255, 0.35)' : '1px solid rgba(255, 215, 0, 0.35)',
                 color: mode === 'buy' ? '#00f5ff' : '#ffd700',
-                padding: '6px 0',
-                borderRadius: '6px',
+                padding: '5px 0',
+                borderRadius: '5px',
                 cursor: 'pointer',
-                fontWeight: 900
+                fontWeight: 900,
+                lineHeight: 1
               }}
             >
               {p === 100 ? 'MAX' : `${p}%`}
@@ -558,22 +561,23 @@ export default function DeFiVibePanel({ player }) {
       </div>
 
       {/* FLIP DIRECTION BUTTON ↕ */}
-      <div style={{ textAlign: 'center', margin: '-4px 0 8px 0' }}>
+      <div style={{ textAlign: 'center', margin: '-4px 0 6px 0' }}>
         <button
           onClick={handleToggleMode}
           title="Switch Swap Direction"
           style={{
             fontFamily: 'var(--vv-pixel)',
-            fontSize: '14px',
+            fontSize: '12px',
             background: 'rgba(4, 20, 48, 0.95)',
-            border: '2px solid #00f5ff',
+            border: '1.5px solid #00f5ff',
             color: '#ffd700',
-            width: '36px',
-            height: '36px',
+            width: '32px',
+            height: '32px',
             borderRadius: '50%',
             cursor: 'pointer',
-            boxShadow: '0 0 14px rgba(0, 245, 255, 0.5)',
-            transition: 'transform 0.2s ease'
+            boxShadow: '0 0 12px rgba(0, 245, 255, 0.4)',
+            transition: 'transform 0.2s ease',
+            lineHeight: 1
           }}
         >
           ↕
@@ -583,17 +587,17 @@ export default function DeFiVibePanel({ player }) {
       {/* INPUT CARD 2: YOU RECEIVE */}
       <div className="vv-defi-input-card" style={{
         background: '#020b1a',
-        border: '2px solid rgba(0, 245, 255, 0.4)',
+        border: '1.5px solid rgba(0, 245, 255, 0.35)',
         borderRadius: '12px',
-        padding: '14px 16px',
-        marginBottom: '16px',
+        padding: '12px 14px',
+        marginBottom: '12px',
         width: '100%',
         boxSizing: 'border-box'
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', color: '#aaa', fontSize: '9px', marginBottom: '8px', fontWeight: 900 }}>
-          <span>YOU RECEIVE</span>
-          <span>
-            BALANCE:{' '}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#aaa', fontSize: '6.5px', marginBottom: '8px', fontWeight: 900, gap: '4px' }}>
+          <span style={{ color: '#88aacc' }}>YOU RECEIVE</span>
+          <span style={{ whiteSpace: 'nowrap', textAlign: 'right' }}>
+            BAL:{' '}
             <strong style={{ color: mode === 'buy' ? '#ffd700' : '#00f5ff' }}>
               {balances.loading
                 ? '...'
@@ -604,13 +608,13 @@ export default function DeFiVibePanel({ player }) {
           </span>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <div style={{
             flex: 1,
             width: '100%',
             minWidth: '0',
             fontFamily: 'var(--vv-pixel)',
-            fontSize: '16px',
+            fontSize: '14px',
             color: '#00ff88',
             fontWeight: 900
           }}>
@@ -618,13 +622,13 @@ export default function DeFiVibePanel({ player }) {
           </div>
           <span style={{
             fontFamily: 'var(--vv-pixel)',
-            fontSize: '10px',
+            fontSize: '8px',
             fontWeight: 900,
             color: mode === 'buy' ? '#ffd700' : '#00f5ff',
             background: mode === 'buy' ? 'rgba(255, 215, 0, 0.15)' : 'rgba(0, 245, 255, 0.15)',
             border: mode === 'buy' ? '1px solid #ffd700' : '1px solid #00f5ff',
-            padding: '6px 10px',
-            borderRadius: '8px',
+            padding: '4px 8px',
+            borderRadius: '6px',
             whiteSpace: 'nowrap',
             flexShrink: 0
           }}>
@@ -633,7 +637,7 @@ export default function DeFiVibePanel({ player }) {
         </div>
 
         {/* Small USD Equivalent Display */}
-        <div style={{ color: 'rgba(255, 255, 255, 0.55)', fontSize: '8px', marginTop: '4px', fontWeight: 700 }}>
+        <div style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '6.5px', marginTop: '4px', fontWeight: 700 }}>
           {toUsd}
         </div>
       </div>
@@ -641,9 +645,9 @@ export default function DeFiVibePanel({ player }) {
       {/* Status Toast Message */}
       {txStatus.msg && (
         <div style={{
-          marginBottom: '14px',
-          padding: '10px 14px',
-          borderRadius: '10px',
+          marginBottom: '12px',
+          padding: '8px 10px',
+          borderRadius: '8px',
           background: txStatus.type === 'success'
             ? 'rgba(0, 255, 136, 0.15)'
             : txStatus.type === 'error'
@@ -659,19 +663,22 @@ export default function DeFiVibePanel({ player }) {
             : txStatus.type === 'error'
             ? '#ff4466'
             : '#00f5ff',
-          fontSize: '9px',
-          fontWeight: 900,
+          fontSize: '6.5px',
+          fontWeight: 800,
+          lineHeight: 1.4,
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
+          gap: '6px',
+          wordBreak: 'break-word'
         }}>
-          <span>{txStatus.msg}</span>
+          <span style={{ flex: 1 }}>{txStatus.msg}</span>
           {txStatus.hash && (
             <a
               href={`https://basescan.org/tx/${txStatus.hash}`}
               target="_blank"
               rel="noreferrer"
-              style={{ color: '#00f5ff', textDecoration: 'underline' }}
+              style={{ color: '#00f5ff', textDecoration: 'underline', fontSize: '6px', whiteSpace: 'nowrap', flexShrink: 0 }}
             >
               BASESCAN ↗
             </a>
@@ -679,30 +686,37 @@ export default function DeFiVibePanel({ player }) {
         </div>
       )}
 
-      {/* MAIN SWAP ACTION BUTTON (Enlarged, Prominent & Heavy) */}
+      {/* MAIN SWAP ACTION BUTTON */}
       <button
         onClick={handleSwap}
         disabled={swapping || !fromAmount || Number(fromAmount) <= 0}
         style={{
           width: '100%',
-          height: '52px',
+          height: '46px',
           fontFamily: 'var(--vv-pixel)',
-          fontSize: '14px',
+          fontSize: '10px',
           fontWeight: 900,
           background: mode === 'buy'
             ? 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)'
             : 'linear-gradient(135deg, #ffd700 0%, #ff6b35 100%)',
-          border: '2.5px solid #ffffff',
-          borderRadius: '12px',
-          padding: '14px',
+          border: '2px solid #ffffff',
+          borderRadius: '10px',
+          padding: '10px',
           color: '#ffffff',
           cursor: swapping || !fromAmount || Number(fromAmount) <= 0 ? 'not-allowed' : 'pointer',
           opacity: swapping || !fromAmount || Number(fromAmount) <= 0 ? 0.6 : 1,
-          boxShadow: '0 4px 20px rgba(0, 245, 255, 0.4), 0 0 12px rgba(255, 255, 255, 0.5)',
-          letterSpacing: '1px'
+          boxShadow: mode === 'buy'
+            ? '0 0 16px rgba(0, 245, 255, 0.4)'
+            : '0 0 16px rgba(255, 215, 0, 0.4)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          letterSpacing: '0.4px',
+          transition: 'all 0.15s ease'
         }}
       >
-        {swapping ? 'SWAPPING...' : (mode === 'buy' ? 'BUY $VIBE' : 'SELL $VIBE')}
+        {swapping ? 'PROCESSING...' : (mode === 'buy' ? 'SWAP ETH FOR $VIBE' : 'SWAP $VIBE FOR ETH')}
       </button>
     </div>
   );

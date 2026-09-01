@@ -21,8 +21,9 @@ export function BaseAppBottomNav({ activeTab, onSelectTab }) {
     },
     {
       id: 'hub',
-      label: 'REWARDS',
+      label: 'REWARDS HUB',
       icon: Gift,
+      isCenter: true
     },
     {
       id: 'claim',
@@ -52,11 +53,12 @@ export function BaseAppBottomNav({ activeTab, onSelectTab }) {
         WebkitBackdropFilter: 'blur(16px)',
         borderTop: '1.5px solid rgba(0, 245, 255, 0.35)',
         boxShadow: '0 -6px 24px rgba(0, 0, 0, 0.8), 0 -1px 0 rgba(0, 245, 255, 0.2)',
-        paddingTop: '8px',
-        paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))',
+        paddingTop: '6px',
+        paddingBottom: 'calc(6px + env(safe-area-inset-bottom, 0px))',
         boxSizing: 'border-box',
         transform: 'translate3d(0, 0, 0)',
-        WebkitTransform: 'translate3d(0, 0, 0)'
+        WebkitTransform: 'translate3d(0, 0, 0)',
+        overflow: 'visible'
       }}
     >
       <div
@@ -67,12 +69,87 @@ export function BaseAppBottomNav({ activeTab, onSelectTab }) {
           gridTemplateColumns: 'repeat(5, 1fr)',
           gap: '2px',
           padding: '0 4px',
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
+          overflow: 'visible',
+          alignItems: 'flex-end'
         }}
       >
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
+
+          if (item.isCenter) {
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSelectTab(item.id);
+                }}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                  background: 'transparent',
+                  border: 'none',
+                  padding: '0 2px 2px 2px',
+                  cursor: 'pointer',
+                  touchAction: 'manipulation',
+                  WebkitTapHighlightColor: 'transparent',
+                  position: 'relative',
+                  marginTop: '-20px'
+                }}
+              >
+                {/* Elevated Floating Circle */}
+                <div
+                  style={{
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                    background: isActive
+                      ? 'linear-gradient(135deg, #00f5ff 0%, #00b4d8 100%)'
+                      : 'linear-gradient(180deg, rgba(6, 26, 60, 0.98) 0%, rgba(2, 11, 26, 0.99) 100%)',
+                    border: isActive ? '2px solid #ffffff' : '2px solid rgba(0, 245, 255, 0.6)',
+                    boxShadow: isActive
+                      ? '0 0 20px rgba(0, 245, 255, 0.8), 0 -4px 12px rgba(0, 0, 0, 0.6)'
+                      : '0 -4px 12px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 245, 255, 0.25)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '4px',
+                    transition: 'all 0.2s ease',
+                    transform: isActive ? 'scale(1.05)' : 'scale(1)'
+                  }}
+                >
+                  <Icon
+                    size={20}
+                    color={isActive ? '#020b1a' : '#00f5ff'}
+                    strokeWidth={isActive ? 2.8 : 2.2}
+                    style={{
+                      filter: isActive ? 'none' : 'drop-shadow(0 0 6px rgba(0, 245, 255, 0.6))'
+                    }}
+                  />
+                </div>
+
+                <span
+                  style={{
+                    fontFamily: "'Press Start 2P', monospace",
+                    fontSize: '4.8px',
+                    fontWeight: 900,
+                    letterSpacing: '0.1px',
+                    whiteSpace: 'nowrap',
+                    lineHeight: 1,
+                    color: isActive ? '#00f5ff' : '#88aacc',
+                    textShadow: isActive ? '0 0 8px rgba(0, 245, 255, 0.6)' : 'none'
+                  }}
+                >
+                  {item.label}
+                </span>
+              </button>
+            );
+          }
           
           return (
             <button
