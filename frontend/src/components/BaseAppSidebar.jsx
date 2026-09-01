@@ -41,7 +41,7 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
           background: 'rgba(0, 0, 0, 0.8)',
           backdropFilter: 'blur(8px)',
           WebkitBackdropFilter: 'blur(8px)',
-          zIndex: 998,
+          zIndex: 999998,
           animation: 'fadeIn 0.2s ease-out'
         }}
       />
@@ -58,16 +58,17 @@ export function BaseAppSidebar({ isOpen, onClose, activeTab, onSelectTab }) {
           height: '100vh',
           background: '#020b1a',
           borderRight: '1.5px solid rgba(0, 245, 255, 0.25)',
-          zIndex: 999,
+          zIndex: 999999,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          padding: '20px 16px',
+          padding: '20px 16px calc(24px + env(safe-area-inset-bottom, 0px)) 16px',
           boxSizing: 'border-box',
           fontFamily: "'Press Start 2P', monospace",
           boxShadow: '10px 0 40px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 245, 255, 0.1)',
           animation: 'slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-          textTransform: 'uppercase'
+          textTransform: 'uppercase',
+          overflowY: 'auto'
         }}
       >
         <div>

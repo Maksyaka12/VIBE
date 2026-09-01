@@ -41,6 +41,7 @@ import round1Data from './data/round_1_proofs.json';
 import royalty1Data from './data/royalty_1_proofs.json';
 import nftNames from './data/nftNames.json';
 import { BaseAppClaimView } from './components/BaseAppClaimView';
+import { BaseAppProfileView } from './components/BaseAppProfileView';
 
 const CA = '0xb200000000000000000000df24ecb8bf51100a01';
 const NFT_CA = '0x9E92307Dbec2d0aE4BBF14cA93E1cA00edC4b886';
@@ -151,7 +152,7 @@ function formatCompactBalance(val) {
   return `${num.toLocaleString('en-US', { maximumFractionDigits: 0 })} $VIBE`;
 }
 
-export default function Checker({ isBaseAppMode = false } = {}) {
+export default function Checker({ isBaseAppMode = false, isProfileMode = false } = {}) {
   const { ready, authenticated, user, login, logout } = usePrivy();
   const { wallets } = useWallets();
   const address = user?.wallet?.address;
@@ -988,65 +989,85 @@ export default function Checker({ isBaseAppMode = false } = {}) {
 
   if (isBaseAppMode) {
     return (
-      <section id="claim-portal" style={{ padding: '24px 0 60px 0', background: 'transparent' }}>
+      <section id={isProfileMode ? "profile-section" : "claim-portal"} style={{ padding: '24px 0 60px 0', background: 'transparent' }}>
         <div className="wrap" style={{ maxWidth: '720px', padding: '0 12px' }}>
-          <BaseAppClaimView
-            address={address}
-            ready={ready}
-            authenticated={authenticated}
-            login={login}
-            logout={logout}
-            balance={balance}
-            nftCount={nftCount}
-            userNft={userNft}
-            loading={loading}
-            copied={copied}
-            copyAddress={copyAddress}
-            fetchBalances={fetchBalances}
-            currentTime={currentTime}
-            claimStatus={claimStatus}
-            claimedHistory={claimedHistory}
-            handleClaim={handleClaim}
-            isHolderEligibleLive={isHolderEligibleLive}
-            holderRewardAmount={holderRewardAmount}
-            hasConfirmedHolderClaim={hasConfirmedHolderClaim}
-            isHolderRound1Available={isHolderRound1Available}
-            isHolderRound1Claimed={isHolderRound1Claimed}
-            isVibeClubEligible={isVibeClubEligible}
-            vibeClubRewardAmount={vibeClubRewardAmount}
-            hasConfirmedRoyaltyClaim={hasConfirmedRoyaltyClaim}
-            isVibeClubRoyalty1Available={isVibeClubRoyalty1Available}
-            isVibeClubRoyalty1Claimed={isVibeClubRoyalty1Claimed}
-            totalAvailableCount={totalAvailableCount}
-            upcomingHolderRound={upcomingHolderRound}
-            upcomingVibeClubRound={upcomingVibeClubRound}
-            HOLDER_ROUNDS={HOLDER_ROUNDS}
-            VIBECLUB_ROUNDS={VIBECLUB_ROUNDS}
-            round1Data={round1Data}
-            royalty1Data={royalty1Data}
-            isAdmin={isAdmin}
-            adminMetrics={adminMetrics}
-            adminDistributorType={adminDistributorType}
-            setAdminDistributorType={setAdminDistributorType}
-            adminCustomRoyaltyCa={adminCustomRoyaltyCa}
-            setAdminCustomRoyaltyCa={setAdminCustomRoyaltyCa}
-            adminEpochId={adminEpochId}
-            setAdminEpochId={setAdminEpochId}
-            adminMerkleRoot={adminMerkleRoot}
-            setAdminMerkleRoot={setAdminMerkleRoot}
-            adminWithdrawAmount={adminWithdrawAmount}
-            setAdminWithdrawAmount={setAdminWithdrawAmount}
-            adminBurnAmount={adminBurnAmount}
-            setAdminBurnAmount={setAdminBurnAmount}
-            adminLoading={adminLoading}
-            adminTxHash={adminTxHash}
-            adminError={adminError}
-            adminSuccess={adminSuccess}
-            handleSetMerkleRoot={handleSetMerkleRoot}
-            handleWithdrawTokens={handleWithdrawTokens}
-            handleBurnTokens={handleBurnTokens}
-            fetchAdminMetrics={fetchAdminMetrics}
-          />
+          {isProfileMode ? (
+            <BaseAppProfileView
+              address={address}
+              ready={ready}
+              authenticated={authenticated}
+              login={login}
+              logout={logout}
+              balance={balance}
+              nftCount={nftCount}
+              userNft={userNft}
+              loading={loading}
+              copied={copied}
+              copyAddress={copyAddress}
+              fetchBalances={fetchBalances}
+              currentTime={currentTime}
+              claimedHistory={claimedHistory}
+              isHolderEligibleLive={isHolderEligibleLive}
+            />
+          ) : (
+            <BaseAppClaimView
+              address={address}
+              ready={ready}
+              authenticated={authenticated}
+              login={login}
+              logout={logout}
+              balance={balance}
+              nftCount={nftCount}
+              userNft={userNft}
+              loading={loading}
+              copied={copied}
+              copyAddress={copyAddress}
+              fetchBalances={fetchBalances}
+              currentTime={currentTime}
+              claimStatus={claimStatus}
+              claimedHistory={claimedHistory}
+              handleClaim={handleClaim}
+              isHolderEligibleLive={isHolderEligibleLive}
+              holderRewardAmount={holderRewardAmount}
+              hasConfirmedHolderClaim={hasConfirmedHolderClaim}
+              isHolderRound1Available={isHolderRound1Available}
+              isHolderRound1Claimed={isHolderRound1Claimed}
+              isVibeClubEligible={isVibeClubEligible}
+              vibeClubRewardAmount={vibeClubRewardAmount}
+              hasConfirmedRoyaltyClaim={hasConfirmedRoyaltyClaim}
+              isVibeClubRoyalty1Available={isVibeClubRoyalty1Available}
+              isVibeClubRoyalty1Claimed={isVibeClubRoyalty1Claimed}
+              totalAvailableCount={totalAvailableCount}
+              upcomingHolderRound={upcomingHolderRound}
+              upcomingVibeClubRound={upcomingVibeClubRound}
+              HOLDER_ROUNDS={HOLDER_ROUNDS}
+              VIBECLUB_ROUNDS={VIBECLUB_ROUNDS}
+              round1Data={round1Data}
+              royalty1Data={royalty1Data}
+              isAdmin={isAdmin}
+              adminMetrics={adminMetrics}
+              adminDistributorType={adminDistributorType}
+              setAdminDistributorType={setAdminDistributorType}
+              adminCustomRoyaltyCa={adminCustomRoyaltyCa}
+              setAdminCustomRoyaltyCa={setAdminCustomRoyaltyCa}
+              adminEpochId={adminEpochId}
+              setAdminEpochId={setAdminEpochId}
+              adminMerkleRoot={adminMerkleRoot}
+              setAdminMerkleRoot={setAdminMerkleRoot}
+              adminWithdrawAmount={adminWithdrawAmount}
+              setAdminWithdrawAmount={setAdminWithdrawAmount}
+              adminBurnAmount={adminBurnAmount}
+              setAdminBurnAmount={setAdminBurnAmount}
+              adminLoading={adminLoading}
+              adminTxHash={adminTxHash}
+              adminError={adminError}
+              adminSuccess={adminSuccess}
+              handleSetMerkleRoot={handleSetMerkleRoot}
+              handleWithdrawTokens={handleWithdrawTokens}
+              handleBurnTokens={handleBurnTokens}
+              fetchAdminMetrics={fetchAdminMetrics}
+            />
+          )}
         </div>
       </section>
     );

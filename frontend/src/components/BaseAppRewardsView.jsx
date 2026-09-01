@@ -362,7 +362,10 @@ export default function BaseAppRewardsView({
                   <div style={{ fontSize: '7px', color: '#ffffff', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", whiteSpace: 'nowrap', textShadow: 'none' }}>Holder 5M+ $VIBE</div>
                 </div>
                 <div style={{ background: 'rgba(2, 11, 26, 0.75)', border: '1px solid rgba(0, 245, 255, 0.2)', borderRadius: '10px', padding: '8px 10px' }}>
-                  <div style={{ fontSize: '6px', color: '#88aacc', marginBottom: '2px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>SNAPSHOT</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                    <CheckCircle2 size={9} color="#00ff88" strokeWidth={2.5} style={{ flexShrink: 0 }} />
+                    <span style={{ fontSize: '6px', color: '#00ff88', fontFamily: "'Press Start 2P', monospace", textShadow: 'none', fontWeight: 800 }}>SNAPSHOT COMPLETED</span>
+                  </div>
                   <div style={{ fontSize: '7px', color: '#ffffff', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>{stripYear(featuredHolder.snapshotTime)}</div>
                 </div>
               </div>
@@ -403,10 +406,10 @@ export default function BaseAppRewardsView({
                     </span>
                   </div>
                 ) : (
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '10px', textAlign: 'center' }}>
                     <XCircle size={13} color="#ff4466" strokeWidth={2.5} style={{ flexShrink: 0 }} />
-                    <span style={{ fontSize: '7px', color: '#ff4466', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
-                      You are not eligible
+                    <span style={{ fontSize: '6px', color: '#ff4466', fontFamily: "'Press Start 2P', monospace", fontWeight: 800, lineHeight: 1.4 }}>
+                      YOU ARE NOT ELIGIBLE! YOU DIDN'T HOLD 5M+ $VIBE AT SNAPSHOT
                     </span>
                   </div>
                 )
@@ -600,7 +603,10 @@ export default function BaseAppRewardsView({
                   <div style={{ fontSize: '7px', color: '#ffffff', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", whiteSpace: 'nowrap', textShadow: 'none' }}>Vibe Club NFT Holder</div>
                 </div>
                 <div style={{ background: 'rgba(2, 11, 26, 0.75)', border: '1px solid rgba(0, 245, 255, 0.2)', borderRadius: '10px', padding: '8px 10px' }}>
-                  <div style={{ fontSize: '6px', color: '#88aacc', marginBottom: '2px', fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>SNAPSHOT</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '2px' }}>
+                    <CheckCircle2 size={9} color="#00ff88" strokeWidth={2.5} style={{ flexShrink: 0 }} />
+                    <span style={{ fontSize: '6px', color: '#00ff88', fontFamily: "'Press Start 2P', monospace", textShadow: 'none', fontWeight: 800 }}>SNAPSHOT COMPLETED</span>
+                  </div>
                   <div style={{ fontSize: '7px', color: '#ffffff', fontWeight: 800, fontFamily: "'Press Start 2P', monospace", textShadow: 'none' }}>{stripYear(featuredVibeClub.snapshotTime)}</div>
                 </div>
               </div>
@@ -641,10 +647,10 @@ export default function BaseAppRewardsView({
                     </span>
                   </div>
                 ) : (
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '10px', textAlign: 'center' }}>
                     <XCircle size={13} color="#ff4466" strokeWidth={2.5} style={{ flexShrink: 0 }} />
-                    <span style={{ fontSize: '7px', color: '#ff4466', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
-                      You are not eligible
+                    <span style={{ fontSize: '6px', color: '#ff4466', fontFamily: "'Press Start 2P', monospace", fontWeight: 800, lineHeight: 1.4 }}>
+                      YOU ARE NOT ELIGIBLE! YOU DID NOT HOLD A VIBE CLUB NFT AT SNAPSHOT
                     </span>
                   </div>
                 )

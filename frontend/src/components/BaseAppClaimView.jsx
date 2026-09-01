@@ -199,226 +199,7 @@ export function BaseAppClaimView(props) {
         </div>
       </div>
 
-      {/* ── 2. USER PROFILE CARD (84PX AVATAR, FLUSH TOP/BOTTOM ALIGNED INFO, STATS) ── */}
-      {!address ? (
-        <div
-          style={{
-            background: 'linear-gradient(180deg, rgba(6, 26, 60, 0.95) 0%, rgba(2, 11, 26, 0.98) 100%)',
-            border: '1.5px solid rgba(0, 245, 255, 0.3)',
-            borderRadius: '18px',
-            padding: '28px 16px',
-            textAlign: 'center',
-            marginBottom: '24px',
-            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.7)'
-          }}
-        >
-          <div
-            style={{
-              width: '84px',
-              height: '84px',
-              margin: '0 auto 16px auto',
-              borderRadius: '16px',
-              border: '2px solid rgba(0, 245, 255, 0.5)',
-              overflow: 'hidden',
-              background: '#020b1a',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 20px rgba(0, 245, 255, 0.35)'
-            }}
-          >
-            <img src="/new-logo-vibe.png" alt="Vibe" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          </div>
-          <div style={{ fontSize: '10px', color: '#ffffff', fontFamily: "'Press Start 2P', monospace", marginBottom: '8px', fontWeight: 900 }}>
-            CONNECT YOUR WALLET
-          </div>
-          <p style={{ fontSize: '7px', color: '#88aacc', fontFamily: "'Press Start 2P', monospace", lineHeight: 1.6, margin: '0 0 18px 0' }}>
-            Connect to check your live eligibility, unlock $VIBE rewards and claim royalties.
-          </p>
-          <button
-            onClick={login}
-            style={{
-              background: 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)',
-              border: '2px solid #ffffff',
-              color: '#ffffff',
-              fontFamily: "'Press Start 2P', monospace",
-              fontSize: '8.5px',
-              fontWeight: 900,
-              padding: '12px 24px',
-              borderRadius: '12px',
-              cursor: 'pointer',
-              boxShadow: '0 0 18px rgba(0, 245, 255, 0.5)',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
-          >
-            CONNECT WALLET ↗
-          </button>
-        </div>
-      ) : (
-        <div
-          style={{
-            background: 'linear-gradient(180deg, rgba(6, 26, 60, 0.95) 0%, rgba(2, 11, 26, 0.98) 100%)',
-            border: hasNft ? '1.5px solid #ffd700' : '1.5px solid rgba(0, 245, 255, 0.35)',
-            borderRadius: '18px',
-            padding: '16px 14px',
-            marginBottom: '24px',
-            boxShadow: hasNft ? '0 8px 28px rgba(0, 0, 0, 0.7), 0 0 14px rgba(255, 215, 0, 0.25)' : '0 8px 24px rgba(0, 0, 0, 0.7)'
-          }}
-        >
-          {/* Top Profile Section: Exactly equal height 84px */}
-          <div style={{ display: 'flex', gap: '14px', alignItems: 'center', marginBottom: '16px' }}>
-            {/* 1. Large 84px Avatar */}
-            <div
-              style={{
-                width: '84px',
-                height: '84px',
-                borderRadius: '16px',
-                border: hasNft ? '2.5px solid #ffd700' : '2px solid #64748b',
-                overflow: 'hidden',
-                background: '#020b1a',
-                flexShrink: 0,
-                boxShadow: hasNft ? '0 0 18px rgba(255, 215, 0, 0.45)' : '0 0 10px rgba(0, 0, 0, 0.6)'
-              }}
-            >
-              <img
-                src={hasNft ? (userNft?.image || '/nft/images/5.png') : '/new-logo-vibe.png'}
-                alt="Profile Avatar"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  filter: hasNft ? 'none' : 'grayscale(1) brightness(0.6)'
-                }}
-              />
-            </div>
-
-            {/* 2. Info Column: Tight group for Name + Badge without gap, address at bottom */}
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                minHeight: '84px',
-                minWidth: 0,
-                flex: 1,
-                boxSizing: 'border-box',
-                padding: '1px 0'
-              }}
-            >
-              {/* Group 1: NFT Name + Member Badge directly attached with tight 5px gap */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <div
-                  style={{
-                    fontSize: '15px',
-                    color: '#ffffff',
-                    fontFamily: "'Press Start 2P', monospace",
-                    fontWeight: 900,
-                    margin: 0,
-                    lineHeight: 1.2,
-                    letterSpacing: '0.2px',
-                    wordBreak: 'break-word'
-                  }}
-                >
-                  {hasNft ? (userNft?.name || `Vibe Club #${userNft?.id || 1}`) : 'Unknown Dog'}
-                </div>
-
-                {/* Member Status Pill directly under Name */}
-                <div>
-                  {hasNft ? (
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(0, 255, 136, 0.15)', border: '1px solid #00ff88', borderRadius: '6px', padding: '3.5px 7px', width: 'fit-content' }}>
-                      <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 6px #00ff88', flexShrink: 0 }} />
-                      <span style={{ fontSize: '6px', color: '#00ff88', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
-                        Vibe Club Member
-                      </span>
-                    </div>
-                  ) : (
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(255, 68, 102, 0.15)', border: '1px solid #ff4466', borderRadius: '6px', padding: '3.5px 7px', width: 'fit-content' }}>
-                      <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#ff4466', boxShadow: '0 0 6px #ff4466', flexShrink: 0 }} />
-                      <span style={{ fontSize: '6px', color: '#ff4466', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
-                        Not a Vibe Club Member
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Group 2 (Bottom): Wallet Address + Refresh Button */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginTop: '4px' }}>
-                <span style={{ fontSize: '6.5px', color: '#88aacc', fontFamily: "'Press Start 2P', monospace" }}>
-                  {address.slice(0, 6)}...{address.slice(-4)}
-                </span>
-                <button
-                  onClick={() => fetchBalances(true)}
-                  disabled={loading}
-                  style={{
-                    background: 'rgba(0, 245, 255, 0.12)',
-                    border: '1px solid rgba(0, 245, 255, 0.35)',
-                    color: '#00f5ff',
-                    borderRadius: '5px',
-                    padding: '3px 6px',
-                    fontSize: '5.5px',
-                    fontFamily: "'Press Start 2P', monospace",
-                    cursor: loading ? 'not-allowed' : 'pointer',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '3px'
-                  }}
-                >
-                  <RefreshCw size={8} className={loading ? 'spin' : ''} />
-                  <span>Refresh</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* User Stats Grid (Claimed, Expired, Holding) */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-              gap: '6px',
-              background: 'rgba(2, 11, 26, 0.85)',
-              border: '1px solid rgba(0, 245, 255, 0.2)',
-              borderRadius: '12px',
-              padding: '10px 8px'
-            }}
-          >
-            {/* Stat 1: Claimed */}
-            <div style={{ textAlign: 'center', borderRight: '1px solid rgba(0, 245, 255, 0.15)', paddingRight: '4px' }}>
-              <div style={{ fontSize: '5.5px', color: '#88aacc', fontFamily: "'Press Start 2P', monospace", marginBottom: '4px' }}>
-                CLAIMED
-              </div>
-              <div style={{ fontSize: '7.5px', color: '#00ff88', fontFamily: "'Press Start 2P', monospace", fontWeight: 900 }}>
-                {totalClaimedTokens > 0 ? `${totalClaimedTokens.toLocaleString()}` : '0 $VIBE'}
-              </div>
-            </div>
-
-            {/* Stat 2: Expired */}
-            <div style={{ textAlign: 'center', borderRight: '1px solid rgba(0, 245, 255, 0.15)', paddingRight: '4px' }}>
-              <div style={{ fontSize: '5.5px', color: '#88aacc', fontFamily: "'Press Start 2P', monospace", marginBottom: '4px' }}>
-                EXPIRED
-              </div>
-              <div style={{ fontSize: '7.5px', color: totalExpiredTokens > 0 ? '#ff4466' : '#88aacc', fontFamily: "'Press Start 2P', monospace", fontWeight: 900 }}>
-                {totalExpiredTokens > 0 ? `${totalExpiredTokens.toLocaleString()}` : '0 $VIBE'}
-              </div>
-            </div>
-
-            {/* Stat 3: Holding Balance */}
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '5.5px', color: '#88aacc', fontFamily: "'Press Start 2P', monospace", marginBottom: '4px' }}>
-                HOLDING
-              </div>
-              <div style={{ fontSize: '7.5px', color: isHolderEligibleLive ? '#00f5ff' : '#cbd5e1', fontFamily: "'Press Start 2P', monospace", fontWeight: 900 }}>
-                {formatCompactBalance(balance)}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── 3. SECTION 1: AVAILABLE TO CLAIM ── */}
+      {/* ── 2. SECTION 1: AVAILABLE TO CLAIM ── */}
       <div style={{ marginBottom: '28px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
           <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: totalAvailableCount > 0 ? '#00ff88' : '#64748b', boxShadow: totalAvailableCount > 0 ? '0 0 8px #00ff88' : 'none' }} />
@@ -886,74 +667,78 @@ export function BaseAppClaimView(props) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    gap: '10px',
-                    flexWrap: 'wrap'
+                    gap: '12px'
                   }}
                 >
-                  <div>
+                  {/* LEFT SIDE: Title + Share & BaseScan */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {/* Category (White) • Round (Cyan) */}
-                    <div style={{ fontSize: '7.5px', color: '#ffffff', fontFamily: "'Press Start 2P', monospace", fontWeight: 900, marginBottom: '5px' }}>
+                    <div style={{ fontSize: '7.5px', color: '#ffffff', fontFamily: "'Press Start 2P', monospace", fontWeight: 900 }}>
                       {categoryLabel} <span style={{ color: '#88aacc' }}>•</span> <span style={{ color: '#00f5ff' }}>{roundLabel}</span>
                     </div>
 
-                    {/* Claimed Amount (Green) */}
-                    <div style={{ fontSize: '8.5px', color: '#00ff88', fontFamily: "'Press Start 2P', monospace", fontWeight: 800, marginBottom: '4px' }}>
-                      +{Number(item.amount || 0).toLocaleString()} $VIBE
-                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      {/* Share Button (No arrow, clean pixel button) */}
+                      <button
+                        onClick={() => setShareModalItem(item)}
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.08)',
+                          border: '1px solid rgba(255, 255, 255, 0.35)',
+                          color: '#ffffff',
+                          borderRadius: '8px',
+                          padding: '5px 10px',
+                          fontSize: '6.5px',
+                          fontFamily: "'Press Start 2P', monospace",
+                          fontWeight: 800,
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                      >
+                        <Share2 size={10} />
+                        <span>Share</span>
+                      </button>
 
-                    <div style={{ fontSize: '5.5px', color: '#88aacc', fontFamily: "'Press Start 2P', monospace" }}>
-                      {new Date(item.timestamp || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      {/* BaseScan Tx Link */}
+                      {item.txHash && (
+                        <a
+                          href={`https://basescan.org/tx/${item.txHash}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          style={{
+                            background: 'rgba(0, 245, 255, 0.1)',
+                            border: '1px solid rgba(0, 245, 255, 0.35)',
+                            color: '#00f5ff',
+                            borderRadius: '8px',
+                            padding: '5px 8px',
+                            fontSize: '6px',
+                            fontFamily: "'Press Start 2P', monospace",
+                            fontWeight: 800,
+                            textDecoration: 'none',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '3px'
+                          }}
+                        >
+                          <span>BaseScan</span>
+                          <ArrowUpRight size={9} />
+                        </a>
+                      )}
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    {/* Share Button (Opens Celebration Modal) */}
-                    <button
-                      onClick={() => setShareModalItem(item)}
-                      style={{
-                        background: 'rgba(255, 255, 255, 0.08)',
-                        border: '1px solid rgba(255, 255, 255, 0.35)',
-                        color: '#ffffff',
-                        borderRadius: '8px',
-                        padding: '6px 12px',
-                        fontSize: '6.5px',
-                        fontFamily: "'Press Start 2P', monospace",
-                        fontWeight: 800,
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '4px'
-                      }}
-                    >
-                      <Share2 size={10} />
-                      <span>Share ↗</span>
-                    </button>
+                  {/* RIGHT SIDE: Claimed Amount + Date below */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', textAlign: 'right' }}>
+                    {/* Claimed Amount (Green) */}
+                    <div style={{ fontSize: '9px', color: '#00ff88', fontFamily: "'Press Start 2P', monospace", fontWeight: 900, marginBottom: '4px' }}>
+                      +{Number(item.amount || 0).toLocaleString()} $VIBE
+                    </div>
 
-                    {/* BaseScan Tx Link */}
-                    {item.txHash && (
-                      <a
-                        href={`https://basescan.org/tx/${item.txHash}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        style={{
-                          background: 'rgba(0, 245, 255, 0.1)',
-                          border: '1px solid rgba(0, 245, 255, 0.35)',
-                          color: '#00f5ff',
-                          borderRadius: '8px',
-                          padding: '6px 10px',
-                          fontSize: '6px',
-                          fontFamily: "'Press Start 2P', monospace",
-                          fontWeight: 800,
-                          textDecoration: 'none',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '3px'
-                        }}
-                      >
-                        <span>BaseScan</span>
-                        <ArrowUpRight size={9} />
-                      </a>
-                    )}
+                    {/* Claim Date */}
+                    <div style={{ fontSize: '6px', color: '#88aacc', fontFamily: "'Press Start 2P', monospace" }}>
+                      {new Date(item.timestamp || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </div>
                   </div>
                 </div>
               );
@@ -962,7 +747,7 @@ export function BaseAppClaimView(props) {
         )}
       </div>
 
-      {/* ── 6. CELEBRATION / SHARE MODAL ── */}
+      {/* ── 4. CELEBRATION / SHARE MODAL ── */}
       {shareModalItem && (
         <div
           onClick={() => setShareModalItem(null)}
@@ -1050,56 +835,69 @@ export function BaseAppClaimView(props) {
             </div>
 
             {/* 2 Action Steps: Save Image & Share on X */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               {/* Step 1: Save Image */}
-              <button
-                onClick={handleDownloadBanner}
-                disabled={downloadingBanner}
-                style={{
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.35)',
-                  borderRadius: '10px',
-                  padding: '10px',
-                  color: '#ffffff',
-                  fontFamily: "'Press Start 2P', monospace",
-                  fontSize: '6.5px',
-                  fontWeight: 900,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '4px'
-                }}
-              >
-                <Download size={14} />
-                <span>1. SAVE IMAGE</span>
-              </button>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ fontSize: '6px', color: '#88aacc', fontFamily: "'Press Start 2P', monospace", marginBottom: '5px', fontWeight: 900 }}>
+                  STEP 1
+                </div>
+                <button
+                  onClick={handleDownloadBanner}
+                  disabled={downloadingBanner}
+                  style={{
+                    width: '100%',
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    border: '1.5px solid rgba(255, 255, 255, 0.35)',
+                    borderRadius: '10px',
+                    padding: '10px',
+                    color: '#ffffff',
+                    fontFamily: "'Press Start 2P', monospace",
+                    fontSize: '6.5px',
+                    fontWeight: 900,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
+                >
+                  <Download size={14} />
+                  <span>SAVE IMAGE</span>
+                </button>
+              </div>
 
               {/* Step 2: Share on X */}
-              <a
-                href={getShareTwitterUrl(shareModalItem)}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  background: 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)',
-                  border: '1.5px solid #ffffff',
-                  borderRadius: '10px',
-                  padding: '10px',
-                  color: '#ffffff',
-                  fontFamily: "'Press Start 2P', monospace",
-                  fontSize: '6.5px',
-                  fontWeight: 900,
-                  textDecoration: 'none',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '4px',
-                  boxShadow: '0 0 14px rgba(0, 245, 255, 0.4)'
-                }}
-              >
-                <Share2 size={14} />
-                <span>2. SHARE ON 𝕏</span>
-              </a>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ fontSize: '6px', color: '#00f5ff', fontFamily: "'Press Start 2P', monospace", marginBottom: '5px', fontWeight: 900 }}>
+                  STEP 2
+                </div>
+                <a
+                  href={getShareTwitterUrl(shareModalItem)}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    background: 'linear-gradient(135deg, #00f5ff 0%, #0050ff 100%)',
+                    border: '1.5px solid #ffffff',
+                    borderRadius: '10px',
+                    padding: '10px',
+                    color: '#ffffff',
+                    fontFamily: "'Press Start 2P', monospace",
+                    fontSize: '6.5px',
+                    fontWeight: 900,
+                    textDecoration: 'none',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px',
+                    boxShadow: '0 0 14px rgba(0, 245, 255, 0.4)'
+                  }}
+                >
+                  <Share2 size={14} />
+                  <span>SHARE ON 𝕏</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>

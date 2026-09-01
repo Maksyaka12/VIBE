@@ -40,10 +40,7 @@ export function BaseAppView({ RewardsComponent }) {
     } else if (tabId === 'vibeclub') {
       navigate('/vibeclub', { replace: false });
     } else if (tabId === 'profile') {
-      navigate('/claim', { replace: false });
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 50);
+      navigate('/profile', { replace: false });
     } else {
       navigate('/hub', { replace: false });
     }
@@ -133,7 +130,7 @@ export function BaseAppView({ RewardsComponent }) {
             </div>
           </div>
         ) : (activeTab === 'claim' || activeTab === 'profile') ? (
-          <Checker isBaseAppMode={true} />
+          <Checker isBaseAppMode={true} isProfileMode={activeTab === 'profile'} />
         ) : activeTab === 'vibeclub' ? (
           <NftClubPage isEmbeddedInBaseApp={true} />
         ) : (

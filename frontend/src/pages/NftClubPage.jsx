@@ -1002,9 +1002,9 @@ export default function NftClubPage({ isEmbeddedInBaseApp = false } = {}) {
                 borderRadius: '12px',
                 padding: '10px 14px'
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', whiteSpace: 'nowrap' }}>
-                  <span style={{ fontSize: '8px', color: '#ff4466', fontWeight: 900 }}>TOTAL BURNED BY MINT</span>
-                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '9px', color: '#ffffff' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', whiteSpace: 'nowrap', gap: '6px' }}>
+                  <span style={{ fontSize: '6.5px', color: '#ff4466', fontWeight: 900 }}>TOTAL BURNED BY MINT</span>
+                  <span style={{ fontFamily: 'var(--vv-pixel)', fontSize: '7.5px', color: '#ffffff' }}>
                     {formatVibeComma(totalVibeBurnedByContract)}
                   </span>
                 </div>

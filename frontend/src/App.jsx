@@ -3428,14 +3428,14 @@ function DomainRouter() {
   const checkIsBaseApp = () => {
     if (typeof window === 'undefined') return false;
     const ua = navigator.userAgent || '';
-    const isBaseUa = /BaseApp|CoinbaseWallet|Farcaster|Warpcast|Base/i.test(ua);
-    const isBaseProvider = !!(window.ethereum?.isCoinbaseWallet || window.ethereum?.isBaseApp || window.ethereum?.isBase);
+    const isBaseMobileApp = /Android|iPhone|iPad|iPod/i.test(ua) && /BaseApp|BaseMobile|CoinbaseWallet|CoinbaseBrowser|Toshi|Warpcast|Farcaster/i.test(ua);
+    const isBaseAppUa = /BaseApp|BaseMobile/i.test(ua);
+    const isBaseAppInjected = !!(window.ethereum?.isBaseApp);
     const isIframe = window.self !== window.top;
-    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(ua) || (window.innerWidth <= 768);
     const urlParams = new URLSearchParams(location.search);
-    const isBaseParam = urlParams.get('app') === 'base' || urlParams.get('mode') === 'base' || urlParams.get('mode') === 'app' || urlParams.get('source') === 'base';
-    const isAppPath = location.pathname.startsWith('/app') || location.pathname.startsWith('/hub') || location.pathname.startsWith('/claim') || location.pathname.startsWith('/vibeclub') || location.pathname.startsWith('/buy') || location.pathname.startsWith('/swap') || location.pathname.startsWith('/mint');
-    return isBaseUa || isBaseProvider || isIframe || isBaseParam || isAppPath || isMobile || (!isGameDomain && !isDevPreview);
+    const isBaseParam = urlParams.get('app') === 'base' || urlParams.get('mode') === 'base' || urlParams.get('mode') === 'app' || urlParams.get('source') === 'base' || urlParams.get('client') === 'base';
+    const isAppPath = location.pathname.startsWith('/app') || location.pathname.startsWith('/hub-app');
+    return isBaseMobileApp || isBaseAppUa || isBaseAppInjected || isIframe || isBaseParam || isAppPath;
   };
 
   const [isBaseApp, setIsBaseApp] = useState(checkIsBaseApp);
@@ -3503,6 +3503,7 @@ function DomainRouter() {
       <Route path="/swap" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><Swap /></StandaloneLayout>} />
       <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
       <Route path="/claim" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><Checker /></StandaloneLayout>} />
+      <Route path="/profile" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><Checker isProfileMode={true} /></StandaloneLayout>} />
       <Route path="/checker" element={<Navigate to="/claim" replace />} />
       <Route path="/portal" element={<Navigate to="/claim" replace />} />
       <Route
