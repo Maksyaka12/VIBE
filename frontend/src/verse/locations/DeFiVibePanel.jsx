@@ -443,7 +443,7 @@ export default function DeFiVibePanel({ player }) {
 
         {/* Slippage Tolerance Selector (Single row, compact) */}
         <div className="vv-defi-slippage-row" style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: 'auto', flexShrink: 0 }}>
-          <span style={{ fontSize: '5.5px', color: '#88aacc', fontWeight: 900 }}>SLIP:</span>
+          <span style={{ fontSize: '5.5px', color: '#88aacc', fontWeight: 900 }}>SLIPPAGE:</span>
           {[0.5, 1.0, 3.0, 5.0].map((s) => (
             <button
               key={s}
@@ -480,7 +480,7 @@ export default function DeFiVibePanel({ player }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#aaa', fontSize: '6.5px', marginBottom: '8px', fontWeight: 900, gap: '4px' }}>
           <span style={{ color: '#88aacc' }}>YOU PAY</span>
           <span style={{ whiteSpace: 'nowrap', textAlign: 'right' }}>
-            BAL:{' '}
+            BALANCE:{' '}
             <strong style={{ color: mode === 'buy' ? '#00f5ff' : '#ffd700' }}>
               {balances.loading
                 ? '...'
@@ -597,7 +597,7 @@ export default function DeFiVibePanel({ player }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#aaa', fontSize: '6.5px', marginBottom: '8px', fontWeight: 900, gap: '4px' }}>
           <span style={{ color: '#88aacc' }}>YOU RECEIVE</span>
           <span style={{ whiteSpace: 'nowrap', textAlign: 'right' }}>
-            BAL:{' '}
+            BALANCE:{' '}
             <strong style={{ color: mode === 'buy' ? '#ffd700' : '#00f5ff' }}>
               {balances.loading
                 ? '...'

@@ -49,11 +49,11 @@ export function BaseAppBottomNav({ activeTab, onSelectTab }) {
         width: '100%',
         height: '62px',
         zIndex: 99999,
-        background: 'linear-gradient(180deg, rgba(6, 26, 60, 0.98) 0%, rgba(2, 11, 26, 0.99) 100%)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        borderTop: '1.5px solid rgba(0, 245, 255, 0.35)',
-        boxShadow: '0 -6px 24px rgba(0, 0, 0, 0.8), 0 -1px 0 rgba(0, 245, 255, 0.2)',
+        background: 'rgba(2, 11, 26, 0.92)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderTop: '1px solid rgba(0, 245, 255, 0.2)',
+        boxShadow: '0 -6px 24px rgba(0, 0, 0, 0.8), 0 -1px 0 rgba(0, 245, 255, 0.15)',
         paddingTop: '5px',
         paddingBottom: 'calc(10px + env(safe-area-inset-bottom, 0px))',
         boxSizing: 'border-box',
@@ -127,7 +127,7 @@ export function BaseAppBottomNav({ activeTab, onSelectTab }) {
                 >
                   <Icon
                     size={22}
-                    color="#041430"
+                    color="#020b1a"
                     strokeWidth={2.6}
                   />
                 </div>
@@ -135,14 +135,14 @@ export function BaseAppBottomNav({ activeTab, onSelectTab }) {
                 <span
                   style={{
                     fontFamily: "'Press Start 2P', monospace",
-                    fontSize: '4.6px',
+                    fontSize: '5.5px',
                     fontWeight: 900,
-                    letterSpacing: '0.1px',
+                    letterSpacing: '0.15px',
                     whiteSpace: 'nowrap',
                     lineHeight: 1,
                     color: isActive ? '#00f5ff' : '#88aacc',
                     textShadow: isActive ? '0 0 8px rgba(0, 245, 255, 0.6)' : 'none',
-                    marginTop: '28px'
+                    marginTop: '24px'
                   }}
                 >
                   {item.label}
