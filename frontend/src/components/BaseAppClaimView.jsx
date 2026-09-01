@@ -294,56 +294,58 @@ export function BaseAppClaimView(props) {
               />
             </div>
 
-            {/* 2. Info Column: Height exactly 84px with Space-Between */}
+            {/* 2. Info Column: Tight group for Name + Badge without gap, address at bottom */}
             <div
               style={{
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                height: '84px',
+                minHeight: '84px',
                 minWidth: 0,
                 flex: 1,
                 boxSizing: 'border-box',
-                padding: '2px 0'
+                padding: '1px 0'
               }}
             >
-              {/* Block 1 (Top): NFT Name in prominent font, flush with top */}
-              <div
-                style={{
-                  fontSize: '13.5px',
-                  color: '#ffffff',
-                  fontFamily: "'Press Start 2P', monospace",
-                  fontWeight: 900,
-                  margin: 0,
-                  lineHeight: 1.25,
-                  letterSpacing: '0.2px',
-                  wordBreak: 'break-word'
-                }}
-              >
-                {hasNft ? (userNft?.name || `Vibe Club #${userNft?.id || 1}`) : 'Unknown Dog'}
+              {/* Group 1: NFT Name + Member Badge directly attached with tight 5px gap */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <div
+                  style={{
+                    fontSize: '15px',
+                    color: '#ffffff',
+                    fontFamily: "'Press Start 2P', monospace",
+                    fontWeight: 900,
+                    margin: 0,
+                    lineHeight: 1.2,
+                    letterSpacing: '0.2px',
+                    wordBreak: 'break-word'
+                  }}
+                >
+                  {hasNft ? (userNft?.name || `Vibe Club #${userNft?.id || 1}`) : 'Unknown Dog'}
+                </div>
+
+                {/* Member Status Pill directly under Name */}
+                <div>
+                  {hasNft ? (
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(0, 255, 136, 0.15)', border: '1px solid #00ff88', borderRadius: '6px', padding: '3.5px 7px', width: 'fit-content' }}>
+                      <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 6px #00ff88', flexShrink: 0 }} />
+                      <span style={{ fontSize: '6px', color: '#00ff88', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
+                        Vibe Club Member
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(255, 68, 102, 0.15)', border: '1px solid #ff4466', borderRadius: '6px', padding: '3.5px 7px', width: 'fit-content' }}>
+                      <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#ff4466', boxShadow: '0 0 6px #ff4466', flexShrink: 0 }} />
+                      <span style={{ fontSize: '6px', color: '#ff4466', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
+                        Not a Vibe Club Member
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {/* Block 2 (Middle): Member Status Pill */}
-              <div>
-                {hasNft ? (
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(0, 255, 136, 0.15)', border: '1px solid #00ff88', borderRadius: '6px', padding: '3.5px 7px', width: 'fit-content' }}>
-                    <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 6px #00ff88', flexShrink: 0 }} />
-                    <span style={{ fontSize: '6px', color: '#00ff88', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
-                      Vibe Club Member
-                    </span>
-                  </div>
-                ) : (
-                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', background: 'rgba(255, 68, 102, 0.15)', border: '1px solid #ff4466', borderRadius: '6px', padding: '3.5px 7px', width: 'fit-content' }}>
-                    <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#ff4466', boxShadow: '0 0 6px #ff4466', flexShrink: 0 }} />
-                    <span style={{ fontSize: '6px', color: '#ff4466', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
-                      Not a Vibe Club Member
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Block 3 (Bottom): Wallet Address + Refresh Button Only, flush with bottom */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              {/* Group 2 (Bottom): Wallet Address + Refresh Button */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginTop: '4px' }}>
                 <span style={{ fontSize: '6.5px', color: '#88aacc', fontFamily: "'Press Start 2P', monospace" }}>
                   {address.slice(0, 6)}...{address.slice(-4)}
                 </span>
@@ -611,16 +613,8 @@ export function BaseAppClaimView(props) {
           >
             {/* Header: Title + Round + Status Pill */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '13px' }}>💎</span>
-                <div>
-                  <div style={{ fontSize: '8px', color: '#ffffff', fontFamily: "'Press Start 2P', monospace", fontWeight: 900 }}>
-                    HOLDER REWARDS <span style={{ color: '#88aacc' }}>·</span> <span style={{ color: '#00f5ff' }}>UNLOCK 2</span>
-                  </div>
-                  <div style={{ fontSize: '5.5px', color: '#88aacc', fontFamily: "'Press Start 2P', monospace", marginTop: '3px' }}>
-                    10,000,000 $VIBE POOL
-                  </div>
-                </div>
+              <div style={{ fontSize: '8px', color: '#ffffff', fontFamily: "'Press Start 2P', monospace", fontWeight: 900 }}>
+                HOLDER REWARDS <span style={{ color: '#88aacc' }}>·</span> <span style={{ color: '#00f5ff' }}>UNLOCK 2</span>
               </div>
               <span
                 style={{
@@ -695,8 +689,8 @@ export function BaseAppClaimView(props) {
                   }}
                 >
                   <X size={12} color="#ff4466" style={{ flexShrink: 0 }} />
-                  <span style={{ fontSize: '5.5px', color: '#ff4466', fontFamily: "'Press Start 2P', monospace", lineHeight: 1.4 }}>
-                    NOT ELIGIBLE YET! HOLD 5M+ $VIBE AT SNAPSHOT TO BECOME ELIGIBLE
+                  <span style={{ fontSize: '5.5px', color: '#ff4466', fontFamily: "'Press Start 2P', monospace", lineHeight: 1.5 }}>
+                    NOT ELIGIBLE YET! YOU NEED TO HOLD 5M+ $VIBE BEFORE SNAPSHOT TO BECOME ELIGIBLE
                   </span>
                 </div>
                 <a
@@ -741,16 +735,8 @@ export function BaseAppClaimView(props) {
           >
             {/* Header: Title + Round + Status Pill */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '13px' }}>👑</span>
-                <div>
-                  <div style={{ fontSize: '8px', color: '#ffffff', fontFamily: "'Press Start 2P', monospace", fontWeight: 900 }}>
-                    VIBE CLUB <span style={{ color: '#88aacc' }}>·</span> <span style={{ color: '#00f5ff' }}>ROYALTY 2</span>
-                  </div>
-                  <div style={{ fontSize: '5.5px', color: '#88aacc', fontFamily: "'Press Start 2P', monospace", marginTop: '3px' }}>
-                    20% SECONDARY ROYALTIES POOL
-                  </div>
-                </div>
+              <div style={{ fontSize: '8px', color: '#ffffff', fontFamily: "'Press Start 2P', monospace", fontWeight: 900 }}>
+                VIBE CLUB <span style={{ color: '#88aacc' }}>·</span> <span style={{ color: '#00f5ff' }}>ROYALTY 2</span>
               </div>
               <span
                 style={{
