@@ -3479,6 +3479,8 @@ function DomainRouter() {
       <Route path="/events" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><Rewards /></StandaloneLayout>} />
       <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} />
       <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
+      <Route path="/buy" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><Swap /></StandaloneLayout>} />
+      <Route path="/swap" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><Swap /></StandaloneLayout>} />
       <Route path="/trade" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
       <Route path="/claim" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><Checker /></StandaloneLayout>} />
       <Route path="/checker" element={<Navigate to="/claim" replace />} />
