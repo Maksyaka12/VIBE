@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Coins, Lock, ArrowUpRight, ChevronDown, Info, Sparkles } from 'lucide-react';
+import { usePrivy } from '@privy-io/react-auth';
+import { Coins, Lock, ArrowUpRight, ChevronDown, Info, Sparkles, CheckCircle2, XCircle } from 'lucide-react';
+import round1Data from '../data/round_1_proofs.json';
+import royalty1Data from '../data/royalty_1_proofs.json';
 
 function formatClaimCountdown(targetDate) {
   if (!targetDate) return '';
@@ -60,19 +63,69 @@ export default function BaseAppRewardsView({
   O1_STAKING_VAULT,
   now
 }) {
+  const { authenticated, user } = usePrivy();
+  const address = user?.wallet?.address;
+  const userAddress = address ? address.toLowerCase() : null;
+
   const [currentTab, setCurrentTab] = useState('holders');
   const [openFaq, setOpenFaq] = useState(null);
   const [activeTooltip, setActiveTooltip] = useState(null);
+
+  // Cached / live states for balances
+  const [userBalance, setUserBalance] = useState(() => {
+    if (!userAddress) return 0;
+    return Number(localStorage.getItem(`vibe_balance_${userAddress}`) || 0);
+  });
+  const [userNftCount, setUserNftCount] = useState(() => {
+    if (!userAddress) return 0;
+    return Number(localStorage.getItem(`vibe_nfts_${userAddress}`) || 0);
+  });
+
+  useEffect(() => {
+    if (!userAddress) return;
+    const cachedBal = Number(localStorage.getItem(`vibe_balance_${userAddress}`) || 0);
+    const cachedNfts = Number(localStorage.getItem(`vibe_nfts_${userAddress}`) || 0);
+    setUserBalance(cachedBal);
+    setUserNftCount(cachedNfts);
+  }, [userAddress]);
 
   // Holder calculations
   const activeHolders = HOLDER_UNLOCKS.filter(u => now >= u.dateObj);
   const featuredHolder = activeHolders[0] || HOLDER_UNLOCKS[0];
   const upcomingHolders = HOLDER_UNLOCKS.filter(u => u.unlock !== featuredHolder.unlock);
 
+  // Dynamic eligibility calculation for featured/active Holder Reward
+  // (Checks Merkle proof snapshot for Unlock 1, or 5M+ holding balance for active/subsequent unlocks)
+  const isHolderActiveEligible = (() => {
+    if (!authenticated || !userAddress) return false;
+    const unlockNum = parseInt(featuredHolder?.unlock?.replace(/\D/g, '') || '1', 10);
+    if (unlockNum === 1 && round1Data?.claims?.[userAddress]) {
+      return true;
+    }
+    if (userBalance >= 5000000) {
+      return true;
+    }
+    return false;
+  })();
+
   // Vibe Club calculations
   const activeVibeClubs = VIBECLUB_EPOCHS.filter(u => now >= u.dateObj);
   const featuredVibeClub = activeVibeClubs[0] || VIBECLUB_EPOCHS[0];
   const upcomingVibeClubs = VIBECLUB_EPOCHS.filter(u => u.epoch !== featuredVibeClub.epoch);
+
+  // Dynamic eligibility calculation for featured/active Vibe Club Royalty
+  // (Checks Merkle proof snapshot for Royalty 1, or Vibe Club NFT ownership)
+  const isVibeClubActiveEligible = (() => {
+    if (!authenticated || !userAddress) return false;
+    const epochNum = parseInt(featuredVibeClub?.epoch?.replace(/\D/g, '') || '1', 10);
+    if (epochNum === 1 && royalty1Data?.claims?.[userAddress]) {
+      return true;
+    }
+    if (userNftCount > 0) {
+      return true;
+    }
+    return false;
+  })();
 
   // Dynamic Staking calculations based on timestamps
   const activeStakings = STAKING_EPOCHS.filter(e => getEpochStatus(e, now) === 'active');
@@ -339,6 +392,32 @@ export default function BaseAppRewardsView({
               >
                 <span style={{ color: '#00ff88' }}>CLAIM REWARD</span> <ArrowUpRight size={14} color="#00ff88" strokeWidth={2.5} />
               </Link>
+
+              {/* Dynamic Eligibility Indicator Under Claim Button */}
+              {authenticated ? (
+                isHolderActiveEligible ? (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '10px' }}>
+                    <CheckCircle2 size={13} color="#00ff88" strokeWidth={2.5} style={{ flexShrink: 0 }} />
+                    <span style={{ fontSize: '7px', color: '#00ff88', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
+                      You are eligible
+                    </span>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '10px' }}>
+                    <XCircle size={13} color="#ff4466" strokeWidth={2.5} style={{ flexShrink: 0 }} />
+                    <span style={{ fontSize: '7px', color: '#ff4466', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
+                      You are not eligible
+                    </span>
+                  </div>
+                )
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '10px' }}>
+                  <Info size={11} color="#88aacc" strokeWidth={2.5} style={{ flexShrink: 0 }} />
+                  <span style={{ fontSize: '6.5px', color: '#88aacc', fontFamily: "'Press Start 2P', monospace" }}>
+                    Connect wallet to check eligibility
+                  </span>
+                </div>
+              )}
             </div>
           )}
 
@@ -551,6 +630,32 @@ export default function BaseAppRewardsView({
               >
                 <span style={{ color: '#00ff88' }}>CLAIM ROYALTIES</span> <ArrowUpRight size={14} color="#00ff88" strokeWidth={2.5} />
               </Link>
+
+              {/* Dynamic Eligibility Indicator Under Claim Button */}
+              {authenticated ? (
+                isVibeClubActiveEligible ? (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '10px' }}>
+                    <CheckCircle2 size={13} color="#00ff88" strokeWidth={2.5} style={{ flexShrink: 0 }} />
+                    <span style={{ fontSize: '7px', color: '#00ff88', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
+                      You are eligible
+                    </span>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '10px' }}>
+                    <XCircle size={13} color="#ff4466" strokeWidth={2.5} style={{ flexShrink: 0 }} />
+                    <span style={{ fontSize: '7px', color: '#ff4466', fontFamily: "'Press Start 2P', monospace", fontWeight: 800 }}>
+                      You are not eligible
+                    </span>
+                  </div>
+                )
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '10px' }}>
+                  <Info size={11} color="#88aacc" strokeWidth={2.5} style={{ flexShrink: 0 }} />
+                  <span style={{ fontSize: '6.5px', color: '#88aacc', fontFamily: "'Press Start 2P', monospace" }}>
+                    Connect wallet to check eligibility
+                  </span>
+                </div>
+              )}
             </div>
           )}
 
