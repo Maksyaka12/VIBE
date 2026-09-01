@@ -43,7 +43,7 @@ export function BaseAppBottomNav({ activeTab, onSelectTab }) {
         bottom: 0,
         left: 0,
         right: 0,
-        zIndex: 999,
+        zIndex: 99999,
         background: 'linear-gradient(180deg, rgba(6, 26, 60, 0.97) 0%, rgba(2, 11, 26, 0.99) 100%)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',

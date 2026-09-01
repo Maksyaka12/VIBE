@@ -3425,17 +3425,37 @@ function DomainRouter() {
   const isGameDomain = typeof window !== 'undefined' && window.location.hostname.toLowerCase().includes('vibeverse');
   const isDevPreview = new URLSearchParams(location.search).get('preview') === 'true';
 
-  const isBaseApp = (() => {
+  const checkIsBaseApp = () => {
     if (typeof window === 'undefined') return false;
     const ua = navigator.userAgent || '';
-    const isBaseUa = /BaseApp|CoinbaseWallet|Farcaster|Warpcast/i.test(ua);
+    const isBaseUa = /BaseApp|CoinbaseWallet|Farcaster|Warpcast|Base/i.test(ua);
     const isBaseProvider = !!(window.ethereum?.isCoinbaseWallet || window.ethereum?.isBaseApp || window.ethereum?.isBase);
     const isIframe = window.self !== window.top;
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(ua) || (window.innerWidth <= 768);
     const urlParams = new URLSearchParams(location.search);
     const isBaseParam = urlParams.get('app') === 'base' || urlParams.get('mode') === 'base' || urlParams.get('mode') === 'app' || urlParams.get('source') === 'base';
-    const isAppPath = location.pathname.startsWith('/app') || location.pathname.startsWith('/hub-app');
-    return isBaseUa || isBaseProvider || isIframe || isBaseParam || isAppPath;
-  })();
+    const isAppPath = location.pathname.startsWith('/app') || location.pathname.startsWith('/hub') || location.pathname.startsWith('/claim') || location.pathname.startsWith('/vibeclub') || location.pathname.startsWith('/buy') || location.pathname.startsWith('/swap') || location.pathname.startsWith('/mint');
+    return isBaseUa || isBaseProvider || isIframe || isBaseParam || isAppPath || isMobile || (!isGameDomain && !isDevPreview);
+  };
+
+  const [isBaseApp, setIsBaseApp] = useState(checkIsBaseApp);
+
+  useEffect(() => {
+    const updateBase = () => {
+      setIsBaseApp(checkIsBaseApp());
+    };
+    updateBase();
+    window.addEventListener('ethereum#initialized', updateBase);
+    window.addEventListener('resize', updateBase);
+    const t1 = setTimeout(updateBase, 100);
+    const t2 = setTimeout(updateBase, 500);
+    return () => {
+      window.removeEventListener('ethereum#initialized', updateBase);
+      window.removeEventListener('resize', updateBase);
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     if (isGameDomain) {
