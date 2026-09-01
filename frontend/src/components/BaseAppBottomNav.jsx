@@ -38,20 +38,25 @@ export function BaseAppBottomNav({ activeTab, onSelectTab }) {
 
   return (
     <nav
+      className="base-app-bottom-nav"
       style={{
         position: 'fixed',
         bottom: 0,
+        top: 'auto',
         left: 0,
         right: 0,
+        width: '100%',
         zIndex: 99999,
-        background: 'linear-gradient(180deg, rgba(6, 26, 60, 0.97) 0%, rgba(2, 11, 26, 0.99) 100%)',
+        background: 'linear-gradient(180deg, rgba(6, 26, 60, 0.98) 0%, rgba(2, 11, 26, 0.99) 100%)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
         borderTop: '1.5px solid rgba(0, 245, 255, 0.35)',
         boxShadow: '0 -6px 24px rgba(0, 0, 0, 0.8), 0 -1px 0 rgba(0, 245, 255, 0.2)',
         paddingTop: '8px',
         paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        transform: 'translate3d(0, 0, 0)',
+        WebkitTransform: 'translate3d(0, 0, 0)'
       }}
     >
       <div
@@ -67,13 +72,16 @@ export function BaseAppBottomNav({ activeTab, onSelectTab }) {
       >
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = activeTab === item.id || (item.id === 'claim' && activeTab === 'claim');
+          const isActive = activeTab === item.id;
           
           return (
             <button
               key={item.id}
               type="button"
-              onClick={() => onSelectTab(item.id)}
+              onClick={(e) => {
+                e.preventDefault();
+                onSelectTab(item.id);
+              }}
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -85,6 +93,8 @@ export function BaseAppBottomNav({ activeTab, onSelectTab }) {
                 borderRadius: '8px',
                 padding: '6px 2px',
                 cursor: 'pointer',
+                touchAction: 'manipulation',
+                WebkitTapHighlightColor: 'transparent',
                 transition: 'all 0.15s ease',
                 color: isActive ? '#00f5ff' : '#88aacc',
                 boxShadow: isActive ? 'inset 0 0 10px rgba(0, 245, 255, 0.15)' : 'none'

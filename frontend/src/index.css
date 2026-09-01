@@ -45,7 +45,7 @@ body {
 }
 
 /* ── NAV ── */
-nav {
+nav:not(.base-app-bottom-nav) {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   padding: 18px 0;
   border-bottom: 1px solid var(--border);
@@ -54,7 +54,7 @@ nav {
   -webkit-backdrop-filter: blur(12px);
   transition: all 0.3s;
 }
-nav.stuck {
+nav:not(.base-app-bottom-nav).stuck {
   background: rgba(190, 241, 255, 0.95);
   backdrop-filter: blur(24px) saturate(1.5);
   -webkit-backdrop-filter: blur(24px) saturate(1.5);
