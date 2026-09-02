@@ -331,7 +331,7 @@ export function BaseAppProfileView(props) {
 
         {!hasNft && (
           <Link
-            to="/vibeclub"
+            to="/app/vibeclub"
             style={{
               width: '100%',
               padding: '10px 12px',
@@ -359,7 +359,7 @@ export function BaseAppProfileView(props) {
       {/* ── 4. QUICK LINKS / ACTIONS ── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
         <Link
-          to="/hub"
+          to="/app/hub"
           style={{
             padding: '12px 10px',
             background: 'rgba(2, 11, 26, 0.8)',
@@ -380,7 +380,7 @@ export function BaseAppProfileView(props) {
         </Link>
 
         <Link
-          to="/claim"
+          to="/app/claim"
           style={{
             padding: '12px 10px',
             background: 'rgba(2, 11, 26, 0.8)',

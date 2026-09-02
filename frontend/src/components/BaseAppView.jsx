@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import sdk from '@farcaster/frame-sdk';
 import { BaseAppHeader } from './BaseAppHeader';
 import { BaseAppSidebar } from './BaseAppSidebar';
 import { BaseAppBottomNav } from './BaseAppBottomNav';
@@ -12,6 +13,14 @@ export function BaseAppView({ RewardsComponent }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      sdk.actions.ready();
+    } catch (err) {
+      // Ignore if not in iframe / frame context
+    }
+  }, []);
 
   const getInitialTab = () => {
     const path = location.pathname.toLowerCase();
@@ -34,15 +43,15 @@ export function BaseAppView({ RewardsComponent }) {
   const handleSelectTab = (tabId) => {
     setActiveTab(tabId);
     if (tabId === 'buy') {
-      navigate('/buy', { replace: false });
+      navigate('/app/buy', { replace: false });
     } else if (tabId === 'claim') {
-      navigate('/claim', { replace: false });
+      navigate('/app/claim', { replace: false });
     } else if (tabId === 'vibeclub') {
-      navigate('/vibeclub', { replace: false });
+      navigate('/app/vibeclub', { replace: false });
     } else if (tabId === 'profile') {
-      navigate('/profile', { replace: false });
+      navigate('/app/profile', { replace: false });
     } else {
-      navigate('/hub', { replace: false });
+      navigate('/app/hub', { replace: false });
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
