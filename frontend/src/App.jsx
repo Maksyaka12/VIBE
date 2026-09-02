@@ -126,9 +126,9 @@ function Nav() {
             ))}
           </ul>
           <div style={{display:'flex', alignItems:'center', gap:'6px'}}>
-            <Link to="/vibeclub" className="nav-mint">
+            <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" className="nav-mint">
               Mint NFT <ArrowUpRight size={14} strokeWidth={2.5} />
-            </Link>
+            </a>
             <a href={O1} target="_blank" rel="noreferrer" className="nav-buy">
               Buy $VIBE <ArrowUpRight size={14} strokeWidth={2.5} />
             </a>
@@ -162,9 +162,9 @@ function Nav() {
               {label}
             </Link>
           ))}
-          <Link to="/vibeclub" className="mob-mint" onClick={() => setOpen(false)}>
+          <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" className="mob-mint" onClick={() => setOpen(false)}>
             Mint NFT <ArrowUpRight size={20} strokeWidth={2.5} />
-          </Link>
+          </a>
           <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}} onClick={() => setOpen(false)}>
             Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} />
           </a>
@@ -822,7 +822,7 @@ function Tokenomics() {
                 </div>
 
                 {/* 6. Action Button: Join Vibe Club */}
-                <Link to="/vibeclub" className="who-r" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--blue)' }}>
+                <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" className="who-r" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--blue)' }}>
                   <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Crown color="#fff" size={20} />
                   </div>
@@ -832,7 +832,7 @@ function Tokenomics() {
                       Mint your NFT <ArrowUpRight size={14} style={{ verticalAlign: 'middle', marginLeft: 4 }} />
                     </span>
                   </div>
-                </Link>
+                </a>
 
               </div>
             </div>
@@ -1122,7 +1122,7 @@ function Roadmap() {
                 <div className="r-desc">Introducing the first-ever NFT collection officially integrated into the o1 B20 ecosystem and directly tied to the $VIBE token economy.</div>
                 <div className="r-subnote done">
                   <span className="r-subnote-dot done"></span>
-                  <span>Vibe Club mint is live &rarr; <Link to="/vibeclub" style={{color:'var(--blue)',textDecoration:'underline',fontWeight:600}}>vibehome.dog/vibeclub</Link></span>
+                  <span>Vibe Club mint is live &rarr; <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" style={{color:'var(--blue)',textDecoration:'underline',fontWeight:600}}>vibeverse.dog/vibeclub</a></span>
                   <span className="badge-rm done" style={{marginLeft:'auto',fontSize:'0.65rem',padding:'4px 8px'}}><Check size={11} strokeWidth={3}/> DONE</span>
                 </div>
               </div>
@@ -3329,6 +3329,18 @@ function StandaloneLayout({ children }) {
   );
 }
 
+function VibeClubRedirect() {
+  useEffect(() => {
+    window.location.href = 'https://vibeverse.dog/vibeclub';
+  }, []);
+  return (
+    <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
+      <Loader2 size={32} className="spin" color="var(--blue)" />
+      <p style={{ fontWeight: 600, color: 'var(--muted)' }}>Redirecting to Vibe Club Mint on VibeVerse...</p>
+    </div>
+  );
+}
+
 function DomainRouter() {
   const location = useLocation();
 
@@ -3392,12 +3404,12 @@ function DomainRouter() {
 
   return (
     <Routes>
-      {/* ── Standalone VIBE Club NFT Mint Page ── */}
-      <Route path="/vibeclub" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><NftClubPage /></StandaloneLayout>} />
-      <Route path="/vibe-club" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><NftClubPage /></StandaloneLayout>} />
-      <Route path="/nft-club" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><NftClubPage /></StandaloneLayout>} />
-      <Route path="/nft" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><NftClubPage /></StandaloneLayout>} />
-      <Route path="/mint" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><NftClubPage /></StandaloneLayout>} />
+      {/* ── Standalone VIBE Club NFT Mint Page / Redirect ── */}
+      <Route path="/vibeclub" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <VibeClubRedirect />} />
+      <Route path="/vibe-club" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <VibeClubRedirect />} />
+      <Route path="/nft-club" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <VibeClubRedirect />} />
+      <Route path="/nft" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <VibeClubRedirect />} />
+      <Route path="/mint" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <VibeClubRedirect />} />
 
       {/* ── Dedicated Base App / Vibe Hub Routes ── */}
       <Route path="/app" element={<BaseAppView RewardsComponent={Rewards} />} />
