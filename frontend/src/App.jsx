@@ -1399,10 +1399,10 @@ const GIVEAWAYS_DATA = [
   {
     id: 5,
     title: 'Meme & Art',
+    winners: '6 Winners',
     prizePool: '$50 in ETH',
-    status: 'ongoing',
-    distribution: 'Not Started',
-    deadlineDate: new Date('2026-09-02T13:00:00Z'),
+    status: 'ended',
+    distribution: 'Completed',
     link: 'https://x.com/noelle_base/status/2094038840927203494'
   },
   {
