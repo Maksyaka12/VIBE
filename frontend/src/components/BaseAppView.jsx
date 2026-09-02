@@ -42,16 +42,17 @@ export function BaseAppView({ RewardsComponent }) {
 
   const handleSelectTab = (tabId) => {
     setActiveTab(tabId);
+    const prefix = location.pathname.startsWith('/app') ? '/app' : '';
     if (tabId === 'buy') {
-      navigate('/app/buy', { replace: false });
+      navigate(prefix ? '/app/buy' : '/buy', { replace: false });
     } else if (tabId === 'claim') {
-      navigate('/app/claim', { replace: false });
+      navigate(prefix ? '/app/claim' : '/claim', { replace: false });
     } else if (tabId === 'vibeclub') {
-      navigate('/app/vibeclub', { replace: false });
+      navigate(prefix ? '/app/vibeclub' : '/vibeclub', { replace: false });
     } else if (tabId === 'profile') {
-      navigate('/app/profile', { replace: false });
+      navigate(prefix ? '/app/profile' : '/profile', { replace: false });
     } else {
-      navigate('/app/hub', { replace: false });
+      navigate(prefix ? '/app/hub' : '/hub', { replace: false });
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };

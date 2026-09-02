@@ -2,7 +2,7 @@
   "name": "Vibe Hub",
   "short_name": "Vibe Hub",
   "description": "Official Vibe Hub on Base - Rewards & Claim Portal for $VIBE and Vibe Club NFT",
-  "start_url": "/app",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#020b1a",
   "theme_color": "#0052ff",

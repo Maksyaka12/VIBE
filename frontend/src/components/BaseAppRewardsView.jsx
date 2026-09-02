@@ -372,7 +372,7 @@ export default function BaseAppRewardsView({
 
               {/* Direct Claim Action Button (Explicit Green text & border) */}
               <Link
-                to="/app/claim"
+                to="/claim"
                 style={{
                   width: '100%',
                   padding: '12px',
@@ -542,7 +542,7 @@ export default function BaseAppRewardsView({
               </span>
             </div>
             <Link
-              to="/app/vibeclub"
+              to="/vibeclub"
               style={{
                 fontSize: '6.5px',
                 color: '#ffd700',
@@ -613,7 +613,7 @@ export default function BaseAppRewardsView({
 
               {/* Direct Claim Action Button (Explicit Green text & border) */}
               <Link
-                to="/app/claim"
+                to="/claim"
                 style={{
                   width: '100%',
                   padding: '12px',
