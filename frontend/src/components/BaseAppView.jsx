@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import sdk from '@farcaster/frame-sdk';
 import { BaseAppHeader } from './BaseAppHeader';
 import { BaseAppSidebar } from './BaseAppSidebar';
 import { BaseAppBottomNav } from './BaseAppBottomNav';
@@ -13,14 +12,6 @@ export function BaseAppView({ RewardsComponent }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  useEffect(() => {
-    try {
-      sdk.actions.ready();
-    } catch (err) {
-      // Ignore if not in iframe / frame context
-    }
-  }, []);
 
   const getInitialTab = () => {
     const path = location.pathname.toLowerCase();
