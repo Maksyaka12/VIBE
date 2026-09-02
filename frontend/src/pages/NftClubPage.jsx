@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 import { parseEther } from 'viem';
-import { useUserBalances } from '../verse/hooks/useUserBalances';
+import { useUserBalances } from '../hooks/useUserBalances';
 import { useVibeNftContract, NFT_CONTRACT_ADDRESS, OPENSEA_COLLECTION_URL } from '../hooks/useVibeNftContract';
 import nftNames from '../data/nftNames.json';
 

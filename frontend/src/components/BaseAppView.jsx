@@ -6,7 +6,7 @@ import { BaseAppSidebar } from './BaseAppSidebar';
 import { BaseAppBottomNav } from './BaseAppBottomNav';
 import Checker from '../Checker';
 import NftClubPage from '../pages/NftClubPage';
-import DeFiVibePanel from '../verse/locations/DeFiVibePanel';
+import DeFiVibePanel from './DeFiVibePanel';
 import './BaseAppTheme.css';
 
 export function BaseAppView({ RewardsComponent }) {

@@ -9,8 +9,6 @@ import { createPublicClient, http, formatUnits, parseAbiItem, parseAbi } from 'v
 import { base } from 'viem/chains';
 import Checker from './Checker';
 import { BaseAppView } from './components/BaseAppView';
-import VibeVerse from './verse/VibeVerse';
-import VibeVerseLockScreen from './verse/VibeVerseLockScreen';
 import NftClubPage from './pages/NftClubPage';
 import BaseAppRewardsView from './components/BaseAppRewardsView';
 import './index.css';
@@ -128,9 +126,9 @@ function Nav() {
             ))}
           </ul>
           <div style={{display:'flex', alignItems:'center', gap:'6px'}}>
-            <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" className="nav-mint">
+            <Link to="/vibeclub" className="nav-mint">
               Mint NFT <ArrowUpRight size={14} strokeWidth={2.5} />
-            </a>
+            </Link>
             <a href={O1} target="_blank" rel="noreferrer" className="nav-buy">
               Buy $VIBE <ArrowUpRight size={14} strokeWidth={2.5} />
             </a>
@@ -164,9 +162,9 @@ function Nav() {
               {label}
             </Link>
           ))}
-          <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" className="mob-mint" onClick={() => setOpen(false)}>
+          <Link to="/vibeclub" className="mob-mint" onClick={() => setOpen(false)}>
             Mint NFT <ArrowUpRight size={20} strokeWidth={2.5} />
-          </a>
+          </Link>
           <a href={O1} target="_blank" rel="noreferrer" className="mob-buy" style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'8px'}} onClick={() => setOpen(false)}>
             Buy $VIBE <ArrowUpRight size={20} strokeWidth={2.5} />
           </a>
@@ -824,7 +822,7 @@ function Tokenomics() {
                 </div>
 
                 {/* 6. Action Button: Join Vibe Club */}
-                <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" className="who-r" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--blue)' }}>
+                <Link to="/vibeclub" className="who-r" style={{ textDecoration: 'none', cursor: 'pointer', background: 'var(--blue)' }}>
                   <div className="who-ico" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Crown color="#fff" size={20} />
                   </div>
@@ -834,7 +832,7 @@ function Tokenomics() {
                       Mint your NFT <ArrowUpRight size={14} style={{ verticalAlign: 'middle', marginLeft: 4 }} />
                     </span>
                   </div>
-                </a>
+                </Link>
 
               </div>
             </div>
@@ -1124,7 +1122,7 @@ function Roadmap() {
                 <div className="r-desc">Introducing the first-ever NFT collection officially integrated into the o1 B20 ecosystem and directly tied to the $VIBE token economy.</div>
                 <div className="r-subnote done">
                   <span className="r-subnote-dot done"></span>
-                  <span>Vibe Club mint is live &rarr; <a href="https://vibeverse.dog/vibeclub" target="_blank" rel="noreferrer" style={{color:'var(--blue)',textDecoration:'underline',fontWeight:600}}>vibeverse.dog/vibeclub</a></span>
+                  <span>Vibe Club mint is live &rarr; <Link to="/vibeclub" style={{color:'var(--blue)',textDecoration:'underline',fontWeight:600}}>vibehome.dog/vibeclub</Link></span>
                   <span className="badge-rm done" style={{marginLeft:'auto',fontSize:'0.65rem',padding:'4px 8px'}}><Check size={11} strokeWidth={3}/> DONE</span>
                 </div>
               </div>
@@ -1321,18 +1319,6 @@ const STAKING_EPOCHS = [
   }
 ];
 
-const VIBEVERSE_EPOCHS = [
-  { epoch: 'Epoch 1', dates: 'Aug 29 – Sep 08, 2026', pool: '30% Pool', status: 'ongoing', note: 'Active Gameplay Leaderboard' },
-  { epoch: 'Epoch 2', dates: 'Sep 08 – Sep 18, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 3', dates: 'Sep 18 – Sep 28, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 4', dates: 'Sep 28 – Oct 08, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 5', dates: 'Oct 08 – Oct 18, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 6', dates: 'Oct 18 – Oct 28, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 7', dates: 'Oct 28 – Nov 07, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 8', dates: 'Nov 07 – Nov 17, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 9', dates: 'Nov 17 – Nov 27, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
-  { epoch: 'Epoch 10', dates: 'Nov 27 – Dec 07, 2026', pool: '30% Pool', status: 'upcoming', note: 'Scheduled' },
-];
 
 const VIBECLUB_EPOCHS = [
   { epoch: 'Royalty 1', snapshotTime: '28 Aug, 00:00 UTC', claimDate: '28 Aug, 14:00 UTC', dateObj: new Date('2026-08-28T14:00:00Z'), nextSnapshotDate: new Date('2026-09-07T00:00:00Z'), poolAmount: '2,500,000 $VIBE' },
@@ -1614,22 +1600,11 @@ function Rewards({ isBaseAppMode = false } = {}) {
       label: 'Giveaways',
       image: '/rewards/giveaways.jfif',
     },
-    {
-      id: 'vibe-verse',
-      label: 'Vibe Verse',
-      image: '/rewards/vibe-verse.jfif',
-    },
   ];
 
-  const activeCategoryCards = isBaseAppMode
-    ? categoryCards.filter(c => c.id !== 'vibe-verse')
-    : categoryCards;
+  const activeCategoryCards = categoryCards;
 
   const getCategoryBadges = (catId) => {
-    if (catId === 'vibe-verse') {
-      return [{ type: 'coming-soon', label: 'COMING SOON' }];
-    }
-
     let active = 0;
     let upcoming = 0;
 
@@ -2700,61 +2675,7 @@ function Rewards({ isBaseAppMode = false } = {}) {
           </div>
         )}
 
-        {/* ── 3. VIBEVERSE APP REWARDS SECTION ── */}
-        {activeTab === 'vibe-verse' && (
-          <div
-            style={{
-              marginTop: '20px',
-              padding: '60px 24px',
-              background: 'linear-gradient(145deg, rgba(215, 246, 255, 0.85) 0%, rgba(240, 252, 255, 0.95) 100%)',
-              border: '1.5px solid rgba(0, 160, 255, 0.25)',
-              borderRadius: '24px',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '16px',
-              boxShadow: '0 8px 30px rgba(0, 82, 255, 0.06)'
-            }}
-          >
-            <img
-              src="/new-logo-vibe.png"
-              alt="VIBE"
-              style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '50%',
-                objectFit: 'cover',
-                border: '2px solid var(--blue)',
-                boxShadow: '0 4px 16px rgba(0, 82, 255, 0.2)'
-              }}
-            />
-            <div>
-              <h3 style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--ink)', margin: '0 0 6px 0', letterSpacing: '-0.02em' }}>
-                VibeVerse Rewards
-              </h3>
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  background: 'rgba(0, 82, 255, 0.1)',
-                  color: 'var(--blue)',
-                  border: '1px solid rgba(0, 82, 255, 0.2)',
-                  padding: '6px 16px',
-                  borderRadius: '99px',
-                  fontSize: '0.86rem',
-                  fontWeight: 900,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em'
-                }}
-              >
-                <Sparkles size={14} color="var(--blue)" /> Coming Soon
-              </span>
-            </div>
-          </div>
-        )}
+
 
         {/* ── 4. HOLDER REWARDS VESTING SECTION ── */}
         {activeTab === 'holders' && (
@@ -3408,22 +3329,8 @@ function StandaloneLayout({ children }) {
   );
 }
 
-function VibeClubRedirect() {
-  useEffect(() => {
-    window.location.href = 'https://vibeverse.dog/vibeclub';
-  }, []);
-  return (
-    <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
-      <Loader2 size={32} className="spin" color="var(--blue)" />
-      <p style={{ fontWeight: 600, color: 'var(--muted)' }}>Redirecting to Vibe Club Mint on VibeVerse...</p>
-    </div>
-  );
-}
-
 function DomainRouter() {
   const location = useLocation();
-  const isGameDomain = typeof window !== 'undefined' && window.location.hostname.toLowerCase().includes('vibeverse');
-  const isDevPreview = new URLSearchParams(location.search).get('preview') === 'true';
 
   const checkIsBaseApp = () => {
     if (typeof window === 'undefined') return false;
@@ -3476,23 +3383,21 @@ function DomainRouter() {
   }, [location.pathname, location.search]);
 
   useEffect(() => {
-    if (isGameDomain) {
-      document.title = "Vibe Club NFT Mint & VibeVerse — The Base Dog";
-    } else if (isBaseApp) {
+    if (isBaseApp) {
       document.title = "$VIBE — Vibe Hub";
     } else {
       document.title = "$VIBE — The Base Dog";
     }
-  }, [isGameDomain, isBaseApp]);
+  }, [isBaseApp]);
 
   return (
     <Routes>
-      {/* ── Standalone VIBE Club NFT Mint Page / Redirect ── */}
-      <Route path="/vibeclub" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : (isGameDomain ? <NftClubPage /> : <VibeClubRedirect />)} />
-      <Route path="/vibe-club" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : (isGameDomain ? <NftClubPage /> : <VibeClubRedirect />)} />
-      <Route path="/nft-club" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : (isGameDomain ? <NftClubPage /> : <VibeClubRedirect />)} />
-      <Route path="/nft" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : (isGameDomain ? <NftClubPage /> : <VibeClubRedirect />)} />
-      <Route path="/mint" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : (isGameDomain ? <NftClubPage /> : <VibeClubRedirect />)} />
+      {/* ── Standalone VIBE Club NFT Mint Page ── */}
+      <Route path="/vibeclub" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><NftClubPage /></StandaloneLayout>} />
+      <Route path="/vibe-club" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><NftClubPage /></StandaloneLayout>} />
+      <Route path="/nft-club" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><NftClubPage /></StandaloneLayout>} />
+      <Route path="/nft" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><NftClubPage /></StandaloneLayout>} />
+      <Route path="/mint" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><NftClubPage /></StandaloneLayout>} />
 
       {/* ── Dedicated Base App / Vibe Hub Routes ── */}
       <Route path="/app" element={<BaseAppView RewardsComponent={Rewards} />} />
@@ -3502,11 +3407,9 @@ function DomainRouter() {
       <Route
         path="/"
         element={
-          isGameDomain
-            ? (isDevPreview ? <VibeVerse /> : <VibeVerseLockScreen />)
-            : isBaseApp
-              ? <BaseAppView RewardsComponent={Rewards} />
-              : <><Nav /><LandingPage /><Footer /></>
+          isBaseApp
+            ? <BaseAppView RewardsComponent={Rewards} />
+            : <><Nav /><LandingPage /><Footer /></>
         }
       />
       <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
@@ -3524,11 +3427,6 @@ function DomainRouter() {
       <Route path="/profile" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><Checker isProfileMode={true} /></StandaloneLayout>} />
       <Route path="/checker" element={<Navigate to="/claim" replace />} />
       <Route path="/portal" element={<Navigate to="/claim" replace />} />
-      <Route
-        path="/verse"
-        element={isDevPreview ? <VibeVerse /> : <VibeVerseLockScreen />}
-      />
-      <Route path="/verse-dev" element={<VibeVerse />} />
     </Routes>
   );
 }
