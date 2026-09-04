@@ -51,11 +51,7 @@ const DISTRIBUTOR_CA = '0x77e04dd8c45725d2b2b3c8eebac2f3f1708fd089';
 export const ROYALTY_DISTRIBUTOR_CA = '0x3753EE7fa9538087f901aa5E4afc12dBA57B97c1';
 const ADMIN_WALLET = '0x4c91d3bed372c11795b9ce9a9017dfe447bf050a';
 const O1 = 'https://launch.o1.exchange/token/0xb200000000000000000000df24ecb8bf51100a01?chain=8453';
-const VIBECLUB_MINT_URL = 'https://vibeverse.dog/vibeclub';
-
-const BUILDER_CODE = 'bc_wsbqqe2u';
-// Official ERC-8021 Data Suffix for Base Builder Code bc_wsbqqe2u:
-const BUILDER_CODE_HEX = '62635f77736271716532750b00802180218021802180218021802180218021';
+import { BUILDER_CODE, DATA_SUFFIX, BUILDER_CODE_HEX, appendBuilderSuffix } from './config/builderCode';
 
 const MIN_HOLDER_BALANCE = 5000000; // 5M $VIBE
 
@@ -599,7 +595,7 @@ export default function Checker({ isBaseAppMode = false, isProfileMode = false }
   const sendAdminTx = async (to, data) => {
     const activeWallet = wallets.find(w => w.address.toLowerCase() === address?.toLowerCase()) || wallets[0];
     const provider = await activeWallet.getEthereumProvider();
-    const calldata = data.includes(BUILDER_CODE_HEX) ? data : (data + BUILDER_CODE_HEX);
+    const calldata = appendBuilderSuffix(data);
 
     try {
       const callsRes = await provider.request({
@@ -609,7 +605,7 @@ export default function Checker({ isBaseAppMode = false, isProfileMode = false }
           chainId: '0x2105',
           from: address,
           calls: [{ to, value: '0x0', data: calldata }],
-          capabilities: { dataSuffix: { value: '0x' + BUILDER_CODE_HEX, optional: true } }
+          capabilities: { dataSuffix: { value: DATA_SUFFIX, optional: true } }
         }]
       });
 
@@ -767,7 +763,7 @@ export default function Checker({ isBaseAppMode = false, isProfileMode = false }
           args: [BigInt(roundId), amountWei, userProofData.proof]
         });
         // Append Official ERC-8021 Data Suffix for Base Builder Code
-        const calldata = calldataRaw.includes(BUILDER_CODE_HEX) ? calldataRaw : (calldataRaw + BUILDER_CODE_HEX);
+        const calldata = appendBuilderSuffix(calldataRaw);
 
         try {
           const callsRes = await provider.request({
@@ -779,7 +775,7 @@ export default function Checker({ isBaseAppMode = false, isProfileMode = false }
               calls: [{ to: DISTRIBUTOR_CA, value: '0x0', data: calldata }],
               capabilities: {
                 dataSuffix: {
-                  value: '0x' + BUILDER_CODE_HEX,
+                  value: DATA_SUFFIX,
                   optional: true
                 }
               }
@@ -835,7 +831,7 @@ export default function Checker({ isBaseAppMode = false, isProfileMode = false }
           functionName: 'claim',
           args: [BigInt(roundId), amountWei, userRoyaltyProofData.proof]
         });
-        const calldata = calldataRaw.includes(BUILDER_CODE_HEX) ? calldataRaw : (calldataRaw + BUILDER_CODE_HEX);
+        const calldata = appendBuilderSuffix(calldataRaw);
 
         try {
           const callsRes = await provider.request({
@@ -847,7 +843,7 @@ export default function Checker({ isBaseAppMode = false, isProfileMode = false }
               calls: [{ to: targetRoyaltyCa, value: '0x0', data: calldata }],
               capabilities: {
                 dataSuffix: {
-                  value: '0x' + BUILDER_CODE_HEX,
+                  value: DATA_SUFFIX,
                   optional: true
                 }
               }
