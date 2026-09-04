@@ -86,7 +86,7 @@ function Nav() {
     { id: 'tokenomics', label: 'Tokenomics' },
     { id: 'hub', label: 'Rewards Hub' },
     { id: 'claim', label: 'Claim Portal' },
-    { id: 'roadmap', label: 'Roadmap' },
+    // { id: 'roadmap', label: 'Roadmap' },
     { id: 'chart', label: 'Chart' },
     { id: 'trade', label: 'Trade' }
   ];
@@ -3252,8 +3252,8 @@ function LandingPage() {
       <About/>
       <div className="divr"/>
       <Tokenomics/>
-      <div className="divr"/>
-      <Roadmap/>
+      {/* <div className="divr"/>
+      <Roadmap/> */}
       <div className="divr"/>
       <Chart/>
       <div className="divr"/>
@@ -3356,7 +3356,7 @@ function DomainRouter() {
       <Route path="/hub" element={<StandaloneLayout><Rewards /></StandaloneLayout>} />
       <Route path="/rewards" element={<StandaloneLayout><Rewards /></StandaloneLayout>} />
       <Route path="/events" element={<StandaloneLayout><Rewards /></StandaloneLayout>} />
-      <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} />
+      {/* <Route path="/roadmap" element={<StandaloneLayout><Roadmap /></StandaloneLayout>} /> */}
       <Route path="/chart" element={<StandaloneLayout><Chart /></StandaloneLayout>} />
       <Route path="/buy" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
       <Route path="/swap" element={<StandaloneLayout><Swap /></StandaloneLayout>} />
