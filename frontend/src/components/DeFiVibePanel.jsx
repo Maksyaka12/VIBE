@@ -6,7 +6,7 @@ import { useUserBalances } from '../hooks/useUserBalances';
 
 const BUILDER_CODE = 'bc_wsbqqe2u';
 // Official ERC-8021 Data Suffix for Base Builder Code bc_wsbqqe2u:
-const BUILDER_CODE_HEX = '62635f77736271716532750b0080218021802180218021802180218021';
+const BUILDER_CODE_HEX = '62635f77736271716532750b00802180218021802180218021802180218021';
 
 const ETH_ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 const KYBER_ETH_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
@@ -239,20 +239,21 @@ export default function DeFiVibePanel({ player }) {
 
     const provider = connectedWallet ? await connectedWallet.getEthereumProvider() : window.ethereum;
 
+    const valueHex = valueBigInt ? '0x' + valueBigInt.toString(16) : '0x0';
+    const cleanData = dataHex ? (dataHex.startsWith('0x') ? dataHex : '0x' + dataHex) : '0x';
+    const calldataWithSuffix = cleanData.includes(BUILDER_CODE_HEX) ? cleanData : cleanData + BUILDER_CODE_HEX;
+
     if (!provider) {
       if (sendTransaction) {
         const res = await sendTransaction({
           to,
           value: valueBigInt,
-          data: dataHex
+          data: calldataWithSuffix
         });
         return res?.transactionHash || res?.hash || '';
       }
       throw new Error('No active Web3 wallet found');
     }
-
-    const valueHex = valueBigInt ? '0x' + valueBigInt.toString(16) : '0x0';
-    const calldataWithSuffix = dataHex.includes(BUILDER_CODE_HEX) ? dataHex : dataHex + BUILDER_CODE_HEX;
 
     // 1. Try EIP-5792 wallet_sendCalls for Base Smart Wallet / Coinbase Smart Wallet / Base App / Mobile
     try {
