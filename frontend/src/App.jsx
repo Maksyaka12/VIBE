@@ -84,7 +84,7 @@ function Nav() {
   }, []);
 
   const navLinks = [
-    { id: 'about', label: 'About' },
+    // { id: 'about', label: 'About' },
     { id: 'tokenomics', label: 'Tokenomics' },
     { id: 'hub', label: 'Rewards Hub' },
     { id: 'claim', label: 'Claim Portal' },
@@ -3275,8 +3275,8 @@ function LandingPage() {
   return (
     <>
       <Hero/>
-      <div className="divr"/>
-      <About/>
+      {/* <div className="divr"/>
+      <About/> */}
       <div className="divr"/>
       <Tokenomics/>
       {/* <div className="divr"/>
@@ -3432,7 +3432,7 @@ function DomainRouter() {
             : <><Nav /><LandingPage /><Footer /></>
         }
       />
-      <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} />
+      {/* <Route path="/about" element={<StandaloneLayout><About /></StandaloneLayout>} /> */}
       <Route path="/tokenomics" element={<StandaloneLayout><Tokenomics /></StandaloneLayout>} />
       <Route path="/hub" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><Rewards /></StandaloneLayout>} />
       <Route path="/rewards" element={isBaseApp ? <BaseAppView RewardsComponent={Rewards} /> : <StandaloneLayout><Rewards /></StandaloneLayout>} />
