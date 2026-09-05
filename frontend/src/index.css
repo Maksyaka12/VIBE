@@ -217,11 +217,18 @@ h1 .line2 {
   letter-spacing: -0.01em;
 }
 
-.hero-quote-line:last-child {
+.hero-quote-line strong {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.hero-quote-line.blue-line {
+  color: var(--blue);
+  font-weight: 700;
   margin-bottom: 0;
 }
 
-.hero-quote-line strong {
+.hero-quote-line.blue-line strong {
   color: var(--blue);
   font-weight: 800;
 }

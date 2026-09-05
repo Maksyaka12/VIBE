@@ -191,13 +191,13 @@ function Hero() {
             <div className="hero-quote-line">
               Dog Vibe belongs to only one owner <strong>offchain</strong>.
             </div>
-            <div className="hero-quote-line">
+            <div className="hero-quote-line blue-line">
               Base Dog <strong>$VIBE</strong> belongs to everyone <strong>onchain</strong>.
             </div>
           </div>
 
           <p className="hero-desc">
-            Not just a meme. The real maltipoo dog and the ultimate mood maker on Base B20. Good vibes, pure loyalty, and positive energy for the entire Base community. Every great journey starts with a single paw print 🐾
+            Not just a meme. The real maltipoo dog and the ultimate mood maker on Base B20. Good vibes and positive energy only. Every great journey starts with a single paw print 🐾
           </p>
           <div className="hero-btns">
             <a href={O1} target="_blank" rel="noreferrer" className="btn-fill">
